@@ -1,0 +1,24 @@
+.dialog {
+    margin:10px auto;
+}
+
+.default_message {
+    box-sizing: border-box;
+    color:#000;
+    background-color: #fff;
+    border-radius:50px;
+    padding: 10px;
+    cursor:pointer;
+}
+.sendMessage {
+    display:flex;
+    flex-direction: column;
+}
+.sendMessage__input {
+    margin: 10px;
+    border-radius:10px;
+    height: 40px;
+}
+.sendMessage__btn {
+    margin:auto;
+}

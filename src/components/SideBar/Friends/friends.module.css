@@ -1,0 +1,9 @@
+.title {
+    margin:50px 0 40px 40px;
+    color:#DCD079;
+    cursor:pointer;
+    width: 30%;
+}
+.friendsList {
+    display:flex;
+}

@@ -1,0 +1,20 @@
+.footer {
+    height: 200px;
+    width: 100%;
+    background-color:#000000;
+}
+.container {
+    width: 1470px;
+    margin: 0 auto;
+    display: flex;
+    justify-content:space-around;
+}
+.inf h2 {
+    color:grey;
+}   
+.signature h4 {
+    color:orangered;
+    text-decoration:underline;
+    font-size: 15px;
+    font-weight:300;
+}

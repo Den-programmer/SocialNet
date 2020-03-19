@@ -1,0 +1,19 @@
+.avatar img {
+    width: 70px;
+    height: 70px;
+    border-radius:50px;
+}
+
+.user {
+    display:flex;
+    cursor:pointer;
+}
+.userName {
+    font-size: 17px;
+    color:#000;
+}
+.lastMessage {
+    color:#B6B6B6;
+    font-size: 14px;
+}
+

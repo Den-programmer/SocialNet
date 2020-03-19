@@ -1,0 +1,32 @@
+* {
+    font-family:Arial, sans-serif;
+}
+.container {
+    width: 1170px;
+    margin: 0 auto;
+}
+.flex-container {
+    display:flex;
+}
+button {
+    cursor:pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

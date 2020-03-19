@@ -1,0 +1,18 @@
+.addPost {
+    display:flex;
+    flex-direction: column;
+}
+.btn_addPost {
+    margin: 10px;
+}
+
+.inputs {
+    display:inline-flex;
+    flex-direction:column;            
+}
+
+.inputs input {
+    margin: 10px;
+    height: 20px;
+    width: 290px;
+}

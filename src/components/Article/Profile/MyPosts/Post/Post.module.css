@@ -1,0 +1,28 @@
+.dFlex {
+    display:flex;
+    align-items: center;
+}
+.m {
+    margin: 7px;
+}
+.post {
+    border-bottom:1px solid #000000;
+    padding: 20px;
+}
+.post__title {
+    font-size: 25px;
+    font-weight:bold;
+    color:#FFF;
+    text-align:center;
+}
+.post__author {
+    border-radius: 350px;
+    width: 70px;
+    height: 70px;
+}
+.post__text {
+    color:silver;
+    font-size: 17px;
+    font-weight: bold;
+    text-decoration:underline;
+}

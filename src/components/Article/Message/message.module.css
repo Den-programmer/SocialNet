@@ -1,0 +1,8 @@
+img {
+    user-select:none;
+}
+
+.messages {
+    display:flex;
+    align-items: flex-end;
+}
