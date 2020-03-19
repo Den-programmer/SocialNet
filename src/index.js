@@ -1,22 +1,20 @@
 import * as serviceWorker from './serviceWorker';
-import state from './BLL/state'
+import store from './BLL/state'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import { addpost } from './BLL/state';
-import {subscribe} from './BLL/state';
 
 let rerenderEntireTree = () => {
     ReactDOM.render(<App render={rerenderEntireTree}
-        addpost={addpost}
-        state={state}
-        dialogsData={state.messagesPage.dialogsData} 
-        posts={state.profilePage.posts}/>, 
+        addpost={store.addpost.bind(store)}
+        state={store.getState()}
+        dialogsData={store.getState().messagesPage.dialogsData} 
+        posts={store.getState().profilePage.posts}/>, 
         document.getElementById('root'));    
 }
 
-subscribe(rerenderEntireTree);
+store.subscribe(rerenderEntireTree);
 
 rerenderEntireTree();
 
