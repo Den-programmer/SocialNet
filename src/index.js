@@ -7,7 +7,7 @@ import App from './App';
 
 let rerenderEntireTree = () => {
     ReactDOM.render(<App render={rerenderEntireTree}
-        addpost={store.addpost.bind(store)}
+        dispatch={store.dispatch.bind(store)}
         state={store.getState()}
         dialogsData={store.getState().messagesPage.dialogsData} 
         posts={store.getState().profilePage.posts}/>, 

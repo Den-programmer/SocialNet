@@ -11,7 +11,7 @@ const Article = (props) => {
     return (
         <article className={classes.article}>
             <Route exact path='/Profile' render={() => (<Profile render={props.render}
-                                                        addpost={props.addpost}
+                                                        dispatch={props.dispatch}
                                                         state={props.state} 
                                                         functionAddPost={props.functionAddPost} 
                                                         posts={props.posts}/>)} />

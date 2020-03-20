@@ -14,7 +14,7 @@ function App(props) {
         <div className="flex-container">
           <SideBar state={props.state}/>
           <Article render={props.render}
-              addpost={props.addpost}
+              dispatch={props.dispatch}
               state={props.state}
               functionAddPost={props.functionAddPost} 
               posts={props.posts} 

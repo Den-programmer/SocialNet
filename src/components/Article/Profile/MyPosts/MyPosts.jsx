@@ -11,7 +11,7 @@ const MyPosts = (props) => {
     return (
         <div className={classes.postPage}>
             <div className={classes.addPostBlock}>
-                <AddPost render={props.render} addpost={props.addpost} state={props.state} functionAddPost={props.functionAddPost}/>
+                <AddPost render={props.render} dispatch={props.dispatch} state={props.state} functionAddPost={props.functionAddPost}/>
             </div>
             <div className={classes.posts}>
                 {posts}

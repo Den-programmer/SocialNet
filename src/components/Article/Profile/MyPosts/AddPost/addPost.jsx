@@ -7,7 +7,8 @@ const AddPost = (props) => {
     let addPost = () => {
         newPostTitle = newPostTitle.current.value;
         newPostInformat = newPostInformat.current.value;
-        props.addpost(newPostTitle, newPostInformat);
+        // props.addpost(newPostTitle, newPostInformat);
+        props.dispatch({type: 'ADD-POST', newPostTitle:newPostTitle, newPostInformat:newPostInformat,});
         props.state.profilePage.ValueOfPostTitle = '';
         props.state.profilePage.ValueOfPostInf = '';
     }

@@ -143,25 +143,29 @@ let store = {
       ],
     },
   },
-  getState() {
-    return this._state;
-  },
   _callSubscriber() {
     console.log(' This is the function that will be changed! ');
+  },
+
+  getState() {
+    return this._state;
   },
   subscribe(observer) {
     this._callSubscriber = observer;
   },
-  addpost(newPostTitle, newPostInformat) {
-    let newPost = {
-      id: this._state.profilePage.posts.length + 1,
-      postTitle: newPostTitle,
-      postInf: newPostInformat,
-      likesCount: 200000,
+
+  dispatch(action) {
+    if (action.type === 'ADD-POST') {
+      let newPost = {
+        id: this._state.profilePage.posts.length + 1,
+        postTitle: action.newPostTitle,
+        postInf: action.newPostInformat,
+        likesCount: 200000,
+      }
+      store._state.profilePage.posts.push(newPost);
+      store._callSubscriber();
     }
-    store._state.profilePage.posts.push(newPost);
-    store._callSubscriber();
-  }
+  } 
 }
 
 window.store = store;
