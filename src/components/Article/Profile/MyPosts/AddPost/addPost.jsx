@@ -1,14 +1,15 @@
 import React from 'react';
 import classes from './addPost.module.css';
+import {addPostActionCreator} from '../../../../../BLL/state';
 
 const AddPost = (props) => {
     let newPostTitle = React.createRef();
     let newPostInformat = React.createRef();
+
     let addPost = () => {
         newPostTitle = newPostTitle.current.value;
         newPostInformat = newPostInformat.current.value;
-        // props.addpost(newPostTitle, newPostInformat);
-        props.dispatch({type: 'ADD-POST', newPostTitle:newPostTitle, newPostInformat:newPostInformat,});
+        props.dispatch(addPostActionCreator(newPostTitle, newPostInformat));
         props.state.profilePage.ValueOfPostTitle = '';
         props.state.profilePage.ValueOfPostInf = '';
     }

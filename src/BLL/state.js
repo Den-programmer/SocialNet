@@ -2,6 +2,8 @@ import avatar1 from '../images/friends-avatars/friend1.jpg';
 import avatar2 from '../images/friends-avatars/friend2.jpg';
 import avatar3 from '../images/friends-avatars/friend3.jpg';
 
+let ADD_POST = 'ADD-POST';
+
 let store = {
   _state: {
     profilePage: {
@@ -155,7 +157,7 @@ let store = {
   },
 
   dispatch(action) {
-    if (action.type === 'ADD-POST') {
+    if (action.type === ADD_POST) {
       let newPost = {
         id: this._state.profilePage.posts.length + 1,
         postTitle: action.newPostTitle,
@@ -166,6 +168,10 @@ let store = {
       store._callSubscriber();
     }
   } 
+}
+
+export const addPostActionCreator = (newPostTitle, newPostInformat) => {
+  return {type: ADD_POST, newPostTitle:newPostTitle, newPostInformat:newPostInformat,};
 }
 
 window.store = store;
