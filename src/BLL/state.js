@@ -83,7 +83,13 @@ let store = {
           name: "Yana",
           lastMessage: "Everything will be alright!",
         }
-      ]
+      ],
+      messages: [
+        {
+          id: 1,
+          message: 'Hello World !!!',
+        }
+      ],
     },
     newsPage: {
   

@@ -7,14 +7,10 @@ const Messages = (props) => {
     return (
         <div className={classes.messages}>
             <Dialogs dialogsData={props.dialogsData}/>
-            <DialogDefault />
+            <Dialog Messages={props.state.messagesPage.messages}/>
         </div>
     );
 }
 
-const DialogDefault = (props) => {
-    return(
-        <Dialog defaultMessage="You haven't text this person yet!"/>
-    );
-}
+
 export default Messages;
