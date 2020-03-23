@@ -16,7 +16,6 @@ function App(props) {
           <Article render={props.render}
               dispatch={props.dispatch}
               state={props.state}
-              functionAddPost={props.functionAddPost} 
               posts={props.posts} 
               dialogsData={props.dialogsData}/>
         </div>

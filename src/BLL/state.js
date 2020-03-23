@@ -3,6 +3,7 @@ import avatar2 from '../images/friends-avatars/friend2.jpg';
 import avatar3 from '../images/friends-avatars/friend3.jpg';
 
 let ADD_POST = 'ADD-POST';
+let ADD_MESSAGE = 'ADD-MESSAGE';
 
 let store = {
   _state: {
@@ -87,9 +88,18 @@ let store = {
       messages: [
         {
           id: 1,
-          message: 'Hello World !!!',
+          messageText: 'Hello World !!!',
+        }, 
+        {
+          id: 2,
+          messageText: 'How is it going?',
+        },
+        {
+          id: 3,
+          messageText: 'Would u like to go for a walk?',
         }
       ],
+      NewMessageValue: '',
     },
     newsPage: {
   
@@ -172,12 +182,22 @@ let store = {
       }
       store._state.profilePage.posts.push(newPost);
       store._callSubscriber();
+    } else if (action.type === ADD_MESSAGE) {
+      let newMessage = {
+        id: this._state.messagesPage.messages.length + 1,
+        messageText: action.messageText,
+      }
+      store._state.messagesPage.messages.push(newMessage);
+      store._callSubscriber();
     }
   } 
 }
 
 export const addPostActionCreator = (newPostTitle, newPostInformat) => {
   return {type: ADD_POST, newPostTitle:newPostTitle, newPostInformat:newPostInformat,};
+}
+export const addMessageActionCreator = (messageText) => {
+  return {type: ADD_MESSAGE, messageText:messageText}
 }
 
 window.store = store;

@@ -7,10 +7,13 @@ const Messages = (props) => {
     return (
         <div className={classes.messages}>
             <Dialogs dialogsData={props.dialogsData}/>
-            <Dialog Messages={props.state.messagesPage.messages}/>
+            <Dialog state={props.state} render={props.render}
+            dispatch={props.dispatch} 
+            newMessageValue={props.state.messagesPage.NewMessageValue} 
+            Messages={props.state.messagesPage.messages}
+            />
         </div>
     );
 }
-
 
 export default Messages;

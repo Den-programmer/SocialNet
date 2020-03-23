@@ -13,7 +13,6 @@ const Profile = (props) => {
             render={props.render}
             dispatch={props.dispatch}
             state={props.state} 
-            functionAddPost={props.functionAddPost} 
             posts={props.posts}/>
         </div>
     );
