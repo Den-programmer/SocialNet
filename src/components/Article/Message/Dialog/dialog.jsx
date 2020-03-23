@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './dialog.module.css';
 import Conversation from './Conversation/conversation';
-import {addMessageActionCreator} from '../../../../BLL/state';
+import {addMessageActionCreator} from '../../../../BLL/reducer-messages';
 
 const Dialog = (props) => {
     

@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './addPost.module.css';
-import {addPostActionCreator} from '../../../../../BLL/state';
+import {addPostActionCreator} from '../../../../../BLL/reducer-profile';
 
 const AddPost = (props) => {
     let newPostTitle = React.createRef();
