@@ -3,6 +3,11 @@ import avatar2 from '../images/friends-avatars/friend2.jpg';
 import avatar3 from '../images/friends-avatars/friend3.jpg';
 import reducerProfile from './reducer-profile';
 import reducerMessages from './reducer-messages';
+import reducerMusic from './reducer-music';
+import reducerNews from './reducer-news';
+import reducerOptions from './reducer-options';
+import reducerFriends from './reducer-friends';
+import reducerFooter from './reducer-footer';
 
 let store = {
   _state: {
@@ -174,6 +179,11 @@ let store = {
   dispatch(action) {
     reducerProfile(this._state.profilePage, action);
     reducerMessages(this._state.messagesPage, action);
+    reducerMusic(this._state.musicPage);
+    reducerNews(this._state.newsPage);
+    reducerOptions(this._state.optionsPage);
+    reducerFriends(this._state.Friends);
+    reducerFooter(this._state.Footer);
 
     this._callSubscriber();
   } 
