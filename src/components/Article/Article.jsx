@@ -11,10 +11,16 @@ const Article = (props) => {
     return (
         <article className={classes.article}>
             <Route exact path='/Profile' render={() => (<Profile render={props.render}
+                                                        profilePage={props.profilePage}
                                                         dispatch={props.dispatch}
                                                         state={props.state} 
                                                         posts={props.posts}/>)} />
-            <Route exact path='/Messages' render={() => (<Messages render={props.render} dispatch={props.dispatch} state={props.state} dialogsData={props.dialogsData}/>)} />
+            <Route exact path='/Messages' render={() => (<Messages render={props.render} 
+                                                                   messagesPage={props.messagesPage}
+                                                                   Messages={props.Messages}
+                                                                   newMessageValue={props.newMessageValue} 
+                                                                   dispatch={props.dispatch} 
+                                                                   dialogsData={props.dialogsData}/>)} />
             <Route exact path='/News' component={News} />
             <Route exact path='/Music' component={Music} />
             <Route exact path='/Options' component={Options} />

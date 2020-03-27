@@ -7,7 +7,7 @@ const SideBar = (props) => {
   return (
     <div className={classes.menu}>
       <Nav />
-      <Friends state={props.state}/>
+      <Friends Friends={props.Friends}/>
     </div>
   );
 }

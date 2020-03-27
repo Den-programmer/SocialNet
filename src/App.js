@@ -12,14 +12,17 @@ function App(props) {
       <div className="App">
         <Header />
         <div className="flex-container">
-          <SideBar state={props.state}/>
+          <SideBar Friends={props.Friends}/>
           <Article render={props.render}
+              profilePage={props.profilePage}
+              messagesPage={props.messagesPage}
+              Messages={props.Messages}
+              newMessageValue={props.newMessageValue} 
               dispatch={props.dispatch}
-              state={props.state}
               posts={props.posts} 
               dialogsData={props.dialogsData}/>
         </div>
-        <Footer footLinks={props.state.Footer.footLinks} year={props.state.Footer.year} footInf={props.state.Footer.footInf} />
+        <Footer footLinks={props.footer.footLinks} year={props.footer.year} footInf={props.footer.footInf} />
       </div>
     </BrowserRouter>
   );

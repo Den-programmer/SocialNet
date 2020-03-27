@@ -1,4 +1,6 @@
-const reducerOptions = (state, action) => {
+let initialState = {}
+
+const reducerOptions = (state = initialState, action) => {
 
 
 

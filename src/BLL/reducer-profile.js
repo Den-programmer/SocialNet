@@ -4,7 +4,32 @@ export const addPostActionCreator = (newPostTitle, newPostInformat) => {
     return { type: ADD_POST, newPostTitle: newPostTitle, newPostInformat: newPostInformat, };
 }
 
-const reducerProfile = (state, action) => {
+export let profilePage =  {
+    posts: [
+      {
+        id: 1,
+        postTitle: "It's a post!@",
+        postInf: "This post has no meaning!",
+        likesCount: 200000,
+      },
+      {
+        id: 2,
+        postTitle: "It's a post!@",
+        postInf: "This post has no meaning!",
+        likesCount: 200000,
+      },
+      {
+        id: 3,
+        postTitle: "It's a post!@",
+        postInf: "This post has no meaning!",
+        likesCount: 200000,
+      },
+    ],
+    ValueOfPostTitle: '',
+    ValueOfPostInf: '',
+}
+
+const reducerProfile = (state = profilePage, action) => {
     if (action.type === ADD_POST) {
         let newPost = {
             id: state.posts.length + 1,
@@ -13,8 +38,7 @@ const reducerProfile = (state, action) => {
             likesCount: 200000,
         }
         state.posts.push(newPost);
-    }   // Don't forget about state!
-
+    } 
     return state;
 }
 

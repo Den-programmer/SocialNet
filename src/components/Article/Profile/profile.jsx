@@ -9,7 +9,7 @@ const Profile = (props) => {
         <div className={classes.profile}>
             <Background />
             <User />
-            <MyPosts 
+            <MyPosts profilePage={props.profilePage}
             render={props.render}
             dispatch={props.dispatch}
             state={props.state} 

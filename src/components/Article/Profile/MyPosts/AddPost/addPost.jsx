@@ -10,8 +10,8 @@ const AddPost = (props) => {
         newPostTitle = newPostTitle.current.value;
         newPostInformat = newPostInformat.current.value;
         props.dispatch(addPostActionCreator(newPostTitle, newPostInformat));
-        props.state.profilePage.ValueOfPostTitle = '';
-        props.state.profilePage.ValueOfPostInf = '';
+        props.profilePage.ValueOfPostTitle = '';
+        props.profilePage.ValueOfPostInf = '';
     }
 
     let onPostTitleChange = () => {
@@ -33,14 +33,14 @@ const AddPost = (props) => {
                 <div>
                     <input onChange={ onPostTitleChange } 
                            ref={newPostTitle} 
-                           value={props.state.profilePage.ValueOfPostTitle} 
+                           value={props.profilePage.ValueOfPostTitle} 
                            placeholder="Post Name" 
                            type="text" />
                 </div>
                 <div>
                     <input onChange={ onPostInfChange } 
                            ref={newPostInformat} 
-                           value={props.state.profilePage.ValueOfPostInf} 
+                           value={props.profilePage.ValueOfPostInf} 
                            placeholder="Post Text" 
                            type="text" />
                 </div>
