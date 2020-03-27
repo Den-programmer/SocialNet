@@ -76,7 +76,7 @@ export let messagesPage = {
             messageText: 'Would u like to go for a walk?',
         }
     ],
-    NewMessageValue: 'p;k;ko;',
+    NewMessageValue: '',
 }
 
 const reducerMessages = (state = messagesPage, action) => {
@@ -88,7 +88,7 @@ const reducerMessages = (state = messagesPage, action) => {
         }
         state.messages.push(newMessage);
     } else if (action.type === NEW_MESSAGE_CHANGE) {
-        state.newMessageValue = action.newMessageValue;
+        state.NewMessageValue = action.newMessageValue;
     }
 
     return state;

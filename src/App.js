@@ -7,15 +7,14 @@ import Footer from './components/Footer/Footer';
 import { BrowserRouter } from 'react-router-dom';
 
 function App(props) {
+  
   return (
     <BrowserRouter>
       <div className="App">
         <Header />
         <div className="flex-container">
           <SideBar Friends={props.Friends}/>
-          <Article render={props.render}
-              profilePage={props.profilePage}
-              messagesPage={props.messagesPage}
+          <Article profilePage={props.profilePage}
               Messages={props.Messages}
               newMessageValue={props.newMessageValue} 
               dispatch={props.dispatch}

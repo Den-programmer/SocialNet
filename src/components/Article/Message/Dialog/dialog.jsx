@@ -18,7 +18,7 @@ const Dialog = (props) => {
     let onNewMessageChange = () => {
         let newMessageValue = newMessage.current.value;
         props.dispatch(onNewMessageChangeActionCreator(newMessageValue));
-        newMessage.current.value = props.messagesPage.newMessageValue;
+        newMessageValue = props.newMessageValue;
     }
 
     return (
