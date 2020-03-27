@@ -12,7 +12,7 @@ export const onPostInfChangeActionCreator = (newPostInformatVal) => {
   return { type: POST_INF_CHANGE, newPostInformatVal:newPostInformatVal }
 } 
 
-export let profilePage = {
+let profilePage = {
   posts: [
     {
       id: 1,

@@ -6,7 +6,7 @@ import {onNewMessageChangeActionCreator} from '../../../../BLL/reducer-messages'
 
 const Dialog = (props) => {
     let newMessage = React.createRef();
-    let Messages = props.Messages.map((ms) => {
+    let Messages = props.messagesPage.messages.map((ms) => {
         return <Conversation id={ms.id} messageText={ms.messageText}/>
     });
 
@@ -18,7 +18,7 @@ const Dialog = (props) => {
     let onNewMessageChange = () => {
         let newMessageValue = newMessage.current.value;
         props.dispatch(onNewMessageChangeActionCreator(newMessageValue));
-        newMessageValue = props.newMessageValue;
+        newMessageValue = props.messagesPage.newMessageValue;
     }
 
     return (

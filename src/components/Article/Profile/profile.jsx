@@ -10,10 +10,7 @@ const Profile = (props) => {
             <Background />
             <User />
             <MyPosts profilePage={props.profilePage}
-            render={props.render}
-            dispatch={props.dispatch}
-            state={props.state} 
-            posts={props.posts}/>
+            dispatch={props.dispatch}/>
         </div>
     );
 }

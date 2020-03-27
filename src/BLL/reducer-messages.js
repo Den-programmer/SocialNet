@@ -8,7 +8,7 @@ export const onNewMessageChangeActionCreator = (newMessageValue) => {
     return { type: NEW_MESSAGE_CHANGE, newMessageValue: newMessageValue }
 }
 
-export let messagesPage = {
+let messagesPage = {
     dialogsData: [
         {
             id: 1,

@@ -4,22 +4,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {profilePage} from './BLL/reducer-profile';
-import {messagesPage} from './BLL/reducer-messages';
-import { Friends } from './BLL/reducer-friends'; 
-import { Footer } from './BLL/reducer-footer';
+
+let state = store.getState();
 
 let rerenderEntireTree = () => {
-    ReactDOM.render(<App render={rerenderEntireTree}
-        profilePage={profilePage}
-        Messages={messagesPage.messages}
-        footer={Footer}
-        Friends={Friends}
-        messagesPage={messagesPage}
-        newMessageValue={messagesPage.NewMessageValue} 
-        dispatch={store.dispatch.bind(store)}
-        dialogsData={messagesPage.dialogsData} 
-        posts={profilePage.posts}/>, 
+    ReactDOM.render(<App profilePage={state.profilePage}
+        footer={state.Footer}
+        Friends={state.Friends}
+        messagesPage={state.messagesPage} 
+        dispatch={store.dispatch.bind(store)}/>, 
         document.getElementById('root'));    
 }
 store.subscribe(rerenderEntireTree);

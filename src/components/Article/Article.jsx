@@ -11,13 +11,9 @@ const Article = (props) => {
     return (
         <article className={classes.article}>
             <Route exact path='/Profile' render={() => (<Profile profilePage={props.profilePage}
-                                                        dispatch={props.dispatch}
-                                                        state={props.state} 
-                                                        posts={props.posts}/>)} />
-            <Route exact path='/Messages' render={() => (<Messages Messages={props.Messages}
-                                                                   newMessageValue={props.newMessageValue} 
-                                                                   dispatch={props.dispatch} 
-                                                                   dialogsData={props.dialogsData}/>)} />
+                                                        dispatch={props.dispatch}/>)} />
+            <Route exact path='/Messages' render={() => (<Messages messagesPage={props.messagesPage} 
+                                                        dispatch={props.dispatch} />)} />
             <Route exact path='/News' component={News} />
             <Route exact path='/Music' component={Music} />
             <Route exact path='/Options' component={Options} />

@@ -4,14 +4,16 @@ import Post from './Post/Post';
 import AddPost from './AddPost/addPost';
 
 const MyPosts = (props) => {
-    let posts = props.posts.map((post) => {
+    let posts = props.profilePage.posts.map((post) => {
         return  <Post id={post.id} postTitle={post.postTitle} postInf={post.postInf}  likesCount={post.likesCount} />
     });
 
     return (
         <div className={classes.postPage}>
             <div className={classes.addPostBlock}>
-                <AddPost profilePage={props.profilePage} render={props.render} dispatch={props.dispatch} state={props.state}/>
+                <AddPost 
+                profilePage={props.profilePage}  
+                dispatch={props.dispatch}/>
             </div>
             <div className={classes.posts}>
                 {posts}
