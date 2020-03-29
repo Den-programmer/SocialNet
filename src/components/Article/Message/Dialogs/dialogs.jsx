@@ -9,7 +9,7 @@ const Dialogs = (props) => {
         <div className={classes.dialogs}>
             <Search />
             <MessagesTitle title="Messages"/>
-            <Users messagesPage={props.messagesPage}/>
+            <Users dialogsData={props.dialogsData}/>
         </div>
     );
 }

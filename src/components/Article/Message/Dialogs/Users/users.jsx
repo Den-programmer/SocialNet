@@ -5,7 +5,7 @@ import user from './User/images/user.jpg';
 
 const Users = (props) => {
 
-    let dialogs = props.messagesPage.dialogsData.map((d) => {
+    let dialogs = props.dialogsData.map((d) => {
         return <User avatar={user} id={d.id} name={d.name} lastMessage={d.lastMessage}/>
     });
     

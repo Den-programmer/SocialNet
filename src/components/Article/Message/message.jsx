@@ -1,13 +1,13 @@
 import React from 'react';
 import classes from './message.module.css';
-import Dialogs from './Dialogs/dialogs';
-import Dialog from './Dialog/dialog';
+import DialogContainer from './Dialog/dialogContainer';
+import DialogsContainer from './Dialogs/dialogsContainer';
 
 const Messages = (props) => {
     return (
         <div className={classes.messages}>
-            <Dialogs messagesPage={props.messagesPage}/>
-            <Dialog messagesPage={props.messagesPage}
+            <DialogsContainer messagesPage={props.messagesPage}/>
+            <DialogContainer messagesPage={props.messagesPage}
             dispatch={props.dispatch} />
         </div>
     );

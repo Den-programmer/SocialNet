@@ -1,23 +1,21 @@
 import React from 'react';
 import classes from './dialog.module.css';
 import Conversation from './Conversation/conversation';
-import {addMessageActionCreator} from '../../../../BLL/reducer-messages';
-import {onNewMessageChangeActionCreator} from '../../../../BLL/reducer-messages';
 
 const Dialog = (props) => {
     let newMessage = React.createRef();
-    let Messages = props.messagesPage.messages.map((ms) => {
+    let Messages = props.messages.map((ms) => {
         return <Conversation id={ms.id} messageText={ms.messageText}/>
     });
 
     let addMessage = () => {
         let newMessageVal = newMessage.current.value;
-        props.dispatch(addMessageActionCreator(newMessageVal));
+        props.addMessage(newMessageVal);
         newMessage.current.value = '';
     }
     let onNewMessageChange = () => {
         let newMessageValue = newMessage.current.value;
-        props.dispatch(onNewMessageChangeActionCreator(newMessageValue));
+        props.onNewMessageChange(newMessageValue);
         newMessageValue = props.messagesPage.newMessageValue;
     }
 

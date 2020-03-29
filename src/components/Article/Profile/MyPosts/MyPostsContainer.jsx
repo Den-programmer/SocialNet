@@ -22,9 +22,7 @@ const MyPostsContainer = (props) => {
         <MyPosts profilePage={props.profilePage} onPostInfChange={onPostInfChange} 
         onPostTitleChange={onPostTitleChange}
         addPost={addPost} 
-        posts={props.profilePage.posts} 
-        ValueOfPostInf={props.profilePage.ValueOfPostInf}
-        ValueOfPostTitle={props.profilePage.ValueOfPostTitle}/>
+        posts={props.profilePage.posts} />
     );
 }
 
