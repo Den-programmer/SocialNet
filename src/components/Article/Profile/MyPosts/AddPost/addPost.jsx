@@ -1,8 +1,5 @@
 import React from 'react';
 import classes from './addPost.module.css';
-import {addPostActionCreator} from '../../../../../BLL/reducer-profile';
-import {onPostTitleChangeActionCreator} from '../../../../../BLL/reducer-profile';
-import {onPostInfChangeActionCreator} from '../../../../../BLL/reducer-profile';
 
 const AddPost = (props) => {
     let newPostTitle = React.createRef();
@@ -11,19 +8,19 @@ const AddPost = (props) => {
     let addPost = () => {
         newPostTitle = newPostTitle.current.value;
         newPostInformat = newPostInformat.current.value;
-        props.dispatch(addPostActionCreator(newPostTitle, newPostInformat));
+        props.addPost(newPostTitle, newPostInformat);
         props.profilePage.ValueOfPostTitle = '';
         props.profilePage.ValueOfPostInf = '';
     }
 
     let onPostTitleChange = () => {
         let newPostTitleVal = newPostTitle.current.value;
-        props.dispatch(onPostTitleChangeActionCreator(newPostTitleVal));
+        props.onPostTitleChange(newPostTitleVal);
         newPostTitleVal = props.profilePage.ValueOfPostTitle;
     }
     let onPostInfChange = () => {
         let newPostInformatVal = newPostInformat.current.value;
-        props.dispatch(onPostInfChangeActionCreator(newPostInformatVal));
+        props.onPostInfChange(newPostInformatVal);
         newPostInformatVal =  props.profilePage.ValueOfPostInf;
     }
 
