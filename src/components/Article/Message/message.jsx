@@ -6,9 +6,8 @@ import DialogsContainer from './Dialogs/dialogsContainer';
 const Messages = (props) => {
     return (
         <div className={classes.messages}>
-            <DialogsContainer messagesPage={props.messagesPage}/>
-            <DialogContainer messagesPage={props.messagesPage}
-            dispatch={props.dispatch} />
+            <DialogsContainer/>
+            <DialogContainer/>
         </div>
     );
 }

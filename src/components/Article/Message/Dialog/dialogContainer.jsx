@@ -1,21 +1,30 @@
 import React from 'react';
 import Dialog from './dialog';
-import {addMessageActionCreator} from '../../../../BLL/reducer-messages';
-import {onNewMessageChangeActionCreator} from '../../../../BLL/reducer-messages';
+import { addMessageActionCreator } from '../../../../BLL/reducer-messages';
+import { onNewMessageChangeActionCreator } from '../../../../BLL/reducer-messages';
+import storeContext from '../../../../storeContext';
 
 const DialogContainer = (props) => {
-    let addMessage = (newMessageVal) => {
-        props.dispatch(addMessageActionCreator(newMessageVal));
-    }
-    let onNewMessageChange = (newMessageValue) => {
-        props.dispatch(onNewMessageChangeActionCreator(newMessageValue));
-    }
-
     return (
-        <Dialog messagesPage={props.messagesPage} 
-        onNewMessageChange={onNewMessageChange} 
-        addMessage={addMessage}  
-        messages={props.messagesPage.messages}/>
+        <storeContext.Consumer>
+            {(store) => {
+
+                let addMessage = (newMessageVal) => {
+                    store.dispatch(addMessageActionCreator(newMessageVal));
+                }
+                let onNewMessageChange = (newMessageValue) => {
+                    store.dispatch(onNewMessageChangeActionCreator(newMessageValue));
+                }
+
+                let state = store.getState();
+                
+                return <Dialog messagesPage={state.messagesPage}
+                    onNewMessageChange={onNewMessageChange}
+                    addMessage={addMessage}
+                    messages={state.messagesPage.messages} />
+            }
+            }
+        </storeContext.Consumer>
     );
 }
 

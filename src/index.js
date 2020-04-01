@@ -4,16 +4,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import storeContext from './storeContext';
 
 let state = store.getState();
 
 let rerenderEntireTree = () => {
-    ReactDOM.render(<App profilePage={state.profilePage}
-        footer={state.Footer}
-        Friends={state.Friends}
-        messagesPage={state.messagesPage} 
-        dispatch={store.dispatch.bind(store)}/>, 
-        document.getElementById('root'));    
+    ReactDOM.render(<storeContext.Provider value={store}>
+        <App footer={state.Footer}
+            Friends={state.Friends}/>
+    </storeContext.Provider>,
+        document.getElementById('root'));
 }
 store.subscribe(rerenderEntireTree);
 

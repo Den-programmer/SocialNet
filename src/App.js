@@ -14,9 +14,7 @@ function App(props) {
         <Header />
         <div className="flex-container">
           <SideBar Friends={props.Friends}/>
-          <Article profilePage={props.profilePage}
-              messagesPage={props.messagesPage}
-              dispatch={props.dispatch}/>
+          <Article/>
         </div>
         <Footer footLinks={props.footer.footLinks} year={props.footer.year} footInf={props.footer.footInf} />
       </div>

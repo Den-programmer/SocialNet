@@ -1,9 +1,17 @@
 import React from 'react';
 import Dialogs from './dialogs';
+import storeContext from '../../../../storeContext';
 
 const DialogsContainer = (props) => {
     return (
-        <Dialogs dialogsData={props.messagesPage.dialogsData}/>
+        <storeContext.Consumer> 
+        {
+            (store) => {
+                let state = store.getState();
+                return <Dialogs dialogsData={state.messagesPage.dialogsData}/>
+            }
+}
+        </storeContext.Consumer>
     );
 }
 

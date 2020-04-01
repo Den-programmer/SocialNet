@@ -10,10 +10,8 @@ import { Route } from 'react-router-dom';
 const Article = (props) => {
     return (
         <article className={classes.article}>
-            <Route exact path='/Profile' render={() => (<Profile profilePage={props.profilePage}
-                                                        dispatch={props.dispatch}/>)} />
-            <Route exact path='/Messages' render={() => (<Messages messagesPage={props.messagesPage} 
-                                                        dispatch={props.dispatch} />)} />
+            <Route exact path='/Profile' render={() => (<Profile/>)} />
+            <Route exact path='/Messages' render={() => (<Messages/>)} />
             <Route exact path='/News' component={News} />
             <Route exact path='/Music' component={Music} />
             <Route exact path='/Options' component={Options} />
