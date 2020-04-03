@@ -4,15 +4,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import storeContext from './storeContext';
+import { Provider } from 'react-redux';
 
 let state = store.getState();
 
 let rerenderEntireTree = () => {
-    ReactDOM.render(<storeContext.Provider value={store}>
+    ReactDOM.render(<Provider store={store}>
         <App footer={state.Footer}
-            Friends={state.Friends}/>
-    </storeContext.Provider>,
+            Friends={state.Friends} />
+    </Provider>,
         document.getElementById('root'));
 }
 store.subscribe(rerenderEntireTree);
