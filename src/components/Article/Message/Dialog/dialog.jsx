@@ -25,7 +25,12 @@ const Dialog = (props) => {
                 {Messages}
             </React.Fragment>
             <div className={classes.sendMessage}>
-                <input value={props.newMessageValue} onChange={ onNewMessageChange } ref={newMessage} className={classes.sendMessage__input} type="text" />
+                <input value={props.newMessageValue} 
+                placeholder="Enter your message..."
+                onChange={ onNewMessageChange } 
+                ref={newMessage} 
+                className={classes.sendMessage__input} 
+                type="text" />
                 <div className={classes.sendMessage__btn}>
                     <button onClick={addMessage}>Send</button>
                 </div>
