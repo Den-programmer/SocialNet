@@ -39,17 +39,25 @@ let profilePage = {
 
 const reducerProfile = (state = profilePage, action) => {
   if (action.type === ADD_POST) {
+    let stateCopy = {...state}
+    stateCopy.posts = [...state.posts]
+
     let newPost = {
-      id: state.posts.length + 1,
+      id: stateCopy.posts.length + 1,
       postTitle: action.newPostTitle,
       postInf: action.newPostInformat,
       likesCount: 200000,
     }
-    state.posts.push(newPost);
+    stateCopy.posts.push(newPost);
+    return stateCopy;
   } else if (action.type === POST_TITLE_CHANGE) {
-      state.ValueOfPostTitle = action.newPostTitleVal;
+      let stateCopy = {...state}
+      stateCopy.ValueOfPostTitle = action.newPostTitleVal;
+      return stateCopy;
   } else if (action.type === POST_INF_CHANGE) {
-      state.ValueOfPostInf = action.newPostInformatVal;
+      let stateCopy = {...state}  
+      stateCopy.ValueOfPostInf = action.newPostInformatVal;
+      return stateCopy;
   }
 
   return state;

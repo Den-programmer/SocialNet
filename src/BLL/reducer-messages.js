@@ -82,13 +82,18 @@ let messagesPage = {
 const reducerMessages = (state = messagesPage, action) => {
 
     if (action.type === ADD_MESSAGE) {
+        let stateCopy = {...state};
+        stateCopy.messages = [...state.messages]
         let newMessage = {
-            id: state.messages.length + 1,
+            id: stateCopy.messages.length + 1,
             messageText: action.messageText,
         }
-        state.messages.push(newMessage);
+        stateCopy.messages.push(newMessage);
+        return stateCopy;
     } else if (action.type === NEW_MESSAGE_CHANGE) {
-        state.NewMessageValue = action.newMessageValue;
+        let stateCopy = {...state};
+        stateCopy.NewMessageValue = action.newMessageValue;
+        return stateCopy;
     }
 
     return state;
