@@ -1,0 +1,21 @@
+.user {
+    display: flex;
+    margin:35px 50px 10px 30px;
+}
+.avatar {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+.avatar img {
+    width: 100px;
+    height: 100px;
+    border-radius:50px;
+}
+.following {
+    margin: 10px;
+}
+.following button {
+    background-color:#0275D8;
+    border:1px solid #4088FA;
+}

@@ -6,7 +6,7 @@ const Friend = (props) => {
         <div className={classes.friend}>
             <img src={props.avatar} alt="" />
             <h6 className={classes.friendsName}>
-                {props.name}
+                {props.nickname}
             </h6>
         </div>
     );

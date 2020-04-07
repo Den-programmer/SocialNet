@@ -13,7 +13,7 @@ const User = (props) => {
                     <img src={props.avatar} alt="user" />
                 </div>
                 <div className={classes.userInf}>
-                    <h3 className={classes.userName}>{props.name}</h3>
+                    <h3 className={classes.userName}>{props.nickname}</h3>
                     <p className={classes.lastMessage}>{props.lastMessage}</p>
                 </div>
             </div>

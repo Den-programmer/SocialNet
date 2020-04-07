@@ -1,4 +1,4 @@
-export let Footer = {
+let Footer = {
     year: 2020,
     footInf: 'This is foot information!',
     footLinks: [

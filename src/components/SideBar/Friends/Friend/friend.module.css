@@ -13,4 +13,9 @@
 }
 .friendsName {
     color:#FFF;
+    font-size: 14px;
+}
+.friendsName:hover {
+    transition:all .3s linear;
+    color:#F8A335;
 }

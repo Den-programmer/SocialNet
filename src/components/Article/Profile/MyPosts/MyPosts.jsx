@@ -5,7 +5,7 @@ import AddPost from './AddPost/addPost';
 
 const MyPosts = (props) => {
     let posts = props.posts.map((post) => {
-        return  <Post id={post.id} postTitle={post.postTitle} postInf={post.postInf}  likesCount={post.likesCount} />
+        return  <Post id={post.id} key={post.id} postTitle={post.postTitle} postInf={post.postInf}  likesCount={post.likesCount} />
     });
 
     return (

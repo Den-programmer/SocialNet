@@ -4,6 +4,10 @@
     cursor:pointer;
     width: 30%;
 }
+.title:hover {
+    transition:all .7s ease;
+    text-decoration:underline;
+}
 .friendsList {
     display:flex;
 }

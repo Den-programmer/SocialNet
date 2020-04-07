@@ -1,0 +1,20 @@
+.user {
+    margin: 20px 175px;
+    text-align: center;
+}
+.user img {
+    width:100px;
+    height: 100px;
+    border-radius: 100px;
+}
+.user h4 {
+    color:#FFF;
+}
+.user h6 {
+    color:#FFF;
+}
+.user button {
+    background-color: #F8F9FA;
+    border:1px solid #F8F9FA;
+    padding:5px 10px;
+} 
