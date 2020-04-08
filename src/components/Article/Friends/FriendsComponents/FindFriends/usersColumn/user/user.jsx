@@ -7,7 +7,7 @@ const User = (props) => {
             <img src={props.avatar} alt="" />
             <h4>{props.nickname}</h4>
             <h6>{props.name}</h6>
-            <button>Unfollow</button>
+            {props.followed ? <button>Follow</button> : <button>Unfollow</button>}
         </div>
     );
 }
