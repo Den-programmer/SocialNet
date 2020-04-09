@@ -4,13 +4,13 @@ import { followAC, unfollowAC } from "../../../../../../BLL/reducer-users";
 
 let mapStateToProps = (state) => {
     return {
-        users: state.users.users,
+        users: state.Friends.users,
     }
 }
 let mapDispatchToProps = (dispatch) => {
     return {
-        follow: (userId) => {
-            dispatch(followAC(userId));
+        follow: (userId, name, nickname, avatar) => {
+            dispatch(followAC(userId, name, nickname, avatar));
         },
         unfollow: (userId) => {
             dispatch(unfollowAC(userId));

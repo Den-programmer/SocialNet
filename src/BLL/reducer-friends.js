@@ -8,75 +8,160 @@ import avatar7 from '../images/friends-avatars/avatar7.jpg';
 import avatar8 from '../images/friends-avatars/avatar8.jpg';
 import avatar9 from '../images/friends-avatars/avatar9.jpg';
 import avatar10 from '../images/friends-avatars/avatar10.jpg';
+import avatarUnknown from '../images/users/unfollowed-user.jpg';
+
+const FOLLOW = 'FOLLOW';
+const UNFOLLOW = 'UNFOLLOW';
 
 let Friends = {
     friends: [
         {
             id: 1,
-            nickname:'John',
+            nickname: 'John',
             name: 'John',
             avatar: avatar1,
+            followed: true,
         },
         {
             id: 2,
             nickname: 'Alan',
             name: 'Alan',
             avatar: avatar2,
+            followed: true,
         },
         {
             id: 3,
             nickname: 'Josh',
             name: 'Josh',
             avatar: avatar3,
+            followed: true,
         },
         {
             id: 4,
-            nickname:'Jake',
+            nickname: 'Jake',
             name: 'Jake',
             avatar: avatar4,
+            followed: true,
         },
         {
             id: 5,
-            nickname:'Chris',
+            nickname: 'Chris',
             name: 'Chris Heria',
             avatar: avatar5,
+            followed: true,
         },
         {
             id: 6,
-            nickname:'LilPipka',
+            nickname: 'LilPipka',
             name: 'Lil',
             avatar: avatar6,
+            followed: true,
         },
         {
             id: 7,
-            nickname:'Thomas',
+            nickname: 'Thomas',
             name: 'Thomas',
             avatar: avatar7,
+            followed: true,
         },
         {
             id: 8,
-            nickname:'Static_Alex',
+            nickname: 'Static_Alex',
             name: 'Alex',
             avatar: avatar8,
+            followed: true,
         },
         {
             id: 9,
-            nickname:'Hayden',
+            nickname: 'Hayden',
             name: 'Hayden Cristian',
             avatar: avatar9,
+            followed: true,
         },
         {
             id: 10,
-            nickname:'Yana',
+            nickname: 'Yana',
             name: 'Yana',
             avatar: avatar10,
+            followed: true,
+        },
+    ],
+    users: [
+        {
+            id: 1,
+            nickname: 'John',
+            name: "John",
+            avatar: avatar1,
+            followed: true,
+        },
+        {
+            id: 2,
+            nickname: 'Alan',
+            name: "Alan",
+            avatar: avatar2,
+            followed: true,
+        },
+        {
+            id: 3,
+            nickname: 'Josh',
+            name: "Josh",
+            avatar: avatar3,
+            followed: true,
+        },
+        {
+            id: 4,
+            nickname: 'Jake',
+            name: "Jake",
+            avatar: avatar4,
+            followed: true,
+        },
+        {
+            id: 156969787,
+            nickname: 'Alina',
+            name: "Alina",
+            avatar: avatarUnknown,
+            followed: false,
         },
     ],
 }
-// Если имена не помещаються в сайдбар, тогда присвой им фиксированою ширину!
+
 const reducerFriends = (state = Friends, action) => {
+    if (action.type === FOLLOW) {
+        let stateCopy = { ...state }
+        stateCopy.users = [...state.users];
+        let newFriend = {
+            id: action.userId,
+            name: action.name,
+            nickname: action.nickname,
+            avatar: action.avatar,
+        }
+        stateCopy.users.push(newFriend);
+
+        return stateCopy;
+    } else if (action.type === UNFOLLOW) {
+        let stateCopy = { ...state }
+        stateCopy.users = [...state.users];
+        stateCopy.users = state.users.map(u => {
+            return {...u}
+        });
+        stateCopy.users.filter(u => {
+            if (u.id !== action.userId) {
+                return true;
+            }
+        });
+
+        return stateCopy;
+    }
 
     return state;
 }
+
+export let followAC = (userId, name, nickname, avatar) => {
+    return ({ type: FOLLOW, userId: userId, name: name, nickname: nickname, avatar:avatar });
+}
+export let unfollowAC = (userId) => {
+    return ({ type: UNFOLLOW, userId: userId });
+}
+
 
 export default reducerFriends;

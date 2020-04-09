@@ -6,7 +6,6 @@ import reducerMusic from "./reducer-music";
 import reducerOptions from "./reducer-options";
 import reducerFriends from "./reducer-friends";
 import reducerFooter from "./reducer-footer";
-import reducerUsers from "./reducer-users";
 
 let reducers = combineReducers ({
     profilePage: reducerProfile,
@@ -16,7 +15,6 @@ let reducers = combineReducers ({
     optionsPage: reducerOptions,
     Friends: reducerFriends,
     Footer: reducerFooter, 
-    users: reducerUsers,
 });
 
 let store = createStore(reducers);

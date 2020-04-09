@@ -10,4 +10,5 @@
 }
 .friendsList {
     display:flex;
+    flex-wrap:  wrap;
 }

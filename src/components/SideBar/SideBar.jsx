@@ -8,7 +8,7 @@ const SideBar = (props) => {
   return (
     <div className={classes.menu}>
       <Nav />
-      <NavLink to="/Friends">
+      <NavLink to="/Friends/DataFriends">
         <Friends Friends={props.Friends}/>
       </NavLink>  
     </div>

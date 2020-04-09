@@ -14,7 +14,11 @@
     color:#FFF;
 }
 .user button {
-    background-color: #F8F9FA;
-    border:1px solid #F8F9FA;
+    background-color:#0275D8;
+    border:1px solid #4088FA;
     padding:5px 10px;
 } 
+.user button:hover {
+    transition:all .3s linear;
+    opacity:0.9;
+}
