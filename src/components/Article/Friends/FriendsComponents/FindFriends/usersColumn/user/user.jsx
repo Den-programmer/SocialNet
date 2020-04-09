@@ -2,6 +2,7 @@ import React from 'react';
 import classes from './user.module.css';
 
 const User = (props) => {
+    console.log(props.name);
 
     // let follow = () => {
     //     if(props.followed == false) {
@@ -13,12 +14,22 @@ const User = (props) => {
     //         props.unfollow(props.id);
     //     }
     // }
+    let following = (e) => {
+        // Проблема в том, что мы передаем пропс как обьект, чтобы решить эту проблему нужно будет создать глубокие копии!
+        // Когда мы пытаемся передать в пропсах имя - мы передаем массив имён, ведь имя то не одно, а чтобы оно было одно - 
+        // нужно использовать currentTarget! 
+        let id = props.id;
+        let name = props.name;
+        let nickname = props.nickname;
+        let avatar =  props.avatar;
 
-    let following = () => {
+        let currentTarget = e.target;
+        console.log(currentTarget);
+
         if (props.followed == false) {
-            props.follow(props.id, props.name, props.nickname, props.avatar);
+            props.follow(id, name, nickname, avatar);
         } else {
-            props.unfollow(props.id);
+            props.unfollow(id);
         }
     }
 
