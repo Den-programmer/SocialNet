@@ -5,7 +5,7 @@ import Conversation from './Conversation/conversation';
 const Dialog = (props) => {
     let newMessage = React.createRef();
     let Messages = props.messages.map((ms) => {
-        return <Conversation id={ms.id} messageText={ms.messageText}/>
+        return <Conversation key={ms.id} id={ms.id} messageText={ms.messageText}/>
     });
 
     let addMessage = () => {

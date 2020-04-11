@@ -10,6 +10,13 @@ import avatar9 from '../images/friends-avatars/avatar9.jpg';
 import avatar10 from '../images/friends-avatars/avatar10.jpg';
 import avatarUnknown from '../images/users/unfollowed-user.jpg';
 
+export const followAC = (userId) => {
+    return { type: FOLLOW, userId: userId, }
+}
+export const unfollowAC = (userId) => {
+    return { type: UNFOLLOW, userId: userId, }
+}
+
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 
@@ -128,24 +135,43 @@ let Friends = {
 const reducerFriends = (state = Friends, action) => {
     if (action.type === FOLLOW) {
         let stateCopy = { ...state }
+        stateCopy.friends = [...state.friends];
         stateCopy.users = [...state.users];
+        stateCopy.friends.map(friend => {
+            return {...friend}
+        });
+        let currentUser = stateCopy.users.filter((user) => {
+            if (user.id == action.userId) {
+                return true;
+            }
+        });
+        console.log(currentUser);
+
+        // Массив приходит правильный, напиши код, который будет правильно ререндерить страницу!
+        // Все-таки приходит undefined в свойства обьекта, потому все перерисовываеться, но неправильно!
+        // Походу на новый массив с одним пользователем нужно сделать глубокую копию!
+        // Как обратиться к объекту в массиве, зная значение его свойства не через цикл?
+
         let newFriend = {
             id: action.userId,
-            name: action.name,
-            nickname: action.nickname,
-            avatar: action.avatar,
+            name: currentUser.name,
+            nickname: currentUser.nickname,
+            avatar: currentUser.avatar,
+            followed: true,
         }
-        stateCopy.users.push(newFriend);
+        console.log(newFriend);
+        stateCopy.friends.push(newFriend);
 
         return stateCopy;
     } else if (action.type === UNFOLLOW) {
         let stateCopy = { ...state }
         stateCopy.users = [...state.users];
-        stateCopy.users = state.users.map(u => {
-            return {...u}
+        stateCopy.friends = [...state.friends];
+        stateCopy.friends = state.friends.map(friend => {
+            return {...friend}
         });
-        stateCopy.users.filter(u => {
-            if (u.id !== action.userId) {
+        stateCopy.friends.filter(friend => {
+            if (friend.id !== action.userId) {
                 return true;
             }
         });
@@ -155,13 +181,5 @@ const reducerFriends = (state = Friends, action) => {
 
     return state;
 }
-
-export let followAC = (userId, name, nickname, avatar) => {
-    return ({ type: FOLLOW, userId: userId, name: name, nickname: nickname, avatar:avatar });
-}
-export let unfollowAC = (userId) => {
-    return ({ type: UNFOLLOW, userId: userId });
-}
-
 
 export default reducerFriends;

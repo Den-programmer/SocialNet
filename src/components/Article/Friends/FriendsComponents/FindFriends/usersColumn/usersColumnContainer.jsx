@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import UsersColumn from "./usersColumn";
-import { followAC, unfollowAC } from "../../../../../../BLL/reducer-users";
+import { followAC, unfollowAC } from "../../../../../../BLL/reducer-friends";
 
 let mapStateToProps = (state) => {
     return {
@@ -9,8 +9,8 @@ let mapStateToProps = (state) => {
 }
 let mapDispatchToProps = (dispatch) => {
     return {
-        follow: (userId, name, nickname, avatar) => {
-            dispatch(followAC(userId, name, nickname, avatar));
+        follow: (userId) => {
+            dispatch(followAC(userId));
         },
         unfollow: (userId) => {
             dispatch(unfollowAC(userId));

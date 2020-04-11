@@ -7,6 +7,7 @@ const UsersColumn = (props) => {
     let users = props.users.map((user) => {
         return <User id={user.id} 
                      key={user.id} 
+                     users={props.users}
                      followed={user.followed}
                      nickname={user.nickname} 
                      name={user.name} 
