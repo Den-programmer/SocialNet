@@ -7,7 +7,6 @@ export const addMessageActionCreator = (messageText) => {
 export const onNewMessageChangeActionCreator = (newMessageValue) => {
     return { type: NEW_MESSAGE_CHANGE, newMessageValue: newMessageValue }
 }
-// Пропиши каждому свой особенный аватар!
 
 let messagesPage = {
     dialogsData: [

@@ -49,6 +49,9 @@ const reducerProfile = (state = profilePage, action) => {
       likesCount: 200000,
     }
     stateCopy.posts.push(newPost);
+    stateCopy.ValueOfPostTitle = '';
+    stateCopy.ValueOfPostInf = '';
+
     return stateCopy;
   } else if (action.type === POST_TITLE_CHANGE) {
       let stateCopy = {...state}

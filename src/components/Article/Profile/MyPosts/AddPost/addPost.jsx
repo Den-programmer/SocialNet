@@ -9,8 +9,6 @@ const AddPost = (props) => {
         newPostTitle = newPostTitle.current.value;
         newPostInformat = newPostInformat.current.value;
         props.addPost(newPostTitle, newPostInformat);
-        props.profilePage.ValueOfPostTitle = '';
-        props.profilePage.ValueOfPostInf = '';
     }
 
     let onPostTitleChange = () => {
