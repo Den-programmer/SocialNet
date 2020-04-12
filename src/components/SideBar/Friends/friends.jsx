@@ -3,8 +3,16 @@ import classes from './friends.module.css';
 import Friend from './Friend/friend';
 
 const Friends = (props) => {
+    let Friends = props.Friends.friends;
+    let friendsArray = [];
 
-    let friends = props.Friends.friends.map((f) => {
+    for (let i = 0; i < Friends.length; i++) {
+        if (i <= 2) {
+            friendsArray.push(Friends[i]);
+        }
+    }
+
+    let friends = friendsArray.map((f) => {
         return <Friend id={f.id} key={f.id} nickname={f.nickname} avatar={f.avatar}/>
     });
 
