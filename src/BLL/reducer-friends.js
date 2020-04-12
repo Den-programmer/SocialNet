@@ -129,29 +129,75 @@ let Friends = {
             avatar: avatarUnknown,
             followed: false,
         },
+        {
+            id: 5,
+            nickname: 'Chris',
+            name: 'Chris Heria',
+            avatar: avatar5,
+            followed: true,
+        },
+        {
+            id: 6,
+            nickname: 'LilPipka',
+            name: 'Lil',
+            avatar: avatar6,
+            followed: true,
+        },
+        {
+            id: 7,
+            nickname: 'Thomas',
+            name: 'Thomas',
+            avatar: avatar7,
+            followed: true,
+        },
+        {
+            id: 8,
+            nickname: 'Static_Alex',
+            name: 'Alex',
+            avatar: avatar8,
+            followed: true,
+        },
+        {
+            id: 9,
+            nickname: 'Hayden',
+            name: 'Hayden Cristian',
+            avatar: avatar9,
+            followed: true,
+        },
+        {
+            id: 10,
+            nickname: 'Yana',
+            name: 'Yana',
+            avatar: avatar10,
+            followed: true,
+        },
     ],
 }
 
 const reducerFriends = (state = Friends, action) => {
+
+    let stateCopy = { ...state }
+    stateCopy.friends = [...state.friends];
+    stateCopy.users = [...state.users];
+    stateCopy.users.map(u => {
+        return { ...u }
+    });
+    stateCopy.friends = state.friends.map(friend => {
+        return { ...friend }
+    });
+
     if (action.type === FOLLOW) {
-        let stateCopy = { ...state }
-        stateCopy.friends = [...state.friends];
-        stateCopy.users = [...state.users];
-        stateCopy.friends.map(friend => {
-            return {...friend}
+        stateCopy.users.forEach(u => {
+            if (u.id == action.userId) {
+                u.followed = true;
+            }
         });
         let currentUser = stateCopy.users.filter((user) => {
             if (user.id == action.userId) {
                 return true;
             }
         });
-        console.log(currentUser);
-
-        // Массив приходит правильный, напиши код, который будет правильно ререндерить страницу!
-        // Все-таки приходит undefined в свойства обьекта, потому все перерисовываеться, но неправильно!
-        // Походу на новый массив с одним пользователем нужно сделать глубокую копию!
-        // Как обратиться к объекту в массиве, зная значение его свойства не через цикл?
-
+        currentUser = currentUser.find(item => item);
         let newFriend = {
             id: action.userId,
             name: currentUser.name,
@@ -159,22 +205,21 @@ const reducerFriends = (state = Friends, action) => {
             avatar: currentUser.avatar,
             followed: true,
         }
-        console.log(newFriend);
         stateCopy.friends.push(newFriend);
 
         return stateCopy;
     } else if (action.type === UNFOLLOW) {
-        let stateCopy = { ...state }
-        stateCopy.users = [...state.users];
-        stateCopy.friends = [...state.friends];
-        stateCopy.friends = state.friends.map(friend => {
-            return {...friend}
+        stateCopy.users.forEach(u => {
+            if (u.id == action.userId) {
+                u.followed = false;
+            }
         });
-        stateCopy.friends.filter(friend => {
+        let newArrayFriends = stateCopy.friends.filter(friend => {
             if (friend.id !== action.userId) {
                 return true;
             }
         });
+        stateCopy.friends = [...newArrayFriends];
 
         return stateCopy;
     }
