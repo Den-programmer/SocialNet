@@ -16,9 +16,13 @@ export const followAC = (userId) => {
 export const unfollowAC = (userId) => {
     return { type: UNFOLLOW, userId: userId, }
 }
+export const setUsersAC = (users) => {
+    return { type: SET_USERS, users:users }
+}
 
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
+const SET_USERS = 'SET-USERS';
 
 let Friends = {
     friends: [
@@ -94,83 +98,83 @@ let Friends = {
         },
     ],
     users: [
-        {
-            id: 1,
-            nickname: 'John',
-            name: "John",
-            avatar: avatar1,
-            followed: true,
-        },
-        {
-            id: 2,
-            nickname: 'Alan',
-            name: "Alan",
-            avatar: avatar2,
-            followed: true,
-        },
-        {
-            id: 3,
-            nickname: 'Josh',
-            name: "Josh",
-            avatar: avatar3,
-            followed: true,
-        },
-        {
-            id: 4,
-            nickname: 'Jake',
-            name: "Jake",
-            avatar: avatar4,
-            followed: true,
-        },
-        {
-            id: 156969787,
-            nickname: 'Alina',
-            name: "Alina",
-            avatar: avatarUnknown,
-            followed: false,
-        },
-        {
-            id: 5,
-            nickname: 'Chris',
-            name: 'Chris Heria',
-            avatar: avatar5,
-            followed: true,
-        },
-        {
-            id: 6,
-            nickname: 'LilPipka',
-            name: 'Lil',
-            avatar: avatar6,
-            followed: true,
-        },
-        {
-            id: 7,
-            nickname: 'Thomas',
-            name: 'Thomas',
-            avatar: avatar7,
-            followed: true,
-        },
-        {
-            id: 8,
-            nickname: 'Static_Alex',
-            name: 'Alex',
-            avatar: avatar8,
-            followed: true,
-        },
-        {
-            id: 9,
-            nickname: 'Hayden',
-            name: 'Hayden Cristian',
-            avatar: avatar9,
-            followed: true,
-        },
-        {
-            id: 10,
-            nickname: 'Yana',
-            name: 'Yana',
-            avatar: avatar10,
-            followed: true,
-        },
+        // {
+        //     id: 1,
+        //     nickname: 'John',
+        //     name: "John",
+        //     avatar: avatar1,
+        //     followed: true,
+        // },
+        // {
+        //     id: 2,
+        //     nickname: 'Alan',
+        //     name: "Alan",
+        //     avatar: avatar2,
+        //     followed: true,
+        // },
+        // {
+        //     id: 3,
+        //     nickname: 'Josh',
+        //     name: "Josh",
+        //     avatar: avatar3,
+        //     followed: true,
+        // },
+        // {
+        //     id: 4,
+        //     nickname: 'Jake',
+        //     name: "Jake",
+        //     avatar: avatar4,
+        //     followed: true,
+        // },
+        // {
+        //     id: 156969787,
+        //     nickname: 'Alina',
+        //     name: "Alina",
+        //     avatar: avatarUnknown,
+        //     followed: false,
+        // },
+        // {
+        //     id: 5,
+        //     nickname: 'Chris',
+        //     name: 'Chris Heria',
+        //     avatar: avatar5,
+        //     followed: true,
+        // },
+        // {
+        //     id: 6,
+        //     nickname: 'LilPipka',
+        //     name: 'Lil',
+        //     avatar: avatar6,
+        //     followed: true,
+        // },
+        // {
+        //     id: 7,
+        //     nickname: 'Thomas',
+        //     name: 'Thomas',
+        //     avatar: avatar7,
+        //     followed: true,
+        // },
+        // {
+        //     id: 8,
+        //     nickname: 'Static_Alex',
+        //     name: 'Alex',
+        //     avatar: avatar8,
+        //     followed: true,
+        // },
+        // {
+        //     id: 9,
+        //     nickname: 'Hayden',
+        //     name: 'Hayden Cristian',
+        //     avatar: avatar9,
+        //     followed: true,
+        // },
+        // {
+        //     id: 10,
+        //     nickname: 'Yana',
+        //     name: 'Yana',
+        //     avatar: avatar10,
+        //     followed: true,
+        // },
     ],
 }
 
@@ -185,8 +189,11 @@ const reducerFriends = (state = Friends, action) => {
     stateCopy.friends = state.friends.map(friend => {
         return { ...friend }
     });
+    if (action.type === SET_USERS) {
+        stateCopy.users = action.users;
 
-    if (action.type === FOLLOW) {
+        return stateCopy;
+    } else if (action.type === FOLLOW) {
         stateCopy.users.forEach(u => {
             if (u.id == action.userId) {
                 u.followed = true;

@@ -2,11 +2,13 @@ import React from 'react';
 import classes from './user.module.css';
 
 const User = (props) => {
+
+    
     let following = (e) => {
 
-        let currentElement = e.target.parentNode; 
+        let currentElement = e.target.parentNode;
         let id = Number(currentElement.getAttribute("id"));
-        
+
         if (props.followed == false) {
             props.follow(id);
         } else {
