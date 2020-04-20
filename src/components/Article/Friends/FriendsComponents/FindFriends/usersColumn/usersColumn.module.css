@@ -1,6 +1,10 @@
-.usersColumn {
+.users {
     display:flex;
     margin: 0 auto; 
     width: 75%;
     flex-wrap: wrap;
+}
+.btn_setUsers {
+    display:flex;
+    justify-content: center;
 }

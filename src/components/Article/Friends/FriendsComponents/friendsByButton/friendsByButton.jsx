@@ -4,7 +4,14 @@ import Friend from './Friend/friend';
 
 const FriendsByButton = (props) => {
     let friends = props.friends.map((f) => {
-        return <Friend id={f.id} key={f.id} nickname={f.nickname} name={f.name} avatar={f.avatar}/>;
+        return <Friend id={f.id} 
+                       key={f.id} 
+                       nickname={f.nickname} 
+                       name={f.name} 
+                       avatar={f.avatar} 
+                       followed={f.followed} 
+                       follow={props.follow} 
+                       unfollow={props.unfollow}/>;
     });
 // Сделай функцию в reducer'e, которая будет подписывать и отписывать пользователей при нажатии на кнопку!
     return (
