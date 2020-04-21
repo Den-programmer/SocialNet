@@ -4,7 +4,3 @@
     width: 75%;
     flex-wrap: wrap;
 }
-.btn_setUsers {
-    display:flex;
-    justify-content: center;
-}
