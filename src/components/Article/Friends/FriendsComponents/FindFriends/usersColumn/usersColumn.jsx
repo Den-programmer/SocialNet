@@ -11,7 +11,6 @@ const UsersColumn = (props) => {
             });
         }
     }
-    console.log(props.users.photo);
     
     let users = props.users.map((user) => {
         return <User id={user.id} 

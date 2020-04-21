@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './friend.module.css';
+import defaultUserPhoto from './img/defaultUserPhoto.jpg';
 
 const Friend = (props) => {
 
@@ -18,8 +19,8 @@ const Friend = (props) => {
     return (
         <div className={classes.ObjectUser}>
             <div className={classes.user}>
-                <img src={props.avatar} alt="" />
-                <h5>{props.nickname}</h5>
+                {props.avatar !== undefined ? <img src={props.avatar} alt="" /> : <img src={defaultUserPhoto} alt="" />}
+                <h5>{props.nickname !== undefined ? props.nickname : props.name}</h5>
                 <div className={classes.following}>
                     <button onClick={following}>Followed</button> 
                 </div>

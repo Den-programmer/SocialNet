@@ -8,7 +8,6 @@ import avatar7 from '../images/friends-avatars/avatar7.jpg';
 import avatar8 from '../images/friends-avatars/avatar8.jpg';
 import avatar9 from '../images/friends-avatars/avatar9.jpg';
 import avatar10 from '../images/friends-avatars/avatar10.jpg';
-import avatarUnknown from '../images/users/unfollowed-user.jpg';
 
 export const followAC = (userId) => {
     return { type: FOLLOW, userId: userId, }
