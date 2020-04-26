@@ -1,6 +1,6 @@
 import Dialog from './dialog';
-import { addMessageActionCreator } from '../../../../BLL/reducer-messages';
-import { onNewMessageChangeActionCreator } from '../../../../BLL/reducer-messages';
+import { addMessage } from '../../../../BLL/reducer-messages';
+import { onNewMessageChange } from '../../../../BLL/reducer-messages';
 import { connect } from 'react-redux';
 
 let mapStateToProps = (state) => {
@@ -9,17 +9,8 @@ let mapStateToProps = (state) => {
         messages:state.messagesPage.messages,
     }
 }
-let mapDispatchToProps = (dispatch) => {
-    return {
-        addMessage: (newMessageVal) => {
-            dispatch(addMessageActionCreator(newMessageVal));
-        },
-        onNewMessageChange: (newMessageValue) => {
-            dispatch(onNewMessageChangeActionCreator(newMessageValue));
-        }
-    }
-}
 
-const DialogContainer = connect(mapStateToProps, mapDispatchToProps)(Dialog);
+
+const DialogContainer = connect(mapStateToProps, { addMessage: addMessage,onNewMessageChange: onNewMessageChange })(Dialog);
 
 export default DialogContainer;

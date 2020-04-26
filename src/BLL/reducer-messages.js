@@ -112,11 +112,11 @@ const reducerMessages = (state = messagesPage, action) => {
             return state;
     }
 }
-export const addMessageActionCreator = (messageText) => {
-    return { type: ADD_MESSAGE, messageText: messageText }
+export const addMessage = messageText => {
+    return { type: ADD_MESSAGE, messageText }
 }
-export const onNewMessageChangeActionCreator = (newMessageValue) => {
-    return { type: NEW_MESSAGE_CHANGE, newMessageValue: newMessageValue }
+export const onNewMessageChange = newMessageValue => {
+    return { type: NEW_MESSAGE_CHANGE, newMessageValue }
 }
 
 export default reducerMessages;
