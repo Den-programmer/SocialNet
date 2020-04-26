@@ -28,11 +28,11 @@ let profilePage = {
 }
 
 const reducerProfile = (state = profilePage, action) => {
+  let stateCopy = { ...state }
+  stateCopy.posts = [...state.posts]
+  
   switch (action.type) {
     case ADD_POST:
-      let stateCopy = { ...state }
-      stateCopy.posts = [...state.posts]
-
       let newPost = {
         id: stateCopy.posts.length + 1,
         postTitle: action.newPostTitle,
@@ -45,12 +45,12 @@ const reducerProfile = (state = profilePage, action) => {
 
       return stateCopy;
     case POST_TITLE_CHANGE:
-      let stateCopy = { ...state }
       stateCopy.ValueOfPostTitle = action.newPostTitleVal;
+
       return stateCopy;
     case POST_INF_CHANGE:
-      let stateCopy = { ...state }
       stateCopy.ValueOfPostInf = action.newPostInformatVal;
+
       return stateCopy;
     default:
       return state;

@@ -14,6 +14,7 @@ const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET-USERS';
 const CHANGE_PAGE = 'CHANGE-PAGE';
 const SET_USERSINF = "SET-USERSINF";
+const IS_FETCHING = 'IS_FETCHING';
 
 let Friends = {
     friends: [
@@ -95,6 +96,7 @@ let Friends = {
 
     ],
     usersInf: {
+        isFetching: true,
         totalCount: 0,
         pageSize: 12,
         currentPage: 1,
@@ -163,25 +165,32 @@ const reducerFriends = (state = Friends, action) => {
             stateCopy.usersInf.totalCount = action.data.totalCount;
 
             return stateCopy;
+        case IS_FETCHING: 
+            stateCopy.usersInf.isFetching = action.isFetching;
+        
+            return stateCopy;
         default:  
             return state;    
     }
 }
 
-export const followAC = (userId) => {
+export const followAC = userId => {
     return { type: FOLLOW, userId: userId, }
 }
-export const unfollowAC = (userId) => {
+export const unfollowAC = userId => {
     return { type: UNFOLLOW, userId: userId, }
 }
-export const setUsersAC = (users) => {
+export const setUsersAC = users => {
     return { type: SET_USERS, users: users }
 }
-export const onPageChangeAC = (currentPage) => {
+export const onPageChangeAC = currentPage => {
     return { type: CHANGE_PAGE, currentPage }
 }
 export const setUsersInfAC = data => {
     return { type: SET_USERSINF, data }
+}
+export const isFetchingAC = isFetching => {
+    return { type: IS_FETCHING, isFetching }
 }
 
 export default reducerFriends;

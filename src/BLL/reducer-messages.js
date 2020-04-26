@@ -93,10 +93,9 @@ let messagesPage = {
 }
 
 const reducerMessages = (state = messagesPage, action) => {
-
+    let stateCopy = { ...state };
     switch (action.type) {
         case ADD_MESSAGE:
-            let stateCopy = { ...state };
             stateCopy.messages = [...state.messages]
             let newMessage = {
                 id: stateCopy.messages.length + 1,
@@ -106,7 +105,6 @@ const reducerMessages = (state = messagesPage, action) => {
 
             return stateCopy;
         case NEW_MESSAGE_CHANGE:
-            let stateCopy = { ...state };
             stateCopy.NewMessageValue = action.newMessageValue;
 
             return stateCopy;
