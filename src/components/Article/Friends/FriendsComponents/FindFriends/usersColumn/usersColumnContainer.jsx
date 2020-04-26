@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { followAC, unfollowAC, setUsersAC, setUsersInfAC, isFetchingAC } from "../../../../../../BLL/reducer-friends";
+import { follow, unfollow, setUsers, setUsersInf, isFetching } from "../../../../../../BLL/reducer-friends";
 import UsersColumnAPI from "./usersColumnAPI";
 
 let mapStateToProps = (state) => {
@@ -8,26 +8,13 @@ let mapStateToProps = (state) => {
         usersInf: state.Friends.usersInf,
     }
 }
-let mapDispatchToProps = (dispatch) => {
-    return {
-        follow: userId => {
-            dispatch(followAC(userId));
-        },
-        unfollow: userId => {
-            dispatch(unfollowAC(userId));
-        },
-        setUsers: users => {
-            dispatch(setUsersAC(users));
-        },
-        setUsersInf:data => {
-            dispatch(setUsersInfAC(data));
-        },
-        isFetching:isFetching => {
-            dispatch(isFetchingAC(isFetching));
-        }
-    }
-}
 
-const UsersColumnContainer = connect(mapStateToProps, mapDispatchToProps)(UsersColumnAPI); 
+const UsersColumnContainer = connect(mapStateToProps, {
+    follow: follow,
+    unfollow: unfollow,
+    setUsers: setUsers,
+    setUsersInf: setUsersInf,
+    isFetching:isFetching
+})(UsersColumnAPI); 
 
 export default UsersColumnContainer;

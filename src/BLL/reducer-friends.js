@@ -174,22 +174,22 @@ const reducerFriends = (state = Friends, action) => {
     }
 }
 
-export const followAC = userId => {
+export const follow = userId => {
     return { type: FOLLOW, userId: userId, }
 }
-export const unfollowAC = userId => {
+export const unfollow = userId => {
     return { type: UNFOLLOW, userId: userId, }
 }
-export const setUsersAC = users => {
+export const setUsers = users => {
     return { type: SET_USERS, users: users }
 }
-export const onPageChangeAC = currentPage => {
+export const onPageChange = currentPage => {
     return { type: CHANGE_PAGE, currentPage }
 }
-export const setUsersInfAC = data => {
+export const setUsersInf = data => {
     return { type: SET_USERSINF, data }
 }
-export const isFetchingAC = isFetching => {
+export const isFetching = isFetching => {
     return { type: IS_FETCHING, isFetching }
 }
 
