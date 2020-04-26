@@ -9,7 +9,7 @@ let mapStateToProps = state => {
 }
 let mapDispatchtoProps = (dispatch) => {
     return {
-        changePage:(currentPage) => {
+        changePage:currentPage => {
             dispatch(onPageChangeAC(currentPage));
         },
     }

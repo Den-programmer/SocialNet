@@ -57,14 +57,14 @@ const reducerProfile = (state = profilePage, action) => {
   }
 }
 
-export const addPostActionCreator = (newPostTitle, newPostInformat) => {
-  return { type: ADD_POST, newPostTitle: newPostTitle, newPostInformat: newPostInformat, };
+export const addPost = (newPostTitle, newPostInformat) => {
+  return { type: ADD_POST, newPostTitle, newPostInformat };
 }
-export const onPostTitleChangeActionCreator = (newPostTitleVal) => {
-  return { type: POST_TITLE_CHANGE, newPostTitleVal: newPostTitleVal }
+export const onPostTitleChange = (newPostTitleVal) => {
+  return { type: POST_TITLE_CHANGE, newPostTitleVal }
 }
-export const onPostInfChangeActionCreator = (newPostInformatVal) => {
-  return { type: POST_INF_CHANGE, newPostInformatVal: newPostInformatVal }
+export const onPostInfChange = (newPostInformatVal) => {
+  return { type: POST_INF_CHANGE, newPostInformatVal }
 }
 
 export default reducerProfile;
