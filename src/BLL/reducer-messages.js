@@ -1,13 +1,6 @@
 let ADD_MESSAGE = 'ADD-MESSAGE';
 let NEW_MESSAGE_CHANGE = 'NEW-MESSAGE-CHANGE';
 
-export const addMessageActionCreator = (messageText) => {
-    return { type: ADD_MESSAGE, messageText: messageText }
-}
-export const onNewMessageChangeActionCreator = (newMessageValue) => {
-    return { type: NEW_MESSAGE_CHANGE, newMessageValue: newMessageValue }
-}
-
 let messagesPage = {
     dialogsData: [
         {
@@ -101,22 +94,31 @@ let messagesPage = {
 
 const reducerMessages = (state = messagesPage, action) => {
 
-    if (action.type === ADD_MESSAGE) {
-        let stateCopy = {...state};
-        stateCopy.messages = [...state.messages]
-        let newMessage = {
-            id: stateCopy.messages.length + 1,
-            messageText: action.messageText,
-        }
-        stateCopy.messages.push(newMessage);
-        return stateCopy;
-    } else if (action.type === NEW_MESSAGE_CHANGE) {
-        let stateCopy = {...state};
-        stateCopy.NewMessageValue = action.newMessageValue;
-        return stateCopy;
-    }
+    switch (action.type) {
+        case ADD_MESSAGE:
+            let stateCopy = { ...state };
+            stateCopy.messages = [...state.messages]
+            let newMessage = {
+                id: stateCopy.messages.length + 1,
+                messageText: action.messageText,
+            }
+            stateCopy.messages.push(newMessage);
 
-    return state;
+            return stateCopy;
+        case NEW_MESSAGE_CHANGE:
+            let stateCopy = { ...state };
+            stateCopy.NewMessageValue = action.newMessageValue;
+
+            return stateCopy;
+        default:
+            return state;
+    }
+}
+export const addMessageActionCreator = (messageText) => {
+    return { type: ADD_MESSAGE, messageText: messageText }
+}
+export const onNewMessageChangeActionCreator = (newMessageValue) => {
+    return { type: NEW_MESSAGE_CHANGE, newMessageValue: newMessageValue }
 }
 
 export default reducerMessages;
