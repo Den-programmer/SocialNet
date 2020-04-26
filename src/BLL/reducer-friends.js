@@ -9,22 +9,6 @@ import avatar8 from '../images/friends-avatars/avatar8.jpg';
 import avatar9 from '../images/friends-avatars/avatar9.jpg';
 import avatar10 from '../images/friends-avatars/avatar10.jpg';
 
-export const followAC = (userId) => {
-    return { type: FOLLOW, userId: userId, }
-}
-export const unfollowAC = (userId) => {
-    return { type: UNFOLLOW, userId: userId, }
-}
-export const setUsersAC = (users) => {
-    return { type: SET_USERS, users:users }
-}
-export const onPageChangeAC = (currentPage) => {
-    return { type: CHANGE_PAGE, currentPage }
-}
-export const setUsersInfAC = data => {
-    return { type: SET_USERSINF, data }
-}
-
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET-USERS';
@@ -122,65 +106,82 @@ const reducerFriends = (state = Friends, action) => {
     let stateCopy = { ...state }
     stateCopy.friends = [...state.friends];
     stateCopy.users = [...state.users];
-    stateCopy.friendsInf = {...state.friendsInf}
-    stateCopy.usersInf = {...state.usersInf}
+    stateCopy.friendsInf = { ...state.friendsInf }
+    stateCopy.usersInf = { ...state.usersInf }
     stateCopy.users.map(u => {
         return { ...u }
     });
     stateCopy.friends = state.friends.map(friend => {
         return { ...friend }
     });
-    if (action.type === SET_USERS) {
-        stateCopy.users = action.users;
+    switch (action.type) {
+        case SET_USERS:
+            stateCopy.users = action.users;
 
-        return stateCopy;
-    } else if (action.type === FOLLOW) {
-        stateCopy.users.forEach(u => {
-            if (u.id == action.userId) {
-                u.followed = true;
+            return stateCopy;
+        case FOLLOW:
+            stateCopy.users.forEach(u => {
+                if (u.id == action.userId) {
+                    u.followed = true;
+                }
+            });
+            let currentUser = stateCopy.users.filter((user) => {
+                if (user.id == action.userId) {
+                    return true;
+                }
+            });
+            currentUser = currentUser.find(item => item);
+            let newFriend = {
+                id: action.userId,
+                name: currentUser.name,
+                nickname: currentUser.nickname,
+                avatar: currentUser.avatar,
+                followed: true,
             }
-        });
-        let currentUser = stateCopy.users.filter((user) => {
-            if (user.id == action.userId) {
-                return true;
-            }
-        });
-        currentUser = currentUser.find(item => item);
-        let newFriend = {
-            id: action.userId,
-            name: currentUser.name,
-            nickname: currentUser.nickname,
-            avatar: currentUser.avatar,
-            followed: true,
-        }
-        stateCopy.friends.push(newFriend);
+            stateCopy.friends.push(newFriend);
 
-        return stateCopy;
-    } else if (action.type === UNFOLLOW) {
-        stateCopy.users.forEach(u => {
-            if (u.id == action.userId) {
-                u.followed = false;
-            }
-        });
-        let newArrayFriends = stateCopy.friends.filter(friend => {
-            if (friend.id !== action.userId) {
-                return true;
-            }
-        });
-        stateCopy.friends = [...newArrayFriends];
+            return stateCopy;
+        case UNFOLLOW:
+            stateCopy.users.forEach(u => {
+                if (u.id == action.userId) {
+                    u.followed = false;
+                }
+            });
+            let newArrayFriends = stateCopy.friends.filter(friend => {
+                if (friend.id !== action.userId) {
+                    return true;
+                }
+            });
+            stateCopy.friends = [...newArrayFriends];
 
-        return stateCopy;
-    } else if (action.type === CHANGE_PAGE) {
-        stateCopy.usersInf.currentPage = action.currentPage;
+            return stateCopy;
+        case CHANGE_PAGE:
+            stateCopy.usersInf.currentPage = action.currentPage;
 
-        return stateCopy;
-    } else if (action.type === SET_USERSINF) {
-        stateCopy.usersInf.totalCount = action.data.totalCount;
+            return stateCopy;
+        case SET_USERSINF:
+            stateCopy.usersInf.totalCount = action.data.totalCount;
 
-        return stateCopy;
+            return stateCopy;
+        default:  
+            return state;    
     }
+}
 
-    return state;
+export const followAC = (userId) => {
+    return { type: FOLLOW, userId: userId, }
+}
+export const unfollowAC = (userId) => {
+    return { type: UNFOLLOW, userId: userId, }
+}
+export const setUsersAC = (users) => {
+    return { type: SET_USERS, users: users }
+}
+export const onPageChangeAC = (currentPage) => {
+    return { type: CHANGE_PAGE, currentPage }
+}
+export const setUsersInfAC = data => {
+    return { type: SET_USERSINF, data }
 }
 
 export default reducerFriends;
