@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { followAC, unfollowAC, setUsersAC, setUsersInfAC } from "../../../../../../BLL/reducer-friends";
+import { followAC, unfollowAC, setUsersAC, setUsersInfAC, isFetchingAC } from "../../../../../../BLL/reducer-friends";
 import UsersColumnAPI from "./usersColumnAPI";
 
 let mapStateToProps = (state) => {
@@ -10,17 +10,20 @@ let mapStateToProps = (state) => {
 }
 let mapDispatchToProps = (dispatch) => {
     return {
-        follow: (userId) => {
+        follow: userId => {
             dispatch(followAC(userId));
         },
-        unfollow: (userId) => {
+        unfollow: userId => {
             dispatch(unfollowAC(userId));
         },
-        setUsers: (users) => {
+        setUsers: users => {
             dispatch(setUsersAC(users));
         },
         setUsersInf:data => {
             dispatch(setUsersInfAC(data));
+        },
+        isFetching:isFetching => {
+            dispatch(isFetchingAC(isFetching));
         }
     }
 }
