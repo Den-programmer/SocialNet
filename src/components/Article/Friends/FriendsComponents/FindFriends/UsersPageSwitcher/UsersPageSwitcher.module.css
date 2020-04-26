@@ -1,0 +1,14 @@
+.pages {
+    display:flex;
+    justify-content: center;
+}
+.selected_page {
+    font-weight:bold;
+}
+.pages button {
+    margin: 10px;
+    color:#FFF;
+    background: none;
+    border:none;
+    font-size: 17px;
+}

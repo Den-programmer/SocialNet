@@ -6,7 +6,7 @@ import News from './News/news';
 import Music from './Music/music';
 import Options from './Options/options';
 import { Route } from 'react-router-dom';
-import FindFriends from './Friends/FriendsComponents/FindFriends/findFriends';
+import FindFriendsContainer from './Friends/FriendsComponents/FindFriends/findFriendsContainer';
 import FriendsNav from './Friends/FriendsNav/friendsNav';
 import FriendsByButtonContainer from './Friends/FriendsComponents/friendsByButton/friendsByButtonContainer';
 
@@ -25,7 +25,7 @@ const Article = (props) => {
                 </React.Fragment>)}/>
             <Route exact path='/Friends/FindUsers' render={() => (<React.Fragment>
                     <FriendsNav/>
-                    <FindFriends/>
+                    <FindFriendsContainer/>
                 </React.Fragment>)}/>
         </article>
     );

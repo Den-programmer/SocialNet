@@ -6,13 +6,11 @@ import './index.css';
 import App from './App';
 import { Provider } from 'react-redux';
 
-let state = store.getState();
 
 
 ReactDOM.render(<Provider store={store}>
-    <App footer={state.Footer}
-        Friends={state.Friends} />
-    </Provider>,
+                    <App />
+                </Provider>,
     document.getElementById('root'));
 
 

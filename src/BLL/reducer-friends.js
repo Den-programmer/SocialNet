@@ -18,10 +18,18 @@ export const unfollowAC = (userId) => {
 export const setUsersAC = (users) => {
     return { type: SET_USERS, users:users }
 }
+export const onPageChangeAC = (currentPage) => {
+    return { type: CHANGE_PAGE, currentPage }
+}
+export const setUsersInfAC = data => {
+    return { type: SET_USERSINF, data }
+}
 
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET-USERS';
+const CHANGE_PAGE = 'CHANGE-PAGE';
+const SET_USERSINF = "SET-USERSINF";
 
 let Friends = {
     friends: [
@@ -96,9 +104,17 @@ let Friends = {
             followed: true,
         },
     ],
+    friendsInf: {
+
+    },
     users: [
-        
+
     ],
+    usersInf: {
+        totalCount: 0,
+        pageSize: 12,
+        currentPage: 1,
+    }
 }
 
 const reducerFriends = (state = Friends, action) => {
@@ -106,6 +122,8 @@ const reducerFriends = (state = Friends, action) => {
     let stateCopy = { ...state }
     stateCopy.friends = [...state.friends];
     stateCopy.users = [...state.users];
+    stateCopy.friendsInf = {...state.friendsInf}
+    stateCopy.usersInf = {...state.usersInf}
     stateCopy.users.map(u => {
         return { ...u }
     });
@@ -150,6 +168,14 @@ const reducerFriends = (state = Friends, action) => {
             }
         });
         stateCopy.friends = [...newArrayFriends];
+
+        return stateCopy;
+    } else if (action.type === CHANGE_PAGE) {
+        stateCopy.usersInf.currentPage = action.currentPage;
+
+        return stateCopy;
+    } else if (action.type === SET_USERSINF) {
+        stateCopy.usersInf.totalCount = action.data.totalCount;
 
         return stateCopy;
     }

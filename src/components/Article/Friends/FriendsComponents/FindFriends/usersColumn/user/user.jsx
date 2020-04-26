@@ -22,7 +22,7 @@ const User = (props) => {
             {props.photo !== null ? <img src={props.photo} alt=""/> : <img src={defaultUserPhoto} alt=""/>}
             <h4>{props.nickname}</h4>
             <h6>{props.name}</h6>
-            {props.followed ? <button onClick={following} >Follow</button> : <button onClick={following} >Unfollow</button>}
+            {props.followed ? <button onClick={following} title="Add this user to list of friends!">Follow</button> : <button onClick={following} title="Delete this user from your list of friends!">Unfollow</button>}
         </div>
     );
 }

@@ -1,10 +1,11 @@
 import { connect } from "react-redux";
-import UsersColumn from "./usersColumn";
-import { followAC, unfollowAC, setUsersAC } from "../../../../../../BLL/reducer-friends";
+import { followAC, unfollowAC, setUsersAC, setUsersInfAC } from "../../../../../../BLL/reducer-friends";
+import UsersColumnAPI from "./usersColumnAPI";
 
 let mapStateToProps = (state) => {
     return {
         users: state.Friends.users,
+        usersInf: state.Friends.usersInf,
     }
 }
 let mapDispatchToProps = (dispatch) => {
@@ -18,9 +19,12 @@ let mapDispatchToProps = (dispatch) => {
         setUsers: (users) => {
             dispatch(setUsersAC(users));
         },
+        setUsersInf:data => {
+            dispatch(setUsersInfAC(data));
+        }
     }
 }
 
-const UsersColumnContainer = connect(mapStateToProps, mapDispatchToProps)(UsersColumn); 
+const UsersColumnContainer = connect(mapStateToProps, mapDispatchToProps)(UsersColumnAPI); 
 
 export default UsersColumnContainer;

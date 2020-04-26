@@ -3,7 +3,7 @@ import './App.css';
 import Header from './components/Header/Header';
 import SideBar from './components/SideBar/SideBar';
 import Article from './components/Article/Article';
-import Footer from './components/Footer/Footer';
+import FooterContainer from './components/Footer/FooterContainer';
 import { BrowserRouter } from 'react-router-dom';
 
 function App(props) {
@@ -13,10 +13,10 @@ function App(props) {
       <div className="App">
         <Header />
         <div className="flex-container">
-          <SideBar Friends={props.Friends}/>
+          <SideBar />
           <Article/>
         </div>
-        <Footer footLinks={props.footer.footLinks} year={props.footer.year} footInf={props.footer.footInf} />
+        <FooterContainer />
       </div>
     </BrowserRouter>
   );

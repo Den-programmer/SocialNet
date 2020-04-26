@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './SideBar.module.css';
 import Nav from './Navigation/nav';
-import Friends from './Friends/friends';
+import FriendsContainer from './Friends/friendsContainer';
 import { NavLink } from 'react-router-dom';
 
 const SideBar = (props) => {
@@ -9,7 +9,7 @@ const SideBar = (props) => {
     <div className={classes.menu}>
       <Nav />
       <NavLink to="/Friends/DataFriends">
-        <Friends Friends={props.Friends}/>
+        <FriendsContainer />
       </NavLink>  
     </div>
   );
