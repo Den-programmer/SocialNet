@@ -1,6 +1,6 @@
 let Footer = {
     year: 2020,
-    footInf: 'This is foot information!',
+    footInf: 'This is footer\'s information!',
     footLinks: [
         {
             id: 1,

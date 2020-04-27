@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './Article.module.css';
-import Profile from './Profile/profile';
+import ProfileContainer from './Profile/profileContainer';
 import Messages from './Message/message';
 import News from './News/news';
 import Music from './Music/music';
@@ -9,11 +9,12 @@ import { Route } from 'react-router-dom';
 import FindFriendsContainer from './Friends/FriendsComponents/FindFriends/findFriendsContainer';
 import FriendsNav from './Friends/FriendsNav/friendsNav';
 import FriendsByButtonContainer from './Friends/FriendsComponents/friendsByButton/friendsByButtonContainer';
+import Preloader from '../common/preloader/preloader';
 
 const Article = (props) => {
     return (
         <article className={classes.article}>
-            <Route exact path='/Profile' render={() => (<Profile/>)} />
+            <Route path='/Profile' render={() => (<>{props.isProfileFetching ? <Preloader /> : <ProfileContainer/>}</>)} />
             <Route exact path='/Messages' render={() => (<Messages/>)} />
             <Route exact path='/News' component={News} />
             <Route exact path='/Music' component={Music} />

@@ -8,8 +8,8 @@ const Profile = (props) => {
     return(
         <div className={classes.profile}>
             <Background />
-            <User />
-            <MyPostsContainer/>
+            <User profile={props.profile}/>
+            <MyPostsContainer />
         </div>
     );
 }

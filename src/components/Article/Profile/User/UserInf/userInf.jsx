@@ -12,8 +12,8 @@ const UserInf = (props) => {
                 </h2>
             </div>
             <div className={classes.biography}>
-                <p>Date of Birth: {props.birthDate} </p>
-                <p>City: {props.city} </p>
+                <p>Date of Birth: {props.birthDate ? props.birthDate : ""} </p>
+                <p>City: {props.city ? props.city : ""} </p>
                 <p>Education: {props.education} </p>
                 <p>Web Site: {props.href} </p>
             </div>

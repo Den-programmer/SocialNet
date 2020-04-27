@@ -1,11 +1,10 @@
 import React from 'react';
 import classes from './avatar.module.css';
-import avatar from './img/avatar.jpg';
 
-const Avatar = () => {
+const Avatar = (props) => {
     return (
         <div className={classes.avatar}>
-            <img src={avatar} alt="avatar" />
+            <img src={props.avatar} alt="avatar" />
         </div>
     );
 }

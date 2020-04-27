@@ -2,9 +2,9 @@ import React from 'react';
 import './App.css';
 import Header from './components/Header/Header';
 import SideBar from './components/SideBar/SideBar';
-import Article from './components/Article/Article';
 import FooterContainer from './components/Footer/FooterContainer';
 import { BrowserRouter } from 'react-router-dom';
+import ArticleContainer from './components/Article/ArticleContainer';
 
 function App(props) {
   
@@ -14,7 +14,7 @@ function App(props) {
         <Header />
         <div className="flex-container">
           <SideBar />
-          <Article/>
+          <ArticleContainer/>
         </div>
         <FooterContainer />
       </div>

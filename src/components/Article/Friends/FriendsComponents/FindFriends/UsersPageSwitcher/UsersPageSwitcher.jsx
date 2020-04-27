@@ -12,7 +12,6 @@ const UsersPageSwitcher = (props) => {
       pagesToShow.push(i);
     }
   }
-  console.log(pagesToShow);
   pagesToShow = pagesToShow.map(p => {
        return <button className={props.currentPage === p ? classes.selected_page : ''} onClick={() => props.changePage(p)} key={p}>{p}</button>
   });

@@ -6,13 +6,14 @@ let mapStateToProps = (state) => {
     return {
         profilePage:state.profilePage,
         posts:state.profilePage.posts,
+        profile: state.profile,
     }
 }
 
 const MyPostsContainer = connect(mapStateToProps, {
-    addPost: addPost,
-    onPostTitleChange: onPostTitleChange,
-    onPostInfChange: onPostInfChange
+    addPost,
+    onPostTitleChange,
+    onPostInfChange
 })(MyPosts);
 
 export default MyPostsContainer;
