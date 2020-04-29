@@ -9,7 +9,7 @@ const User = (props) => {
            <Avatar avatar={props.profile.photos.large}/>
            <UserInf name={props.profile.fullName} 
            birthDate={props.profile.aboutMe.birthDate}
-           city={props.profile.location.city} 
+           city="props.profile.location.city"
            href={props.profile.aboutMe.instagram}/>
            
            {/* <UserInf name="LightL2" birthDate="27/01/2005" city="Kharkiv"/> */}

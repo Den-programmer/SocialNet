@@ -6,7 +6,7 @@ let mapStateToProps = (state) => {
     return {
         profilePage:state.profilePage,
         posts:state.profilePage.posts,
-        profile: state.profile,
+        profile: state.profilePage.profile,
     }
 }
 

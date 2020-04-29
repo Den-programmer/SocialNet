@@ -9,12 +9,11 @@ import { Route } from 'react-router-dom';
 import FindFriendsContainer from './Friends/FriendsComponents/FindFriends/findFriendsContainer';
 import FriendsNav from './Friends/FriendsNav/friendsNav';
 import FriendsByButtonContainer from './Friends/FriendsComponents/friendsByButton/friendsByButtonContainer';
-import Preloader from '../common/preloader/preloader';
 
 const Article = (props) => {
     return (
         <article className={classes.article}>
-            <Route path='/Profile' render={() => (<>{props.isProfileFetching ? <Preloader /> : <ProfileContainer/>}</>)} />
+            <Route path='/Profile' render={() => (<ProfileContainer/>)} />
             <Route exact path='/Messages' render={() => (<Messages/>)} />
             <Route exact path='/News' component={News} />
             <Route exact path='/Music' component={Music} />
