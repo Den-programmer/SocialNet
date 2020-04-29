@@ -13,7 +13,7 @@ import FriendsByButtonContainer from './Friends/FriendsComponents/friendsByButto
 const Article = (props) => {
     return (
         <article className={classes.article}>
-            <Route path='/Profile' render={() => (<ProfileContainer/>)} />
+            <Route path='/Profile/:userId?' render={() => (<ProfileContainer/>)} />
             <Route exact path='/Messages' render={() => (<Messages/>)} />
             <Route exact path='/News' component={News} />
             <Route exact path='/Music' component={Music} />
