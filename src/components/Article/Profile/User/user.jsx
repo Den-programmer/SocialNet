@@ -3,6 +3,7 @@ import Avatar from './Avatar/avatar';
 import UserInf from './UserInf/userInf';
 import classes from './user.module.css';
 import defaultAvatar from '../../Profile/images/withoutAvatar/defaultUserPhoto.jpg';
+import FollowingInformation from './followingInformation/followingInformation';
 
 const User = (props) => {
     return (
@@ -12,8 +13,7 @@ const User = (props) => {
            birthDate="props.profile.aboutMe.birthDate"
            city="props.profile.location.city"
            href={props.profile.contacts.instagram ? props.profile.aboutMe.instagram : ""}/>
-           
-           {/* <UserInf name="LightL2" birthDate="27/01/2005" city="Kharkiv"/> */}
+           <FollowingInformation posts={props.posts} friends={props.friends}/>
         </div>
     );
 } 

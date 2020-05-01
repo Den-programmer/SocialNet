@@ -2,10 +2,31 @@
     background-color:green;
     height:200px;
 }
-.logo img {
-    width: 50px;
+.container {
+    width:1200px;
+    margin: 0 auto;
+    display:flex;
+    justify-content: space-between;
+    height: 200px;
 }
-
-
-
-
+.logo {
+    margin:auto 0;
+}
+.logo img {
+    width: 100px;
+}
+.btn_login {
+    
+    margin:20px;
+}
+.btn_login a {
+    color:blue;
+    padding: 10px;
+    background: #EFEFEF;
+    border:1px solid silver;
+}
+.btn_login a:hover {
+    text-decoration: underline;
+    color:#3535FF;
+    opacity: 0.9;
+}

@@ -26,7 +26,7 @@ const Article = (props) => {
             <Route exact path='/Friends/FindUsers' render={() => (<React.Fragment>
                     <FriendsNav/>
                     <FindFriendsContainer/>
-                </React.Fragment>)}/>
+                </React.Fragment>)}/>  
         </article>
     );
 }

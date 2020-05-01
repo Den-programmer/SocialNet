@@ -1,0 +1,20 @@
+.followingContainer {
+    margin-right: 50px;
+}
+.mainFollowingInf { 
+    display:flex;
+    justify-content:space-between;
+    margin: 0 auto; 
+}
+
+.btn_following {
+    display: flex;
+    justify-content: center;
+} 
+.btn_following button {
+    background:#0275D8;
+    border:1px solid #4088FA;
+}
+.infBlock {
+    text-align: center;
+}

@@ -28,28 +28,26 @@ let profilePage = {
   ],
   ValueOfPostTitle: '',
   ValueOfPostInf: '',
-  profile: null,
+  profile: {
+    aboutMe: 'What can I say new?! I\'m GOD!!!',
+    contacts: {
+      facebook: "facebook.com",
+      website: null,
+      github: "github.com",
+      instagram: "instagram.com",
+      mainLink: null,
+      twitter: "https://twitter.com",
+      vk: "vk.com",
+      youtube: null
+    },
+    fullName: "LightL2",
+    photos: {
+      large: MyAvatar,
+      small: MyAvatar,
+    },
+    userId: 7735794,
+  },  
 }
-
-// {
-//   aboutMe: 'What can I say new?! I\'m GOD!!!',
-//   contacts: {
-//     facebook: "facebook.com",
-//     website: null,
-//     github: "github.com",
-//     instagram: "instagram.com",
-//     mainLink: null,
-//     twitter: "https://twitter.com",
-//     vk: "vk.com",
-//     youtube: null
-//   },
-//   fullName: "LightL2",
-//   photos: {
-//     large: MyAvatar,
-//     small: MyAvatar,
-//   },
-//   userId: 7735794,
-// },  
 
 const reducerProfile = (state = profilePage, action) => {
   let stateCopy = { ...state }
