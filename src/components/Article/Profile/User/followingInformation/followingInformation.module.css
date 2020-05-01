@@ -1,10 +1,15 @@
+.followingBlock {
+    display:flex;
+    align-items: center;
+    margin: 0px 10px;
+}
 .followingContainer {
     margin-right: 50px;
 }
 .mainFollowingInf { 
     display:flex;
     justify-content:space-between;
-    margin: 0 auto; 
+    margin:auto; 
 }
 
 .btn_following {
@@ -14,7 +19,9 @@
 .btn_following button {
     background:#0275D8;
     border:1px solid #4088FA;
+    width: 100%;
 }
 .infBlock {
     text-align: center;
+    margin: 10px;
 }

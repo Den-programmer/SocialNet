@@ -3,4 +3,9 @@
     height: 100px;
     border-radius:50px;
     margin: 20px;
+    margin-bottom: 0;
 }
+.name {
+    color:#000;
+    text-align: center;
+} 

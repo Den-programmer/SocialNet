@@ -5,6 +5,9 @@
 .m {
     margin: 7px;
 }
+.post:first-child {
+    border-top:1px solid #000000;
+}
 .post {
     border-bottom:1px solid #000000;
     padding: 20px;

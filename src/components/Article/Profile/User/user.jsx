@@ -1,19 +1,22 @@
 import React from 'react';
 import Avatar from './Avatar/avatar';
-import UserInf from './UserInf/userInf';
+import Contacts from './Contacts/contacts';
 import classes from './user.module.css';
 import defaultAvatar from '../../Profile/images/withoutAvatar/defaultUserPhoto.jpg';
 import FollowingInformation from './followingInformation/followingInformation';
+import Biography from './biography/biography';
 
 const User = (props) => {
     return (
         <div className={classes.user}>
-           <Avatar avatar={props.profile.photos.large ? props.profile.photos.large : defaultAvatar}/>
-           <UserInf name={props.profile.fullName} 
-           birthDate="props.profile.aboutMe.birthDate"
-           city="props.profile.location.city"
-           href={props.profile.contacts.instagram ? props.profile.aboutMe.instagram : ""}/>
-           <FollowingInformation posts={props.posts} friends={props.friends}/>
+            <div className={classes.row}>
+                <Avatar avatar={props.profile.photos.large ? props.profile.photos.large : defaultAvatar} name={props.profile.fullName}/>
+                <FollowingInformation posts={props.posts} friends={props.friends}/>
+                <Biography biography={props.biography}/>
+            </div>
+            <div>
+                <Contacts contacts={props.profile.contacts}/>
+            </div>
         </div>
     );
 } 

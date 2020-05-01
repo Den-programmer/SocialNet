@@ -12,15 +12,13 @@ function App(props) {
   return (
     <BrowserRouter>
       <div className="App">
-        <div className="page-authentication">
-          <Route path="/login" render={() => (<Authentication />)} />
-        </div>
         <div className="main-page">
           <HeaderContainer />
-          <div className="flex-container">
+          <Route path="/login" render={() => (<div className="page-authentication"><Authentication /></div>)} />
+          <Route path="/" render={() => (<div className="flex-container">
             <SideBar />
             <Article />
-          </div>
+          </div>)} />
           <FooterContainer />
         </div>
       </div>

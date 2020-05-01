@@ -10,7 +10,9 @@ const Header = (props) => {
       <header className={classes.header}>
         <div className={classes.container}>
           <div className={classes.logo}>
-            <img src={logo} alt="logo"/>
+            <NavLink to="/">
+              <img src={logo} alt="logo"/>
+            </NavLink>
           </div>
           <div className={classes.btn_login}>
             <NavLink to="/login"> 

@@ -8,7 +8,7 @@ const FollowingInformation = (props) => {
                 <div className={classes.mainFollowingInf}>
                     <div className={classes.infBlock}>
                         <h3>Posts</h3>
-                            <p>{props.posts.length}</p>
+                        <p>{props.posts.length}</p>
                     </div>
                     <div className={classes.infBlock}>
                         <h3>Followers</h3>
@@ -16,7 +16,7 @@ const FollowingInformation = (props) => {
                     </div>
                     <div className={classes.infBlock}>
                         <h3>Following</h3>
-                            <p>{props.friends.length}</p>
+                        <p>{props.friends.length}</p>
                     </div>
                 </div>
                 <div className={classes.btn_following}>
