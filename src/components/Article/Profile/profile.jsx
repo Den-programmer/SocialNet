@@ -3,7 +3,6 @@ import classes from './profile.module.css';
 import User from './User/user';
 import Background from './Background/background';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
-import Preloader from '../../common/preloader/preloader';
 
 const Profile = (props) => {
     return(
