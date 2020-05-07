@@ -5,7 +5,5 @@
     margin:10px;
 }
 .information {
-    display: flex;
-    justify-content: center;
-    width:80%;
+    padding-left: 50px;
 }

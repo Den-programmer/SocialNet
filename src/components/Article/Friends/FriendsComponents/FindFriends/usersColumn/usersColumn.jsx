@@ -1,7 +1,6 @@
 import React from 'react';
 import User from './user/user';
 import classes from './usersColumn.module.css'
-import { NavLink } from 'react-router-dom';
 
 const UsersColumn = (props) => {
 
