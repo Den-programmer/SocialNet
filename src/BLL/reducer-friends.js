@@ -13,8 +13,9 @@ const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET-USERS';
 const CHANGE_PAGE = 'CHANGE-PAGE';
-const SET_USERSINF = "SET-USERSINF";
+const SET_USERSINF = 'SET-USERSINF';
 const IS_FETCHING = 'IS_FETCHING';
+const TOGGLE_IS_FOLLOWING_PROCESS = 'TOGGLE_IS_FOLLOWING_PROCESS';
 
 let Friends = {
     friends: [
@@ -100,7 +101,11 @@ let Friends = {
         totalCount: 0,
         pageSize: 12,
         currentPage: 1,
-    }
+    },
+    followingDisableButton: {
+        disabled: 'disabled',
+    },
+    followingInProcess: [],
 }
 
 const reducerFriends = (state = Friends, action) => {
@@ -108,6 +113,7 @@ const reducerFriends = (state = Friends, action) => {
     let stateCopy = { ...state }
     stateCopy.friends = [...state.friends];
     stateCopy.users = [...state.users];
+    stateCopy.followingInProcess = [...state.followingInProcess];
     stateCopy.friendsInf = { ...state.friendsInf }
     stateCopy.usersInf = { ...state.usersInf }
     stateCopy.users.map(u => {
@@ -157,6 +163,12 @@ const reducerFriends = (state = Friends, action) => {
             stateCopy.friends = [...newArrayFriends];
 
             return stateCopy;
+        case TOGGLE_IS_FOLLOWING_PROCESS:
+            action.isFetching ? stateCopy.followingInProcess.push(action.userId) 
+            :
+            stateCopy.followingInProcess = [];
+
+            return stateCopy;    
         case CHANGE_PAGE:
             stateCopy.usersInf.currentPage = action.currentPage;
 
@@ -191,6 +203,9 @@ export const setUsersInf = data => {
 }
 export const isFetching = isFetching => {
     return { type: IS_FETCHING, isFetching }
+}
+export const toggleFollowingInProcess = (isFetching, userId) => {
+    return { type: TOGGLE_IS_FOLLOWING_PROCESS, isFetching, userId }
 }
 
 export default reducerFriends;

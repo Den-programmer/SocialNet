@@ -2,7 +2,7 @@ import React from 'react';
 import UsersColumn from './usersColumn';
 import Preloader from '../../../../../common/preloader/preloader';
 import { connect } from "react-redux";
-import { follow, unfollow, setUsers, setUsersInf, isFetching } from "../../../../../../BLL/reducer-friends";
+import { follow, unfollow, setUsers, setUsersInf, isFetching, toggleFollowingInProcess } from "../../../../../../BLL/reducer-friends";
 import { UsersAPI } from '../../../../../../DAL/api'
 
 class UsersColumnAPI extends React.Component {
@@ -17,7 +17,8 @@ class UsersColumnAPI extends React.Component {
     render() {
         return (
             <>
-                {this.props.usersInf.isFetching ? <Preloader /> : <UsersColumn setUsers={this.props.setUsers}
+                {this.props.usersInf.isFetching ? <Preloader /> : <UsersColumn toggleFollowingInProcess={this.props.toggleFollowingInProcess} followingInProcess={this.props.followingInProcess} followingDisableButton={this.props.followingDisableButton} 
+                    setUsers={this.props.setUsers}
                     follow={this.props.follow}
                     unfollow={this.props.unfollow} users={this.props.users} />}
             </>
@@ -29,15 +30,18 @@ let mapStateToProps = (state) => {
     return {
         users: state.Friends.users,
         usersInf: state.Friends.usersInf,
+        followingDisableButton: state.Friends.followingDisableButton,
+        followingInProcess: state.Friends.followingInProcess,
     }
 }
 
 const UsersColumnContainer = connect(mapStateToProps, {
-    follow: follow,
-    unfollow: unfollow,
-    setUsers: setUsers,
-    setUsersInf: setUsersInf,
-    isFetching:isFetching
+    follow,
+    unfollow,
+    setUsers,
+    setUsersInf,
+    isFetching,
+    toggleFollowingInProcess
 })(UsersColumnAPI); 
 
 export default UsersColumnContainer;

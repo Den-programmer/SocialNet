@@ -13,6 +13,7 @@ const User = (props) => {
         let id = Number(currentElement.getAttribute("id"));
 
         if (props.followed == false) {
+            props.toggleFollowingInProcess(true, id)
             axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${id}`, {}, {
                 withCredentials: true,
                 headers: {
@@ -22,8 +23,10 @@ const User = (props) => {
                 if (response.data.resultCode == 0) {
                     props.follow(id);
                 }
+                props.toggleFollowingInProcess(false, id)
             });
         } else {
+            props.toggleFollowingInProcess(true, id);
             axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${id}`, {
                 withCredentials: true,
                 headers: {
@@ -33,6 +36,7 @@ const User = (props) => {
                 if (response.data.resultCode == 0) {
                     props.unfollow(id);
                 }
+                props.toggleFollowingInProcess(false, id);
             });
         }
     }
@@ -44,7 +48,9 @@ const User = (props) => {
                 <h4>{props.nickname}</h4>
                 <h6>{props.name}</h6>
             </NavLink>
-            {props.followed ? <button onClick={following} title="Add this user to list of friends!">Follow</button> : <button onClick={following} title="Delete this user from your list of friends!">Unfollow</button>}
+            {props.followed ? <button disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Add this user to list of friends!">Follow</button> 
+            : 
+            <button disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Delete this user from your list of friends!">Unfollow</button>}
         </div>
     );
 }

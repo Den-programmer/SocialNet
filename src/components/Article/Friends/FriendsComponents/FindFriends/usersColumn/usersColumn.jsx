@@ -7,12 +7,13 @@ const UsersColumn = (props) => {
     let users = props.users.map((user) => {
         return <User id={user.id}
             key={user.id}
+            followingInProcess={props.followingInProcess}
             followed={user.followed}
             nickname={user.nickname}
             name={user.name}
             photo={user.photos.small}
             setUsers={props.setUsers}
-            follow={props.follow} unfollow={props.unfollow} />
+            follow={props.follow} unfollow={props.unfollow} toggleFollowingInProcess={props.toggleFollowingInProcess} followingDisableButton={props.followingDisableButton}/>
     });
 
     return (
