@@ -8,6 +8,7 @@ import avatar7 from '../images/friends-avatars/avatar7.jpg';
 import avatar8 from '../images/friends-avatars/avatar8.jpg';
 import avatar9 from '../images/friends-avatars/avatar9.jpg';
 import avatar10 from '../images/friends-avatars/avatar10.jpg';
+import { UsersAPI } from '../DAL/api';
 
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
@@ -164,11 +165,11 @@ const reducerFriends = (state = Friends, action) => {
 
             return stateCopy;
         case TOGGLE_IS_FOLLOWING_PROCESS:
-            action.isFetching ? stateCopy.followingInProcess.push(action.userId) 
-            :
-            stateCopy.followingInProcess = [];
+            action.isFetching ? stateCopy.followingInProcess.push(action.userId)
+                :
+                stateCopy.followingInProcess = [];
 
-            return stateCopy;    
+            return stateCopy;
         case CHANGE_PAGE:
             stateCopy.usersInf.currentPage = action.currentPage;
 
@@ -177,12 +178,12 @@ const reducerFriends = (state = Friends, action) => {
             stateCopy.usersInf.totalCount = action.data.totalCount;
 
             return stateCopy;
-        case IS_FETCHING: 
+        case IS_FETCHING:
             stateCopy.usersInf.isFetching = action.isFetching;
-        
+
             return stateCopy;
-        default:  
-            return state;    
+        default:
+            return state;
     }
 }
 
@@ -206,6 +207,39 @@ export const isFetching = isFetching => {
 }
 export const toggleFollowingInProcess = (isFetching, userId) => {
     return { type: TOGGLE_IS_FOLLOWING_PROCESS, isFetching, userId }
+}
+
+export const getUsers = (pageSize, currentPage) => {
+    return (dispatch) => {
+        dispatch(isFetching(true));
+        UsersAPI.getUsers(pageSize, currentPage).then(data => {
+            dispatch(isFetching(false));
+            dispatch(setUsers(data.items));
+            dispatch(setUsersInf(data));
+        });
+    }
+}
+export const followThunk = (userId) => {
+    return (dispatch) => {
+        dispatch(toggleFollowingInProcess(true, userId));
+        UsersAPI.follow(userId).then(data => {
+            if (data.resultCode == 0) {
+                dispatch(follow(userId));
+            }
+            dispatch(toggleFollowingInProcess(false, userId));
+        });
+    }
+}
+export const unfollowThunk = (userId) => {
+    return (dispatch) => {
+        dispatch(toggleFollowingInProcess(true, userId));
+        UsersAPI.unfollow(userId).then(data => {
+            if (data.resultCode == 0) {
+                dispatch(unfollow(userId));
+            }
+            dispatch(toggleFollowingInProcess(false, userId));
+        });
+    }
 }
 
 export default reducerFriends;

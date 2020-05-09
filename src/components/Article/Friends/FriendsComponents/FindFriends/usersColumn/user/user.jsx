@@ -1,7 +1,6 @@
 import React from 'react';
 import classes from './user.module.css';
 import defaultUserPhoto from './img/defaultUserPhoto.jpg';
-import * as axios from 'axios';
 import { NavLink } from 'react-router-dom';
 
 const User = (props) => {
@@ -13,31 +12,9 @@ const User = (props) => {
         let id = Number(currentElement.getAttribute("id"));
 
         if (props.followed == false) {
-            props.toggleFollowingInProcess(true, id)
-            axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${id}`, {}, {
-                withCredentials: true,
-                headers: {
-                    "API-KEY": "84df6f8d-3114-43eb-bbd6-9f107dc49f3e"
-                }
-            }).then(response => {
-                if (response.data.resultCode == 0) {
-                    props.follow(id);
-                }
-                props.toggleFollowingInProcess(false, id)
-            });
+            props.followThunk(id);
         } else {
-            props.toggleFollowingInProcess(true, id);
-            axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${id}`, {
-                withCredentials: true,
-                headers: {
-                    "API-KEY": "84df6f8d-3114-43eb-bbd6-9f107dc49f3e"
-                }
-            }).then(response => {
-                if (response.data.resultCode == 0) {
-                    props.unfollow(id);
-                }
-                props.toggleFollowingInProcess(false, id);
-            });
+            props.unfollowThunk(id);
         }
     }
 

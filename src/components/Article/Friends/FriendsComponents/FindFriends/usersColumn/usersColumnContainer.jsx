@@ -2,25 +2,19 @@ import React from 'react';
 import UsersColumn from './usersColumn';
 import Preloader from '../../../../../common/preloader/preloader';
 import { connect } from "react-redux";
-import { follow, unfollow, setUsers, setUsersInf, isFetching, toggleFollowingInProcess } from "../../../../../../BLL/reducer-friends";
-import { UsersAPI } from '../../../../../../DAL/api'
+import { follow, unfollow, setUsers, getUsers, followThunk, unfollowThunk } from "../../../../../../BLL/reducer-friends";
 
 class UsersColumnAPI extends React.Component {
     componentDidMount() {
-        this.props.isFetching(true);
-        UsersAPI.getUsers(this.props.usersInf.pageSize, this.props.usersInf.currentPage).then(data => {
-            this.props.isFetching(false);
-            this.props.setUsers(data.items);
-            this.props.setUsersInf(data);
-        });
+        this.props.getUsers(this.props.pageSize, this.props.currentPage);
     }
     render() {
         return (
             <>
-                {this.props.usersInf.isFetching ? <Preloader /> : <UsersColumn toggleFollowingInProcess={this.props.toggleFollowingInProcess} followingInProcess={this.props.followingInProcess} followingDisableButton={this.props.followingDisableButton} 
-                    setUsers={this.props.setUsers}
-                    follow={this.props.follow}
-                    unfollow={this.props.unfollow} users={this.props.users} />}
+                {this.props.usersInf.isFetching ? <Preloader /> : <UsersColumn followThunk={this.props.followThunk} unfollowThunk={this.props.unfollowThunk}
+                followingInProcess={this.props.followingInProcess} 
+                    followingDisableButton={this.props.followingDisableButton} 
+                    setUsers={this.props.setUsers} users={this.props.users} />}
             </>
         );
     }
@@ -39,9 +33,9 @@ const UsersColumnContainer = connect(mapStateToProps, {
     follow,
     unfollow,
     setUsers,
-    setUsersInf,
-    isFetching,
-    toggleFollowingInProcess
+    getUsers,
+    followThunk,
+    unfollowThunk
 })(UsersColumnAPI); 
 
 export default UsersColumnContainer;

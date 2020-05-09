@@ -1,4 +1,4 @@
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import reducerAuth from './reducer-auth';
 import reducerProfile from "./reducer-profile";
 import reducerMessages from "./reducer-messages";
@@ -7,6 +7,7 @@ import reducerMusic from "./reducer-music";
 import reducerOptions from "./reducer-options";
 import reducerFriends from "./reducer-friends";
 import reducerFooter from "./reducer-footer";
+import thunkMiddleWare from 'redux-thunk';
 
 let reducers = combineReducers ({
     auth: reducerAuth,
@@ -19,6 +20,6 @@ let reducers = combineReducers ({
     Footer: reducerFooter, 
 });
 
-let store = createStore(reducers);
+let store = createStore(reducers, applyMiddleware(thunkMiddleWare));
 
 export default store;

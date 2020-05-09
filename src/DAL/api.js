@@ -14,6 +14,16 @@ export const UsersAPI = {
             return response.data;
         });
     },
+    follow: (userId) => {
+        return instance.post(`https://social-network.samuraijs.com/api/1.0/follow/${userId}`).then(response => {
+            return response.data;
+        });
+    },
+    unfollow: (userId) => {
+        return instance.delete(`https://social-network.samuraijs.com/api/1.0/follow/${userId}`).then(response => {
+          return response.data;
+        });
+    }
 }
 export const ProfileAPI = {
     getUsersProfile: userId => {

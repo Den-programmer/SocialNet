@@ -1,4 +1,5 @@
 import MyAvatar from '../components/Article/Profile/images/userDeafultAvatar/avatar.jpg';
+import { ProfileAPI } from '../DAL/api';
 
 const ADD_POST = 'ADD-POST';
 const POST_TITLE_CHANGE = 'POST-TITLE-CHANGE';
@@ -94,6 +95,14 @@ export const onPostInfChange = (newPostInformatVal) => {
 }
 export const setUserProfile = (profile) => {
   return { type: SET_USER_PROFILE, profile }
+}
+
+export const setUserProfileThunk = (userId) => {
+  return (dispatch) => {
+      ProfileAPI.getUsersProfile(userId).then(data => {
+          dispatch(setUserProfile(data));
+      });
+  }
 }
 
 export default reducerProfile;
