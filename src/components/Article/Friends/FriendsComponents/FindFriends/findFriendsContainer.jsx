@@ -5,6 +5,7 @@ import { onPageChange } from './../../../../../BLL/reducer-friends';
 let mapStateToProps = state => {
     return {
         usersInf: state.Friends.usersInf,
+        isAuth:state.auth.isAuth,
     }
 }
 

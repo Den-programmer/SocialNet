@@ -5,6 +5,7 @@ import { follow, unfollow } from '../../../../../BLL/reducer-friends';
 let mapStateToProps = (state) => {
     return {
         friends: state.Friends.friends,
+        ifAuth: state.auth.isAuth,
     }
 };
 

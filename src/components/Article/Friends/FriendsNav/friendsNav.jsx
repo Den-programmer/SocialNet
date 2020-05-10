@@ -1,8 +1,11 @@
 import React from 'react';
 import classes from './friendsNav.module.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 
 const FriendsNav = (props) => {
+    
+    if(!props.isAuth) return <Redirect to='/login'/>
+
     return (
         <div className={classes.friendsButtons}>
             <div className={classes.btn_friends}>

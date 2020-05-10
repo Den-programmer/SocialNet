@@ -20,7 +20,8 @@ let mapStateToProps = (state) => {
     return {
         profile: state.profilePage.profile,
         posts: state.profilePage.posts,
-        friends: state.Friends.friends
+        friends: state.Friends.friends,
+        isAuth: state.auth.isAuth,
     }
 }
 
