@@ -10,12 +10,13 @@ let auth = {
 }
 
 const reducerAuth = (state = auth, action) => {
+    let stateCopy = {...state}
+
     switch (action.type) {
-        case SET_AUTH_USER_DATA: 
-            return {
-                ...state,
-                ...action.data
-            }
+        case SET_AUTH_USER_DATA:
+            stateCopy = action.data;
+
+            return stateCopy;
         default:  
             return state;    
     }

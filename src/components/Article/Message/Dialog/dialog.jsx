@@ -1,12 +1,8 @@
 import React from 'react';
 import classes from './dialog.module.css';
 import Conversation from './Conversation/conversation';
-import { Redirect } from 'react-router-dom';
 
 const Dialog = (props) => {
-
-    if (!props.isAuth) return <Redirect to='/login'/> 
-
     let newMessage = React.createRef();
     let Messages = props.messages.map((ms) => {
         return <Conversation key={ms.id} id={ms.id} messageText={ms.messageText}/>

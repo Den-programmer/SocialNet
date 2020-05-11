@@ -1,12 +1,7 @@
 import { connect } from 'react-redux';
 import FriendsNav from './friendsNav';
+import { withAuthRedirect } from '../../../../HOC/withAuthRedirect';
 
-let mapStateToProps = (state) => {
-    return {
-        isAuth: state.auth.isAuth,
-    }
-}
-
-const FriendsNavContainer = connect(mapStateToProps, null)(FriendsNav);
+const FriendsNavContainer = withAuthRedirect(connect(null, null)(FriendsNav));
 
 export default FriendsNavContainer;
