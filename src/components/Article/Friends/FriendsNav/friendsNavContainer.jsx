@@ -1,7 +1,9 @@
 import { connect } from 'react-redux';
 import FriendsNav from './friendsNav';
 import { withAuthRedirect } from '../../../../HOC/withAuthRedirect';
+import { compose } from 'redux';
 
-const FriendsNavContainer = withAuthRedirect(connect(null, null)(FriendsNav));
-
-export default FriendsNavContainer;
+export default compose(
+    withAuthRedirect,
+    connect(null, null)
+)(FriendsNav);

@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 import FindFriends from "./findFriends";
 import { onPageChange } from './../../../../../BLL/reducer-friends';
 import { withAuthRedirect } from "../../../../../HOC/withAuthRedirect";
+import { compose } from 'redux';
 
 let mapStateToProps = state => {
     return {
@@ -9,7 +10,7 @@ let mapStateToProps = state => {
     }
 }
 
-const FindFriendsContainer = withAuthRedirect(connect(mapStateToProps, { changePage: onPageChange })(FindFriends));
-
-
-export default FindFriendsContainer;
+export default compose(
+    withAuthRedirect,
+    connect(mapStateToProps, { changePage: onPageChange })
+)(FindFriends);
