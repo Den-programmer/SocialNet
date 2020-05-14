@@ -5,6 +5,9 @@ const ADD_POST = 'ADD-POST';
 const POST_TITLE_CHANGE = 'POST-TITLE-CHANGE';
 const POST_INF_CHANGE = 'POST-INF-CHANGE';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
+const SET_STATUS = 'SET_STATUS';
+const UPDATE_STATUS = 'UPDATE_STATUS';
+
 
 let profilePage = {
   posts: [
@@ -30,6 +33,7 @@ let profilePage = {
   ValueOfPostTitle: '',
   ValueOfPostInf: '',
   profile: {
+    status: "Hello my friends! I\'m GOD!!!",
     aboutMe: 'What can I say new?! I\'m GOD!!!',
     contacts: {
       facebook: "facebook.com",
@@ -47,13 +51,14 @@ let profilePage = {
       small: MyAvatar,
     },
     userId: 7735794,
-  },  
+  },
 }
 
 const reducerProfile = (state = profilePage, action) => {
   let stateCopy = { ...state }
   stateCopy.posts = [...state.posts]
-  
+  stateCopy.profile = { ...state.profile };
+
   switch (action.type) {
     case ADD_POST:
       let newPost = {
@@ -75,8 +80,16 @@ const reducerProfile = (state = profilePage, action) => {
       stateCopy.ValueOfPostInf = action.newPostInformatVal;
 
       return stateCopy;
-    case SET_USER_PROFILE: 
+    case SET_USER_PROFILE:
       stateCopy.profile = action.profile;
+
+      return stateCopy;
+    case SET_STATUS:
+      stateCopy.profile.status = action.status;
+
+      return stateCopy;
+    case UPDATE_STATUS:
+      stateCopy.profile.status = action.status;
       
       return stateCopy;
     default:
@@ -93,15 +106,35 @@ export const onPostTitleChange = (newPostTitleVal) => {
 export const onPostInfChange = (newPostInformatVal) => {
   return { type: POST_INF_CHANGE, newPostInformatVal }
 }
-export const setUserProfile = (profile) => {
+const setUserProfile = (profile) => {
   return { type: SET_USER_PROFILE, profile }
+}
+const setStatus = (status) => {
+  return { type: SET_STATUS, status }
+}
+const updateStatus = (status) => {
+  return { type: UPDATE_STATUS, status }
 }
 
 export const setUserProfileThunk = (userId) => {
   return (dispatch) => {
-      ProfileAPI.getUsersProfile(userId).then(data => {
-          dispatch(setUserProfile(data));
-      });
+    ProfileAPI.getUsersProfile(userId).then(data => {
+      dispatch(setUserProfile(data));
+    });
+  }
+}
+export const setStatusThunk = (userId) => {
+  return (dispatch) => {
+    ProfileAPI.getStatus(userId).then(data => {
+      dispatch(setStatus(data));
+    });
+  }
+}
+export const updateStatusThunk = (status) => {
+  return (dispatch) => {
+    ProfileAPI.updateStatus(status).then(data => {
+      dispatch(updateStatus(data));
+    });
   }
 }
 

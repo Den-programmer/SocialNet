@@ -1,0 +1,15 @@
+.status {
+    margin:25px 10px;
+}
+.editCurrentStatus {
+    display:flex;
+    flex-direction:column;
+} 
+.editCurrentStatus input {
+    width:320px;
+    height: 20px;
+    margin-bottom: 10px;
+}
+.editCurrentStatus button {
+    width: 135px;
+}
