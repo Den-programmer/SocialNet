@@ -1,5 +1,5 @@
 import MyPosts from './MyPosts';
-import { addPost, onPostInfChange, onPostTitleChange } from '../../../../BLL/reducer-profile';
+import { addPost } from '../../../../BLL/reducer-profile';
 import { connect } from 'react-redux';
 
 let mapStateToProps = (state) => {
@@ -10,10 +10,6 @@ let mapStateToProps = (state) => {
     }
 }
 
-const MyPostsContainer = connect(mapStateToProps, {
-    addPost,
-    onPostTitleChange,
-    onPostInfChange
-})(MyPosts);
+const MyPostsContainer = connect(mapStateToProps, { addPost })(MyPosts);
 
 export default MyPostsContainer;

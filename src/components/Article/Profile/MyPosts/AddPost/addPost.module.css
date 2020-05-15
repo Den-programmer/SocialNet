@@ -6,12 +6,12 @@
     margin: 10px;
 }
 
-.inputs {
+.postForm {
     display:inline-flex;
     flex-direction:column;            
 }
 
-.inputs input {
+.postForm input {
     margin: 10px;
     height: 20px;
     width: 290px;

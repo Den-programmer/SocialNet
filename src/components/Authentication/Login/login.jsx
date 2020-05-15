@@ -3,12 +3,15 @@ import classes from './login.module.css';
 import { reduxForm, Field } from 'redux-form';
 
 const Login = (props) => {
+    let onSubmit = (formData) => {
+        console.log(formData);
+    }
     return (
         <div className={classes.login}>
             <div className={classes.title}>
                 <h3>Login</h3>
             </div>
-            <LoginReduxForm />
+            <LoginReduxForm onSubmit={onSubmit}/>
         </div>
     );
 }
@@ -27,7 +30,7 @@ const LoginForm = (props) => {
                 </div>
                 <div className={classes.confirmation}>
                     <div className={classes.rememberMe}>
-                        <Field type="checkbox" component="input"/>
+                        <Field type="checkbox" name="RememberMe" component="input"/>
                         <p>Remember me!</p>
                     </div>
                     <div className={classes.btn_login}>

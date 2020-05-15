@@ -72,14 +72,6 @@ const reducerProfile = (state = profilePage, action) => {
       stateCopy.ValueOfPostInf = '';
 
       return stateCopy;
-    case POST_TITLE_CHANGE:
-      stateCopy.ValueOfPostTitle = action.newPostTitleVal;
-
-      return stateCopy;
-    case POST_INF_CHANGE:
-      stateCopy.ValueOfPostInf = action.newPostInformatVal;
-
-      return stateCopy;
     case SET_USER_PROFILE:
       stateCopy.profile = action.profile;
 
@@ -99,12 +91,6 @@ const reducerProfile = (state = profilePage, action) => {
 
 export const addPost = (newPostTitle, newPostInformat) => {
   return { type: ADD_POST, newPostTitle, newPostInformat };
-}
-export const onPostTitleChange = (newPostTitleVal) => {
-  return { type: POST_TITLE_CHANGE, newPostTitleVal }
-}
-export const onPostInfChange = (newPostInformatVal) => {
-  return { type: POST_INF_CHANGE, newPostInformatVal }
 }
 const setUserProfile = (profile) => {
   return { type: SET_USER_PROFILE, profile }

@@ -15,11 +15,7 @@ const MyPosts = (props) => {
     return (
         <div className={classes.postPage}>
             <div className={classes.addPostBlock}>
-                <AddPost profilePage={props.profilePage} onPostTitleChange={props.onPostTitleChange} 
-                onPostInfChange={props.onPostInfChange} 
-                ValueOfPostInf={props.ValueOfPostInf}
-                ValueOfPostTitle={props.ValueOfPostTitle}
-                addPost={props.addPost} />
+                <AddPost profilePage={props.profilePage} addPost={props.addPost} />
             </div>
             <div className={classes.posts}>
                 {posts}
