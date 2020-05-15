@@ -8,6 +8,7 @@ import reducerOptions from "./reducer-options";
 import reducerFriends from "./reducer-friends";
 import reducerFooter from "./reducer-footer";
 import thunkMiddleWare from 'redux-thunk';
+import {reducer as formReducer} from 'redux-form';
 
 let reducers = combineReducers ({
     auth: reducerAuth,
@@ -18,6 +19,7 @@ let reducers = combineReducers ({
     optionsPage: reducerOptions,
     Friends: reducerFriends,
     Footer: reducerFooter, 
+    form: formReducer,
 });
 
 let store = createStore(reducers, applyMiddleware(thunkMiddleWare));
