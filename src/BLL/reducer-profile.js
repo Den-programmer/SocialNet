@@ -2,8 +2,6 @@ import MyAvatar from '../components/Article/Profile/images/userDeafultAvatar/ava
 import { ProfileAPI } from '../DAL/api';
 
 const ADD_POST = 'ADD-POST';
-const POST_TITLE_CHANGE = 'POST-TITLE-CHANGE';
-const POST_INF_CHANGE = 'POST-INF-CHANGE';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
 const UPDATE_STATUS = 'UPDATE_STATUS';
@@ -30,8 +28,6 @@ let profilePage = {
       likesCount: 200000,
     },
   ],
-  ValueOfPostTitle: '',
-  ValueOfPostInf: '',
   profile: {
     status: "Hello my friends! I\'m GOD!!!",
     aboutMe: 'What can I say new?! I\'m GOD!!!',

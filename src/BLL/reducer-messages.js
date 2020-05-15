@@ -1,5 +1,4 @@
 let ADD_MESSAGE = 'ADD-MESSAGE';
-let NEW_MESSAGE_CHANGE = 'NEW-MESSAGE-CHANGE';
 
 let messagesPage = {
     dialogsData: [
@@ -89,7 +88,6 @@ let messagesPage = {
             messageText: 'Would u like to go for a walk?',
         }
     ],
-    NewMessageValue: '',
 }
 
 const reducerMessages = (state = messagesPage, action) => {
@@ -104,19 +102,12 @@ const reducerMessages = (state = messagesPage, action) => {
             stateCopy.messages.push(newMessage);
 
             return stateCopy;
-        case NEW_MESSAGE_CHANGE:
-            stateCopy.NewMessageValue = action.newMessageValue;
-
-            return stateCopy;
         default:
             return state;
     }
 }
 export const addMessage = messageText => {
     return { type: ADD_MESSAGE, messageText }
-}
-export const onNewMessageChange = newMessageValue => {
-    return { type: NEW_MESSAGE_CHANGE, newMessageValue }
 }
 
 export default reducerMessages;
