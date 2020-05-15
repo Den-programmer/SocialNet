@@ -2,7 +2,6 @@ import React from 'react';
 import classes from './UsersPageSwitcher.module.css';
 
 const UsersPageSwitcher = (props) => {
-
   let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
 
   let pagesToShow = [];

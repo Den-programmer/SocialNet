@@ -1,0 +1,14 @@
+.btn_addPost {
+    margin: 10px;
+}
+
+.postForm {
+    display:inline-flex;
+    flex-direction:column;            
+}
+
+.postForm input {
+    margin: 10px;
+    height: 20px;
+    width: 290px;
+}

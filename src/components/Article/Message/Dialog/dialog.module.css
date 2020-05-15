@@ -1,16 +1,4 @@
 .dialog {
     margin:0 auto;
-}
-.sendMessage {
-    display:flex;
-    flex-direction: column;
-}
-.sendMessage__input {
-    margin: 10px auto;
-    border-radius:10px;
-    height: 40px;
-    width: 200px;
-}
-.sendMessage__btn {
-    margin:5px auto;
+    
 }

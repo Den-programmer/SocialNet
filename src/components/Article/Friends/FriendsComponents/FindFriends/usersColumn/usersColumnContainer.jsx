@@ -6,7 +6,7 @@ import { follow, unfollow, setUsers, getUsers, followThunk, unfollowThunk } from
 
 class UsersColumnAPI extends React.Component {
     componentDidMount() {
-        this.props.getUsers(this.props.pageSize, this.props.currentPage);
+        this.props.getUsers(this.props.usersInf.pageSize, this.props.usersInf.currentPage);
     }
     render() {
         return (
