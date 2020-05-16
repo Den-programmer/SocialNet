@@ -1,0 +1,19 @@
+.Input .error {
+    border:3px solid blue;
+}
+.Input .errorText {
+    color: blue;
+}
+.textarea .error {
+    border:3px solid blue;
+}
+.textarea .errorText {
+    color: blue;
+}
+.RememberMe .errorText {
+    color: blue;
+}
+.dFlexRememberMe {
+    display:flex;
+    align-items:center;
+}
