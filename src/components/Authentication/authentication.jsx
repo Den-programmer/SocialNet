@@ -1,12 +1,12 @@
 import React from 'react';
 import classes from './authentication.module.css';
-import Login from './Login/login';
+import LoginContainer from './Login/loginContainer';
 
 const Authentication = (props) => {
     return (
         <div className={classes.authentication}>
             <div className="container">
-                <Login />
+                <LoginContainer />
             </div>
         </div>
     );

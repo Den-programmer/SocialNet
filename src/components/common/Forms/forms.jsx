@@ -21,14 +21,12 @@ export const Textarea = ({input, meta, ...props}) => {
     );
 }
 export const RememberMe = ({input, meta, ...props}) => {
-    const hasError = meta.error && meta.touched;
     return (
         <div className={classes.RememberMe}>
             <div className={classes.dFlexRememberMe}>
-                <input {...input} {...props} className={hasError ? classes.error : ''}/>
+                <input {...input} {...props}/>
                 <p>Remember me!</p>
             </div>
-            {hasError ? <p className={classes.errorText}> {meta.error}</p> : ''}
         </div>
     );
 } 

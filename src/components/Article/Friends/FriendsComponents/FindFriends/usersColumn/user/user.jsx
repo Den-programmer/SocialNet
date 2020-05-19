@@ -11,7 +11,7 @@ const User = (props) => {
         let currentElement = e.target.parentNode;
         let id = Number(currentElement.getAttribute("id"));
 
-        if (props.followed == false) {
+        if (props.followed === false) {
             props.followThunk(id);
         } else {
             props.unfollowThunk(id);

@@ -17,9 +17,14 @@ export const maxLengthCreator = (countSymbols) => (value) => {
 export const minLengthCreator = (countSymbols) => {
     return (value) => {
         if (value && value.length < countSymbols) {
-            return "Min length is" + " " + countSymbols;
+            return "Min length is " + countSymbols;
         } else {
             return undefined;
         }
     }
+}
+export const enteredNothingError = val => {
+    if (!val) return "You entered nothing!"
+    
+    return undefined;
 }

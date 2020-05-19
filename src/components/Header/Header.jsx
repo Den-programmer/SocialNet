@@ -15,9 +15,7 @@ const Header = (props) => {
             </NavLink>
           </div>
           <div className={classes.btn_login}>
-            <NavLink to="/login"> 
-              {props.isAuth == 0 ? props.login : "Login"}
-            </NavLink>        
+            {props.isAuth === 0 ? <NavLink onClick={props.logout} to="/login">Logout</NavLink> : <NavLink to='/login'>Login</NavLink>}     
           </div>
         </div>
         <Route exact path='/login' component={Authentication} />    

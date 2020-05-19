@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './status.module.css';
+import StatusReduxForm from './StatusForm/statusForm';
 
 class Status extends React.Component {
     state = {
@@ -18,20 +19,13 @@ class Status extends React.Component {
         });
         this.props.updateStatus(this.state.status);
     }
-    onStatusChange = (e) => {
-        this.setState({
-            status: e.currentTarget.value
-        });
-        console.log(this.state.status);
-    }
 
     render() {
         return (
             <div className={classes.status}>
                 {this.state.editMode ?
                     <div className={classes.editCurrentStatus}>
-                        <input onChange={this.onStatusChange} value={this.state.status} autoFocus={true} title="Edit status..." placeholder="Edit status..." />
-                        <button onClick={this.deactivateEditMode}>Save Changes!</button>
+                        <StatusReduxForm onSubmit={this.deactivateEditMode}/>
                     </div>
                     :
                     <div className={classes.currentStatus}>

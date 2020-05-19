@@ -130,12 +130,12 @@ const reducerFriends = (state = Friends, action) => {
             return stateCopy;
         case FOLLOW:
             stateCopy.users.forEach(u => {
-                if (u.id == action.userId) {
+                if (u.id === action.userId) {
                     u.followed = true;
                 }
             });
             let currentUser = stateCopy.users.filter((user) => {
-                if (user.id == action.userId) {
+                if (user.id === action.userId) {
                     return true;
                 }
             });
@@ -152,7 +152,7 @@ const reducerFriends = (state = Friends, action) => {
             return stateCopy;
         case UNFOLLOW:
             stateCopy.users.forEach(u => {
-                if (u.id == action.userId) {
+                if (u.id === action.userId) {
                     u.followed = false;
                 }
             });
@@ -223,7 +223,7 @@ export const followThunk = (userId) => {
     return (dispatch) => {
         dispatch(toggleFollowingInProcess(true, userId));
         UsersAPI.follow(userId).then(data => {
-            if (data.resultCode == 0) {
+            if (data.resultCode === 0) {
                 dispatch(follow(userId));
             }
             dispatch(toggleFollowingInProcess(false, userId));
@@ -234,7 +234,7 @@ export const unfollowThunk = (userId) => {
     return (dispatch) => {
         dispatch(toggleFollowingInProcess(true, userId));
         UsersAPI.unfollow(userId).then(data => {
-            if (data.resultCode == 0) {
+            if (data.resultCode === 0) {
                 dispatch(unfollow(userId));
             }
             dispatch(toggleFollowingInProcess(false, userId));

@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './dialogForm.module.css';
 import { Field, reduxForm } from 'redux-form';
-import { maxLengthCreator } from '../../../../../utils/validators/validators';
+import { maxLengthCreator, enteredNothingError } from '../../../../../utils/validators/validators';
 import { Input } from '../../../../common/Forms/forms';
 
 const maxMessageLength = maxLengthCreator(90);
@@ -14,7 +14,7 @@ const DialogForm = (props) => {
                         name="dialog" 
                         className={classes.sendMessage__input} 
                         type="text" component={Input} 
-                        validate={maxMessageLength}/>
+                        validate={[maxMessageLength, enteredNothingError]}/>
                 <div className={classes.sendMessage__btn}>
                     <button>Send</button>
                 </div>

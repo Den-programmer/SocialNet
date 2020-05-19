@@ -29,7 +29,7 @@ let profilePage = {
     },
   ],
   profile: {
-    status: "Hello my friends! I\'m GOD!!!",
+    status: "Hello my friends! I'm GOD!!!",
     aboutMe: 'What can I say new?! I\'m GOD!!!',
     contacts: {
       facebook: "facebook.com",
@@ -75,10 +75,6 @@ const reducerProfile = (state = profilePage, action) => {
     case SET_STATUS:
       stateCopy.profile.status = action.status;
 
-      return stateCopy;
-    case UPDATE_STATUS:
-      stateCopy.profile.status = action.status;
-      
       return stateCopy;
     default:
       return state;

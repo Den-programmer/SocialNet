@@ -9,7 +9,7 @@ const Friend = (props) => {
         let currentElement = e.target.parentNode;
         let id = Number(currentElement.getAttribute("id"));
 
-        if (props.followed == false) {
+        if (props.followed === false) {
             props.follow(id);
         } else {
             props.unfollow(id);
