@@ -1,0 +1,13 @@
+.editPhoto {
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+}
+.editPhoto img {
+    width: 100px;
+    height: 100px;
+    border-radius:50px;
+}
+.btn_changeAvatar {
+    
+}

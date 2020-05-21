@@ -24,6 +24,6 @@ let mapStateToProps = (state) => {
 }
 
 export default compose(
+    reduxForm({ form: 'status', enableReinitialize: true }),
     connect(mapStateToProps),
-    reduxForm({ form: 'status', enableReinitialize: true })
 )(StatusForm);

@@ -20,7 +20,7 @@ const FollowingInformation = (props) => {
                     </div>
                 </div>
                 <div className={classes.btn_following}>
-                    <button>Follow/Unfollow</button>
+                    {props.userId !== 7149 ? <button>Follow/Unfollow</button> : ""}
                 </div>
             </div>
         </div>

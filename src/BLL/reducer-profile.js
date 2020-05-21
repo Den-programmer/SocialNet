@@ -1,10 +1,12 @@
-import MyAvatar from '../components/Article/Profile/images/userDeafultAvatar/avatar.jpg';
+import MyAvatar from '../components/Article/Profile/images/myAvatar/avatar.jpg';
 import { ProfileAPI } from '../DAL/api';
+import { OptionsAPI } from "../DAL/api";
 
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
 const UPDATE_STATUS = 'UPDATE_STATUS';
+const SET_USERS_PHOTO = 'SET_USERS_PHOTO';
 
 
 let profilePage = {
@@ -54,6 +56,7 @@ const reducerProfile = (state = profilePage, action) => {
   let stateCopy = { ...state }
   stateCopy.posts = [...state.posts]
   stateCopy.profile = { ...state.profile };
+  stateCopy.profile.photos = {...state.profile.photos}
 
   switch (action.type) {
     case ADD_POST:
@@ -76,10 +79,17 @@ const reducerProfile = (state = profilePage, action) => {
       stateCopy.profile.status = action.status;
 
       return stateCopy;
+    case SET_USERS_PHOTO: 
+      stateCopy.profile.photos.large = action.photo;
+      stateCopy.profile.photos.small = action.photo;
+
+      return stateCopy;
     default:
       return state;
   }
 }
+
+/* Action Creators! */
 
 export const addPost = (newPostTitle, newPostInformat) => {
   return { type: ADD_POST, newPostTitle, newPostInformat };
@@ -93,7 +103,19 @@ const setStatus = (status) => {
 const updateStatus = (status) => {
   return { type: UPDATE_STATUS, status }
 }
+const setUserPhoto = (photo) => {
+  return { type: SET_USERS_PHOTO, photo }
+}
 
+/* Thunks! */
+
+export const setUserPhotoThunk = (photo) => {
+  return (dispatch) => {
+      OptionsAPI.setUserPhoto(photo).then(data => {
+          dispatch(setUserPhoto(photo));
+      });      
+  }
+}
 export const setUserProfileThunk = (userId) => {
   return (dispatch) => {
     ProfileAPI.getUsersProfile(userId).then(data => {

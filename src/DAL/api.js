@@ -63,3 +63,10 @@ export const AuthAPI = {
         });
     }
 }
+export const OptionsAPI = {
+    setUserPhoto: (photo) => {
+        return instance.put(`profile/photo`, { photo }).then(response => {
+            return response.data;
+        });
+    }
+}

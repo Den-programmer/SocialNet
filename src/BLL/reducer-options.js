@@ -1,11 +1,9 @@
-let initialState = {}
+let options = {
 
-const reducerOptions = (state = initialState, action) => {
+}
 
-
-
-
-
+const reducerOptions = (state = options, action) => {
+  
     return state;
 }
 
