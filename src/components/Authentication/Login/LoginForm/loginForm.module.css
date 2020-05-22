@@ -13,3 +13,7 @@
     color:#FFF;
     font-weight: normal;
 }    
+.error p {
+    color:red;
+    font-weight: 700;
+}

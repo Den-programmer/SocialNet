@@ -10,6 +10,8 @@ const EditPhoto = (props) => {
                     <button>
                         Change avatar
                     </button>
+                </div>
+                <div>
                     <input type="file" />
                 </div>
             </div>

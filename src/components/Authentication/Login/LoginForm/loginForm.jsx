@@ -20,6 +20,9 @@ const LoginForm = (props) => {
                     <div className={classes.rememberMe}>
                         <Remembering />
                     </div>
+                    {props.error && <div className={classes.error}>
+                        <p>{props.error}</p>
+                    </div>}
                     <div className={classes.btn_login}>
                         <button>Login</button>
                     </div>

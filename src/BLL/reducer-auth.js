@@ -1,4 +1,5 @@
 import { AuthAPI } from '../DAL/api';
+import { stopSubmit } from 'redux-form';
 
 const SET_AUTH_USER_DATA = 'SET_AUTH_USER_DATA';
 
@@ -41,7 +42,12 @@ export const login = (email, password, rememberMe) => {
   return (dispatch) => {
     AuthAPI.login(email, password, rememberMe).then(response => {
       AuthAPI.auth().then(data => {
-        dispatch(setAuthUserData(response.userId, email, email, password, 0, rememberMe));
+        if (response.resultCode === 0) {
+          dispatch(setAuthUserData(response.userId, email, email, password, 0, rememberMe));
+        } else {
+          let messageError = response.messages[0]; 
+          dispatch(stopSubmit("login",  {_error: messageError}));
+        }
       });
     });
   }
