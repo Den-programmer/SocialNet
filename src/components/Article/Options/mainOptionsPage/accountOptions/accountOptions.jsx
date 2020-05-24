@@ -6,7 +6,7 @@ import ChangeUserName from './ChangeUserName/changeUserName';
 const AccountOptions = (props) => {
     return (
         <div className={classes.accountOptions}>
-            <EditPhoto />
+            <EditPhoto setUserPhoto={props.setUserPhotoThunk}/>
             <ChangeUserName />
         </div>
     );

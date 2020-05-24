@@ -1,6 +1,7 @@
 import MyAvatar from '../components/Article/Profile/images/myAvatar/avatar.jpg';
 import { ProfileAPI } from '../DAL/api';
 import { OptionsAPI } from "../DAL/api";
+import { stopSubmit } from 'redux-form';
 
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
@@ -112,7 +113,12 @@ const setUserPhoto = (photo) => {
 export const setUserPhotoThunk = (photo) => {
   return (dispatch) => {
       OptionsAPI.setUserPhoto(photo).then(data => {
-          dispatch(setUserPhoto(photo));
+          if (data.resultCode === 0) {
+            dispatch(setUserPhoto(photo));
+          } else {
+            let action = stopSubmit('editUserAvatar', {_error: 'Choose correct image file!'});
+            dispatch(action);
+          }
       });      
   }
 }

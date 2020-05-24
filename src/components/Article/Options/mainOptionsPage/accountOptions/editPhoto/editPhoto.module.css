@@ -13,7 +13,10 @@
     border-radius:50px;
     margin: 10px;
 }
-.btn_changeAvatar button {
+.btn_changeAvatar {
+    margin: 10px;
+}
+.btn_changeAvatar label {
     font-weight: 700;
     color: white;
     padding:4px 20px;
@@ -21,4 +24,13 @@
     background: rgb(64,199,129);
     box-shadow: 0 -1px rgb(53,167,110) inset;
     transition: 0.2s;
+    cursor:pointer;
+}
+.btn_changeAvatar input {
+   overflow: hidden;
+   width: 0.1px;
+   height: 0.1px;
+   opacity:0;
+   position: absolute;
+   z-index:-1;
 }
