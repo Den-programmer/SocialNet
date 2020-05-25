@@ -32,9 +32,11 @@ export const setAuthUserData = (userId, email, login, password, isAuth, remember
 
 export const authentication = () => {
   return (dispatch) => {
-    AuthAPI.auth().then(data => {
-      let { id, email, login } = data.data;
-      dispatch(setAuthUserData(id, email, login, data.resultCode));
+    return AuthAPI.auth().then(data => {
+      if(data.resultcode === 0) {
+        let { id, email, login } = data.data;
+        dispatch(setAuthUserData(id, email, login, null, true, true));
+      }
     });
   }
 }
@@ -43,7 +45,7 @@ export const login = (email, password, rememberMe) => {
     AuthAPI.login(email, password, rememberMe).then(response => {
       AuthAPI.auth().then(data => {
         if (response.resultCode === 0) {
-          dispatch(setAuthUserData(response.userId, email, email, password, 0, rememberMe));
+          dispatch(setAuthUserData(response.userId, email, email, password, true, rememberMe));
         } else {
           let messageError = response.messages[0]; 
           dispatch(stopSubmit("login",  {_error: messageError}));
