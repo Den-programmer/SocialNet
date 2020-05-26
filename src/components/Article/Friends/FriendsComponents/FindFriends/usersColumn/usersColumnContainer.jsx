@@ -2,19 +2,19 @@ import React from 'react';
 import UsersColumn from './usersColumn';
 import Preloader from '../../../../../common/preloader/preloader';
 import { connect } from "react-redux";
-import { follow, unfollow, setUsers, getUsers, followThunk, unfollowThunk } from "../../../../../../BLL/reducer-friends";
+import { follow, unfollow, setUsers, requestUsers, followThunk, unfollowThunk } from "../../../../../../BLL/reducer-friends";
+import { getUsersInf, getUsers, getFollowingInProcess } from '../../../../../../BLL/selectors/selectors';
 
 class UsersColumnAPI extends React.Component {
     componentDidMount() {
-        this.props.getUsers(this.props.usersInf.pageSize, this.props.usersInf.currentPage);
+        this.props.requestUsers(this.props.usersInf.pageSize, this.props.usersInf.currentPage);
     }
     render() {
         return (
             <>
                 {this.props.usersInf.isFetching ? <Preloader /> : <UsersColumn followThunk={this.props.followThunk} unfollowThunk={this.props.unfollowThunk}
                 followingInProcess={this.props.followingInProcess} 
-                    followingDisableButton={this.props.followingDisableButton} 
-                    setUsers={this.props.setUsers} users={this.props.users} />}
+                setUsers={this.props.setUsers} users={this.props.users} />}
             </>
         );
     }
@@ -22,10 +22,9 @@ class UsersColumnAPI extends React.Component {
 
 let mapStateToProps = (state) => {
     return {
-        users: state.Friends.users,
-        usersInf: state.Friends.usersInf,
-        followingDisableButton: state.Friends.followingDisableButton,
-        followingInProcess: state.Friends.followingInProcess,
+        users: getUsers(state),
+        usersInf: getUsersInf(state),
+        followingInProcess: getFollowingInProcess(state),
     }
 }
 
@@ -33,7 +32,7 @@ const UsersColumnContainer = connect(mapStateToProps, {
     follow,
     unfollow,
     setUsers,
-    getUsers,
+    requestUsers,
     followThunk,
     unfollowThunk
 })(UsersColumnAPI); 

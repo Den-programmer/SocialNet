@@ -103,9 +103,6 @@ let Friends = {
         pageSize: 12,
         currentPage: 1,
     },
-    followingDisableButton: {
-        disabled: 'disabled',
-    },
     followingInProcess: [],
 }
 
@@ -209,10 +206,10 @@ export const toggleFollowingInProcess = (isFetching, userId) => {
     return { type: TOGGLE_IS_FOLLOWING_PROCESS, isFetching, userId }
 }
 
-export const getUsers = (pageSize, currentPage) => {
+export const requestUsers = (pageSize, currentPage) => {
     return (dispatch) => {
         dispatch(isFetching(true));
-        UsersAPI.getUsers(pageSize, currentPage).then(data => {
+        UsersAPI.requestUsers(pageSize, currentPage).then(data => {
             dispatch(isFetching(false));
             dispatch(setUsers(data.items));
             dispatch(setUsersInf(data));

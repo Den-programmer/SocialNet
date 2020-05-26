@@ -14,8 +14,7 @@ const UsersColumn = (props) => {
             nickname={user.nickname}
             name={user.name}
             photo={user.photos.small}
-            setUsers={props.setUsers}
-            followingDisableButton={props.followingDisableButton}/>
+            setUsers={props.setUsers}/>
     });
 
     return (

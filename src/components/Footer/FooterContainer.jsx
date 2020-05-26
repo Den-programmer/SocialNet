@@ -1,11 +1,12 @@
 import { connect } from "react-redux";
 import Footer from "./Footer";
+import { getFootLinks, getYear, getFootInf } from "../../BLL/selectors/selectors";
 
 let mapStatetoProps = (state) => {
     return {
-        footLinks:state.Footer.footLinks,
-        year:state.Footer.year,
-        footInf:state.Footer.footInf,
+        footLinks:getFootLinks(state),
+        year:getYear(state),
+        footInf:getFootInf(state),
     }
 }
 

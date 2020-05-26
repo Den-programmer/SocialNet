@@ -5,6 +5,7 @@ import { setUserProfileThunk, setStatusThunk, updateStatusThunk } from '../../..
 import { withRouter } from 'react-router-dom';
 import { withAuthRedirect } from '../../../HOC/withAuthRedirect';
 import { compose } from 'redux';
+import { getUsersProfile, getPosts, getFriends, getAuthorizedUserId } from '../../../BLL/selectors/selectors';
 
 class ProfileContainer extends React.Component {
     componentDidMount() {
@@ -25,10 +26,10 @@ class ProfileContainer extends React.Component {
 
 let mapStateToProps = (state) => {
     return {
-        profile: state.profilePage.profile,
-        posts: state.profilePage.posts,
-        friends: state.Friends.friends,
-        authorizedUserId: state.profilePage.profile.userId
+        profile: getUsersProfile(state),
+        posts: getPosts(state),
+        friends: getFriends(state),
+        authorizedUserId: getAuthorizedUserId(state),
     }
 }
 export default compose(

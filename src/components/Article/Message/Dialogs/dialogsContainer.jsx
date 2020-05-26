@@ -1,9 +1,10 @@
 import Dialogs from './dialogs';
 import { connect } from 'react-redux';
+import { getDialogsData } from '../../../../BLL/selectors/selectors';
 
 let mapStateToProps = (state) => {
     return {
-        dialogsData:state.messagesPage.dialogsData
+        dialogsData: getDialogsData(state)
     }
 } 
 

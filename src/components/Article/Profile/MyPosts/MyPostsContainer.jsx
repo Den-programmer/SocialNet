@@ -1,12 +1,12 @@
 import MyPosts from './MyPosts';
 import { addPost } from '../../../../BLL/reducer-profile';
 import { connect } from 'react-redux';
+import { getUsersProfile, getPosts } from '../../../../BLL/selectors/selectors';
 
 let mapStateToProps = (state) => {
     return {
-        profilePage:state.profilePage,
-        posts:state.profilePage.posts,
-        profile: state.profilePage.profile,
+        posts: getPosts(state),
+        profile: getUsersProfile(state),
     }
 }
 
