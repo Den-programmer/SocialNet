@@ -1,40 +1,43 @@
 import React from 'react';
 import classes from './status.module.css';
-import StatusReduxForm from './StatusForm/statusForm';
+import { useState, useEffect } from 'react';
 
-class Status extends React.Component {
-    state = {
-        editMode: false,
-        status: this.props.status
+const Status = (props) => {
+
+    let [editMode, setEditMode] = useState(false);
+    let [status, setStatus] = useState(props.status);
+
+    useEffect(() => {
+        setStatus(props.status);
+    }, [props.status]);
+
+    let activateEditMode = () => {
+        setEditMode(true);
+    }
+    let deactivateEditMode = () => {
+        setEditMode(false);
+        props.updateStatus(status);
+    }
+    let onStatusChange = (e) => {
+        setStatus(e.currentTarget.value);
     }
 
-    activateEditMode = () => {
-        this.setState({
-            editMode: true
-        });
-    }
-    deactivateEditMode = () => {
-        this.setState({
-            editMode: false
-        });
-        this.props.updateStatus(this.state.status);
-    }
-
-    render() {
-        return (
-            <div className={classes.status}>
-                {this.state.editMode ?
-                    <div className={classes.editCurrentStatus}>
-                        <StatusReduxForm onSubmit={this.deactivateEditMode}/>
-                    </div>
-                    :
-                    <div className={classes.currentStatus}>
-                        <span onClick={this.activateEditMode} title="Edit status...">{this.state.status}</span>
-                    </div>
-                }
-            </div>
-        );
-    }
+    return (
+        <div className={classes.status}>
+            {editMode ?
+                <div className={classes.editCurrentStatus}>
+                    <input value={status} onChange={onStatusChange} autoFocus={true}  type="text" 
+                    placeholder={"Edit status..."} 
+                    title="Edit Status..." 
+                    onBlur={deactivateEditMode}/>
+                </div>
+                :
+                <div className={classes.currentStatus}>
+                    <span onClick={activateEditMode} title="Edit status...">{props.status}</span>
+                </div>
+            }
+        </div>
+    );
 }
 
 export default Status;
