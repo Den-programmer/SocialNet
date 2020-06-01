@@ -8,6 +8,8 @@ import Article from './components/Article/Article';
 import { connect } from 'react-redux';
 import { initialize } from './BLL/reducer-app';
 import Preloader from './components/common/preloader/preloader';
+import Authentication from './components/Authentication/authentication';
+import { getIsAuthStatus, getAppInitializationStatus } from './BLL/selectors/selectors';
 
 class App extends React.Component {
   componentDidMount() {
@@ -19,7 +21,7 @@ class App extends React.Component {
     }
     return (
       <BrowserRouter>
-      <div className="App">
+      {this.props.isAuth ? <div className="App">
           <div className="main-page">
             <HeaderContainer />
             <div className="flex-container">
@@ -28,7 +30,7 @@ class App extends React.Component {
             </div>
             <FooterContainer />
           </div>
-        </div>
+        </div> : <Authentication />}
       </BrowserRouter>
     );
   }
@@ -36,7 +38,8 @@ class App extends React.Component {
 
 let mapStateToProps = (state) => {
   return {
-    Initialized: state.app.isInitialized,
+    Initialized: getAppInitializationStatus(state),
+    isAuth: getIsAuthStatus(state)
   }
 } 
 

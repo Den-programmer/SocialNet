@@ -19,7 +19,7 @@ const reducerAuth = (state = auth, action) => {
   switch (action.type) {
     case SET_AUTH_USER_DATA:
       stateCopy = action.data;
-
+      console.warn(stateCopy)
       return stateCopy;
     default:
       return state;
@@ -45,7 +45,7 @@ export const login = (email, password, rememberMe) => {
     AuthAPI.login(email, password, rememberMe).then(response => {
       AuthAPI.auth().then(data => {
         if (response.resultCode === 0) {
-          dispatch(setAuthUserData(response.userId, email, email, password, true, rememberMe));
+          dispatch(setAuthUserData(data.userId, email, email, password, true, rememberMe));
         } else {
           let messageError = response.messages[0]; 
           dispatch(stopSubmit("login",  {_error: messageError}));

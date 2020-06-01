@@ -1,0 +1,12 @@
+.dFlex {
+    display:flex;
+}
+.contact h4 {
+    text-transform: capitalize;
+}
+.btn_confirm {
+    margin-left: 10px;
+}
+.urlInput {
+    width: 320px;
+}

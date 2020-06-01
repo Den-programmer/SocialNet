@@ -1,22 +1,23 @@
 import React from 'react';
 import classes from './contacts.module.css';
+import Contact from './Contact/contact';
 
 
 const Contacts = (props) => {
-
-    let contacts = props.contacts;
+    let contacts = props.contacts.map(contact => {
+        let hasContact = contact.title && contact.value;
+        return <Contact key={contact.id} contactTitle={hasContact ? contact.title : ''} 
+                        contactValue={hasContact ? contact.value : ''}/>
+    });
 
     return (
         <div className={classes.userInf}>
             <div className={classes.contacts}>
                 <div className={classes.title}>
-                    <h3>{contacts.facebook || contacts.instagram || contacts.twitter || contacts.vk ? "Contacts:" : ''}</h3>
+                    <h3>{props.contacts.some(item => item.value !== '' || !item.value) ? "Contacts" : ''}</h3>
                 </div>
                 <div classes={classes.information}>
-                    <h4>{contacts.facebook ? "Facebook: " + contacts.facebook : ''}</h4>
-                    <h4>{contacts.instagram ? "Instagram: " + contacts.instagram : ''}</h4>
-                    <h4>{contacts.twitter ? "Twitter: " + contacts.twitter : ''}</h4>
-                    <h4>{contacts.vk ? "VK: " + contacts.vk : ''} </h4>
+                    {contacts}
                 </div>
             </div>
         </div>

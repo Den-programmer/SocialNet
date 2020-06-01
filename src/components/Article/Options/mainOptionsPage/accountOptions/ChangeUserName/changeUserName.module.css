@@ -1,0 +1,6 @@
+.changeUserName {
+    display:flex;
+}
+.changeUserName * {
+    margin: 10px;
+}

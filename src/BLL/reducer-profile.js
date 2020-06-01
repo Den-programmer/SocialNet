@@ -8,6 +8,7 @@ const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
 const UPDATE_STATUS = 'UPDATE_STATUS';
 const SET_USERS_PHOTO = 'SET_USERS_PHOTO';
+const CHANGE_USER_NAME = 'CHANGE_USER_NAME';
 
 
 let profilePage = {
@@ -34,16 +35,48 @@ let profilePage = {
   profile: {
     status: "Hello my friends! I'm GOD!!!",
     aboutMe: 'What can I say new?! I\'m GOD!!!',
-    contacts: {
-      facebook: "facebook.com",
-      website: null,
-      github: "github.com",
-      instagram: "instagram.com",
-      mainLink: null,
-      twitter: "https://twitter.com",
-      vk: "vk.com",
-      youtube: null
-    },
+    contacts: [
+      {
+        id: 1,
+        title: 'Facebook',
+        value: "facebook.com"
+      },
+      {
+        id: 2,
+        title: 'Website',
+        value: "http://localhost:3000/"
+      },
+      {
+        id: 3,
+        title: 'Github',
+        value: "github.com"
+      },
+      {
+        id: 4,
+        title: 'Instagram',
+        value: "instagram.com"
+      },
+      {
+        id: 5,
+        title: 'MainLink',
+        value: "http://localhost:3000/Profile/7149"
+      },
+      {
+        id: 6,
+        title: 'Twitter',
+        value: "https://twitter.com"
+      },
+      {
+        id: 7,
+        title: 'Vk',
+        value: "vk.com"
+      },
+      {
+        id: 8,
+        title: 'Youtube',
+        value: "https://www.youtube.com/"
+      },
+    ],
     fullName: "LightL2",
     photos: {
       large: MyAvatar,
@@ -85,6 +118,10 @@ const reducerProfile = (state = profilePage, action) => {
       stateCopy.profile.photos.small = action.photo;
 
       return stateCopy;
+    case CHANGE_USER_NAME: 
+      stateCopy.profile.fullName = action.userName;
+
+      return stateCopy;
     default:
       return state;
   }
@@ -106,6 +143,9 @@ const updateStatus = (status) => {
 }
 const setUserPhoto = (photo) => {
   return { type: SET_USERS_PHOTO, photo }
+}
+export const changeUserName = (userName) => {
+  return { type: CHANGE_USER_NAME, userName }
 }
 
 /* Thunks! */

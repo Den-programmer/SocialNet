@@ -1,3 +1,7 @@
+export const getAppInitializationStatus = (state) => {
+    return state.app.isInitialized;
+}
+
 export const getUsersProfile = (state) => {
     return state.profilePage.profile 
 }
@@ -24,6 +28,14 @@ export const getMessages = (state) => {
 
 export const getUsersSmallPhoto = (state) => {
     return state.profilePage.profile.photos.small
+}
+
+export const getUsersName = (state) => {
+    return state.profilePage.profile.fullName
+}
+
+export const getContacts = (state) => {
+    return state.profilePage.profile.contacts
 }
 
 export const getUsersInf = (state) => {

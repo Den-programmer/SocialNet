@@ -12,6 +12,6 @@ let mapStateToProps = (state) => {
 };
 
 export default compose(
-    // withAuthRedirect,
+    withAuthRedirect,
     connect(mapStateToProps, { follow: follow, unfollow: unfollow }),
 )(FriendsByButton);

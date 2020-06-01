@@ -3,8 +3,8 @@ import classes from './login.module.css';
 import ReduxLoginForm from './LoginForm/loginForm';
 
 const Login = (props) => {
-    let onSubmit = (formData) => {
-        let { email, password, RememberMe } = formData;
+    let onSubmit = (FormData) => {
+        let { email, password, RememberMe } = FormData;
         props.login(email, password, RememberMe);
     }
     return (
