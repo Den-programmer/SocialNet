@@ -1,10 +1,11 @@
 import React from 'react';
 import classes from './generalOptions.module.css';
+import ChangeFontSize from './ChangeFontSize/changeFontSize';
 
 const GeneralOptions = (props) => {
     return (
         <div className={classes.generalOptions}>
-            General Options
+            <ChangeFontSize fontSizeValues={props.fontSizeValues}/>
         </div>
     );
 }

@@ -2,11 +2,43 @@ import { authentication } from "./reducer-auth";
 
 const SET_INITIALIZED = 'SET_INITIALIZED';
 
-let initialState = {
-   isInitialized: false,
+let AppState = {
+  isInitialized: false,
+  options: {
+    fontSize: [
+      {
+        title: 'ExtraSmall',
+        size: 10
+      },
+      {
+        title: 'Small',
+        size: 12
+      },
+      {
+        title: 'Normal',
+        size: 16
+      }, 
+      {
+        title: 'Enlarged',
+        size: 20
+      },
+      {
+        title: 'Large',
+        size: 30
+      },
+      {
+        title: 'ExtraLarge',
+        size: 40
+      },
+      {
+        title: 'MegaLarge',
+        size: 50
+      }
+    ],
+  }
 }
 
-const reducerApp = (state = initialState, action) => {
+const reducerApp = (state = AppState, action) => {
   let stateCopy = { ...state }
 
   switch (action.type) {

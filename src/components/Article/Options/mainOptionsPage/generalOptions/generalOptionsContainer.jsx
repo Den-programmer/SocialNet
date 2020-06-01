@@ -3,7 +3,7 @@ import GeneralOptions from './generalOptions';
 
 let mapStateToProps = (state) => {
     return {
-        
+        fontSizeValues: state.app.options.fontSize
     }
 }
 
