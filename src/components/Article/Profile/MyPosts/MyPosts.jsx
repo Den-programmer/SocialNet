@@ -4,24 +4,23 @@ import Post from './Post/Post';
 import AddPost from './AddPost/addPost';
 import defaultUser from '../images/withoutAvatar/defaultUserPhoto.jpg'
 
-const MyPosts = (props) => {
+const MyPosts = React.memo(props =>  {
     let posts = props.posts.map(post => {
         return  <Post id={post.id} key={post.id} 
                 postTitle={post.postTitle} 
                 postInf={post.postInf}  
                 likesCount={post.likesCount} avatar={props.profile.photos.large ? props.profile.photos.large : defaultUser}/>
     });
-
-    return (
-        <div className={classes.postPage}>
-            <div className={classes.addPostBlock}>
-                <AddPost addPost={props.addPost} />
+        return (
+            <div className={classes.postPage}>
+                <div className={classes.addPostBlock}>
+                    <AddPost addPost={props.addPost} />
+                </div>
+                <div className={classes.posts}>
+                    {posts}
+                </div>
             </div>
-            <div className={classes.posts}>
-                {posts}
-            </div>
-        </div>
-    );
-}
+        );
+})
 
 export default MyPosts;

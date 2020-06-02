@@ -19,7 +19,6 @@ const reducerAuth = (state = auth, action) => {
   switch (action.type) {
     case SET_AUTH_USER_DATA:
       stateCopy = action.data;
-      console.warn(stateCopy)
       return stateCopy;
     default:
       return state;
