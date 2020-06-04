@@ -70,3 +70,6 @@ export const getIsAuthStatus = (state) => {
     return state.auth.isAuth;
 }
 
+export const getAppFontSize = (state) => {
+    return state.app.options.appFontSize
+}

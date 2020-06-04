@@ -14,7 +14,7 @@ const Contacts = (props) => {
         <div className={classes.userInf}>
             <div className={classes.contacts}>
                 <div className={classes.title}>
-                    <h3>{props.contacts.some(item => item.value !== '' || !item.value) ? "Contacts" : ''}</h3>
+                    <h3>{props.contacts.some(item => item.value !== '' || !item.value) ? "" : 'Contacts'}</h3>
                 </div>
                 <div classes={classes.information}>
                     {contacts}

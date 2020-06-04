@@ -9,9 +9,10 @@ import { connect } from 'react-redux';
 import { initialize } from './BLL/reducer-app';
 import Preloader from './components/common/preloader/preloader';
 import Authentication from './components/Authentication/authentication';
-import { getIsAuthStatus, getAppInitializationStatus } from './BLL/selectors/selectors';
+import { getIsAuthStatus, getAppInitializationStatus, getAppFontSize } from './BLL/selectors/selectors';
 
 class App extends React.Component {
+  style = { fontSize: this.props.size + 'px'}
   componentDidMount() {
     this.props.initialize();
   }
@@ -21,7 +22,7 @@ class App extends React.Component {
     }
     return (
       <BrowserRouter>
-      {this.props.isAuth ? <div className="App">
+      {this.props.isAuth ? <div style={this.style} className="App">
           <div className="main-page">
             <HeaderContainer />
             <div className="flex-container">
@@ -39,7 +40,8 @@ class App extends React.Component {
 let mapStateToProps = (state) => {
   return {
     Initialized: getAppInitializationStatus(state),
-    isAuth: getIsAuthStatus(state)
+    isAuth: getIsAuthStatus(state),
+    size: getAppFontSize(state)
   }
 } 
 

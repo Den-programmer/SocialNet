@@ -4,6 +4,7 @@ import { OptionsAPI } from "../DAL/api";
 import { stopSubmit } from 'redux-form';
 
 const ADD_POST = 'ADD-POST';
+const DELETE_POST = 'DELETE_POST'; 
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
 const UPDATE_STATUS = 'UPDATE_STATUS';
@@ -101,12 +102,20 @@ const reducerProfile = (state = profilePage, action) => {
         likesCount: 200000,
       }
       stateCopy.posts.push(newPost);
-      stateCopy.ValueOfPostTitle = '';
-      stateCopy.ValueOfPostInf = '';
+
+      return stateCopy;
+    case DELETE_POST: 
+      stateCopy.posts.filter(post => {
+        if(post.id !== action.postId) {
+          return true;
+        }
+      });  
 
       return stateCopy;
     case SET_USER_PROFILE:
       stateCopy.profile = action.profile;
+
+      // Create correct object!
 
       return stateCopy;
     case SET_STATUS:
@@ -131,6 +140,9 @@ const reducerProfile = (state = profilePage, action) => {
 
 export const addPost = (newPostTitle, newPostInformat) => {
   return { type: ADD_POST, newPostTitle, newPostInformat };
+}
+export const deletePost = (postId) => {
+  return { DELETE_POST, postId }
 }
 const setUserProfile = (profile) => {
   return { type: SET_USER_PROFILE, profile }
@@ -165,6 +177,52 @@ export const setUserPhotoThunk = (photo) => {
 export const setUserProfileThunk = (userId) => {
   return (dispatch) => {
     ProfileAPI.getUsersProfile(userId).then(data => {
+      let {facebook, github, instagram, mainLink, twitter, vk, website, youtube} = data.contacts;
+      // можешь сделать код как-нибудь, но потом перепишы его(оптимизируй)!
+      // Оптимизация - цыклы и spread оператор, куча кода!!!
+      let contacts = [
+        {
+          id: 1,
+          title: 'Facebook',
+          value: facebook
+        },
+        {
+          id: 2,
+          title: 'Website',
+          value: website
+        },
+        {
+          id: 3,
+          title: 'Github',
+          value: github
+        },
+        {
+          id: 4,
+          title: 'Instagram',
+          value: instagram
+        },
+        {
+          id: 5,
+          title: 'MainLink',
+          value: mainLink
+        },
+        {
+          id: 6,
+          title: 'Twitter',
+          value: twitter
+        },
+        {
+          id: 7,
+          title: 'Vk',
+          value: vk
+        },
+        {
+          id: 8,
+          title: 'Youtube',
+          value: youtube
+        },
+      ];
+      data.contacts = contacts;
       dispatch(setUserProfile(data));
     });
   }

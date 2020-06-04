@@ -1,6 +1,9 @@
 * {
     font-family:Arial, sans-serif;
 }
+
+/* Half Selectors and True Selectors! */
+
 .container {
     width: 1170px;
     margin: 0 auto;
@@ -12,7 +15,47 @@ button {
     cursor:pointer;
 }
 
+/* Font Size! */
 
+.fontSizeEqual10 {
+    font-size: 10px;
+}
+.fontSizeEqual12 {
+    font-size: 12px;
+}
+.fontSizeEqual16 {
+    font-size: 16px;
+}
+.fontSizeEqual20 {
+    font-size: 20px;
+}
+.fontSizeEqual30 {
+    font-size: 30px;
+}
+.fontSizeEqual40 {
+    font-size: 40px;
+}
+.fontSizeEqual50 {
+    font-size: 50px;
+}
+
+/* Colors! */
+
+.colorWhite {
+    color: #FFF;
+}
+
+/* Font Weight! */
+
+.fontWeightNormal {
+    font-weight: normal;
+}
+.fontWeightBold {
+    font-weight: bold;
+}
+.fontWeightExtraBold {
+    font-weight: 900;
+} 
 
 
 

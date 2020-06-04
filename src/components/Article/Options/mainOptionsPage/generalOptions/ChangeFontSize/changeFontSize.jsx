@@ -4,7 +4,7 @@ import ChangeFontSizeSingleComponent from './ChangeFontSizeSingleComponent/chang
 
 const ChangeFontSize = (props) => {
     let fontSizeValues = props.fontSizeValues.map(item => {
-        return <ChangeFontSizeSingleComponent title={item.title} size={item.size}/>
+        return <ChangeFontSizeSingleComponent key={item.id} id={item.id} title={item.title} size={item.size} setFontSize={props.setFontSize}/>
     });
     return (
         <div className={classes.changeFontSize}>

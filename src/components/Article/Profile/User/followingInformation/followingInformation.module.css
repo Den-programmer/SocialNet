@@ -25,3 +25,8 @@
     text-align: center;
     margin: 10px;
 }
+.horizontal_line {
+    height: 1px;
+    width: 300px;
+    background-color: black;
+}
