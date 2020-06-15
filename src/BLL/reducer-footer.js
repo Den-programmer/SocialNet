@@ -4,28 +4,28 @@ let Footer = {
     footLinks: [
         {
             id: 1,
-            name: 'NavLink',
-            url: "#",
+            name: 'Profile',
+            url: "/Profile",
         },
         {
             id: 2,
-            name: 'NavLink',
-            url: "#",
+            name: 'Messages',
+            url: "/Messages",
         },
         {
             id: 3,
-            name: 'NaVLink',
-            url: "#",
+            name: 'News',
+            url: "/News",
         },
         {
             id: 4,
-            name: 'NavLink',
-            url: "#",
+            name: 'Music',
+            url: "/Music",
         },
         {
             id: 5,
-            name: 'NavLink',
-            url: "#",
+            name: 'Options',
+            url: "/Options",
         },
     ],
 }

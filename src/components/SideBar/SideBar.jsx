@@ -4,10 +4,10 @@ import Nav from './Navigation/nav';
 import FriendsContainer from './Friends/friendsContainer';
 import { NavLink } from 'react-router-dom';
 
-const SideBar = (props) => {
+const SideBar = ({navLinks}) => {
   return (
     <div className={classes.menu}>
-      <Nav />
+      <Nav navLinks={navLinks}/>
       <NavLink to="/Friends/DataFriends">
         <FriendsContainer />
       </NavLink>  

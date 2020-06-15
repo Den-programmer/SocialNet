@@ -1,7 +1,7 @@
 import { authentication } from "./reducer-auth";
 
-const SET_INITIALIZED = 'SET_INITIALIZED';
-const SET_FONT_SIZE = 'SET_FONT_SIZE';
+const SET_INITIALIZED = 'app/SET_INITIALIZED';
+const SET_FONT_SIZE = 'app/SET_FONT_SIZE';
 
 let AppState = {
   isInitialized: false,
@@ -59,11 +59,8 @@ const reducerApp = (state = AppState, action) => {
       }
     case SET_FONT_SIZE: 
       stateCopy.options.fontSize.forEach(item => {
-        if(item.id == action.id) {
-          stateCopy.options.appFontSize = item.size;
-        }
+        if(item.id === action.id) stateCopy.options.appFontSize = item.size;
       });
-      console.log(stateCopy.options.appFontSize)
 
       return stateCopy;  
     default:

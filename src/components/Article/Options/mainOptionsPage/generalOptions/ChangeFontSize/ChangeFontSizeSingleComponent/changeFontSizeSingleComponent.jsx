@@ -2,13 +2,12 @@ import React from 'react';
 
 const ChangeFontSizeSingleComponent = (props) => {
 
-    let changeAppFontSize = (e) => {
-        let currentId = Number(e.currentTarget.parentNode.getAttribute("id"));
-        props.setFontSize(currentId);
+    let changeAppFontSize = () => {
+        props.setFontSize(props.id);
     }
 
     return (
-        <div id={props.id} className={"fontSizeEqual" + props.size + ' ' + "fontWeightBold"}>
+        <div id={props.id} className={"fontSizeEqual" + props.size + " fontWeightBold"}>
             <p>{props.title}</p>
             <button onClick={changeAppFontSize}>{props.title}</button>
         </div>

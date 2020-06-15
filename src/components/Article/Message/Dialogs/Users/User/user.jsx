@@ -2,19 +2,19 @@ import React from 'react';
 import classes from './user.module.css';
 import { NavLink } from 'react-router-dom';
 
-const User = (props) => {
+const User = ({id, avatar, nickname, lastMessage}) => {
 
-    let path = "/Messages/dialog" + props.id;
+    let path = "/Messages/dialog" + id;
 
     return (
         <NavLink to={path}>
             <div className={classes.user}>
                 <div className={classes.avatar}>
-                    <img src={props.avatar} alt="user" />
+                    <img src={avatar} alt="user" />
                 </div>
                 <div className={classes.userInf}>
-                    <h3 className={classes.userName}>{props.nickname}</h3>
-                    <p className={classes.lastMessage}>{props.lastMessage}</p>
+                    <h3 className={classes.userName}>{nickname}</h3>
+                    <p className={classes.lastMessage}>{lastMessage}</p>
                 </div>
             </div>
         </NavLink>

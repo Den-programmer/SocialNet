@@ -3,6 +3,9 @@
     flex-direction: column;
     margin:20px;
     margin-bottom: 0;
+    width: 20%;
+    word-wrap: break-word;
+    align-items: center;
 }
 .avatar img {
     width: 100px;
@@ -11,4 +14,8 @@
 }
 .name {
     color:#000;
+    text-align: center;
+    display:flex;
+    word-wrap:break-word;
+    flex-wrap:wrap;
 } 

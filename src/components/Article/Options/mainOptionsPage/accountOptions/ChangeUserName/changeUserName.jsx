@@ -1,6 +1,7 @@
 import React from 'react';
 import classes from './changeUserName.module.css';
 import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 const ChangeUserName = (props) => {
     let changeNameInput = React.createRef();
@@ -10,7 +11,7 @@ const ChangeUserName = (props) => {
     let onUserNameChange = (e) => {
         setUserName(e.currentTarget.value);
     }
-    let changeUserName = (e) => {
+    let changeUserName = () => {
         let userNameVal = changeNameInput.current.value;
         props.changeUserName(userNameVal);
     }
@@ -19,13 +20,15 @@ const ChangeUserName = (props) => {
         <div className={classes.changeUserName}>
             <label>
                 Change User Nickname <input ref={changeNameInput} 
-                                    onChange={onUserNameChange} 
-                                    type="text" value={userName}/>
+                onChange={onUserNameChange} 
+                type="text" value={userName}/>
             </label>
             <div className={classes.btn_confirmChanges}>
-                <button onClick={changeUserName}>
-                    Confirm
-                </button>
+                <NavLink to={"/Profile"}>
+                    <button onClick={changeUserName}>
+                        Confirm
+                    </button>
+                </NavLink>
             </div>
         </div>
     );

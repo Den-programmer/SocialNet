@@ -1,0 +1,10 @@
+.navLink {
+    color:skyblue;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.navLink:hover {
+    transition: all .1s ease;
+    text-decoration:underline;
+}

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Input } from '../../../../common/Forms/forms';
-import { Field } from 'redux-form';
+import { Input, createField } from '../../../../common/Forms/forms';
 import { maxLengthCreator, minLengthCreator, required } from '../../../../../utils/validators/validators';
 
 const maxLengthPassword = maxLengthCreator(90);
@@ -10,7 +9,7 @@ const Password = (props) => {
     return (
         <>
             <h4>Password</h4>
-            <Field type="password" name="password" component={Input} validate={[required, maxLengthPassword, minLengthPassword]} />
+            {createField("password", null, "password", Input, [required, minLengthPassword, maxLengthPassword])}
         </>
     );
 }

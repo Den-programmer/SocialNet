@@ -1,11 +1,11 @@
 import React from 'react';
 import classes from './conversation.module.css';
 
-const Conversation = (props) => {
+const Conversation = ({messageText}) => {
     return(
         <div className={classes.conversation}>
             <p>
-                {props.messageText}
+                {messageText}
             </p>
      </div>
     );

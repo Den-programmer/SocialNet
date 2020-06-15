@@ -1,11 +1,10 @@
 import React from 'react';
-import { Field } from 'redux-form';
-import { RememberMe } from '../../../../common/Forms/forms';
+import { RememberMe, createField } from '../../../../common/Forms/forms';
 
 const Remembering = (props) => {
     return (
         <>
-            <Field type="checkbox" name="RememberMe" component={RememberMe}/>
+            {createField("checkbox", null, "RememberMe", RememberMe, null)}
         </>
     );
 }

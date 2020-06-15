@@ -5,17 +5,9 @@ import { NavLink } from 'react-router-dom';
 
 const User = (props) => {
 
-
-    let following = (e) => {
-
-        let currentElement = e.target.parentNode;
-        let id = Number(currentElement.getAttribute("id"));
-
-        if (props.followed === false) {
-            props.followThunk(id);
-        } else {
-            props.unfollowThunk(id);
-        }
+    let following = () => {
+        if (props.followed === false) props.followThunk(props.id);
+        props.unfollowThunk(props.id);
     }
 
     return (

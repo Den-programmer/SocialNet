@@ -1,12 +1,12 @@
 import React from 'react';
 import classes from './friend.module.css';
 
-const Friend = (props) => {
+const Friend = ({avatar, nickname}) => {
     return (
         <div className={classes.friend}>
-            <img src={props.avatar} alt="" />
+            <img src={avatar} alt="" />
             <h6 className={classes.friendsName}>
-                {props.nickname}
+                {nickname}
             </h6>
         </div>
     );

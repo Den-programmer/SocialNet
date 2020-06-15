@@ -1,4 +1,4 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import reducerAuth from './reducer-auth';
 import reducerProfile from "./reducer-profile";
 import reducerMessages from "./reducer-messages";
@@ -9,6 +9,7 @@ import reducerFooter from "./reducer-footer";
 import thunkMiddleWare from 'redux-thunk';
 import {reducer as formReducer} from 'redux-form';
 import reducerApp from "./reducer-app";
+import reducerSidebar from "./reducer-sidebar";
 
 let reducers = combineReducers ({
     auth: reducerAuth,
@@ -17,11 +18,13 @@ let reducers = combineReducers ({
     newsPage: reducerNews,
     musicPage: reducerMusic,
     Friends: reducerFriends,
+    Sidebar: reducerSidebar,
     Footer: reducerFooter, 
     form: formReducer,
     app: reducerApp
 });
 
-let store = createStore(reducers, applyMiddleware(thunkMiddleWare));
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+let store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleWare)));
 
 export default store;

@@ -1,17 +1,17 @@
 .Input .error {
-    border:3px solid blue;
+    border:3px solid #0048BA;
 }
 .Input .errorText {
-    color: blue;
+    color: #0048BA;
 }
 .textarea .error {
-    border:3px solid blue;
+    border:3px solid #0048BA;
 }
 .textarea .errorText {
-    color: blue;
+    color: #0048BA;
 }
 .RememberMe .errorText {
-    color: blue;
+    color: #0048BA;
 }
 .dFlexRememberMe {
     display:flex;

@@ -1,16 +1,17 @@
 import React from 'react';
 import classes from './FootLinks.module.css';
+import FootLink from './FootLink/footLink';
 
-const FootLinks = (props) => {
+const FootLinks = ({footLinks}) => {
 
-    let footLinks = props.footLinks.map((l) => {
-        return <li key={l.id}><a id={l.id} href="#" className={classes.navLink}>{l.name}</a></li>
+    let FootLinks = footLinks.map((l) => {
+        return <FootLink key={l.id} id={l.id} path={l.url} name={l.name}/>
     });
 
     return(
         <div className={classes.FootLinks}>
             <ul className={classes.nav}>
-                {footLinks}
+                {FootLinks}
             </ul>
         </div>
     );

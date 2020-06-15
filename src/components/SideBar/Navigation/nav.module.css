@@ -3,15 +3,3 @@
     flex-direction:column;
     list-style: none;
 }
-.item a {
-    color:#FFF;
-    text-decoration: none;
-    font-size: 20px;
-    font-weight:bold;
-}
-
-.item a:hover {
-    transition: all .3s linear;    
-    color:#68D0FE;
-    border-bottom:1px solid #68D0FE;
-}

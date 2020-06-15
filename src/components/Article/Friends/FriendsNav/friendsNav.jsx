@@ -1,23 +1,15 @@
 import React from 'react';
 import classes from './friendsNav.module.css';
-import { NavLink } from 'react-router-dom';
+import { createFriendsNavBtn } from '../../../../utils/helpers/functions/function-helpers';
 
 const FriendsNav = (props) => {
     return (
         <div className={classes.friendsButtons}>
             <div className={classes.btn_friends}>
-                <button title="Here's your friends!">
-                    <NavLink to="/Friends/DataFriends">
-                        Friends
-                    </NavLink>
-                </button>
+                {createFriendsNavBtn("Here's your friends!", "/Friends/DataFriends", "Friends")}
             </div>
             <div className={classes.btn_findFriends}>
-                <button title="You can find new friend here!">
-                    <NavLink to="/Friends/FindUsers">
-                        Find Friends
-                    </NavLink>
-                </button>
+                {createFriendsNavBtn("You can find new friend here!", "/Friends/FindUsers", "Find Friends")}
             </div>
         </div>
     );

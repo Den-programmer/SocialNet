@@ -1,0 +1,16 @@
+.notification {
+    display: flex;
+    flex-direction:column;
+    justify-content: right;
+}
+.notificationIcon {
+    cursor:pointer;
+    margin-left: auto;
+    padding: 4px;
+}
+.menuItem {
+    padding: 5px 10px;
+    border: 1px solid #000000;
+    background: #FFF;
+    cursor:pointer;
+}

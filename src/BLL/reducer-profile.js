@@ -3,54 +3,49 @@ import { ProfileAPI } from '../DAL/api';
 import { OptionsAPI } from "../DAL/api";
 import { stopSubmit } from 'redux-form';
 
-const ADD_POST = 'ADD-POST';
-const DELETE_POST = 'DELETE_POST'; 
-const SET_USER_PROFILE = 'SET_USER_PROFILE';
-const SET_STATUS = 'SET_STATUS';
-const UPDATE_STATUS = 'UPDATE_STATUS';
-const SET_USERS_PHOTO = 'SET_USERS_PHOTO';
-const CHANGE_USER_NAME = 'CHANGE_USER_NAME';
+const ADD_POST = 'profilePage/ADD-POST';
+const DELETE_POST = 'profilePage/DELETE_POST';
+const EDIT_POST = 'profilePage/EDIT-POST';
+const SET_USER_PROFILE = 'profilePage/SET_USER_PROFILE';
+const SET_STATUS = 'profilePage/SET_STATUS';
+const UPDATE_STATUS = 'profilePage/UPDATE_STATUS';
+const SET_USERS_PHOTO = 'profilePage/SET_USERS_PHOTO';
+const CHANGE_USER_NAME = 'profilePage/CHANGE_USER_NAME';
 
 
 let profilePage = {
   posts: [
+    
+  ],
+  postNotification: [
     {
       id: 1,
-      postTitle: "It's a post!@",
-      postInf: "This post has no meaning!",
-      likesCount: 200000,
-    },
-    {
-      id: 2,
-      postTitle: "It's a post!@",
-      postInf: "This post has no meaning!",
-      likesCount: 200000,
-    },
-    {
-      id: 3,
-      postTitle: "It's a post!@",
-      postInf: "This post has no meaning!",
-      likesCount: 200000,
-    },
+      name: 'Delete Post',
+    }
   ],
   profile: {
     status: "Hello my friends! I'm GOD!!!",
     aboutMe: 'What can I say new?! I\'m GOD!!!',
     contacts: [
       {
-        id: 1,
+        id: 0,
         title: 'Facebook',
         value: "facebook.com"
       },
       {
-        id: 2,
+        id: 1,
         title: 'Website',
         value: "http://localhost:3000/"
       },
       {
+        id: 2,
+        title: 'Vk',
+        value: "vk.com"
+      },
+      {
         id: 3,
-        title: 'Github',
-        value: "github.com"
+        title: 'Twitter',
+        value: "https://twitter.com"
       },
       {
         id: 4,
@@ -59,23 +54,18 @@ let profilePage = {
       },
       {
         id: 5,
-        title: 'MainLink',
-        value: "http://localhost:3000/Profile/7149"
-      },
+        title: 'Youtube',
+        value: "https://www.youtube.com/"
+      }, 
       {
         id: 6,
-        title: 'Twitter',
-        value: "https://twitter.com"
+        title: 'Github',
+        value: "github.com"
       },
       {
         id: 7,
-        title: 'Vk',
-        value: "vk.com"
-      },
-      {
-        id: 8,
-        title: 'Youtube',
-        value: "https://www.youtube.com/"
+        title: 'MainLink',
+        value: "http://localhost:3000/Profile/7149"
       },
     ],
     fullName: "LightL2",
@@ -83,54 +73,76 @@ let profilePage = {
       large: MyAvatar,
       small: MyAvatar,
     },
-    userId: 7735794,
+    userId: 7149,
   },
 }
 
 const reducerProfile = (state = profilePage, action) => {
-  let stateCopy = { ...state }
-  stateCopy.posts = [...state.posts]
-  stateCopy.profile = { ...state.profile };
-  stateCopy.profile.photos = {...state.profile.photos}
-
   switch (action.type) {
     case ADD_POST:
       let newPost = {
-        id: stateCopy.posts.length + 1,
+        id: state.posts.length + 1,
         postTitle: action.newPostTitle,
         postInf: action.newPostInformat,
         likesCount: 200000,
       }
-      stateCopy.posts.push(newPost);
-
-      return stateCopy;
-    case DELETE_POST: 
-      stateCopy.posts.filter(post => {
-        if(post.id !== action.postId) {
-          return true;
-        }
-      });  
-
-      return stateCopy;
+      
+      return {
+        ...state,
+        posts: [...state.posts, newPost]
+      };
+    case DELETE_POST:
+      return {
+        ...state,
+        posts: state.posts.filter(post => post.id !== action.postId)
+      };
     case SET_USER_PROFILE:
-      stateCopy.profile = action.profile;
+      let contacts = [];
+      let profile = {...action.profile};
+      profile.contacts = {...action.profile.contacts};
 
-      // Create correct object!
+      for(let key in profile.contacts) {
+        contacts.push({
+          title: key,
+          value: profile.contacts[key]
+        });
+      }
+      profile.contacts = [...contacts];
+      for (let i = 0; i<=profile.contacts.length - 1; i++) {
+        profile.contacts[i].id = i;
+      }
 
-      return stateCopy;
+      return {
+        ...state,
+        profile: profile
+      };
     case SET_STATUS:
-      stateCopy.profile.status = action.status;
-
-      return stateCopy;
-    case SET_USERS_PHOTO: 
-      stateCopy.profile.photos.large = action.photo;
-      stateCopy.profile.photos.small = action.photo;
-
-      return stateCopy;
-    case CHANGE_USER_NAME: 
-      stateCopy.profile.fullName = action.userName;
-
-      return stateCopy;
+      return {
+        ...state,
+        profile: {...state.profile, status: action.status}
+      };
+    case SET_USERS_PHOTO:
+      return {
+        ...state,
+        profile: {...state.profile},
+        photos: {
+          large: action.photo,
+          small: action.photo
+        },
+      };
+    case CHANGE_USER_NAME:
+      return {
+        ...state,
+        profile: {...state.profile,  fullName: action.userName},
+      };
+    case EDIT_POST: 
+      return {
+        ...state,
+        posts: state.posts.map(post => {
+          if (post.id === action.postId) return {...post, postTitle: action.newPostTitle, postInf: action.newPostInformat}
+          return post;
+        })
+      }
     default:
       return state;
   }
@@ -142,7 +154,10 @@ export const addPost = (newPostTitle, newPostInformat) => {
   return { type: ADD_POST, newPostTitle, newPostInformat };
 }
 export const deletePost = (postId) => {
-  return { DELETE_POST, postId }
+  return { type: DELETE_POST, postId }
+}
+export const editPost = (postId, newPostTitle, newPostInformat) => {
+  return { type: EDIT_POST, postId, newPostTitle, newPostInformat }
 }
 const setUserProfile = (profile) => {
   return { type: SET_USER_PROFILE, profile }
@@ -162,84 +177,27 @@ export const changeUserName = (userName) => {
 
 /* Thunks! */
 
-export const setUserPhotoThunk = (photo) => {
-  return (dispatch) => {
-      OptionsAPI.setUserPhoto(photo).then(data => {
-          if (data.resultCode === 0) {
-            dispatch(setUserPhoto(photo));
-          } else {
-            let action = stopSubmit('editUserAvatar', {_error: 'Choose correct image file!'});
-            dispatch(action);
-          }
-      });      
+export const setUserPhotoThunk = (photo) => async (dispatch) => {
+  let data = await OptionsAPI.setUserPhoto(photo);
+  if (data.resultCode === 0) {
+    dispatch(setUserPhoto(photo));
+  } else {
+    let action = stopSubmit('editUserAvatar', { _error: 'Choose correct image file!' });
+    dispatch(action);
   }
 }
-export const setUserProfileThunk = (userId) => {
-  return (dispatch) => {
-    ProfileAPI.getUsersProfile(userId).then(data => {
-      let {facebook, github, instagram, mainLink, twitter, vk, website, youtube} = data.contacts;
-      // можешь сделать код как-нибудь, но потом перепишы его(оптимизируй)!
-      // Оптимизация - цыклы и spread оператор, куча кода!!!
-      let contacts = [
-        {
-          id: 1,
-          title: 'Facebook',
-          value: facebook
-        },
-        {
-          id: 2,
-          title: 'Website',
-          value: website
-        },
-        {
-          id: 3,
-          title: 'Github',
-          value: github
-        },
-        {
-          id: 4,
-          title: 'Instagram',
-          value: instagram
-        },
-        {
-          id: 5,
-          title: 'MainLink',
-          value: mainLink
-        },
-        {
-          id: 6,
-          title: 'Twitter',
-          value: twitter
-        },
-        {
-          id: 7,
-          title: 'Vk',
-          value: vk
-        },
-        {
-          id: 8,
-          title: 'Youtube',
-          value: youtube
-        },
-      ];
-      data.contacts = contacts;
-      dispatch(setUserProfile(data));
-    });
-  }
+
+export const setUserProfileThunk = (userId) => async (dispatch) => {
+  let data = await ProfileAPI.getUsersProfile(userId);
+  dispatch(setUserProfile(data));
 }
-export const setStatusThunk = (userId) => {
-  return (dispatch) => {
-    ProfileAPI.getStatus(userId).then(data => {
-      dispatch(setStatus(data));
-    });
-  }
+export const setStatusThunk = (userId) => async (dispatch) => {
+  let data = await ProfileAPI.getStatus(userId)
+  dispatch(setStatus(data));
 }
-export const updateStatusThunk = (status) => {
-  return (dispatch) => {
-    ProfileAPI.updateStatus(status).then(data => {
-      dispatch(updateStatus(data));
-    });
-  }
+export const updateStatusThunk = (status) => async (dispatch) => {
+  let data = await ProfileAPI.updateStatus(status);
+  dispatch(updateStatus(data));
 }
 
 export default reducerProfile;

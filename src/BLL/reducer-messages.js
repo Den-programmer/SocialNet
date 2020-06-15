@@ -1,4 +1,7 @@
-let ADD_MESSAGE = 'ADD-MESSAGE';
+// import { MessagesAPI } from "../DAL/api";
+
+const ADD_MESSAGE = 'messagesPage/ADD-MESSAGE';
+// const SET_DIALOGS = 'SET-DIALOGS';
 
 let messagesPage = {
     dialogsData: [
@@ -91,23 +94,40 @@ let messagesPage = {
 }
 
 const reducerMessages = (state = messagesPage, action) => {
-    let stateCopy = { ...state };
     switch (action.type) {
         case ADD_MESSAGE:
-            stateCopy.messages = [...state.messages]
             let newMessage = {
-                id: stateCopy.messages.length + 1,
+                id: state.messages.length + 1,
                 messageText: action.messageText,
             }
-            stateCopy.messages.push(newMessage);
-
-            return stateCopy;
+            return {
+                ...state,
+                messages: [...state.messages, newMessage]
+            };
+        // case SET_DIALOGS: 
+        //     return {
+        //         ...state,
+        //         dialogsData: action.dialogs
+        //     }
         default:
             return state;
     }
 }
+
+/* Action Creators! */
+
 export const addMessage = messageText => {
     return { type: ADD_MESSAGE, messageText }
 }
+// const setDialogs = dialogs => {
+//     return { type: SET_DIALOGS, dialogs }
+// }
+
+/* Thunk Creators! */
+
+// export const getDialogs = () => async (dispatch) => {
+//     let data = await MessagesAPI.getDialogs();
+//     dispatch(setDialogs(data));
+// }
 
 export default reducerMessages;

@@ -8,7 +8,7 @@ const Dialogs = (props) => {
     return (
         <div className={classes.dialogs}>
             <Search />
-            <MessagesTitle title="Messages"/>
+            <MessagesTitle title="Dialogs"/>
             <Users dialogsData={props.dialogsData}/>
         </div>
     );

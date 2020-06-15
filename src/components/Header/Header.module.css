@@ -1,5 +1,5 @@
 .header {
-    background-color:green;
+    background-color:#20232A;
     height:200px;
 }
 .container {
@@ -8,26 +8,4 @@
     display:flex;
     justify-content: space-between;
     height: 200px;
-}
-.logo {
-    margin:auto 0;
-}
-.logo img {
-    width: 100px;
-    cursor:pointer;
-}
-.btn_login {
-    
-    margin:20px;
-}
-.btn_login a {
-    color:blue;
-    padding: 10px;
-    background: #EFEFEF;
-    border:1px solid silver;
-}
-.btn_login a:hover {
-    text-decoration: underline;
-    color:#3535FF;
-    opacity: 0.9;
 }

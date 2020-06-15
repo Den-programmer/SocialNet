@@ -6,10 +6,10 @@ import Remembering from './Remembering/remembering';
 import { reduxForm } from 'redux-form';
 
 
-const LoginForm = (props) => {
+const LoginForm = ({handleSubmit, error}) => {
     return (
         <div className={classes.formBlock}>
-            <form onSubmit={props.handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <div className={classes.formItem}>
                     <Email />
                 </div>
@@ -20,8 +20,8 @@ const LoginForm = (props) => {
                     <div className={classes.rememberMe}>
                         <Remembering />
                     </div>
-                    {props.error && <div className={classes.error}>
-                        <p>{props.error}</p>
+                    {error && <div className={classes.error}>
+                        <p>{error}</p>
                     </div>}
                     <div className={classes.btn_login}>
                         <button>Login</button>

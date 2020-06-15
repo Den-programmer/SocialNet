@@ -1,3 +1,8 @@
+.dFlex {
+    display:flex;
+    align-items: center;
+}
+
 .btn_addPost {
     margin: 10px;
 }
@@ -14,4 +19,25 @@
 }
 .postForm p {
     margin: 10px;
+}
+.deleteLastPostBtn {
+    letter-spacing: normal;
+    word-spacing: normal;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    background-color:#EFEFEF;
+    cursor: pointer;
+    box-sizing: border-box;
+    font: 400 13.3333px Arial;
+    padding: 1px 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: -internal-light-dark-color(rgb(118, 118, 118), rgb(195, 195, 195));
+    border-image: initial;
+}
+.deleteLastPostBtn:hover {
+    border-width: 2px;
+    border-color:rgb(94, 94, 88);
 }

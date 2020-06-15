@@ -1,4 +1,11 @@
+.title {
+    width: 300px;
+    text-align: center;
+}
 .posts {
     display: flex;
     flex-direction: column;
+}
+.postedNothingTitle {
+    text-align: center;
 }

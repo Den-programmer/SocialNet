@@ -10,13 +10,13 @@ import avatar9 from '../images/friends-avatars/avatar9.jpg';
 import avatar10 from '../images/friends-avatars/avatar10.jpg';
 import { UsersAPI } from '../DAL/api';
 
-const FOLLOW = 'FOLLOW';
-const UNFOLLOW = 'UNFOLLOW';
-const SET_USERS = 'SET-USERS';
-const CHANGE_PAGE = 'CHANGE-PAGE';
-const SET_USERSINF = 'SET-USERSINF';
-const IS_FETCHING = 'IS_FETCHING';
-const TOGGLE_IS_FOLLOWING_PROCESS = 'TOGGLE_IS_FOLLOWING_PROCESS';
+const FOLLOW = 'Friends/FOLLOW';
+const UNFOLLOW = 'Friends/UNFOLLOW';
+const SET_USERS = 'Friends/SET-USERS';
+const CHANGE_PAGE = 'Friends/CHANGE-PAGE';
+const SET_USERSINF = 'Friends/SET-USERSINF';
+const IS_FETCHING = 'Friends/IS_FETCHING';
+const TOGGLE_IS_FOLLOWING_PROCESS = 'Friends/TOGGLE_IS_FOLLOWING_PROCESS';
 
 let Friends = {
     friends: [
@@ -107,34 +107,15 @@ let Friends = {
 }
 
 const reducerFriends = (state = Friends, action) => {
-
-    let stateCopy = { ...state }
-    stateCopy.friends = [...state.friends];
-    stateCopy.users = [...state.users];
-    stateCopy.followingInProcess = [...state.followingInProcess];
-    stateCopy.friendsInf = { ...state.friendsInf }
-    stateCopy.usersInf = { ...state.usersInf }
-    stateCopy.users.map(u => {
-        return { ...u }
-    });
-    stateCopy.friends = state.friends.map(friend => {
-        return { ...friend }
-    });
     switch (action.type) {
         case SET_USERS:
-            stateCopy.users = action.users;
-
-            return stateCopy;
+            return {
+                ...state,
+                users: action.users
+            };
         case FOLLOW:
-            stateCopy.users.forEach(u => {
-                if (u.id === action.userId) {
-                    u.followed = true;
-                }
-            });
-            let currentUser = stateCopy.users.filter((user) => {
-                if (user.id === action.userId) {
-                    return true;
-                }
+            let currentUser = state.users.filter((user) => {
+                if (user.id === action.userId) return true;
             });
             currentUser = currentUser.find(item => item);
             let newFriend = {
@@ -144,54 +125,58 @@ const reducerFriends = (state = Friends, action) => {
                 avatar: currentUser.avatar,
                 followed: true,
             }
-            stateCopy.friends.push(newFriend);
 
-            return stateCopy;
+            return {
+                ...state,
+                users: state.users.map(user => {
+                    if(user.id === action.userId) return {...user, followed: true}
+                    return user;
+                }),
+                friends: [...state.friends, newFriend]
+            };
         case UNFOLLOW:
-            stateCopy.users.forEach(u => {
-                if (u.id === action.userId) {
-                    u.followed = false;
-                }
-            });
-            let newArrayFriends = stateCopy.friends.filter(friend => {
-                if (friend.id !== action.userId) {
-                    return true;
-                }
-            });
-            stateCopy.friends = [...newArrayFriends];
-
-            return stateCopy;
+            return {
+                ...state,
+                users: state.users.map(user => {
+                    if (user.id === action.userId) return {...user, followed: false}
+                    return user;
+                }),
+                friends: state.friends.filter(friend => friend.id !== action.userId)
+            };
         case TOGGLE_IS_FOLLOWING_PROCESS:
-            action.isFetching ? stateCopy.followingInProcess.push(action.userId)
-                :
-                stateCopy.followingInProcess = [];
-
-            return stateCopy;
+            return {
+                ...state,
+                followingInProcess: [action.isFetching ? [...state.followingInProcess, action.userId] 
+                : state.followingInProcess.filter(id => id !== action.userId) ]
+            };
         case CHANGE_PAGE:
-            stateCopy.usersInf.currentPage = action.currentPage;
-
-            return stateCopy;
+            return {
+                ...state,
+                usersInf: {...state.usersInf, currentPage: action.currentPage},
+            };
         case SET_USERSINF:
-            stateCopy.usersInf.totalCount = action.data.totalCount;
-
-            return stateCopy;
+            return {
+                ...state,
+                usersInf: {...state.usersInf, totalCount: action.data.totalCount},
+            };
         case IS_FETCHING:
-            stateCopy.usersInf.isFetching = action.isFetching;
-
-            return stateCopy;
+            return {
+                ...state,
+                usersInf: {...state.usersInf, isFetching: action.isFetching}
+            };
         default:
             return state;
     }
 }
 
 export const follow = userId => {
-    return { type: FOLLOW, userId: userId, }
+    return { type: FOLLOW, userId }
 }
 export const unfollow = userId => {
-    return { type: UNFOLLOW, userId: userId, }
+    return { type: UNFOLLOW, userId }
 }
 export const setUsers = users => {
-    return { type: SET_USERS, users: users }
+    return { type: SET_USERS, users }
 }
 export const onPageChange = currentPage => {
     return { type: CHANGE_PAGE, currentPage }
@@ -206,37 +191,28 @@ export const toggleFollowingInProcess = (isFetching, userId) => {
     return { type: TOGGLE_IS_FOLLOWING_PROCESS, isFetching, userId }
 }
 
-export const requestUsers = (pageSize, currentPage) => {
-    return (dispatch) => {
-        dispatch(isFetching(true));
-        UsersAPI.requestUsers(pageSize, currentPage).then(data => {
-            dispatch(isFetching(false));
-            dispatch(setUsers(data.items));
-            dispatch(setUsersInf(data));
-        });
-    }
+export const requestUsers = (pageSize, currentPage) => async (dispatch) => {
+    dispatch(isFetching(true));
+    let data = await UsersAPI.requestUsers(pageSize, currentPage);
+    dispatch(isFetching(false));
+    dispatch(setUsers(data.items));
+    dispatch(setUsersInf(data));
 }
-export const followThunk = (userId) => {
-    return (dispatch) => {
-        dispatch(toggleFollowingInProcess(true, userId));
-        UsersAPI.follow(userId).then(data => {
-            if (data.resultCode === 0) {
-                dispatch(follow(userId));
-            }
-            dispatch(toggleFollowingInProcess(false, userId));
-        });
+export const followThunk = (userId) => async (dispatch) => {
+    dispatch(toggleFollowingInProcess(true, userId));
+    let data = await UsersAPI.follow(userId);
+    if (data.resultCode === 0) {
+        dispatch(follow(userId));
     }
+    dispatch(toggleFollowingInProcess(false, userId));
 }
-export const unfollowThunk = (userId) => {
-    return (dispatch) => {
-        dispatch(toggleFollowingInProcess(true, userId));
-        UsersAPI.unfollow(userId).then(data => {
-            if (data.resultCode === 0) {
-                dispatch(unfollow(userId));
-            }
-            dispatch(toggleFollowingInProcess(false, userId));
-        });
+export const unfollowThunk = (userId) => async (dispatch) => {
+    dispatch(toggleFollowingInProcess(true, userId));
+    let data = await UsersAPI.unfollow(userId);
+    if (data.resultCode === 0) {
+        dispatch(unfollow(userId));
     }
+    dispatch(toggleFollowingInProcess(false, userId));
 }
 
 export default reducerFriends;

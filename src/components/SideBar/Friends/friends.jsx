@@ -3,7 +3,7 @@ import classes from './friends.module.css';
 import Friend from './Friend/friend';
 
 const Friends = (props) => {
-    let Friends = props.Friends.friends;
+    let Friends = props.friends;
     let friendsArray = [];
 
     for (let i = 0; i < Friends.length; i++) {
@@ -12,7 +12,7 @@ const Friends = (props) => {
         }
     }
 
-    let friends = friendsArray.map((f) => {
+    let friends = friendsArray.map(f => {
         return <Friend id={f.id} key={f.id} nickname={f.nickname} avatar={f.avatar}/>
     });
 

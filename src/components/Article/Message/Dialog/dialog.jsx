@@ -3,13 +3,13 @@ import classes from './dialog.module.css';
 import Conversation from './Conversation/conversation';
 import DialogReduxForm from './dialogForm/dialogForm';
 
-const Dialog = (props) => {
-    let Messages = props.messages.map((ms) => {
+const Dialog = ({messages, addMessage}) => {
+    let Messages = messages.map((ms) => {
         return <Conversation key={ms.id} id={ms.id} messageText={ms.messageText} />
     });
     let onSubmit = (FormData) => {
         let newMessage = FormData.dialog;
-        props.addMessage(newMessage);   
+        addMessage(newMessage);   
     }
 
     return (

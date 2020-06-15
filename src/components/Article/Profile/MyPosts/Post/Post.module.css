@@ -28,3 +28,35 @@
     font-size: 17px;
     font-weight: bold;
 }
+
+.wrapper {
+    display:flex;
+    justify-content: space-between;
+}
+.editInputs {
+    outline: none;
+    border:none;
+    background: #FF80FF;
+    color:#FFF;
+    border-bottom:3px solid #FFF;
+}
+.editPostTitle {
+    text-align: center;
+}
+.editPostTitle input {
+    text-align: center;
+    font-size: 25px;
+    width:300px;
+}
+.editPostInf {
+    padding: 20px;
+}
+.editPostInf input {
+    color:#C0C0C0;
+    font-size: 17px;
+    width: 100%;
+}
+.confirm_btn {
+    display: flex;
+    justify-content: center;
+}

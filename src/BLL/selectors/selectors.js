@@ -15,7 +15,7 @@ export const getFriends = (state) => {
 }
 
 export const getAuthorizedUserId = (state) => {
-    return state.profilePage.profile.userId 
+    return state.auth.userId 
 }
 
 export const getDialogsData = (state) => {
@@ -48,7 +48,11 @@ export const getUsers = (state) => {
 
 export const getFollowingInProcess = (state) => {
     return state.Friends.followingInProcess
-}    
+}  
+
+export const getSideBarNavLinks = (state) => {
+    return state.Sidebar.navigationLinks;
+}
 
 export const getFootLinks = (state) => {
     return state.Footer.footLinks
