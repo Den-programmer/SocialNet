@@ -34,3 +34,7 @@
    position: absolute;
    z-index:-1;
 }
+.error {
+    padding: 2px;
+    color:#0048BA;
+}

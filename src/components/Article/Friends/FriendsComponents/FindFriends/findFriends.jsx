@@ -10,7 +10,7 @@ const FindFriends = (props) => {
             <SearchNewfriends />
             <UsersColumnContainer  />
             <Paginator pageSize={props.usersInf.pageSize} 
-                               totalUsersCount={props.usersInf.totalCount}
+                               totalItemsCount={props.usersInf.totalCount}
                                currentPage={props.usersInf.currentPage}
                                changePage={props.changePage}/>
         </div>

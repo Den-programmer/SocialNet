@@ -178,7 +178,7 @@ export const unfollow = userId => {
 export const setUsers = users => {
     return { type: SET_USERS, users }
 }
-export const onPageChange = currentPage => {
+export const changePage = currentPage => {
     return { type: CHANGE_PAGE, currentPage }
 }
 export const setUsersInf = data => {

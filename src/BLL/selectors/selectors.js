@@ -77,3 +77,6 @@ export const getIsAuthStatus = (state) => {
 export const getAppFontSize = (state) => {
     return state.app.options.appFontSize
 }
+export const getMessageError = (state) => {
+    return state.app.messageError;
+}

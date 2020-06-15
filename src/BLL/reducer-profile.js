@@ -1,7 +1,7 @@
 import MyAvatar from '../components/Article/Profile/images/myAvatar/avatar.jpg';
 import { ProfileAPI } from '../DAL/api';
 import { OptionsAPI } from "../DAL/api";
-import { stopSubmit } from 'redux-form';
+import { setTextError } from './reducer-app';
 
 const ADD_POST = 'profilePage/ADD-POST';
 const DELETE_POST = 'profilePage/DELETE_POST';
@@ -11,7 +11,7 @@ const SET_STATUS = 'profilePage/SET_STATUS';
 const UPDATE_STATUS = 'profilePage/UPDATE_STATUS';
 const SET_USERS_PHOTO = 'profilePage/SET_USERS_PHOTO';
 const CHANGE_USER_NAME = 'profilePage/CHANGE_USER_NAME';
-
+ 
 
 let profilePage = {
   posts: [
@@ -74,7 +74,7 @@ let profilePage = {
       small: MyAvatar,
     },
     userId: 7149,
-  },
+  }
 }
 
 const reducerProfile = (state = profilePage, action) => {
@@ -179,11 +179,13 @@ export const changeUserName = (userName) => {
 
 export const setUserPhotoThunk = (photo) => async (dispatch) => {
   let data = await OptionsAPI.setUserPhoto(photo);
+  debugger
   if (data.resultCode === 0) {
+    debugger
     dispatch(setUserPhoto(photo));
   } else {
-    let action = stopSubmit('editUserAvatar', { _error: 'Choose correct image file!' });
-    dispatch(action);
+    let message = data.messages[0];
+    dispatch(setTextError(message));
   }
 }
 

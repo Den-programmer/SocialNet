@@ -10,7 +10,6 @@ const instance = axios.create({
 
 export const UsersAPI = {
     requestUsers: (pageSize, currentPage) => {
-        debugger
         return instance.get(`users?count=${pageSize}&page=${currentPage}`).then(response => {
             return response.data;
         });
@@ -46,7 +45,6 @@ export const ProfileAPI = {
 export const MessagesAPI = {
     getDialogs: () => {
         instance.get(`/dialogs`).then(response => {
-            debugger
             return response.data;
         });
     }
