@@ -15,7 +15,7 @@ const Friend = (props) => {
                 {props.avatar ? <img src={props.avatar} alt="" /> : <img src={defaultUserPhoto} alt="" />}
                 <h5>{props.nickname ? props.nickname : props.name}</h5>
                 <div className={classes.following}>
-                    <button onClick={following}>Followed</button> 
+                    {props.followed ? <button onClick={following}>Followed</button> : <button onClick={following}>Follow</button>} 
                 </div>
             </div>
         </div>

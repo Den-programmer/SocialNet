@@ -1,6 +1,7 @@
 import React from 'react';
 import classes from './friends.module.css';
 import Friend from './Friend/friend';
+import defaultUser from './images/withoutAvatar/defaultUserPhoto.jpg';
 
 const Friends = (props) => {
     let Friends = props.friends;
@@ -13,13 +14,13 @@ const Friends = (props) => {
     }
 
     let friends = friendsArray.map(f => {
-        return <Friend id={f.id} key={f.id} nickname={f.nickname} avatar={f.avatar}/>
+        return <Friend id={f.id} key={f.id} name={f.name} nickname={f.nickname} avatar={f.avatar ? f.avatar : defaultUser}/>
     });
 
     return (
         <div className={classes.friends}>
             <div className={classes.title}>
-                <h2>Friends</h2>
+                {friends.length !== 0 && <h2>Friends</h2> }
             </div>
             <div className={classes.friendsList}>
                 {friends}

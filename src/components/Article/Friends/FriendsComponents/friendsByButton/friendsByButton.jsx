@@ -13,7 +13,6 @@ const FriendsByButton = (props) => {
                        follow={props.follow} 
                        unfollow={props.unfollow}/>;
     });
-// Сделай функцию в reducer'e, которая будет подписывать и отписывать пользователей при нажатии на кнопку!
     return (
         <div className={classes.friends}>
             {friends}
