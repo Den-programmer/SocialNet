@@ -1,6 +1,7 @@
 import React from 'react';
 import classes from './friendsByButton.module.css';
 import Friend from './Friend/friend';
+import NoFriendsComponent from './NOfriendsComponent/NOfriendsComponent';
 
 const FriendsByButton = (props) => {
     let friends = props.friends.map((f) => {
@@ -15,7 +16,7 @@ const FriendsByButton = (props) => {
     });
     return (
         <div className={classes.friends}>
-            {friends}
+            {friends.length !== 0 ? friends : <NoFriendsComponent />}
         </div>
     );
 }

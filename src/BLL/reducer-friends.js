@@ -147,7 +147,8 @@ const reducerFriends = (state = Friends, action) => {
             return {
                 ...state,
                 followingInProcess: [action.isFetching ? [...state.followingInProcess, action.userId] 
-                : state.followingInProcess.filter(id => id !== action.userId) ]
+                : state.followingInProcess.filter(id => id === action.userId) ]
+                //I've changed id !== action.userId to id ==== action.userId 
             };
         case CHANGE_PAGE:
             return {
