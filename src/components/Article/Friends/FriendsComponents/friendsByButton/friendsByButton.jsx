@@ -11,8 +11,8 @@ const FriendsByButton = (props) => {
                        name={f.name} 
                        avatar={f.avatar} 
                        followed={f.followed} 
-                       follow={props.follow} 
-                       unfollow={props.unfollow}/>;
+                       follow={props.followThunk} 
+                       unfollow={props.unfollowThunk}/>;
     });
     return (
         <div className={classes.friends}>

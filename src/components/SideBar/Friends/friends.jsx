@@ -16,12 +16,18 @@ const Friends = (props) => {
     let friends = friendsArray.map(f => {
         return <Friend id={f.id} key={f.id} name={f.name} nickname={f.nickname} avatar={f.avatar ? f.avatar : defaultUser}/>
     });
+    let isResizeble = false;
+    if (friends.length === 0 && !isResizeble) {
+        props.addSideBarNavLink('Friends', "/Friends/DataFriends")
 
+        isResizeble = true;
+    }
+    if (friends.length !== 0) props.deleteSideBarNavLink(6);
     return (
         <div className={classes.friends}>
-            <div className={classes.title}>
-                {friends.length !== 0 && <h2>Friends</h2> }
-            </div>
+            {friends.length !== 0 && <div className={classes.title}>
+                <h2>Friends</h2> 
+            </div>}
             <div className={classes.friendsList}>
                 {friends}
             </div>

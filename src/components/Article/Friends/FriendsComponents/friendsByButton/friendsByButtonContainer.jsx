@@ -1,6 +1,6 @@
 import FriendsByButton from './friendsByButton';
 import { connect } from 'react-redux';
-import { follow, unfollow } from '../../../../../BLL/reducer-friends';
+import { followThunk, unfollowThunk } from '../../../../../BLL/reducer-friends';
 import { withAuthRedirect } from '../../../../../HOC/withAuthRedirect';
 import { compose } from 'redux';
 import { getFriends } from '../../../../../BLL/selectors/selectors';
@@ -13,5 +13,5 @@ let mapStateToProps = (state) => {
 
 export default compose(
     withAuthRedirect,
-    connect(mapStateToProps, { follow, unfollow }),
+    connect(mapStateToProps, { followThunk, unfollowThunk }),
 )(FriendsByButton);
