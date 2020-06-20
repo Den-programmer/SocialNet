@@ -3,7 +3,7 @@ import User from './user/user';
 import classes from './usersColumn.module.css'
 
 const UsersColumn = (props) => {
-    let users = props.users.map((user) => {
+    let users = props.users.map(user => {
         return <User id={user.id}
             followThunk={props.followThunk}
             unfollowThunk={props.unfollowThunk}

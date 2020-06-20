@@ -41,7 +41,7 @@ const reducerFriends = (state = Friends, action) => {
                 friends: action.users.filter(user => user.followed === true)
             }    
         case FOLLOW:
-            let currentUser = state.users.filter((user) => {
+            let currentUser = state.users.filter(user => {
                 if (user.id === action.userId) return true;
             });
             currentUser = currentUser.find(item => item);
@@ -73,8 +73,8 @@ const reducerFriends = (state = Friends, action) => {
         case TOGGLE_IS_FOLLOWING_PROCESS:
             return {
                 ...state,
-                followingInProcess: [action.isFetching ? [action.userId] 
-                : state.followingInProcess.filter(id => id !== action.userId) ]
+                followingInProcess: action.isFetching ? [...state.followingInProcess, action.userId] 
+                : state.followingInProcess.filter(id => id !== action.userId) 
             };
         case CHANGE_PAGE:
             return {

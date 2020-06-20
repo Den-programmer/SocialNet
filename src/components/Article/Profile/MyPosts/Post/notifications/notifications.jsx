@@ -9,9 +9,6 @@ class Notifications extends React.Component {
             hidden: true
         }
     }
-    deletePost = () => {
-        this.props.deletePost(this.props.id);
-    }
     toggleMenuEmersion = () => {
         if(this.state.menu.hidden) {
             this.setState({
@@ -27,6 +24,13 @@ class Notifications extends React.Component {
             });
         }
     }
+    editPost = () => {
+        this.toggleMenuEmersion();
+        this.props.activateEditMode();
+    }
+    deletePost = () => {
+        this.props.deletePost(this.props.id);
+    }
     render() {
         return (
             <div id={this.props.id} className={classes.notification}>
@@ -36,7 +40,7 @@ class Notifications extends React.Component {
                     <div onClick={this.deletePost} className={classes.menuItem} title="Delete post!">
                         Delete Post
                     </div>
-                    <div className={classes.menuItem} title="Delete post!">
+                    <div onClick={this.editPost} className={classes.menuItem} title="Delete post!">
                         Edit Post
                     </div>
                     <div className={classes.menuItem} title="Delete post!">

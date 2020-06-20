@@ -38,7 +38,7 @@ class Post extends React.Component {
             <div className={classes.post}>
                 <div className={classes.wrapper}>
                     <img className={classes.post__author} src={this.props.avatar} alt="author" />
-                    <Notifications id={this.props.id} deletePost={this.props.deletePost}/>
+                    <Notifications activateEditMode={this.deactivateEditMode} id={this.props.id} deletePost={this.props.deletePost}/>
                 </div>
                 {this.state.isEdit ? <div className={classes.editPostTitle}>
                     <input className={classes.editInputs} ref={this.postTitle} onChange={this.onPostChange} value={this.props.postTitle}/>
