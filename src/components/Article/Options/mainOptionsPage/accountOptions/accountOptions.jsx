@@ -9,7 +9,7 @@ const AccountOptions = (props) => {
         <div className={classes.accountOptions}>
             <EditPhoto error={props.messageError} setUserPhoto={props.setUserPhotoThunk}/>
             <ChangeUserName userName={props.userName} changeUserName={props.changeUserName}/>
-            <ChangeContacts contacts={props.contacts}/>
+            <ChangeContacts changeContacts={props.changeContacts} contacts={props.contacts}/>
         </div>
     );
 }

@@ -11,6 +11,7 @@ const SET_STATUS = 'profilePage/SET_STATUS';
 const UPDATE_STATUS = 'profilePage/UPDATE_STATUS';
 const SET_USERS_PHOTO = 'profilePage/SET_USERS_PHOTO';
 const CHANGE_USER_NAME = 'profilePage/CHANGE_USER_NAME';
+const CHANGE_CONTACT = 'CHANGE_CONTACT';
  
 
 let profilePage = {
@@ -135,6 +136,14 @@ const reducerProfile = (state = profilePage, action) => {
         ...state,
         profile: {...state.profile,  fullName: action.userName},
       };
+    case CHANGE_CONTACT: 
+      return {
+        ...state,
+        profile: {...state.profile, contacts: state.profile.contacts.map(contact => {
+          if (contact.id === action.contactId) return {...contact, value: action.val}
+          return contact;}
+        )}
+      }  
     case EDIT_POST: 
       return {
         ...state,
@@ -174,14 +183,15 @@ const setUserPhoto = (photo) => {
 export const changeUserName = (userName) => {
   return { type: CHANGE_USER_NAME, userName }
 }
+export const changeContacts = (contactId, val) => {
+  return { type: CHANGE_CONTACT, contactId, val }
+}
 
 /* Thunks! */
 
 export const setUserPhotoThunk = (photo) => async (dispatch) => {
   let data = await OptionsAPI.setUserPhoto(photo);
-  debugger
   if (data.resultCode === 0) {
-    debugger
     dispatch(setUserPhoto(photo));
   } else {
     let message = data.messages[0];

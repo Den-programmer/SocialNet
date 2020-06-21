@@ -1,17 +1,19 @@
 import React from 'react';
 import classes from './changeContacts.module.css';
-import ChangeContactsReduxForm from './ChangeContactsForm/changeContactsForm';
+import ChangeContact from './changeContact/changeContact';
 
 const ChangeContacts = (props) => {
-    let onSubmit = (FormData) => {
-        console.log(FormData);
-    }
+    let contacts = props.contacts.map(contact => {
+        return <ChangeContact key={contact.id} id={contact.id} title={contact.title} val={contact.value} changeContacts={props.changeContacts}/>
+    });
     return (
         <div className={classes.changeContacts}>
             <div className={classes.title}>
                 <h4>Change contacts:</h4>
             </div>
-            <ChangeContactsReduxForm contacts={props.contacts} onSubmit={onSubmit}/>
+            <div className={classes.contacts}>
+                {contacts}
+            </div>
         </div>
     )
 }
