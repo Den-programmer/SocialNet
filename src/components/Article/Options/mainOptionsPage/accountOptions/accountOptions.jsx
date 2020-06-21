@@ -7,7 +7,7 @@ import ChangeContacts from './ChangeContacts/changeContacts';
 const AccountOptions = (props) => {
     return (
         <div className={classes.accountOptions}>
-            <EditPhoto error={props.messageError} setUserPhoto={props.setUserPhotoThunk}/>
+            <EditPhoto error={props.messageError} setUserPhoto={props.setUserPhotoThunk} photo={props.photo}/>
             <ChangeUserName userName={props.userName} changeUserName={props.changeUserName}/>
             <ChangeContacts changeContacts={props.changeContacts} contacts={props.contacts}/>
         </div>
