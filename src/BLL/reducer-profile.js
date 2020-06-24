@@ -27,48 +27,16 @@ let profilePage = {
   profile: {
     status: "Hello my friends! I'm GOD!!!",
     aboutMe: 'What can I say new?! I\'m GOD!!!',
-    contacts: [
-      {
-        id: 0,
-        title: 'Facebook',
-        value: "facebook.com"
-      },
-      {
-        id: 1,
-        title: 'Website',
-        value: "http://localhost:3000/"
-      },
-      {
-        id: 2,
-        title: 'Vk',
-        value: "vk.com"
-      },
-      {
-        id: 3,
-        title: 'Twitter',
-        value: "https://twitter.com"
-      },
-      {
-        id: 4,
-        title: 'Instagram',
-        value: "instagram.com"
-      },
-      {
-        id: 5,
-        title: 'Youtube',
-        value: "https://www.youtube.com/"
-      }, 
-      {
-        id: 6,
-        title: 'Github',
-        value: "github.com"
-      },
-      {
-        id: 7,
-        title: 'MainLink',
-        value: "http://localhost:3000/Profile/7149"
-      },
-    ],
+    contacts: {
+      facebook: "facebook.com",
+      website: "http://localhost:3000/",
+      vk: "vk.com",
+      twitter: "https://twitter.com",
+      instagram: "instagram.com",
+      youtube: "https://www.youtube.com/",
+      github: "github.com",
+      mainLink: "http://localhost:3000/Profile/7149"
+    },
     fullName: "LightL2",
     photos: {
       large: MyAvatar,
@@ -98,24 +66,9 @@ const reducerProfile = (state = profilePage, action) => {
         posts: state.posts.filter(post => post.id !== action.postId)
       };
     case SET_USER_PROFILE:
-      let contacts = [];
-      let profile = {...action.profile};
-      profile.contacts = {...action.profile.contacts};
-
-      for(let key in profile.contacts) {
-        contacts.push({
-          title: key,
-          value: profile.contacts[key]
-        });
-      }
-      profile.contacts = [...contacts];
-      for (let i = 0; i<=profile.contacts.length - 1; i++) {
-        profile.contacts[i].id = i;
-      }
-
       return {
         ...state,
-        profile: profile
+        profile: action.profile
       };
     case SET_STATUS:
       return {

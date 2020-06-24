@@ -4,17 +4,15 @@ import Contact from './Contact/contact';
 
 
 const Contacts = (props) => {
-    let contacts = props.contacts.map(contact => {
-        let hasContact = contact.title && contact.value;
-        return <Contact key={contact.id} contactTitle={hasContact ? contact.title : ''} 
-                        contactValue={hasContact ? contact.value : ''}/>
+    let contacts = Object.keys(props.contacts).map(key => {
+        return <Contact key={key} contactTitle={key} contactValue={props.contacts[key]}/>
     });
 
     return (
         <div className={classes.userInf}>
             <div className={classes.contacts}>
                 <div className={classes.title}>
-                    <h3>{props.contacts.some(item => item.value === '' || !item.value) ? "" : 'Contacts'}</h3>
+                    <h3>{Object.keys(props.contacts).some(item => props.contacts[item] === '' || !props.contacts[item]) ? "" : 'Contacts'}</h3>
                 </div>
                 <div classes={classes.information}>
                     {contacts}

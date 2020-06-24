@@ -3,8 +3,8 @@ import classes from './changeContacts.module.css';
 import ChangeContact from './changeContact/changeContact';
 
 const ChangeContacts = (props) => {
-    let contacts = props.contacts.map(contact => {
-        return <ChangeContact key={contact.id} id={contact.id} title={contact.title} val={contact.value} changeContacts={props.changeContacts}/>
+    let contacts = Object.keys(props.contacts).map(key => {
+        return <ChangeContact key={key} title={key} val={props.contacts[key]}/>
     });
     return (
         <div className={classes.changeContacts}>
