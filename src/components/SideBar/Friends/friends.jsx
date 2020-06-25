@@ -18,12 +18,12 @@ const Friends = (props) => {
     });
     return (
         <div className={classes.friends}>
-            {friends.length !== 0 && <div className={classes.title}>
+            <div className={classes.title}>
                 <h2>Friends</h2> 
-            </div>}
-            <div className={classes.friendsList}>
-                {friends}
             </div>
+            {friends.length !== 0 && <div className={classes.friendsList}>
+                {friends}
+            </div>}
         </div>
     );
 }
