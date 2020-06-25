@@ -1,12 +1,13 @@
 import React from 'react';
 import classes from './contact.module.css';
 
-const Contact = (props) => {
-    let hasContact = props.contactTitle && props.contactValue;
+const Contact = ({contactTitle, contactValue}) => {
+    let hasContact = contactTitle && contactValue;
     return (
-    <>
-        {hasContact && <h4 className={classes.contactTitle}>{props.contactTitle + ': ' + props.contactValue}</h4>}
-    </>
+        <div className={classes.contact}>
+            {hasContact && <><h4 className={classes.contactTitle}>{contactTitle + ': '}</h4>
+            <p>{contactValue}</p></>}
+        </div>
     );
 }
 

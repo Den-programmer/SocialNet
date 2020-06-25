@@ -13,7 +13,11 @@ const ChangeUserName = (props) => {
     }
     let changeUserName = () => {
         let userNameVal = changeNameInput.current.value;
-        props.changeUserName(userNameVal);
+        let profile = {
+            fullName: userNameVal,
+            contacts: props.contacts
+        }
+        props.saveProfile(profile);
     }
 
     return (

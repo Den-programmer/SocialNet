@@ -40,6 +40,11 @@ export const ProfileAPI = {
         return instance.put(`profile/status`, { status }).then(response =>{
             return response.data;
         });
+    },
+    saveProfile: (profile) => {
+        return instance.put(`/profile`, profile).then(response => {
+            return response.data;
+        });
     }
 }
 export const MessagesAPI = {

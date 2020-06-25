@@ -1,0 +1,13 @@
+.contact {
+    display: flex;
+}
+.contact h4 {
+    text-transform: capitalize;
+}
+.contact p {
+    margin-block-start: 1.33em;
+    margin-block-end: 1.33em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}

@@ -33,7 +33,7 @@ let profilePage = {
       vk: "vk.com",
       twitter: "https://twitter.com",
       instagram: "instagram.com",
-      youtube: "https://www.youtube.com/",
+      youtube: "https://www.youtube.com",
       github: "github.com",
       mainLink: "http://localhost:3000/Profile/7149"
     },
@@ -155,6 +155,21 @@ export const setUserPhotoThunk = (photo) => async (dispatch) => {
 export const setUserProfileThunk = (userId) => async (dispatch) => {
   let data = await ProfileAPI.getUsersProfile(userId);
   dispatch(setUserProfile(data));
+}
+export const saveProfile = (profile) => async (dispatch, getState) => {
+  let userId = getState().auth.userId;
+  let trueProfile = {
+    aboutMe: 'I\'m GODNESS!!!',
+    userId: userId,
+    lookingForAJob: true,
+    lookingForAJobDescription: 'I\'m developer that has some skills: JavaScript, React.Js, TypeScript, Redux, C#, HTML, CSS, BootsTrap, SCSS and many others!',
+    fullName: profile.fullName,
+    contacts: profile.contacts,
+  }
+  let data = await ProfileAPI.saveProfile(trueProfile);
+  if (data.resultCode === 0) {
+    dispatch(setUserProfileThunk(userId));
+  }
 }
 export const setStatusThunk = (userId) => async (dispatch) => {
   let data = await ProfileAPI.getStatus(userId)

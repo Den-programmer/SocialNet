@@ -1,19 +1,21 @@
 import React from 'react';
 import classes from './changeContacts.module.css';
-import ChangeContact from './changeContact/changeContact';
+import ChangeContactsForm from './changeContactsForm/changeContactsForm';
 
 const ChangeContacts = (props) => {
-    let contacts = Object.keys(props.contacts).map(key => {
-        return <ChangeContact key={key} title={key} val={props.contacts[key]}/>
-    });
+    let onSubmit = (formData) => {
+        let profile = {
+            fullName: props.userName,
+            contacts: formData
+        }   
+        props.saveProfile(profile);
+    } 
     return (
         <div className={classes.changeContacts}>
             <div className={classes.title}>
                 <h4>Change contacts:</h4>
             </div>
-            <div className={classes.contacts}>
-                {contacts}
-            </div>
+            <ChangeContactsForm initialValues={props.contacts} {...props} onSubmit={onSubmit}/>
         </div>
     )
 }

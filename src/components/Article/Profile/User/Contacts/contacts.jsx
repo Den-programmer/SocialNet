@@ -12,7 +12,7 @@ const Contacts = (props) => {
         <div className={classes.userInf}>
             <div className={classes.contacts}>
                 <div className={classes.title}>
-                    <h3>{Object.keys(props.contacts).some(item => props.contacts[item] === '' || !props.contacts[item]) ? "" : 'Contacts'}</h3>
+                    <h3>{Object.keys(props.contacts).every(item => props.contacts[item] === '' || !props.contacts[item]) ? "" : 'Contacts'}</h3>
                 </div>
                 <div classes={classes.information}>
                     {contacts}

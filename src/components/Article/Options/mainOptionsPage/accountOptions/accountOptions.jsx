@@ -8,8 +8,8 @@ const AccountOptions = (props) => {
     return (
         <div className={classes.accountOptions}>
             <EditPhoto error={props.messageError} setUserPhoto={props.setUserPhotoThunk} photo={props.photo}/>
-            <ChangeUserName userName={props.userName} changeUserName={props.changeUserName}/>
-            <ChangeContacts changeContacts={props.changeContacts} contacts={props.contacts}/>
+            <ChangeUserName contacts={props.contacts} saveProfile={props.saveProfile} userName={props.userName} changeUserName={props.changeUserName}/>
+            <ChangeContacts userName={props.userName} saveProfile={props.saveProfile} contacts={props.contacts}/>
         </div>
     );
 }
