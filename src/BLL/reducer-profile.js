@@ -1,7 +1,8 @@
-import MyAvatar from '../components/Article/Profile/images/myAvatar/avatar.jpg';
+import defaultUser from '../components/Article/Profile/images/withoutAvatar/defaultUserPhoto.jpg';  
 import { ProfileAPI } from '../DAL/api';
 import { OptionsAPI } from "../DAL/api";
 import { setTextError } from './reducer-app';
+import { stopSubmit } from 'redux-form';
 
 const ADD_POST = 'profilePage/ADD-POST';
 const DELETE_POST = 'profilePage/DELETE_POST';
@@ -28,21 +29,21 @@ let profilePage = {
     status: "Hello my friends! I'm GOD!!!",
     aboutMe: 'What can I say new?! I\'m GOD!!!',
     contacts: {
-      facebook: "facebook.com",
-      website: "http://localhost:3000/",
-      vk: "vk.com",
-      twitter: "https://twitter.com",
-      instagram: "instagram.com",
-      youtube: "https://www.youtube.com",
-      github: "github.com",
-      mainLink: "http://localhost:3000/Profile/7149"
+      facebook: null,
+      website: null,
+      vk: null,
+      twitter: null,
+      instagram: null,
+      youtube: null,
+      github: null,
+      mainLink: null
     },
-    fullName: "LightL2",
+    fullName: "Your nickname",
     photos: {
-      large: MyAvatar,
-      small: MyAvatar,
+      large: defaultUser,
+      small: defaultUser,
     },
-    userId: 7149,
+    userId: null,
   }
 }
 
@@ -169,6 +170,8 @@ export const saveProfile = (profile) => async (dispatch, getState) => {
   let data = await ProfileAPI.saveProfile(trueProfile);
   if (data.resultCode === 0) {
     dispatch(setUserProfileThunk(userId));
+  } else {
+    dispatch(stopSubmit('ChangeContacts', { _error: 'Something\'s gone wrong!' }));
   }
 }
 export const setStatusThunk = (userId) => async (dispatch) => {

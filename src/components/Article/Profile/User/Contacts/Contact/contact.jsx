@@ -5,7 +5,7 @@ const Contact = ({contactTitle, contactValue}) => {
     let hasContact = contactTitle && contactValue;
     return (
         <div className={classes.contact}>
-            {hasContact && <><h4 className={classes.contactTitle}>{contactTitle + ': '}</h4>
+            {hasContact && <><h4 className={classes.contactTitle}>{contactTitle + ':'}</h4>
             <p>{contactValue}</p></>}
         </div>
     );
