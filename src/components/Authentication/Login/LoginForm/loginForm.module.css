@@ -17,3 +17,9 @@
     color:red;
     font-weight: 700;
 }
+.captcha {
+    margin: 10px 0;
+}
+.captchaInput {
+    margin-bottom: 10px;
+}

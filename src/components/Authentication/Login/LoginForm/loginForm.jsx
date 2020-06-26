@@ -4,9 +4,11 @@ import Email from './Email/email';
 import Password from './Password/password';
 import Remembering from './Remembering/remembering';
 import { reduxForm } from 'redux-form';
+import { createField, Input } from '../../../common/Forms/forms';
+import { required } from '../../../../utils/validators/validators';
 
 
-const LoginForm = ({handleSubmit, error}) => {
+const LoginForm = ({ handleSubmit, error, captcha }) => {
     return (
         <div className={classes.formBlock}>
             <form onSubmit={handleSubmit}>
@@ -20,6 +22,10 @@ const LoginForm = ({handleSubmit, error}) => {
                     <div className={classes.rememberMe}>
                         <Remembering />
                     </div>
+
+                    {captcha && <img className={classes.captcha} src={captcha}/>}
+                    {captcha && <div className={classes.captchaInput}>{createField("text", "", "captcha", Input, [required])}</div>}
+
                     {error && <div className={classes.error}>
                         <p>{error}</p>
                     </div>}

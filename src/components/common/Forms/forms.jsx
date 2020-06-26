@@ -31,11 +31,10 @@ export const RememberMe = ({input, meta, ...props}) => {
         </div>
     );
 } 
-export const createField = (type, placeholder, name, component, validators, value) => {
+export const createField = (type, placeholder, name, component, validators) => {
     return <Field type={type} 
                   placeholder={placeholder} 
                   name={name} 
                   component={component} 
-                  validate={validators}
-                  value={value}/>
+                  validate={validators}/>
 }

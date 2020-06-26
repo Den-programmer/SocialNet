@@ -6,6 +6,10 @@ export const getUsersProfile = (state) => {
     return state.profilePage.profile 
 }
 
+export const getSecurityCaptcha = (state) => {
+    return state.auth.captchaUrl
+}
+
 export const getPosts = (state) => {
     return state.profilePage.posts 
 }

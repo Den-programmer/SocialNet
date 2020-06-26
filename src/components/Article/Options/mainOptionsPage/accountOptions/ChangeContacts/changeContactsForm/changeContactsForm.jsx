@@ -11,11 +11,11 @@ const ChangeContactsForm = (props) => {
         <form onSubmit={props.handleSubmit} className={classes.contactsForm}>
             <div className={classes.contacts}>
                 {contacts}
-                {props.error && <div>{props.error}</div>}
             </div>
             <div className={classes.btn_confirm}>
                 <button>Confirm</button>
             </div>
+            {props.error && <div className={classes.error}>{props.error}</div>}
         </form>
     );
 }

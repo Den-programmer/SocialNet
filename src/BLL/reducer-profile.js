@@ -171,7 +171,8 @@ export const saveProfile = (profile) => async (dispatch, getState) => {
   if (data.resultCode === 0) {
     dispatch(setUserProfileThunk(userId));
   } else {
-    dispatch(stopSubmit('ChangeContacts', { _error: 'Something\'s gone wrong!' }));
+    let error = data.messages[0];
+    dispatch(stopSubmit('ChangeContacts', {_error: error}));
   }
 }
 export const setStatusThunk = (userId) => async (dispatch) => {

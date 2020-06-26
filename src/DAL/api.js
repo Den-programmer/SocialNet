@@ -60,11 +60,12 @@ export const AuthAPI = {
             return response.data;
         });
     },
-    login: (email, password, rememberMe) => {
+    login: (email, password, rememberMe, captcha = null) => {
         return instance.post(`auth/login`, {
             email,
             password,
-            rememberMe
+            rememberMe,
+            captcha
         }).then(response => {
             return response.data;
         });
@@ -85,6 +86,13 @@ export const OptionsAPI = {
                 'Content-Type': 'multipart/form-data'
             }
         }).then(response => {
+            return response.data;
+        });
+    }
+}
+export const SecurityAPI = {
+    getCaptchaUrl: () => {
+        return instance.get(`/security/get-captcha-url`).then(response => {
             return response.data;
         });
     }
