@@ -2,6 +2,7 @@ import React from 'react';
 import classes from './friends.module.css';
 import Friend from './Friend/friend';
 import defaultUser from './images/withoutAvatar/defaultUserPhoto.jpg';
+import { NavLink } from 'react-router-dom';
 
 const Friends = (props) => {
     let Friends = props.friends;
@@ -19,7 +20,7 @@ const Friends = (props) => {
     return (
         <div className={classes.friends}>
             <div className={classes.title}>
-                <h2>Friends</h2> 
+                <NavLink className={classes.titleNavLink} to="/Friends/DataFriends"><h2>Friends</h2></NavLink> 
             </div>
             {friends.length !== 0 && <div className={classes.friendsList}>
                 {friends}

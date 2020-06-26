@@ -1,6 +1,7 @@
 import React from 'react';
 import classes from './friend.module.css';
 import defaultUserPhoto from './img/defaultUserPhoto.jpg';
+import { NavLink } from 'react-router-dom';
 
 const Friend = (props) => {
     
@@ -12,8 +13,10 @@ const Friend = (props) => {
     return (
         <div className={classes.ObjectUser}>
             <div className={classes.user}>
-                {props.avatar ? <img src={props.avatar} alt="" /> : <img src={defaultUserPhoto} alt="" />}
-                <h5>{props.nickname ? props.nickname : props.name}</h5>
+                <NavLink to={"/Profile/" + props.id}>
+                    {props.avatar ? <img src={props.avatar} alt="" /> : <img src={defaultUserPhoto} alt="" />}
+                    <h5>{props.nickname ? props.nickname : props.name}</h5>
+                </NavLink>
                 <div className={classes.following}>
                     {props.followed ? <button onClick={following}>Followed</button> : <button onClick={following}>Follow</button>} 
                 </div>
