@@ -5,7 +5,7 @@ import MessagesContainer from './Message/messagesContainer';
 import News from './News/news';
 import Music from './Music/music';
 import OptionsContainer from './Options/optionsContainer';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import FindFriendsContainer from './Friends/FriendsComponents/FindFriends/findFriendsContainer';
 import FriendsNavContainer from './Friends/FriendsNav/friendsNavContainer';
 import FriendsByButtonContainer from './Friends/FriendsComponents/friendsByButton/friendsByButtonContainer';
@@ -20,6 +20,7 @@ import ErrorPage from '../common/ErrorPage/errorPage';
 const Article = (props) => {
     return (
         <article className={classes.article}>
+            <Route path='/' render={() => (<Redirect to={'/Profile'}/>)}/>
             {/* Profile! */}
             <Route path='/Profile/:userId?' render={() => (<ProfileContainer/>)} />
             {/* Messages! */}
