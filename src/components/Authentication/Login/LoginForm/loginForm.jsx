@@ -23,7 +23,7 @@ const LoginForm = ({ handleSubmit, error, captcha }) => {
                         <Remembering />
                     </div>
 
-                    {captcha && <img className={classes.captcha} src={captcha}/>}
+                    {captcha && <img className={classes.captcha} src={captcha} alt="captcha"/>}
                     {captcha && <div className={classes.captchaInput}>{createField("text", "", "captcha", Input, [required])}</div>}
 
                     {error && <div className={classes.error}>

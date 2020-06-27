@@ -12,6 +12,7 @@ import FriendsByButtonContainer from './Friends/FriendsComponents/friendsByButto
 import OptionsNav from './Options/OptionsNavigation/optionsNav';
 import GeneralOptionsContainer from './Options/mainOptionsPage/generalOptions/generalOptionsContainer';
 import AccountOptionsContainer from './Options/mainOptionsPage/accountOptions/accountOptionsContainer';
+import ErrorPage from '../common/ErrorPage/errorPage';
 
 // const Music = React.lazy(() => import('./Music/music'));
 // const OptionsContainer = React.lazy(() => import('./Options/optionsContainer'));
@@ -47,6 +48,7 @@ const Article = (props) => {
                     <FriendsNavContainer />
                     <FindFriendsContainer/>
                 </React.Fragment>)}/>  
+            <Route path="*" render={() => (<ErrorPage />)}/>    
         </article>
     );
 }
