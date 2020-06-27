@@ -1,4 +1,4 @@
-import defaultUser from '../components/Article/Profile/images/withoutAvatar/defaultUserPhoto.jpg';  
+import defaultUser from '../components/Article/Profile/images/withoutAvatar/defaultUserPhoto.jpg';
 import { ProfileAPI } from '../DAL/api';
 import { OptionsAPI } from "../DAL/api";
 import { setTextError } from './reducer-app';
@@ -13,11 +13,11 @@ const UPDATE_STATUS = 'profilePage/UPDATE_STATUS';
 const SET_USERS_PHOTO = 'profilePage/SET_USERS_PHOTO';
 const CHANGE_USER_NAME = 'profilePage/CHANGE_USER_NAME';
 const CHANGE_CONTACT = 'CHANGE_CONTACT';
- 
+
 
 let profilePage = {
   posts: [
-    
+
   ],
   postNotification: [
     {
@@ -56,7 +56,7 @@ const reducerProfile = (state = profilePage, action) => {
         postInf: action.newPostInformat,
         likesCount: 200000,
       }
-      
+
       return {
         ...state,
         posts: [...state.posts, newPost]
@@ -74,12 +74,12 @@ const reducerProfile = (state = profilePage, action) => {
     case SET_STATUS:
       return {
         ...state,
-        profile: {...state.profile, status: action.status}
+        profile: { ...state.profile, status: action.status }
       };
     case SET_USERS_PHOTO:
       return {
         ...state,
-        profile: {...state.profile},
+        profile: { ...state.profile },
         photos: {
           large: action.photo,
           small: action.photo
@@ -88,21 +88,24 @@ const reducerProfile = (state = profilePage, action) => {
     case CHANGE_USER_NAME:
       return {
         ...state,
-        profile: {...state.profile,  fullName: action.userName},
+        profile: { ...state.profile, fullName: action.userName },
       };
-    case CHANGE_CONTACT: 
+    case CHANGE_CONTACT:
       return {
         ...state,
-        profile: {...state.profile, contacts: state.profile.contacts.map(contact => {
-          if (contact.id === action.contactId) return {...contact, value: action.val}
-          return contact;}
-        )}
-      }  
-    case EDIT_POST: 
+        profile: {
+          ...state.profile, contacts: state.profile.contacts.map(contact => {
+            if (contact.id === action.contactId) return { ...contact, value: action.val }
+            return contact;
+          }
+          )
+        }
+      }
+    case EDIT_POST:
       return {
         ...state,
         posts: state.posts.map(post => {
-          if (post.id === action.postId) return {...post, postTitle: action.newPostTitle, postInf: action.newPostInformat}
+          if (post.id === action.postId) return { ...post, postTitle: action.newPostTitle, postInf: action.newPostInformat }
           return post;
         })
       }
@@ -144,44 +147,64 @@ export const changeContacts = (contactId, val) => {
 /* Thunks! */
 
 export const setUserPhotoThunk = (photo) => async (dispatch) => {
-  let data = await OptionsAPI.setUserPhoto(photo);
-  if (data.resultCode === 0) {
-    dispatch(setUserPhoto(photo));
-  } else {
-    let message = data.messages[0];
-    dispatch(setTextError(message));
+  try {
+    let data = await OptionsAPI.setUserPhoto(photo);
+    if (data.resultCode === 0) {
+      dispatch(setUserPhoto(photo));
+    } else {
+      let message = data.messages[0];
+      dispatch(setTextError(message));
+    }
+  } catch (error) {
+    alert(`Something's gone wrong, error status: ${error.status}`);
   }
 }
 
 export const setUserProfileThunk = (userId) => async (dispatch) => {
-  let data = await ProfileAPI.getUsersProfile(userId);
-  dispatch(setUserProfile(data));
+  try {
+    let data = await ProfileAPI.getUsersProfile(userId);
+    dispatch(setUserProfile(data));
+  } catch (error) {
+    alert(`Something's gone wrong, error status: ${error.status}`);
+  }
 }
 export const saveProfile = (profile) => async (dispatch, getState) => {
-  let userId = getState().auth.userId;
-  let trueProfile = {
-    aboutMe: 'I\'m GODNESS!!!',
-    userId: userId,
-    lookingForAJob: true,
-    lookingForAJobDescription: 'I\'m developer that has some skills: JavaScript, React.Js, TypeScript, Redux, C#, HTML, CSS, BootsTrap, SCSS and many others!',
-    fullName: profile.fullName,
-    contacts: profile.contacts,
-  }
-  let data = await ProfileAPI.saveProfile(trueProfile);
-  if (data.resultCode === 0) {
-    dispatch(setUserProfileThunk(userId));
-  } else {
-    let error = data.messages[0];
-    dispatch(stopSubmit('ChangeContacts', {_error: error}));
+  try {
+    let userId = getState().auth.userId;
+    let trueProfile = {
+      aboutMe: 'I\'m GODNESS!!!',
+      userId: userId,
+      lookingForAJob: true,
+      lookingForAJobDescription: 'I\'m developer that has some skills: JavaScript, React.Js, TypeScript, Redux, C#, HTML, CSS, BootsTrap, SCSS and many others!',
+      fullName: profile.fullName,
+      contacts: profile.contacts,
+    }
+    let data = await ProfileAPI.saveProfile(trueProfile);
+    if (data.resultCode === 0) {
+      dispatch(setUserProfileThunk(userId));
+    } else {
+      let error = data.messages[0];
+      dispatch(stopSubmit('ChangeContacts', { _error: error }));
+    }
+  } catch(error) {
+    alert(`Something's gone wrong, error status: ${error.status}`);
   }
 }
 export const setStatusThunk = (userId) => async (dispatch) => {
-  let data = await ProfileAPI.getStatus(userId)
-  dispatch(setStatus(data));
+  try {
+    let data = await ProfileAPI.getStatus(userId)
+    dispatch(setStatus(data));
+  } catch(error) {
+    alert(`Something's gone wrong, error status: ${error.status}`);
+  }
 }
 export const updateStatusThunk = (status) => async (dispatch) => {
-  let data = await ProfileAPI.updateStatus(status);
-  dispatch(updateStatus(data));
+  try {
+    let data = await ProfileAPI.updateStatus(status);
+    dispatch(updateStatus(data));
+  } catch(error) {
+    alert(`Something's gone wrong, error status: ${error.status}`);
+  }
 }
 
 export default reducerProfile;

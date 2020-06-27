@@ -25,7 +25,7 @@ const reducerAuth = (state = auth, action) => {
       return {
         ...state,
         captchaUrl: action.captcha
-      } 
+      }
     default:
       return state;
   }
@@ -50,26 +50,38 @@ export const authentication = () => (dispatch) => {
   });
 }
 export const login = (email, password, rememberMe = false, captcha) => async (dispatch) => {
-  let response = await AuthAPI.login(email, password, rememberMe, captcha);
-  let data = await AuthAPI.auth();
-  if (response.resultCode === 0) {
-    dispatch(setAuthUserData(data.data.id, email, email, password, true, rememberMe));
-  } else {
-    if (response.resultCode === 10) {
-      dispatch(getCaptchaUrl());
+  try {
+    let response = await AuthAPI.login(email, password, rememberMe, captcha);
+    let data = await AuthAPI.auth();
+    if (response.resultCode === 0) {
+      dispatch(setAuthUserData(data.data.id, email, email, password, true, rememberMe));
+    } else {
+      if (response.resultCode === 10) {
+        dispatch(getCaptchaUrl());
+      }
+      let messageError = response.messages[0];
+      dispatch(stopSubmit("login", { _error: messageError }));
     }
-    let messageError = response.messages[0];
-    dispatch(stopSubmit("login", { _error: messageError }));
+  } catch (error) {
+    alert(`Something's gone wrong, error status: ${error.status}`);
   }
 }
 export const logout = () => async (dispatch) => {
-  await AuthAPI.logout()
-  dispatch(setAuthUserData(null, null, null, null, false, false));
+  try {
+    await AuthAPI.logout()
+    dispatch(setAuthUserData(null, null, null, null, false, false));
+  } catch (error) {
+    alert(`Something's gone wrong, error status: ${error.status}`);
+  }
 }
 export const getCaptchaUrl = () => async (dispatch) => {
-  let data = await SecurityAPI.getCaptchaUrl();
-  const captchaUrl = data.url;
-  dispatch(setCaptchaUrl(captchaUrl));
+  try {
+    let data = await SecurityAPI.getCaptchaUrl();
+    const captchaUrl = data.url;
+    dispatch(setCaptchaUrl(captchaUrl));
+  } catch(error) {
+    alert(`Something's gone wrong, error status: ${error.status}`);
+  }
 }
 
 export default reducerAuth;

@@ -11,10 +11,10 @@ const TOGGLE_IS_FOLLOWING_PROCESS = 'Friends/TOGGLE_IS_FOLLOWING_PROCESS';
 
 let Friends = {
     friends: [
-        
+
     ],
     friendsInf: {
-    
+
     },
     users: [
 
@@ -35,11 +35,11 @@ const reducerFriends = (state = Friends, action) => {
                 ...state,
                 users: action.users
             };
-        case SET_FRIENDS: 
+        case SET_FRIENDS:
             return {
                 ...state,
                 friends: action.users.filter(user => user.followed === true)
-            }    
+            }
         case FOLLOW:
             let currentUser = state.users.filter(user => {
                 if (user.id === action.userId) return true;
@@ -56,7 +56,7 @@ const reducerFriends = (state = Friends, action) => {
             return {
                 ...state,
                 users: state.users.map(user => {
-                    if(user.id === action.userId) return {...user, followed: true}
+                    if (user.id === action.userId) return { ...user, followed: true }
                     return user;
                 }),
                 friends: [...state.friends, newFriend]
@@ -65,7 +65,7 @@ const reducerFriends = (state = Friends, action) => {
             return {
                 ...state,
                 users: state.users.map(user => {
-                    if (user.id === action.userId) return {...user, followed: false}
+                    if (user.id === action.userId) return { ...user, followed: false }
                     return user;
                 }),
                 friends: state.friends.filter(friend => friend.id !== action.userId)
@@ -73,23 +73,23 @@ const reducerFriends = (state = Friends, action) => {
         case TOGGLE_IS_FOLLOWING_PROCESS:
             return {
                 ...state,
-                followingInProcess: action.isFetching ? [...state.followingInProcess, action.userId] 
-                : state.followingInProcess.filter(id => id !== action.userId) 
+                followingInProcess: action.isFetching ? [...state.followingInProcess, action.userId]
+                    : state.followingInProcess.filter(id => id !== action.userId)
             };
         case CHANGE_PAGE:
             return {
                 ...state,
-                usersInf: {...state.usersInf, currentPage: action.currentPage},
+                usersInf: { ...state.usersInf, currentPage: action.currentPage },
             };
         case SET_USERSINF:
             return {
                 ...state,
-                usersInf: {...state.usersInf, totalCount: action.data.totalCount},
+                usersInf: { ...state.usersInf, totalCount: action.data.totalCount },
             };
         case IS_FETCHING:
             return {
                 ...state,
-                usersInf: {...state.usersInf, isFetching: action.isFetching}
+                usersInf: { ...state.usersInf, isFetching: action.isFetching }
             };
         default:
             return state;
@@ -122,28 +122,40 @@ const setFriends = (users) => {
 }
 
 export const requestUsers = (pageSize, currentPage) => async (dispatch) => {
-    dispatch(isFetching(true));
-    let data = await UsersAPI.requestUsers(pageSize, currentPage);
-    dispatch(isFetching(false));
-    dispatch(setUsers(data.items));
-    dispatch(setUsersInf(data));
-    dispatch(setFriends(data.items));
+    try {
+        dispatch(isFetching(true));
+        let data = await UsersAPI.requestUsers(pageSize, currentPage);
+        dispatch(isFetching(false));
+        dispatch(setUsers(data.items));
+        dispatch(setUsersInf(data));
+        dispatch(setFriends(data.items));
+    } catch (error) {
+        alert(`Something's gone wrong, error status: ${error.status}`);
+    }
 }
 export const followThunk = (userId) => async (dispatch) => {
-    dispatch(toggleFollowingInProcess(true, userId));
-    let data = await UsersAPI.follow(userId);
-    if (data.resultCode === 0) {
-        dispatch(follow(userId));
+    try {
+        dispatch(toggleFollowingInProcess(true, userId));
+        let data = await UsersAPI.follow(userId);
+        if (data.resultCode === 0) {
+            dispatch(follow(userId));
+        }
+        dispatch(toggleFollowingInProcess(false, userId));
+    } catch (error) {
+        alert(`Something's gone wrong, error status: ${error.status}`);
     }
-    dispatch(toggleFollowingInProcess(false, userId));
 }
 export const unfollowThunk = (userId) => async (dispatch) => {
-    dispatch(toggleFollowingInProcess(true, userId));
-    let data = await UsersAPI.unfollow(userId);
-    if (data.resultCode === 0) {
-        dispatch(unfollow(userId));
+    try {
+        dispatch(toggleFollowingInProcess(true, userId));
+        let data = await UsersAPI.unfollow(userId);
+        if (data.resultCode === 0) {
+            dispatch(unfollow(userId));
+        }
+        dispatch(toggleFollowingInProcess(false, userId));
+    } catch (error) {
+        alert(`Something's gone wrong, error status: ${error.status}`);
     }
-    dispatch(toggleFollowingInProcess(false, userId));
 }
 
 export default reducerFriends;
