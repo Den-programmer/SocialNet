@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './findFriends.module.css';
 import SearchNewfriends from './SearchNewFriends/searchNewFriends';
 import UsersColumnContainer from './usersColumn/usersColumnContainer';
-import Paginator from './Paginator/Paginator';
+import Paginator from '../../../../common/Paginator/Paginator';
 
 const FindFriends = (props) => {
     return (
