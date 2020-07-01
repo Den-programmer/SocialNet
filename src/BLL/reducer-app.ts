@@ -4,6 +4,23 @@ const SET_INITIALIZED = 'app/SET_INITIALIZED';
 const SET_FONT_SIZE = 'app/SET_FONT_SIZE';
 const SET_TEXT_ERROR = 'SET_TEXT_ERROR';
 
+type fontSizeObjectType = {
+  id: number
+  title: string
+  size: number
+}
+
+type optionsType = {
+  fontSize: Array<fontSizeObjectType>
+  appFontSize: number
+}
+
+type appStateType = {
+  isInitialized: boolean
+  options: optionsType
+  messageError: null | string
+}
+
 let AppState = {
   isInitialized: false,
   options: {
@@ -47,9 +64,9 @@ let AppState = {
     appFontSize: 16,
   },
   messageError: ''
-}
+} as appStateType
 
-const reducerApp = (state = AppState, action) => {
+const reducerApp = (state = AppState, action: any):appStateType => {
   let stateCopy = { ...state }
   stateCopy.options = { ...state.options }
   stateCopy.options.fontSize = [...state.options.fontSize];
@@ -77,19 +94,33 @@ const reducerApp = (state = AppState, action) => {
 
 // Action Creators!
 
-const initializedSuccessful = () => {
+type initializedSuccessfulActionType = {
+  type: typeof SET_INITIALIZED
+}
+
+const initializedSuccessful = ():initializedSuccessfulActionType => {
   return { type: SET_INITIALIZED }
 }
-export const setFontSize = (id) => {
+type setFontSizeActionType = {
+  type: typeof SET_FONT_SIZE
+  id: number
+}
+export const setFontSize = (id: number):setFontSizeActionType => {
   return { type: SET_FONT_SIZE, id }
 }
-export const setTextError = (text) => {
+
+type setTextErrorActionType = {
+  type: typeof SET_TEXT_ERROR,
+  text: string
+}
+
+export const setTextError = (text: string):setTextErrorActionType => {
   return { type: SET_TEXT_ERROR, text }
 }
 
 // Thunk Creators!
 
-export const initialize = () => (dispatch) => {
+export const initialize = () => (dispatch: any) => {
   let promise = dispatch(authentication());
 
   promise.then(() => {

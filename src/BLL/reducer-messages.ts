@@ -3,6 +3,23 @@
 const ADD_MESSAGE = 'messagesPage/ADD-MESSAGE';
 // const SET_DIALOGS = 'SET-DIALOGS';
 
+type userDialogType = {
+    id: number
+    nickname: string
+    name: string
+    lastMessage: string
+    avatar: any
+}
+type message = {
+    id: number
+    messageText: string
+}
+
+type messagesPageType = {
+    dialogsData: Array<userDialogType>
+    messages: Array<message>
+}
+
 let messagesPage = {
     dialogsData: [
         {
@@ -91,9 +108,9 @@ let messagesPage = {
             messageText: 'Would u like to go for a walk?',
         }
     ],
-}
+} as messagesPageType
 
-const reducerMessages = (state = messagesPage, action) => {
+const reducerMessages = (state = messagesPage, action: any): messagesPageType => {
     switch (action.type) {
         case ADD_MESSAGE:
             let newMessage = {
@@ -116,7 +133,12 @@ const reducerMessages = (state = messagesPage, action) => {
 
 /* Action Creators! */
 
-export const addMessage = messageText => {
+type addMessageActionType = {
+    type: typeof ADD_MESSAGE
+    messageText: string
+}
+
+export const addMessage = (messageText:string):addMessageActionType => {
     return { type: ADD_MESSAGE, messageText }
 }
 // const setDialogs = dialogs => {

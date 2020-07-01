@@ -1,4 +1,4 @@
-import defaultUser from '../components/Article/Profile/images/withoutAvatar/defaultUserPhoto.jpg';
+import defaultUser from './../components/Article/Profile/images/withoutAvatar/defaultUserPhoto.jpg';
 import { ProfileAPI } from '../DAL/api';
 import { OptionsAPI } from "../DAL/api";
 import { setTextError } from './reducer-app';
@@ -14,6 +14,49 @@ const SET_USERS_PHOTO = 'profilePage/SET_USERS_PHOTO';
 const CHANGE_USER_NAME = 'profilePage/CHANGE_USER_NAME';
 const CHANGE_CONTACT = 'CHANGE_CONTACT';
 
+type profilePhotosType = {
+  large: any
+  small: any
+}
+type contactsType = {
+  facebook: null | string,
+  website: null | string,
+  vk: null | string,
+  twitter: null | string,
+  instagram: null | string,
+  youtube: null | string,
+  github: null | string,
+  mainLink: null | string
+}
+type profileType = {
+  status: null | string
+  aboutMe: null | string
+  contacts: contactsType
+  fullName: string
+  photos: profilePhotosType
+  userId: null | number
+}
+
+type postType = {
+  id: number
+  postTitle: string
+  postInf: string
+  likesCount: number
+}
+type postNotificationType = {
+  id: number
+  name: string
+}
+
+type saveProfileType = {
+  fullName: string
+  contacts: contactsType
+}
+export type profilePageType = {
+  posts: Array<postType>,
+  postNotification: Array<postNotificationType>,
+  profile: profileType,
+}
 
 let profilePage = {
   posts: [
@@ -44,10 +87,10 @@ let profilePage = {
       small: defaultUser,
     },
     userId: null,
-  }
-}
+  } 
+} as profilePageType
 
-const reducerProfile = (state = profilePage, action) => {
+const reducerProfile = (state = profilePage, action: any): profilePageType => {
   switch (action.type) {
     case ADD_POST:
       let newPost = {
@@ -55,11 +98,11 @@ const reducerProfile = (state = profilePage, action) => {
         postTitle: action.newPostTitle,
         postInf: action.newPostInformat,
         likesCount: 200000,
-      }
+      } 
 
       return {
         ...state,
-        posts: [...state.posts, newPost]
+        posts: [...state.posts as Array<postType>, newPost as postType]
       };
     case DELETE_POST:
       return {
@@ -79,28 +122,13 @@ const reducerProfile = (state = profilePage, action) => {
     case SET_USERS_PHOTO:
       return {
         ...state,
-        profile: { ...state.profile },
-        photos: {
-          large: action.photo,
-          small: action.photo
-        },
+        profile: { ...state.profile, photos: { large: action.photo, small: action.photo } },
       };
     case CHANGE_USER_NAME:
       return {
         ...state,
         profile: { ...state.profile, fullName: action.userName },
       };
-    case CHANGE_CONTACT:
-      return {
-        ...state,
-        profile: {
-          ...state.profile, contacts: state.profile.contacts.map(contact => {
-            if (contact.id === action.contactId) return { ...contact, value: action.val }
-            return contact;
-          }
-          )
-        }
-      }
     case EDIT_POST:
       return {
         ...state,
@@ -116,39 +144,97 @@ const reducerProfile = (state = profilePage, action) => {
 
 /* Action Creators! */
 
-export const addPost = (newPostTitle, newPostInformat) => {
+type addPostActionType = {
+  type: typeof ADD_POST
+  newPostTitle: string
+  newPostInformat: string
+}
+
+export const addPost = (newPostTitle: string, newPostInformat: string):addPostActionType => {
   return { type: ADD_POST, newPostTitle, newPostInformat };
 }
-export const deletePost = (postId) => {
+
+type deletePostActionType = {
+  type: typeof DELETE_POST
+  postId: number
+}
+
+export const deletePost = (postId: number):deletePostActionType => {
   return { type: DELETE_POST, postId }
 }
-export const editPost = (postId, newPostTitle, newPostInformat) => {
+
+type editPostActionType = {
+  type: typeof EDIT_POST
+  postId: number
+  newPostTitle: string
+  newPostInformat: string
+}
+
+export const editPost = (postId: number, newPostTitle: string, newPostInformat: string):editPostActionType => {
   return { type: EDIT_POST, postId, newPostTitle, newPostInformat }
 }
-const setUserProfile = (profile) => {
+
+type setUserProfileActionType = {
+  type: typeof SET_USER_PROFILE
+  profile: object
+}
+
+const setUserProfile = (profile: object):setUserProfileActionType => {
   return { type: SET_USER_PROFILE, profile }
 }
-const setStatus = (status) => {
+
+type setStatusActionType = {
+  type: typeof SET_STATUS
+  status: string
+}
+
+const setStatus = (status: string):setStatusActionType => {
   return { type: SET_STATUS, status }
 }
-const updateStatus = (status) => {
+
+type updateStatusActionType = {
+  type: typeof UPDATE_STATUS
+  status: string
+}
+
+const updateStatus = (status: string):updateStatusActionType => {
   return { type: UPDATE_STATUS, status }
 }
-const setUserPhoto = (photo) => {
+
+type setUserPhotoActionType = {
+  type: typeof SET_USERS_PHOTO
+  photo: any
+}
+
+const setUserPhoto = (photo: any):setUserPhotoActionType => {
   return { type: SET_USERS_PHOTO, photo }
 }
-export const changeUserName = (userName) => {
+
+type changeUserNameActionType = {
+  type: typeof CHANGE_USER_NAME
+  userName: string
+}
+
+export const changeUserName = (userName: string):changeUserNameActionType => {
   return { type: CHANGE_USER_NAME, userName }
 }
-export const changeContacts = (contactId, val) => {
+
+type changeContactsActionType = {
+  type: typeof CHANGE_CONTACT
+  contactId: number
+  val: string
+}
+
+export const changeContacts = (contactId: number, val: string):changeContactsActionType => {
   return { type: CHANGE_CONTACT, contactId, val }
 }
 
 /* Thunks! */
 
-export const setUserPhotoThunk = (photo) => async (dispatch) => {
+export const setUserPhotoThunk = (photo: any) => async (dispatch: any) => {
   try {
     let data = await OptionsAPI.setUserPhoto(photo);
+    debugger
     if (data.resultCode === 0) {
       dispatch(setUserPhoto(photo));
     } else {
@@ -160,7 +246,7 @@ export const setUserPhotoThunk = (photo) => async (dispatch) => {
   }
 }
 
-export const setUserProfileThunk = (userId) => async (dispatch) => {
+export const setUserProfileThunk = (userId: number) => async (dispatch: any) => {
   try {
     let data = await ProfileAPI.getUsersProfile(userId);
     dispatch(setUserProfile(data));
@@ -168,7 +254,7 @@ export const setUserProfileThunk = (userId) => async (dispatch) => {
     alert(`Something's gone wrong, error status: ${error.status}`);
   }
 }
-export const saveProfile = (profile) => async (dispatch, getState) => {
+export const saveProfile = (profile: saveProfileType) => async (dispatch: any, getState: any) => {
   try {
     let userId = getState().auth.userId;
     let trueProfile = {
@@ -186,23 +272,23 @@ export const saveProfile = (profile) => async (dispatch, getState) => {
       let error = data.messages[0];
       dispatch(stopSubmit('ChangeContacts', { _error: error }));
     }
-  } catch(error) {
+  } catch (error) {
     alert(`Something's gone wrong, error status: ${error.status}`);
   }
 }
-export const setStatusThunk = (userId) => async (dispatch) => {
+export const setStatusThunk = (userId: number) => async (dispatch: any) => {
   try {
     let data = await ProfileAPI.getStatus(userId)
     dispatch(setStatus(data));
-  } catch(error) {
+  } catch (error) {
     alert(`Something's gone wrong, error status: ${error.status}`);
   }
 }
-export const updateStatusThunk = (status) => async (dispatch) => {
+export const updateStatusThunk = (status: string) => async (dispatch: any) => {
   try {
     let data = await ProfileAPI.updateStatus(status);
     dispatch(updateStatus(data));
-  } catch(error) {
+  } catch (error) {
     alert(`Something's gone wrong, error status: ${error.status}`);
   }
 }

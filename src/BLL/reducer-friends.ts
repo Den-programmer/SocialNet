@@ -9,26 +9,41 @@ const IS_FETCHING = 'Friends/IS_FETCHING';
 const SET_FRIENDS = 'SET_FRIENDS';
 const TOGGLE_IS_FOLLOWING_PROCESS = 'Friends/TOGGLE_IS_FOLLOWING_PROCESS';
 
-let Friends = {
-    friends: [
+type userType = {
+    id: number
+    name: string
+    nickname: string
+    avatar: any
+    followed: boolean
+}
 
-    ],
-    friendsInf: {
+type FriendsType = {
+    friends: Array<userType>
+    friendsInf: null | object
+    users: Array<userType>
+    usersInf: {
+        isFetching: boolean
+        totalCount: number
+        pageSize: number
+        currentPage: number
+    }
+    followingInProcess: Array<number>
+}
 
-    },
-    users: [
-
-    ],
+const Friends = {
+    friends: [],
+    friendsInf: {},
+    users: [],
     usersInf: {
         isFetching: true,
         totalCount: 0,
         pageSize: 12,
-        currentPage: 1,
+        currentPage: 1
     },
-    followingInProcess: [],
-}
+    followingInProcess: []
+} as FriendsType
 
-const reducerFriends = (state = Friends, action) => {
+const reducerFriends = (state = Friends, action: any): FriendsType => {
     switch (action.type) {
         case SET_USERS:
             return {
@@ -38,13 +53,13 @@ const reducerFriends = (state = Friends, action) => {
         case SET_FRIENDS:
             return {
                 ...state,
-                friends: action.users.filter(user => user.followed === true)
+                friends: action.users.filter((user: userType) => user.followed === true)
             }
         case FOLLOW:
-            let currentUser = state.users.filter(user => {
+            let currentUserArray:Array<object> = state.users.filter(user => {
                 if (user.id === action.userId) return true;
             });
-            currentUser = currentUser.find(item => item);
+            let currentUser:any = currentUserArray.find(item => item);
             let newFriend = {
                 id: action.userId,
                 name: currentUser.name,
@@ -96,32 +111,84 @@ const reducerFriends = (state = Friends, action) => {
     }
 }
 
-export const follow = userId => {
+// Action Creators!
+
+type followActionType = {
+    type: typeof FOLLOW
+    userId: number
+}
+
+export const follow = (userId: number):followActionType => {
     return { type: FOLLOW, userId }
 }
-export const unfollow = userId => {
+
+type unfollowActionType = {
+    type: typeof UNFOLLOW
+    userId: number
+}
+
+export const unfollow = (userId: number):unfollowActionType => {
     return { type: UNFOLLOW, userId }
 }
-export const setUsers = users => {
+
+type setUsersActionType = {
+    type: typeof SET_USERS
+    users: Array<userType>
+}
+
+export const setUsers = (users: Array<userType>):setUsersActionType => {
     return { type: SET_USERS, users }
 }
-export const changePage = currentPage => {
+
+type changePageActionType = {
+    type: typeof CHANGE_PAGE
+    currentPage: number
+}
+
+export const changePage = (currentPage: number):changePageActionType => {
     return { type: CHANGE_PAGE, currentPage }
 }
-export const setUsersInf = data => {
+
+type setUsersInfActionType = {
+    type: typeof SET_USERSINF
+    data: object
+}
+
+export const setUsersInf = (data: object):setUsersInfActionType => {
     return { type: SET_USERSINF, data }
 }
-export const isFetching = isFetching => {
+
+type isFetchingActionType = {
+    type: typeof IS_FETCHING
+    isFetching: boolean
+}
+
+export const isFetching = (isFetching:boolean):isFetchingActionType => {
     return { type: IS_FETCHING, isFetching }
 }
-export const toggleFollowingInProcess = (isFetching, userId) => {
+
+type toggleFollowingInProcessActionType = {
+    type: typeof TOGGLE_IS_FOLLOWING_PROCESS
+    isFetching: boolean
+    userId: number
+}
+
+export const toggleFollowingInProcess = (isFetching: boolean, userId: number):toggleFollowingInProcessActionType => {
     return { type: TOGGLE_IS_FOLLOWING_PROCESS, isFetching, userId }
 }
-const setFriends = (users) => {
+
+type setFriendsActionType = {
+    type: typeof SET_FRIENDS
+    users: Array<userType>
+}
+
+const setFriends = (users:Array<userType>):setFriendsActionType => {
     return { type: SET_FRIENDS, users }
 }
 
-export const requestUsers = (pageSize, currentPage) => async (dispatch) => {
+// Thunk Creators!
+
+export const requestUsers = (pageSize: number, currentPage: number) => async (dispatch: any) => {
     try {
         dispatch(isFetching(true));
         let data = await UsersAPI.requestUsers(pageSize, currentPage);
@@ -133,7 +200,7 @@ export const requestUsers = (pageSize, currentPage) => async (dispatch) => {
         alert(`Something's gone wrong, error status: ${error.status}`);
     }
 }
-export const followThunk = (userId) => async (dispatch) => {
+export const followThunk = (userId: number) => async (dispatch: any) => {
     try {
         dispatch(toggleFollowingInProcess(true, userId));
         let data = await UsersAPI.follow(userId);
@@ -145,7 +212,7 @@ export const followThunk = (userId) => async (dispatch) => {
         alert(`Something's gone wrong, error status: ${error.status}`);
     }
 }
-export const unfollowThunk = (userId) => async (dispatch) => {
+export const unfollowThunk = (userId: number) => async (dispatch: any) => {
     try {
         dispatch(toggleFollowingInProcess(true, userId));
         let data = await UsersAPI.unfollow(userId);

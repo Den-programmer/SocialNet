@@ -15,6 +15,7 @@
     "@types/node": "^14.0.14",
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
+    "@types/redux-form": "^8.2.6",
     "axios": "^0.19.2",
     "gh-pages": "^2.2.0",
     "react": "^16.13.0",

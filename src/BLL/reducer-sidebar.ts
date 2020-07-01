@@ -1,6 +1,16 @@
 const ADD_SIDEBAR_NAVLINK = 'ADD_SIDEBAR_NAVLINK';
 const DELETE_SIDEBAR_NAVLINK = 'DELETE_SIDEBAR_NAVLINK';
 
+type navLink = {
+    id: number
+    name: string
+    path: string
+}
+
+type SidebarType = {
+    navigationLinks: Array<navLink>
+}
+
 let Sidebar = {
     navigationLinks: [
         {
@@ -28,10 +38,10 @@ let Sidebar = {
             name: 'Options',
             path: '/Options'
         }
-    ],
-}
+    ]
+} as SidebarType
 
-const reducerSidebar = (state = Sidebar, action) => {
+const reducerSidebar = (state = Sidebar, action: any): SidebarType => {
     switch (action.type) {
         case ADD_SIDEBAR_NAVLINK: 
             let newLink = {
@@ -53,10 +63,22 @@ const reducerSidebar = (state = Sidebar, action) => {
     }
 }
 
-export const addSideBarNavLink = (title, path) => {
+type addSideBarNavLinkActionType = {
+    type: typeof ADD_SIDEBAR_NAVLINK
+    title: string
+    path: string
+}
+
+export const addSideBarNavLink = (title: string, path: string): addSideBarNavLinkActionType => {
     return { type: ADD_SIDEBAR_NAVLINK, title, path }
 }
-export const deleteSideBarNavLink = (id) => {
+
+type deleteSideBarNavLinkActionType = {
+    type: typeof DELETE_SIDEBAR_NAVLINK
+    id: number
+}
+
+export const deleteSideBarNavLink = (id: number):deleteSideBarNavLinkActionType => {
     return { type: DELETE_SIDEBAR_NAVLINK, id }
 }
 

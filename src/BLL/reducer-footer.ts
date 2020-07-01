@@ -1,3 +1,15 @@
+type footLinkType = {
+    id: number
+    name: string
+    url: string
+}
+
+type FooterType = {
+    year: number
+    footInf: string
+    footLinks: Array<footLinkType>
+}
+
 let Footer = {
     year: 2020,
     footInf: 'This is footer\'s information!',
@@ -28,9 +40,9 @@ let Footer = {
             url: "/Options",
         },
     ],
-}
+} as FooterType
 
-const reducerFooter = (state = Footer, action) => {
+const reducerFooter = (state = Footer, action:any): FooterType => {
 
 
 
