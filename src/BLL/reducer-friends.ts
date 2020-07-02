@@ -1,4 +1,5 @@
 import { UsersAPI } from '../DAL/api';
+import { userType } from '../types/FriendsType/friendsType';
 
 const FOLLOW = 'Friends/FOLLOW';
 const UNFOLLOW = 'Friends/UNFOLLOW';
@@ -8,14 +9,6 @@ const SET_USERSINF = 'Friends/SET-USERSINF';
 const IS_FETCHING = 'Friends/IS_FETCHING';
 const SET_FRIENDS = 'SET_FRIENDS';
 const TOGGLE_IS_FOLLOWING_PROCESS = 'Friends/TOGGLE_IS_FOLLOWING_PROCESS';
-
-type userType = {
-    id: number
-    name: string
-    nickname: string
-    avatar: any
-    followed: boolean
-}
 
 type FriendsType = {
     friends: Array<userType>

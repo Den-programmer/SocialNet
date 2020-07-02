@@ -2,7 +2,14 @@ import React from 'react';
 import classes from './friend.module.css';
 import { NavLink } from 'react-router-dom';
 
-const Friend = ({avatar, nickname, name, id}) => {
+interface FriendPropsType {
+    avatar: string
+    nickname: string
+    name: string
+    id: number
+}
+
+const Friend:React.FC<FriendPropsType> = ({avatar, nickname, name, id}) => {
     return (
         <div className={classes.friend}>
             <NavLink className={classes.friendLink} to={`/Profile/${id}`}>

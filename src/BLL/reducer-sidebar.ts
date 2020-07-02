@@ -1,14 +1,10 @@
+import { navLinkType } from '../types/SidebarTypes/sidebarTypes';
+
 const ADD_SIDEBAR_NAVLINK = 'ADD_SIDEBAR_NAVLINK';
 const DELETE_SIDEBAR_NAVLINK = 'DELETE_SIDEBAR_NAVLINK';
 
-type navLink = {
-    id: number
-    name: string
-    path: string
-}
-
 type SidebarType = {
-    navigationLinks: Array<navLink>
+    navigationLinks: Array<navLinkType>
 }
 
 let Sidebar = {

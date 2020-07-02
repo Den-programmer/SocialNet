@@ -3,8 +3,13 @@ import classes from './friends.module.css';
 import Friend from './Friend/friend';
 import defaultUser from './images/withoutAvatar/defaultUserPhoto.jpg';
 import { NavLink } from 'react-router-dom';
+import { userType } from '../../../types/FriendsType/friendsType';
 
-const Friends = (props) => {
+interface FriendsPropsType {
+    friends: Array<userType>
+}
+
+const Friends:React.FC<FriendsPropsType> = (props) => {
     let Friends = props.friends;
     let friendsArray = [];
 
