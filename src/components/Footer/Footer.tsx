@@ -1,8 +1,15 @@
 import React from 'react';
 import classes from './Footer.module.css';
+import { footLinkType } from '../../types/FooterTypes/footerTypes';
 import FootLinks from './FootLinks/FootLinks';
 
-const Footer = (props) => {
+interface FooterProps {
+    footLinks: Array<footLinkType>
+    year: number
+    footInf: string
+}
+
+const Footer:React.FC<FooterProps> = (props) => {
     return (
         <footer className={classes.footer}>
             <div className={classes.container}>

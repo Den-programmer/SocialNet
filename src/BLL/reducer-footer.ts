@@ -1,8 +1,4 @@
-type footLinkType = {
-    id: number
-    name: string
-    url: string
-}
+import { footLinkType } from '../types/FooterTypes/footerTypes';
 
 type FooterType = {
     year: number
@@ -17,27 +13,27 @@ let Footer = {
         {
             id: 1,
             name: 'Profile',
-            url: "/Profile",
+            path: "/Profile",
         },
         {
             id: 2,
             name: 'Messages',
-            url: "/Messages",
+            path: "/Messages",
         },
         {
             id: 3,
             name: 'News',
-            url: "/News",
+            path: "/News",
         },
         {
             id: 4,
             name: 'Music',
-            url: "/Music",
+            path: "/Music",
         },
         {
             id: 5,
             name: 'Options',
-            url: "/Options",
+            path: "/Options",
         },
     ],
 } as FooterType

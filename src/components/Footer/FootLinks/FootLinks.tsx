@@ -1,11 +1,16 @@
 import React from 'react';
 import classes from './FootLinks.module.css';
 import FootLink from './FootLink/footLink';
+import { footLinkType } from '../../../types/FooterTypes/footerTypes';
 
-const FootLinks = ({footLinks}) => {
+interface FootLinksPropsType {
+    footLinks: Array<footLinkType>
+}
+
+const FootLinks:React.FC<FootLinksPropsType> = ({footLinks}) => {
 
     let FootLinks = footLinks.map((l) => {
-        return <FootLink key={l.id} id={l.id} path={l.url} name={l.name}/>
+        return <FootLink key={l.id} id={l.id} path={l.path} name={l.name}/>
     });
 
     return(
