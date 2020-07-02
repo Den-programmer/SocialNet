@@ -3,7 +3,12 @@ import classes from './Header.module.css';
 import Logo from './logo/logo';
 import LoginBtn from './LoginBtn/loginBtn';
 
-const Header = ({isAuth, logout}) => {
+interface HeaderProps {
+  isAuth: boolean
+  logout():void
+}
+
+const Header:React.FC<HeaderProps> = ({isAuth, logout}) => {
     return(
       <header className={classes.header}>
         <div className={classes.container}>

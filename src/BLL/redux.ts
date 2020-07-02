@@ -11,7 +11,7 @@ import {reducer as formReducer} from 'redux-form';
 import reducerApp from "./reducer-app";
 import reducerSidebar from "./reducer-sidebar";
 
-let reducers = combineReducers ({
+let rootReducer = combineReducers ({
     auth: reducerAuth,
     profilePage: reducerProfile,
     messagesPage: reducerMessages,
@@ -23,8 +23,11 @@ let reducers = combineReducers ({
     form: formReducer,
     app: reducerApp
 });
-
+// @ts-ignore
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-let store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleWare)));
+let store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunkMiddleWare)));
+
+type RootReducerType = typeof rootReducer;
+export type RootState = ReturnType<RootReducerType>
 
 export default store;

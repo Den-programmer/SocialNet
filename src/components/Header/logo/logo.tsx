@@ -3,7 +3,7 @@ import classes from './logo.module.css';
 import logo from './images/logo.png';
 import { NavLink } from 'react-router-dom';
 
-const Logo = (props) => {
+const Logo:React.FC<{}> = (props) => {
     return (
         <div className={classes.logo}>
             <NavLink to="/">
