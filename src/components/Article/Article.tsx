@@ -5,14 +5,14 @@ import MessagesContainer from './Message/messagesContainer';
 import News from './News/news';
 import Music from './Music/music';
 import OptionsContainer from './Options/optionsContainer';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
 import FindFriendsContainer from './Friends/FriendsComponents/FindFriends/findFriendsContainer';
 import FriendsNavContainer from './Friends/FriendsNav/friendsNavContainer';
 import FriendsByButtonContainer from './Friends/FriendsComponents/friendsByButton/friendsByButtonContainer';
 import OptionsNav from './Options/OptionsNavigation/optionsNav';
 import GeneralOptionsContainer from './Options/mainOptionsPage/generalOptions/generalOptionsContainer';
 import AccountOptionsContainer from './Options/mainOptionsPage/accountOptions/accountOptionsContainer';
-// import ErrorPage from '../common/ErrorPage/errorPage';
+import ErrorPage from '../common/ErrorPage/errorPage';
 
 // const Music = React.lazy(() => import('./Music/music'));
 // const OptionsContainer = React.lazy(() => import('./Options/optionsContainer'));
@@ -22,39 +22,42 @@ interface ArticlePropTypes {}
 const Article:React.FC<ArticlePropTypes> = (props) => {
     return (
         <article className={classes.article}>
-            <Route path='/' render={() => (<Redirect to={'/Profile'} />)} />
-            {/* Profile! */}
-            <Route path='/Profile/:userId?' render={() => (<ProfileContainer />)} />
-            {/* Messages! */}
-            <Route exact path='/Messages' render={() => (<MessagesContainer />)} />
-            {/* News! */}
-            <Route exact path='/News' render={() => (<News />)} />
-            {/* Music! */}
-            <Route exact path='/Music' render={() => (<Music />)} />
-            {/* Options! */}
-            <Route exact path='/Options' render={() => (<OptionsContainer />)} />
-            <Route path="/Options/account" render={() => (<div className={classes.dFlex}>
-                <OptionsNav />
-                <AccountOptionsContainer />
-            </div>)} />
-            <Route exact path='/Options/general' render={() => (<div className={classes.dFlex}>
-                <OptionsNav />
-                <GeneralOptionsContainer />
-            </div>)} />
-            {/* Friends! */}
-            <Route exact path='/Friends' render={() => (<FriendsNavContainer />)} />
-            <Route exact path='/Friends/DataFriends' render={() => (<React.Fragment>
-                <FriendsNavContainer />
-                <FriendsByButtonContainer />
-            </React.Fragment>)} />
-            <Route exact path='/Friends/FindUsers' render={() => (<React.Fragment>
-                <FriendsNavContainer />
-                <FindFriendsContainer />
-            </React.Fragment>)} />
+            <Switch>
+                {/* Profile! */}
+                <Route path='/Profile/:userId?' render={() => (<ProfileContainer />)} />
+                {/* Messages! */}
+                <Route path='/Messages' render={() => (<MessagesContainer />)} />
+                {/* News! */}
+                <Route path='/News' render={() => (<News />)} />
+                {/* Music! */}
+                <Route exact path='/Music' render={() => (<Music />)} />
+                {/* Options! */}
+                <Route path="/Options/account" render={() => (<div className={classes.dFlex}>
+                    <OptionsNav />
+                    <AccountOptionsContainer />
+                </div>)} />
+                <Route path='/Options/general' render={() => (<div className={classes.dFlex}>
+                    <OptionsNav />
+                    <GeneralOptionsContainer />
+                </div>)} />
+                <Route path='/Options' render={() => (<OptionsContainer />)} />
+                {/* Friends! */}
+                <Route path='/Friends/DataFriends' render={() => (<React.Fragment>
+                    <FriendsNavContainer />
+                    <FriendsByButtonContainer />
+                </React.Fragment>)} />
+                <Route exact path='/Friends/FindUsers' render={() => (<React.Fragment>
+                    <FriendsNavContainer />
+                    <FindFriendsContainer />
+                </React.Fragment>)} />
+                <Route path='/Friends' render={() => (<FriendsNavContainer />)} />
 
-            {/* 404 NOT FOUND! */}
+                <Route exact path='/' render={() => (<Redirect to={'/Profile'} />)} />
 
-            {/* <Route path="*" component={ErrorPage} /> */}
+                  {/* 404 NOT FOUND! */}
+
+                <Route path="*" render={() => <ErrorPage />} />
+            </Switch>
         </article>
     );
 }
