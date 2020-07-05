@@ -17,7 +17,9 @@ import AccountOptionsContainer from './Options/mainOptionsPage/accountOptions/ac
 // const Music = React.lazy(() => import('./Music/music'));
 // const OptionsContainer = React.lazy(() => import('./Options/optionsContainer'));
 
-const Article = (props) => {
+interface ArticlePropTypes {}
+
+const Article:React.FC<ArticlePropTypes> = (props) => {
     return (
         <article className={classes.article}>
             <Route path='/' render={() => (<Redirect to={'/Profile'} />)} />

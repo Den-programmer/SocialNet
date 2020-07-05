@@ -1,7 +1,8 @@
 import React from 'react';
 import classes from './forms.module.css';
 import { Field } from 'redux-form';
-// @ts-ignore
+import { FieldValidator } from '../../../utils/validators/validators';
+// @ts-ignore 
 export const Input = ({input, meta, ...props}) => {
     const hasError = meta.error && meta.touched;
     return (
@@ -11,7 +12,7 @@ export const Input = ({input, meta, ...props}) => {
         </div>
     );
 }
-// @ts-ignore
+// @ts-ignore 
 export const Textarea = ({input, meta, ...props}) => {
     const hasError = meta.error && meta.touched;
     return (
@@ -21,7 +22,7 @@ export const Textarea = ({input, meta, ...props}) => {
         </div>
     );
 }
-//@ts-ignore
+// @ts-ignore 
 export const RememberMe = ({input, meta, ...props}) => {
     return (
         <div className={classes.RememberMe}>
@@ -33,15 +34,11 @@ export const RememberMe = ({input, meta, ...props}) => {
     );
 } 
 
-// interface createFieldType {
-//     type: string
-//     placeholder: string
-//     name: string
-//     component: string | React.FC
-//     validators: string
-// }
-
-export const createField = (type: string, placeholder: string, name: string, component: any, validators: Array<Function>) => {
+export const createField = (type: string, 
+                            placeholder: string, 
+                            name: string, 
+                            component: any, 
+                            validators: Array<FieldValidator>) => {
     return <Field type={type} 
                   placeholder={placeholder} 
                   name={name} 

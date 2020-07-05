@@ -9,17 +9,17 @@ interface PaginatorPropTypes {
 }
 
 const Paginator: React.FC<PaginatorPropTypes> = ({totalItemsCount, pageSize, currentPage, changePage}) => {
-  let pagesCount = Math.ceil(totalItemsCount / pageSize);
+  let pagesCount: number = Math.ceil(totalItemsCount / pageSize);
 
-  let pagesToShow = [];
+  let pagesToShow: Array<number> = [];
 
   for (let i = 1; i<=pagesCount; i++) {
     pagesToShow.push(i);
   }
-  let portionCount = Math.ceil(pagesCount / pageSize);
-  let [portionNumber, setPortionNumber] = useState(1);
-  let leftLimitPageNmb = (portionNumber - 1) * pageSize + 1;
-  let rightLimitPageNmb = portionNumber * pageSize;
+  let portionCount:number = Math.ceil(pagesCount / pageSize);
+  let [portionNumber, setPortionNumber] = useState<number>(1);
+  let leftLimitPageNmb:number = (portionNumber - 1) * pageSize + 1;
+  let rightLimitPageNmb:number = portionNumber * pageSize;
 
   let pages = pagesToShow.filter(page => page >= leftLimitPageNmb && page <= rightLimitPageNmb).map(p => {
        return <button key={p}

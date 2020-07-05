@@ -2,8 +2,20 @@ import React from 'react';
 import classes from './login.module.css';
 import ReduxLoginForm from './LoginForm/loginForm';
 
-const Login = (props) => {
-    let onSubmit = (FormData) => {
+interface LoginPropType {
+    captcha: string | null
+    login: (email: string | null, password: string | null, rememberMe: boolean, captcha: string | null) => void
+}
+
+export interface LoginFormDataType {
+    email: string | null
+    password: string | null
+    RememberMe: boolean
+    captcha: string | null
+}
+
+const Login:React.FC<LoginPropType> = (props) => {
+    let onSubmit = (FormData:LoginFormDataType):void => {
         let { email, password, RememberMe, captcha } = FormData;
         props.login(email, password, RememberMe, captcha);
     }

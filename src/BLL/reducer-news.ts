@@ -1,6 +1,6 @@
 let initialState = {}
 
-const reducerNews = (state = initialState, action) => {
+const reducerNews = (state = initialState, action: any) => {
 
 
 

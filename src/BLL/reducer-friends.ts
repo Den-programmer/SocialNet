@@ -1,5 +1,8 @@
-import { UsersAPI } from '../DAL/api';
-import { userType } from '../types/FriendsType/friendsType';
+import { UsersAPI } from '../DAL/api'
+import { userType } from '../types/FriendsType/friendsType'
+import { RootState } from './redux'
+import { ThunkAction } from 'redux-thunk'
+import { resultCode } from '../DAL/api'
 
 const FOLLOW = 'Friends/FOLLOW';
 const UNFOLLOW = 'Friends/UNFOLLOW';
@@ -36,7 +39,7 @@ const Friends = {
     followingInProcess: []
 } as FriendsType
 
-const reducerFriends = (state = Friends, action: any): FriendsType => {
+const reducerFriends = (state = Friends, action: ActionTypes): FriendsType => {
     switch (action.type) {
         case SET_USERS:
             return {
@@ -106,6 +109,15 @@ const reducerFriends = (state = Friends, action: any): FriendsType => {
 
 // Action Creators!
 
+type ActionTypes = followActionType | 
+unfollowActionType | 
+setUsersActionType | 
+changePageActionType | 
+setUsersInfActionType | 
+isFetchingActionType | 
+toggleFollowingInProcessActionType | 
+setFriendsActionType 
+ 
 type followActionType = {
     type: typeof FOLLOW
     userId: number
@@ -142,12 +154,16 @@ export const changePage = (currentPage: number):changePageActionType => {
     return { type: CHANGE_PAGE, currentPage }
 }
 
-type setUsersInfActionType = {
-    type: typeof SET_USERSINF
-    data: object
+type setUsersInfData = {
+    totalCount: number
 }
 
-export const setUsersInf = (data: object):setUsersInfActionType => {
+type setUsersInfActionType = {
+    type: typeof SET_USERSINF
+    data: setUsersInfData
+}
+
+export const setUsersInf = (data:setUsersInfData):setUsersInfActionType => {
     return { type: SET_USERSINF, data }
 }
 
@@ -181,7 +197,9 @@ const setFriends = (users:Array<userType>):setFriendsActionType => {
 
 // Thunk Creators!
 
-export const requestUsers = (pageSize: number, currentPage: number) => async (dispatch: any) => {
+type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
+
+export const requestUsers = (pageSize: number, currentPage: number):ThunkType => async (dispatch) => {
     try {
         dispatch(isFetching(true));
         let data = await UsersAPI.requestUsers(pageSize, currentPage);
@@ -193,11 +211,11 @@ export const requestUsers = (pageSize: number, currentPage: number) => async (di
         alert(`Something's gone wrong, error status: ${error.status}`);
     }
 }
-export const followThunk = (userId: number) => async (dispatch: any) => {
+export const followThunk = (userId: number):ThunkType => async (dispatch) => {
     try {
         dispatch(toggleFollowingInProcess(true, userId));
         let data = await UsersAPI.follow(userId);
-        if (data.resultCode === 0) {
+        if (data.resultCode === resultCode.Success) {
             dispatch(follow(userId));
         }
         dispatch(toggleFollowingInProcess(false, userId));
@@ -205,11 +223,11 @@ export const followThunk = (userId: number) => async (dispatch: any) => {
         alert(`Something's gone wrong, error status: ${error.status}`);
     }
 }
-export const unfollowThunk = (userId: number) => async (dispatch: any) => {
+export const unfollowThunk = (userId: number):ThunkType => async (dispatch) => {
     try {
         dispatch(toggleFollowingInProcess(true, userId));
         let data = await UsersAPI.unfollow(userId);
-        if (data.resultCode === 0) {
+        if (data.resultCode === resultCode.Success) {
             dispatch(unfollow(userId));
         }
         dispatch(toggleFollowingInProcess(false, userId));

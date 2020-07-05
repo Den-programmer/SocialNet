@@ -59,6 +59,8 @@ const reducerSidebar = (state = Sidebar, action: any): SidebarType => {
     }
 }
 
+type ActionsType = addSideBarNavLinkActionType | deleteSideBarNavLinkActionType
+
 type addSideBarNavLinkActionType = {
     type: typeof ADD_SIDEBAR_NAVLINK
     title: string

@@ -4,11 +4,11 @@ import { maxLengthCreator, required } from '../../../../../utils/validators/vali
 
 const maxLengthLogin = maxLengthCreator(90);
 
-const Email = (props) => {
+const Email:React.FC<{}> = (props) => {
     return (
         <>
             <h4>Email</h4>
-            {createField("text", null, "email", Input, [maxLengthLogin, required])}
+            {createField("text", '', "email", Input, [maxLengthLogin, required])}
         </>
     ); 
 }

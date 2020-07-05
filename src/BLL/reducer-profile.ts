@@ -1,8 +1,11 @@
 import defaultUser from './../components/Article/Profile/images/withoutAvatar/defaultUserPhoto.jpg';
 import { ProfileAPI } from '../DAL/api';
 import { OptionsAPI } from "../DAL/api";
-import { setTextError } from './reducer-app';
+import { resultCode } from '../DAL/api';
+import { setTextError, setTextErrorActionType } from './reducer-app';
 import { stopSubmit } from 'redux-form';
+import { RootState } from './redux';
+import { ThunkAction } from 'redux-thunk';
 
 const ADD_POST = 'profilePage/ADD-POST';
 const DELETE_POST = 'profilePage/DELETE_POST';
@@ -15,8 +18,8 @@ const CHANGE_USER_NAME = 'profilePage/CHANGE_USER_NAME';
 const CHANGE_CONTACT = 'CHANGE_CONTACT';
 
 type profilePhotosType = {
-  large: any
-  small: any
+  large: string
+  small: string
 }
 type contactsType = {
   facebook: null | string,
@@ -28,11 +31,17 @@ type contactsType = {
   github: null | string,
   mainLink: null | string
 }
-type profileType = {
+
+type saveProfileType = {
+  fullName: string
+  contacts: contactsType
+}
+
+export type profileType = {
   status: null | string
   aboutMe: null | string
   contacts: contactsType
-  fullName: string
+  fullName: string | null
   photos: profilePhotosType
   userId: null | number
 }
@@ -48,10 +57,6 @@ type postNotificationType = {
   name: string
 }
 
-type saveProfileType = {
-  fullName: string
-  contacts: contactsType
-}
 export type profilePageType = {
   posts: Array<postType>,
   postNotification: Array<postNotificationType>,
@@ -90,7 +95,7 @@ let profilePage = {
   } 
 } as profilePageType
 
-const reducerProfile = (state = profilePage, action: any): profilePageType => {
+const reducerProfile = (state = profilePage, action: ActionTypes): profilePageType => {
   switch (action.type) {
     case ADD_POST:
       let newPost = {
@@ -144,6 +149,17 @@ const reducerProfile = (state = profilePage, action: any): profilePageType => {
 
 /* Action Creators! */
 
+type ActionTypes = addPostActionType | 
+deletePostActionType | 
+editPostActionType | 
+setUserProfileActionType | 
+setStatusActionType | 
+updateStatusActionType| 
+setUserPhotoActionType | 
+changeUserNameActionType | 
+changeContactsActionType |
+setTextErrorActionType
+
 type addPostActionType = {
   type: typeof ADD_POST
   newPostTitle: string
@@ -176,10 +192,10 @@ export const editPost = (postId: number, newPostTitle: string, newPostInformat: 
 
 type setUserProfileActionType = {
   type: typeof SET_USER_PROFILE
-  profile: object
+  profile: profileType
 }
 
-const setUserProfile = (profile: object):setUserProfileActionType => {
+const setUserProfile = (profile: profileType):setUserProfileActionType => {
   return { type: SET_USER_PROFILE, profile }
 }
 
@@ -206,7 +222,7 @@ type setUserPhotoActionType = {
   photo: any
 }
 
-const setUserPhoto = (photo: any):setUserPhotoActionType => {
+const setUserPhoto = (photo: string):setUserPhotoActionType => {
   return { type: SET_USERS_PHOTO, photo }
 }
 
@@ -231,11 +247,13 @@ export const changeContacts = (contactId: number, val: string):changeContactsAct
 
 /* Thunks! */
 
-export const setUserPhotoThunk = (photo: any) => async (dispatch: any) => {
+type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
+
+export const setUserPhotoThunk = (photo: string):ThunkType => async (dispatch) => {
   try {
     let data = await OptionsAPI.setUserPhoto(photo);
     debugger
-    if (data.resultCode === 0) {
+    if (data.resultCode === resultCode.Success) {
       dispatch(setUserPhoto(photo));
     } else {
       let message = data.messages[0];
@@ -246,7 +264,7 @@ export const setUserPhotoThunk = (photo: any) => async (dispatch: any) => {
   }
 }
 
-export const setUserProfileThunk = (userId: number) => async (dispatch: any) => {
+export const setUserProfileThunk = (userId: number | null):ThunkType => async (dispatch) => {
   try {
     let data = await ProfileAPI.getUsersProfile(userId);
     dispatch(setUserProfile(data));
@@ -254,29 +272,34 @@ export const setUserProfileThunk = (userId: number) => async (dispatch: any) => 
     alert(`Something's gone wrong, error status: ${error.status}`);
   }
 }
-export const saveProfile = (profile: saveProfileType) => async (dispatch: any, getState: any) => {
+export const saveProfile = (profile: saveProfileType):ThunkType => async (dispatch, getState) => {
   try {
     let userId = getState().auth.userId;
+    let profileStatus = getState().profilePage.profile.status
+    let userProfilePhoto = getState().profilePage.profile.photos;
     let trueProfile = {
+      status: profileStatus,
       aboutMe: 'I\'m GODNESS!!!',
       userId: userId,
       lookingForAJob: true,
       lookingForAJobDescription: 'I\'m developer that has some skills: JavaScript, React.Js, TypeScript, Redux, C#, HTML, CSS, BootsTrap, SCSS and many others!',
       fullName: profile.fullName,
       contacts: profile.contacts,
+      photos: userProfilePhoto
     }
     let data = await ProfileAPI.saveProfile(trueProfile);
-    if (data.resultCode === 0) {
+    if (data.resultCode === resultCode.Success) {
       dispatch(setUserProfileThunk(userId));
     } else {
       let error = data.messages[0];
-      dispatch(stopSubmit('ChangeContacts', { _error: error }));
+      let action: any = stopSubmit('ChangeContacts', { _error: error })
+      dispatch(action);
     }
   } catch (error) {
     alert(`Something's gone wrong, error status: ${error.status}`);
   }
 }
-export const setStatusThunk = (userId: number) => async (dispatch: any) => {
+export const setStatusThunk = (userId: number):ThunkType => async (dispatch) => {
   try {
     let data = await ProfileAPI.getStatus(userId)
     dispatch(setStatus(data));
@@ -284,7 +307,7 @@ export const setStatusThunk = (userId: number) => async (dispatch: any) => {
     alert(`Something's gone wrong, error status: ${error.status}`);
   }
 }
-export const updateStatusThunk = (status: string) => async (dispatch: any) => {
+export const updateStatusThunk = (status: string):ThunkType => async (dispatch) => {
   try {
     let data = await ProfileAPI.updateStatus(status);
     dispatch(updateStatus(data));

@@ -1,14 +1,18 @@
-import React from 'react';
-import classes from './loginForm.module.css';
-import Email from './Email/email';
-import Password from './Password/password';
-import Remembering from './Remembering/remembering';
-import { reduxForm } from 'redux-form';
-import { createField, Input } from '../../../common/Forms/forms';
-import { required } from '../../../../utils/validators/validators';
+import React from 'react'
+import classes from './loginForm.module.css'
+import Email from './Email/email'
+import Password from './Password/password'
+import Remembering from './Remembering/remembering'
+import { reduxForm, InjectedFormProps } from 'redux-form'
+import { createField, Input } from '../../../common/Forms/forms'
+import { required } from '../../../../utils/validators/validators'
+import { LoginFormDataType } from '../../Login/login'
 
+interface LoginFormPropType {
+    captcha: string | null
+}
 
-const LoginForm = ({ handleSubmit, error, captcha }) => {
+const LoginForm:React.FC<InjectedFormProps<LoginFormDataType, LoginFormPropType> & LoginFormPropType> = ({ handleSubmit, error, captcha }) => {
     return (
         <div className={classes.formBlock}>
             <form onSubmit={handleSubmit}>
@@ -37,8 +41,6 @@ const LoginForm = ({ handleSubmit, error, captcha }) => {
         </div>
     );
 }
-const ReduxLoginForm = reduxForm({
-    form: 'login'
-})(LoginForm);
+const ReduxLoginForm = reduxForm<LoginFormDataType, LoginFormPropType>( { form: 'login' } )(LoginForm);
 
 export default ReduxLoginForm;

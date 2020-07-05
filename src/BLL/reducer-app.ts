@@ -1,4 +1,6 @@
-import { authentication } from "./reducer-auth";
+import { authentication } from "./reducer-auth"
+import { ThunkAction } from "redux-thunk"
+import { RootState } from "./redux"
 
 const SET_INITIALIZED = 'app/SET_INITIALIZED';
 const SET_FONT_SIZE = 'app/SET_FONT_SIZE';
@@ -66,7 +68,7 @@ let AppState = {
   messageError: ''
 } as appStateType
 
-const reducerApp = (state = AppState, action: any):appStateType => {
+const reducerApp = (state = AppState, action: ActionTypes):appStateType => {
   let stateCopy = { ...state }
   stateCopy.options = { ...state.options }
   stateCopy.options.fontSize = [...state.options.fontSize];
@@ -94,6 +96,8 @@ const reducerApp = (state = AppState, action: any):appStateType => {
 
 // Action Creators!
 
+type ActionTypes = initializedSuccessfulActionType | setFontSizeActionType | setTextErrorActionType
+
 type initializedSuccessfulActionType = {
   type: typeof SET_INITIALIZED
 }
@@ -109,7 +113,7 @@ export const setFontSize = (id: number):setFontSizeActionType => {
   return { type: SET_FONT_SIZE, id }
 }
 
-type setTextErrorActionType = {
+export type setTextErrorActionType = {
   type: typeof SET_TEXT_ERROR,
   text: string
 }
@@ -120,7 +124,9 @@ export const setTextError = (text: string):setTextErrorActionType => {
 
 // Thunk Creators!
 
-export const initialize = () => (dispatch: any) => {
+type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
+
+export const initialize = ():ThunkType => async (dispatch) => {
   let promise = dispatch(authentication());
 
   promise.then(() => {

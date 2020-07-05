@@ -5,11 +5,11 @@ import { maxLengthCreator, minLengthCreator, required } from '../../../../../uti
 const maxLengthPassword = maxLengthCreator(90);
 const minLengthPassword = minLengthCreator(7);
 
-const Password = (props) => {
+const Password:React.FC<{}> = (props) => {
     return (
         <>
             <h4>Password</h4>
-            {createField("password", null, "password", Input, [required, minLengthPassword, maxLengthPassword])}
+            {createField("password", '', "password", Input, [required, minLengthPassword, maxLengthPassword])}
         </>
     );
 }

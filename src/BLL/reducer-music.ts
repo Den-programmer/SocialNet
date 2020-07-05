@@ -1,6 +1,6 @@
 let initialState = {}
 
-const reducerMusic = (state = initialState, action) => {
+const reducerMusic = (state = initialState, action:any) => {
 
 
 

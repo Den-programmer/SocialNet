@@ -43,13 +43,11 @@ class App extends React.Component {
   }
 }
 
-let mapStateToProps = (state) => {
-  return {
-    Initialized: getAppInitializationStatus(state),
-    isAuth: getIsAuthStatus(state),
-    size: getAppFontSize(state)
-  }
-} 
+let mapStateToProps = (state) => ({
+  Initialized: getAppInitializationStatus(state),
+  isAuth: getIsAuthStatus(state),
+  size: getAppFontSize(state)
+}) 
 
 const AppContainer = connect(mapStateToProps, { initialize })(App);
 

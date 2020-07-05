@@ -1,7 +1,8 @@
-// import { MessagesAPI } from "../DAL/api";
+import { ThunkAction } from "redux-thunk";
+import { RootState } from "./redux";
 
 const ADD_MESSAGE = 'messagesPage/ADD-MESSAGE';
-// const SET_DIALOGS = 'SET-DIALOGS';
+const SET_DIALOGS = 'SET-DIALOGS';
 
 type userDialogType = {
     id: number
@@ -12,7 +13,7 @@ type userDialogType = {
 }
 type message = {
     id: number
-    messageText: string
+    messageText: string | null
 }
 
 type messagesPageType = {
@@ -110,7 +111,7 @@ let messagesPage = {
     ],
 } as messagesPageType
 
-const reducerMessages = (state = messagesPage, action: any): messagesPageType => {
+const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPageType => {
     switch (action.type) {
         case ADD_MESSAGE:
             let newMessage = {
@@ -121,17 +122,14 @@ const reducerMessages = (state = messagesPage, action: any): messagesPageType =>
                 ...state,
                 messages: [...state.messages, newMessage]
             };
-        // case SET_DIALOGS: 
-        //     return {
-        //         ...state,
-        //         dialogsData: action.dialogs
-        //     }
         default:
             return state;
     }
 }
 
 /* Action Creators! */
+
+type ActionTypes = addMessageActionType | setDialogsActionType
 
 type addMessageActionType = {
     type: typeof ADD_MESSAGE
@@ -141,15 +139,18 @@ type addMessageActionType = {
 export const addMessage = (messageText:string):addMessageActionType => {
     return { type: ADD_MESSAGE, messageText }
 }
-// const setDialogs = dialogs => {
-//     return { type: SET_DIALOGS, dialogs }
-// }
+
+type setDialogsActionType = {
+    type: typeof SET_DIALOGS
+    dialogs: Array<userDialogType>
+}
+
+const setDialogs = (dialogs: Array<userDialogType>):setDialogsActionType => {
+    return { type: SET_DIALOGS, dialogs }
+}
 
 /* Thunk Creators! */
 
-// export const getDialogs = () => async (dispatch) => {
-//     let data = await MessagesAPI.getDialogs();
-//     dispatch(setDialogs(data));
-// }
+type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
 export default reducerMessages;

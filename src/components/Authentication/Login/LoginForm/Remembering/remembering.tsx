@@ -1,10 +1,10 @@
 import React from 'react';
 import { RememberMe, createField } from '../../../../common/Forms/forms';
 
-const Remembering = (props) => {
+const Remembering:React.FC<{}> = (props) => {
     return (
         <>
-            {createField("checkbox", null, "RememberMe", RememberMe, null)}
+            {createField("checkbox", '', "RememberMe", RememberMe, [])}
         </>
     );
 }
