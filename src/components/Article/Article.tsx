@@ -24,9 +24,9 @@ const Article:React.FC<ArticlePropTypes> = (props) => {
         <article className={classes.article}>
             <Switch>
                 {/* Profile! */}
-                <Route path='/Profile/:userId?' render={() => (<ProfileContainer />)} />
+                <Route exact path='/Profile/:userId?' render={() => (<ProfileContainer />)} />
                 {/* Messages! */}
-                <Route path='/Messages' render={() => (<MessagesContainer />)} />
+                <Route exact path='/Messages' render={() => (<MessagesContainer />)} />
                 {/* News! */}
                 <Route path='/News' render={() => (<News />)} />
                 {/* Music! */}
@@ -51,7 +51,7 @@ const Article:React.FC<ArticlePropTypes> = (props) => {
                     <FindFriendsContainer />
                 </React.Fragment>)} />
                 <Route path='/Friends' render={() => (<FriendsNavContainer />)} />
-
+                <Route exact path='/SocialNet' render={() => (<Redirect to={'/Profile'} />)} />
                 <Route exact path='/' render={() => (<Redirect to={'/Profile'} />)} />
 
                   {/* 404 NOT FOUND! */}

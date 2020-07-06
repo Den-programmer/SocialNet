@@ -1,17 +1,24 @@
-import React from 'react';
-import './App.css';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import React from 'react'
+import './App.css'
+import { BrowserRouter } from 'react-router-dom'
 import store from './BLL/redux'
-import HeaderContainer from './components/Header/HeaderContainer';
-import FooterContainer from './components/Footer/FooterContainer';
-import Article from './components/Article/Article';
-import { connect } from 'react-redux';
-import { initialize } from './BLL/reducer-app';
-import Preloader from './components/common/preloader/preloader';
-import Authentication from './components/Authentication/authentication';
-import { getIsAuthStatus, getAppInitializationStatus, getAppFontSize } from './BLL/selectors/selectors';
-import SideBarContainer from './components/SideBar/SideBarContainer';
+import HeaderContainer from './components/Header/HeaderContainer'
+import FooterContainer from './components/Footer/FooterContainer'
+import Article from './components/Article/Article'
+import { connect, Provider } from 'react-redux'
+import { initialize } from './BLL/reducer-app'
+import Preloader from './components/common/preloader/preloader'
+import Authentication from './components/Authentication/authentication'
+import { getIsAuthStatus, getAppInitializationStatus, getAppFontSize } from './BLL/selectors/selectors'
+import SideBarContainer from './components/SideBar/SideBarContainer'
+// import { RootState } from './BLL/redux';
+
+// interface AppProps {
+//   Initialized: boolean
+//   isAuth: boolean
+//   size: number
+//   initialize: () => void
+// }
 
 class App extends React.Component {
   style = { fontSize: this.props.size + 'px !important' }

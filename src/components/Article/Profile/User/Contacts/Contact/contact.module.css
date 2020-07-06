@@ -1,5 +1,7 @@
 .contact {
     display: flex;
+    align-items: center;
+    letter-spacing: 0.2em;
 }
 .contact h4 {
     text-transform: capitalize;
@@ -8,4 +10,13 @@
     margin-block-start: 1.33em;
     margin-block-end: 1.33em;
     font-weight: bold;
+}
+.userLink {
+    color: #fff;
+}
+.userLink:hover {
+    text-decoration: underline;
+}
+.userLink:visited {
+    color:#000;
 }

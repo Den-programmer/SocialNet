@@ -6,7 +6,7 @@ const Contact = ({contactTitle, contactValue}) => {
     return (
         <div className={classes.contact}>
             {hasContact && <><h4 className={classes.contactTitle}>{contactTitle + ':'}</h4>
-            <p>{contactValue}</p></>}
+            <a target="_blank" className={classes.userLink} href={contactValue}>{contactValue}</a></>}
         </div>
     );
 }
