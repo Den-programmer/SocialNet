@@ -1,7 +1,7 @@
-import React from 'react';
-import classes from './notifications.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import React from 'react'
+import classes from './notifications.module.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 
 class Notifications extends React.Component {
     state = {

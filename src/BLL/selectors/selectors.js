@@ -84,3 +84,14 @@ export const getAppFontSize = (state) => {
 export const getMessageError = (state) => {
     return state.app.messageError;
 }
+
+export const getMusicPageNavLinks = (state) => {
+    return state.musicPage.navLinks
+}
+export const getTracks = (state) => {
+    return state.musicPage.tracks
+}
+
+export const getTrackNotifications = (state) => {
+    return state.musicPage.trackNotifications
+}

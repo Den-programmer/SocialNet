@@ -37,7 +37,7 @@ let Sidebar = {
     ]
 } as SidebarType
 
-const reducerSidebar = (state = Sidebar, action: any): SidebarType => {
+const reducerSidebar = (state = Sidebar, action: ActionsType): SidebarType => {
     switch (action.type) {
         case ADD_SIDEBAR_NAVLINK: 
             let newLink = {

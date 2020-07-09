@@ -1,0 +1,27 @@
+.musicTitle {
+    color:#FFF;
+    text-align: center;
+    font-size: 24px;
+}
+.tracks {
+    padding-inline-start: 0;
+}
+.searchInput {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.searchInput input {
+    width: 60%;
+    color:#363652;
+}
+.searchIcon {
+    color: #FFF;
+    transform: rotate(90deg);
+    font-size: 18px;
+    margin:0 10px;
+    cursor: pointer;
+}
+.currentMusic {
+    border-radius: 0px;
+}

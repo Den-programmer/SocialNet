@@ -1,0 +1,68 @@
+.track {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #FFF;
+    border-bottom: 1px solid #fff;
+    padding: 20px;
+}
+.track:hover {
+    transition: all .3s linear;
+    background-color:#FFAEFF;
+    cursor: pointer;
+}
+.btns {
+    display: flex;
+}
+.icon img {
+    width:120px;
+    height: 120px;
+}
+.icon img:hover {
+    transition: all .3s ease;
+    width: 119px;
+    height: 119px;
+    border: 1px solid #FFF;
+}
+.trackInf {
+    display: flex;
+    align-items: center;
+}
+.Inf {
+    padding:0 20px;
+}
+.playTrackIcon {
+    cursor:pointer;
+    color: red;
+    font-size: 18px;
+    margin-right:10px;
+}
+.pauseIcon {
+    color:rgb(255, 255, 255);
+    cursor: pointer;
+    font-size: 18px;
+    margin-right:10px;
+}
+.singer h4:hover {
+    transition: all .3s ease;
+    color: #333333;
+}
+.songTitle h5 {
+    color: #363652;
+}
+.songTitle h5:hover {
+    transition: all .3s ease;
+    color: #636387;
+}
+.likedIcon {
+    font-size: 18px;
+    color: red;
+}
+.likeIcon {
+    font-size: 18px;
+    color: #FFF;
+}
+.likeIcon:hover {
+    transition: all .3s linear;
+    color:red;
+}
