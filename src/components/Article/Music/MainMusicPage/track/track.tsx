@@ -44,8 +44,8 @@ class Track extends React.Component<TrackPropsType> {
                             <h5>{this.props.songTitle}</h5>
                         </div>
                         <div className={classes.btns}>
-                            {this.props.isMusicPlaying ? <FontAwesomeIcon onClick={this.chooseTrack} className={classes.pauseIcon} icon={faPause} /> : 
-                            <FontAwesomeIcon onClick={this.chooseTrack} className={classes.playTrackIcon} icon={faPlay} />}
+                            {this.props.isMusicPlaying ? <FontAwesomeIcon className={classes.pauseIcon} icon={faPause} /> : 
+                            <FontAwesomeIcon className={classes.playTrackIcon} icon={faPlay} />}
                             {this.props.liked ? <FontAwesomeIcon onClick={this.likeTrack} className={classes.likedIcon} icon={faHeart} /> :
                             <FontAwesomeIcon onClick={this.likeTrack} className={classes.likeIcon} icon={faHeart} />}
                         </div>
