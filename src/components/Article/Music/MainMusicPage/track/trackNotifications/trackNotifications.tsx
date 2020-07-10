@@ -22,12 +22,13 @@ class TrackNotifications extends React.Component<TrackNotificationsPropType> {
         return <TrackNotification key={item.id} id={item.id} title={item.title}/>
     })
 
-    openMenu = () => {
+    openMenu = (e:React.MouseEvent<HTMLDivElement>) => {
         if (this.state.isMenu) {
             this.setState({ isMenu: false })
         } else {
             this.setState({ isMenu: true })
         }
+        e.stopPropagation()
     }
 
     render() {
@@ -36,7 +37,7 @@ class TrackNotifications extends React.Component<TrackNotificationsPropType> {
                 <div onClick={this.openMenu} className={classes.notificationIconBlock}>
                     <FontAwesomeIcon className={classes.notificationIcon} icon={faEllipsisV} />
                 </div>
-                {this.state.isMenu && <div className={classes.notifications}>
+                {this.state.isMenu && <div className={classes.trackNotifications}>
                     {this.trackNotifications}
                 </div>}
             </div>

@@ -1,0 +1,11 @@
+.notificationItem {
+    border: 1px solid #000000;
+    border-right: none;
+    border-left: none;
+    width: 120px;
+    background: #484F59;
+    text-align: center;
+}
+.notificationItem:hover {
+    background: #2BA6E9;
+}

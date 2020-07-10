@@ -95,10 +95,7 @@ type authenticationDataType = {
 
 export const authentication = ():ThunkType => (dispatch) => {
   return AuthAPI.auth().then((data: authenticationDataType) => {
-    if (data.resultCode === resultCode.Success) {
-      debugger
-      dispatch(setAuthUserData(data.data.id, data.data.email, data.data.login, null, true, true));
-    }
+    if (data.resultCode === resultCode.Success) dispatch(setAuthUserData(data.data.id, data.data.email, data.data.login, null, true, true));
   });
 }
 export const login = (email: string | null, password: string | null, rememberMe = false as boolean, captcha: string | null):ThunkType => async (dispatch) => {

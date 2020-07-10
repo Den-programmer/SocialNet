@@ -6,12 +6,12 @@ interface TrackNotificationPropType {
     title: string
 }
 
-const TrackNotification: React.FC<TrackNotificationPropType> = ({title}) => {
-    return (
-        <div className={classes.notificationItem}>
-            <h6>{title}</h6>
-        </div>
-    )
+const TrackNotification: React.FC<TrackNotificationPropType> = ({title, id}) => {
+    let chooseNotification = (e:React.MouseEvent<HTMLDivElement>) => {
+        if(e.currentTarget) alert(id)
+        e.stopPropagation()
+    }
+    return <div onClick={chooseNotification} className={classes.notificationItem}>{title}</div>
 }
 
 export default TrackNotification;

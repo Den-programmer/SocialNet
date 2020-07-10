@@ -22,14 +22,12 @@ class Track extends React.Component<TrackPropsType> {
     audio = new Audio
 
     chooseTrack = (): void => {
-        // Turn the control 
-        // Take approtiate styles: track as active!
-        // Hide the faPlay icon!
-        // Set the value of start playing the song in BLL!
-        this.props.chooseTrack(this.props.id);
+        // Turn the control
+        this.props.chooseTrack(this.props.id)
     }
-    likeTrack = (): void => {
+    likeTrack = (event:React.MouseEvent<SVGSVGElement>): void => {
         this.props.likeTrack(this.props.id)
+        event.stopPropagation()
     }
     render() {
         return (

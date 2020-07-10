@@ -4,7 +4,6 @@ import { trackType, trackNotificationType } from '../../../../BLL/reducer-music'
 import Track from './track/track'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
-// import { testMusic } from './track/music/SaveThatShit.mp3'
 
 interface mainMusicPageProps {
     tracks: Array<trackType>
@@ -27,6 +26,7 @@ const MainMusicPage:React.FC<mainMusicPageProps> = (props) => {
                       chooseTrack={props.chooseTrack}
                       trackNotifications={props.trackNotifications}/>
     })
+    
     const search = React.createRef<HTMLInputElement>();
 
     const onSearchIconClick = () => {
