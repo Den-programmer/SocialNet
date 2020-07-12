@@ -23,5 +23,9 @@
     cursor: pointer;
 }
 .currentMusic {
-    border-radius: 0px;
+    margin-top: 50px;
+}
+.audioControler {
+    width: 100%;
+    height: 50px;
 }

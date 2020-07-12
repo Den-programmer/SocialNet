@@ -13,25 +13,41 @@ interface mainMusicPageProps {
 }
 
 const MainMusicPage:React.FC<mainMusicPageProps> = (props) => {
+    const audio = React.createRef<HTMLAudioElement>()
+    const search = React.createRef<HTMLInputElement>()
+
+    let startMusic = (isMusicPlaying: boolean, src: string) => {
+        if(isMusicPlaying) {
+            let node = audio.current
+            if(node) {
+                node.src = src
+                node.play()
+            }
+        } else {
+            let node = audio.current
+            if(node) {
+                node.pause()
+            }
+        }
+    }
     const tracks = props.tracks.map((track:trackType) => {
         return <Track key={track.id} 
                       id={track.id} 
                       singer={track.singer} 
                       singerPhoto={track.singerPhoto} 
                       songTitle={track.song} 
+                      src={track.src}
                       duration={track.duration}
                       liked={track.liked} 
                       isMusicPlaying={track.isMusicPlaying}
                       likeTrack={props.likeTrack}
                       chooseTrack={props.chooseTrack}
-                      trackNotifications={props.trackNotifications}/>
+                      trackNotifications={props.trackNotifications} startMusic={startMusic}/>
     })
-    
-    const search = React.createRef<HTMLInputElement>();
 
     const onSearchIconClick = () => {
-        const node = search.current;
-        if(node) node.focus();
+        const node = search.current
+        if(node) node.focus()
     }
 
     return (
@@ -47,7 +63,7 @@ const MainMusicPage:React.FC<mainMusicPageProps> = (props) => {
                 {tracks}
             </ul>
             <div className={classes.currentMusic}>
-                <audio src="" controls /> 
+                <audio ref={audio} src="" className={classes.audioControler} controls /> 
             </div>  
         </div>
     )
