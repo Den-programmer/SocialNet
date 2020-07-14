@@ -1,13 +1,13 @@
-import React from 'react';
-import UsersColumn from './usersColumn';
-import Preloader from '../../../../../common/preloader/preloader';
-import { connect } from "react-redux";
-import { follow, unfollow, setUsers, requestUsers, followThunk, unfollowThunk } from "../../../../../../BLL/reducer-friends";
-import { getUsersInf, getUsers, getFollowingInProcess } from '../../../../../../BLL/selectors/selectors';
+import React from 'react'
+import UsersColumn from './usersColumn'
+import Preloader from '../../../../../common/preloader/preloader'
+import { connect } from "react-redux"
+import { follow, unfollow, setUsers, requestUsers, followThunk, unfollowThunk } from "../../../../../../BLL/reducer-friends"
+import { getUsersInf, getUsers, getFollowingInProcess } from '../../../../../../BLL/selectors/users-selectors'
 
 class UsersColumnAPI extends React.Component {
     componentDidMount() {
-        this.props.requestUsers(this.props.usersInf.pageSize, this.props.usersInf.currentPage);
+        this.props.requestUsers(this.props.usersInf.pageSize, this.props.usersInf.currentPage)
     }
     render() {
         return (
@@ -24,7 +24,7 @@ let mapStateToProps = (state) => {
     return {
         users: getUsers(state),
         usersInf: getUsersInf(state),
-        followingInProcess: getFollowingInProcess(state),
+        followingInProcess: getFollowingInProcess(state)
     }
 }
 
@@ -35,6 +35,6 @@ const UsersColumnContainer = connect(mapStateToProps, {
     requestUsers,
     followThunk,
     unfollowThunk
-})(UsersColumnAPI); 
+})(UsersColumnAPI)
 
-export default UsersColumnContainer;
+export default UsersColumnContainer

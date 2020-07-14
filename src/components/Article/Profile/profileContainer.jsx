@@ -1,11 +1,13 @@
-import React from 'react';
-import Profile from './profile';
-import { connect } from 'react-redux';
-import { setUserProfileThunk, setStatusThunk, updateStatusThunk } from '../../../BLL/reducer-profile';
-import { withRouter } from 'react-router-dom';
-import { withAuthRedirect } from '../../../HOC/withAuthRedirect';
-import { compose } from 'redux';
-import { getUsersProfile, getPosts, getFriends, getAuthorizedUserId } from '../../../BLL/selectors/selectors';
+import React from 'react'
+import Profile from './profile'
+import { connect } from 'react-redux'
+import { setUserProfileThunk, setStatusThunk, updateStatusThunk } from '../../../BLL/reducer-profile'
+import { withRouter } from 'react-router-dom'
+import { withAuthRedirect } from '../../../HOC/withAuthRedirect'
+import { compose } from 'redux'
+import { getFriends } from '../../../BLL/selectors/users-selectors'
+import { getAuthorizedUserId } from '../../../BLL/selectors/auth-selectors'
+import { getUsersProfile, getPosts } from '../../../BLL/selectors/profile-selectors'
 
 class ProfileContainer extends React.Component {
     refreshProfile() {

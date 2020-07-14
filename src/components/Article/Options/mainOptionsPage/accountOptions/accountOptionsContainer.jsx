@@ -1,7 +1,8 @@
-import { connect } from 'react-redux';
-import AccountOptions from './accountOptions';
-import { setUserPhotoThunk, changeUserName, changeContacts, saveProfile } from '../../../../../BLL/reducer-profile';
-import { getUsersSmallPhoto, getUsersName, getContacts, getMessageError } from '../../../../../BLL/selectors/selectors';
+import { connect } from 'react-redux'
+import AccountOptions from './accountOptions'
+import { setUserPhotoThunk, changeUserName, changeContacts, saveProfile } from '../../../../../BLL/reducer-profile'
+import { getMessageError } from '../../../../../BLL/selectors/selectors'
+import { getUsersSmallPhoto, getUsersName, getContacts } from '../../../../../BLL/selectors/profile-selectors'
 
 let mapStateToProps = (state) => {
     return {

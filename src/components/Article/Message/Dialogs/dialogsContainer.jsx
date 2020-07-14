@@ -1,6 +1,6 @@
-import Dialogs from './dialogs';
-import { connect } from 'react-redux';
-import { getDialogsData } from '../../../../BLL/selectors/selectors';
+import Dialogs from './dialogs'
+import { connect } from 'react-redux'
+import { getDialogsData } from '../../../../BLL/selectors/messages-selectors'
 
 let mapStateToProps = (state) => {
     return {
@@ -8,6 +8,6 @@ let mapStateToProps = (state) => {
     }
 } 
 
-const DialogsContainer = connect(mapStateToProps, null)(Dialogs);
+const DialogsContainer = connect(mapStateToProps, null)(Dialogs)
 
-export default DialogsContainer;
+export default DialogsContainer

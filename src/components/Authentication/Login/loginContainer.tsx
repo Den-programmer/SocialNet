@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import Login from "./login";
 import { login } from '../../../BLL/reducer-auth';
-import { getSecurityCaptcha } from "../../../BLL/selectors/selectors";
+import { getSecurityCaptcha } from "../../../BLL/selectors/security-selectors";
 import { RootState } from "../../../BLL/redux";
 
 

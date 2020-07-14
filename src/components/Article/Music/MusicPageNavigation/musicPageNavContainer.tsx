@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import MusicPageNav from './musicPageNav'
 import { RootState } from '../../../../BLL/redux'
-import { getMusicPageNavLinks } from '../../../../BLL/selectors/selectors'
+import { getMusicPageNavLinks } from '../../../../BLL/selectors/music-selectors'
 
 let mapStateToProps = (state: RootState) => ({
     navLinks: getMusicPageNavLinks(state)

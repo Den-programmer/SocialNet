@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { RootState } from '../../../../BLL/redux'
-import { getLikedTracks, getTrackNotifications } from '../../../../BLL/selectors/selectors'
+import { getLikedTracks, getTrackNotifications } from '../../../../BLL/selectors/music-selectors'
 import MainMusicPage from '../MainMusicPage/mainMusicPage'
 import { likeTrack, chooseTrack, setTrackCurrentTime } from '../../../../BLL/reducer-music'
 

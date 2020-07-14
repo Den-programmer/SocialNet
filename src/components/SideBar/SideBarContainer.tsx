@@ -1,14 +1,12 @@
-import { connect } from 'react-redux';
-import SideBar from './SideBar';
-import { getSideBarNavLinks } from '../../BLL/selectors/selectors';
-import { RootState } from '../../BLL/redux';
+import { connect } from 'react-redux'
+import SideBar from './SideBar'
+import { getSideBarNavLinks } from '../../BLL/selectors/sidebar-selectors'
+import { RootState } from '../../BLL/redux'
 
-let mapStateToProps = (state: RootState) => {
-    return {
-        navLinks: getSideBarNavLinks(state),
-    }
-}
+let mapStateToProps = (state: RootState) => ({
+    navLinks: getSideBarNavLinks(state)
+})
 
-const SideBarContainer = connect(mapStateToProps, {  })(SideBar);
+const SideBarContainer = connect(mapStateToProps, {  })(SideBar)
 
-export default SideBarContainer;
+export default SideBarContainer

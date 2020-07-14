@@ -1,15 +1,14 @@
-import { connect } from "react-redux";
-import Friends from "./friends";
-import { getFriends, getSideBarNavLinks } from "../../../BLL/selectors/selectors";
-import { RootState } from "../../../BLL/redux";
+import { connect } from "react-redux"
+import Friends from "./friends"
+import { getFriends } from "../../../BLL/selectors/users-selectors"
+import { getSideBarNavLinks } from "../../../BLL/selectors/sidebar-selectors"
+import { RootState } from "../../../BLL/redux"
 
-let mapStateToProps = (state: RootState) => {
-    return {
-        friends: getFriends(state),
-        navLinks: getSideBarNavLinks(state)
-    }
-}
+let mapStateToProps = (state: RootState) => ({
+    friends: getFriends(state),
+    navLinks: getSideBarNavLinks(state)
+})
 
-const FriendsContainer = connect(mapStateToProps, {  })(Friends);
+const FriendsContainer = connect(mapStateToProps, {  })(Friends)
 
-export default FriendsContainer;
+export default FriendsContainer

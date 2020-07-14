@@ -9,16 +9,9 @@ import { connect, Provider } from 'react-redux'
 import { initialize } from './BLL/reducer-app'
 import Preloader from './components/common/preloader/preloader'
 import Authentication from './components/Authentication/authentication'
-import { getIsAuthStatus, getAppInitializationStatus, getAppFontSize } from './BLL/selectors/selectors'
+import { getAppInitializationStatus, getAppFontSize } from './BLL/selectors/selectors'
+import { getIsAuthStatus } from './BLL/selectors/auth-selectors'
 import SideBarContainer from './components/SideBar/SideBarContainer'
-// import { RootState } from './BLL/redux';
-
-// interface AppProps {
-//   Initialized: boolean
-//   isAuth: boolean
-//   size: number
-//   initialize: () => void
-// }
 
 class App extends React.Component {
   style = { fontSize: this.props.size + 'px !important' }
@@ -46,7 +39,7 @@ class App extends React.Component {
         : <Authentication />}
       </Provider></BrowserRouter>
       </>  
-    );
+    )
   }
 }
 
@@ -56,7 +49,7 @@ let mapStateToProps = (state) => ({
   size: getAppFontSize(state)
 }) 
 
-const AppContainer = connect(mapStateToProps, { initialize })(App);
+const AppContainer = connect(mapStateToProps, { initialize })(App)
 
 const MyApp = (props) => {
   return <BrowserRouter>
@@ -66,4 +59,4 @@ const MyApp = (props) => {
   </BrowserRouter>
 }
 
-export default MyApp;
+export default MyApp
