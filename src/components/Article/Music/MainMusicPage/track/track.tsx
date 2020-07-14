@@ -10,12 +10,13 @@ interface TrackPropsType {
     singer: string
     singerPhoto: string
     songTitle: string
+    time: number
     duration: number
     liked: boolean
     src: string
     isMusicPlaying: boolean
     trackNotifications: Array<trackNotificationType>
-    startMusic: (isMusicPlaying: boolean, src: string) => void
+    startMusic: (isMusicPlaying: boolean, src: string, id: number, time: number) => void
     likeTrack: (trackId: number) => void
     chooseTrack: (trackId: number) => void
 }
@@ -23,7 +24,7 @@ interface TrackPropsType {
 class Track extends React.Component<TrackPropsType> {
     chooseTrack = (): void => {
         this.props.chooseTrack(this.props.id)
-        setTimeout(() => this.props.startMusic(this.props.isMusicPlaying, this.props.src))   
+        setTimeout(() => this.props.startMusic(this.props.isMusicPlaying, this.props.src, this.props.id, this.props.time))   
     }
     likeTrack = (event:React.MouseEvent<SVGSVGElement>): void => {
         this.props.likeTrack(this.props.id)

@@ -7,6 +7,7 @@ import mydemons from '../components/Article/Music/MainMusicPage/track/music/MyDe
 
 const LIKE_TRACK = 'LIKE_TRACK'
 const CHOOSE_TRACK = 'CHOOSE_TRACK'
+const SET_CURRENT_TRACK_TIME = 'SET_CURRENT_TRACK_TIME'
 
 export type trackType = {
     id: number
@@ -15,6 +16,7 @@ export type trackType = {
     song: string
     src: string
     duration: number
+    time: number
     liked: boolean
     isMusicPlaying: boolean
 }
@@ -91,6 +93,7 @@ const musicPage = {
             song: 'Save that shit',
             src: savethatshit,
             duration: 5,
+            time: 0,
             liked: false,
             isMusicPlaying: false
         },
@@ -101,6 +104,7 @@ const musicPage = {
             song: 'DeathPunch',
             src: deathpunch,
             duration: 4,
+            time: 0,
             liked: false,
             isMusicPlaying: false
         },
@@ -111,6 +115,7 @@ const musicPage = {
             song: 'My Demons',
             src: mydemons,
             duration: 5,
+            time: 0,
             liked: false,
             isMusicPlaying: false
         }
@@ -153,12 +158,20 @@ const reducerMusic = (state = musicPage, action:ActionTypes) => {
                     }
                 })
             }
+        case SET_CURRENT_TRACK_TIME: 
+            return {
+                ...state,
+                tracks: state.tracks.map((track: trackType) => {
+                    if(track.id === action.trackId) return { ...track, time: action.time }
+                    return track
+                })
+            }    
         default:
             return state;
     }
 }
 
-type ActionTypes = likeTrackActionType | chooseTrackActionType
+type ActionTypes = likeTrackActionType | chooseTrackActionType | setTrackCurrentTimeActionType
 
 type likeTrackActionType = {
     type: typeof LIKE_TRACK
@@ -176,6 +189,16 @@ type chooseTrackActionType = {
 
 export const chooseTrack = (trackId: number):chooseTrackActionType => {
     return { type: CHOOSE_TRACK, trackId }
+}
+
+type setTrackCurrentTimeActionType = {
+    type: typeof SET_CURRENT_TRACK_TIME
+    trackId: number
+    time: number
+}
+
+export const setTrackCurrentTime = (trackId: number, time: number) => {
+    return { type: SET_CURRENT_TRACK_TIME, trackId, time }
 }
 
 export default reducerMusic;

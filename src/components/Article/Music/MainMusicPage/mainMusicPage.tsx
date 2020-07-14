@@ -8,6 +8,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 interface mainMusicPageProps {
     tracks: Array<trackType>
     trackNotifications: Array<trackNotificationType>
+    setTrackCurrentTime: (trackId: number, time: number) => void
     likeTrack: (trackId: number) => void
     chooseTrack: (trackId: number) => void
 }
@@ -16,16 +17,18 @@ const MainMusicPage:React.FC<mainMusicPageProps> = (props) => {
     const audio = React.createRef<HTMLAudioElement>()
     const search = React.createRef<HTMLInputElement>()
 
-    let startMusic = (isMusicPlaying: boolean, src: string) => {
+    let startMusic = (isMusicPlaying: boolean, src: string, id: number, time: number) => {
+        let node = audio.current
         if(isMusicPlaying) {
-            let node = audio.current
             if(node) {
                 node.src = src
+                node.currentTime = time
                 node.play()
             }
         } else {
-            let node = audio.current
             if(node) {
+                let time = node.currentTime
+                props.setTrackCurrentTime(id, time)
                 node.pause()
             }
         }
@@ -37,6 +40,7 @@ const MainMusicPage:React.FC<mainMusicPageProps> = (props) => {
                       singerPhoto={track.singerPhoto} 
                       songTitle={track.song} 
                       src={track.src}
+                      time={track.time}
                       duration={track.duration}
                       liked={track.liked} 
                       isMusicPlaying={track.isMusicPlaying}
