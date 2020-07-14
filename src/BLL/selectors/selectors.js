@@ -95,3 +95,7 @@ export const getTracks = (state) => {
 export const getTrackNotifications = (state) => {
     return state.musicPage.trackNotifications
 }
+
+export const getLikedTracks = (state) => {
+    return state.musicPage.likedTracks
+}

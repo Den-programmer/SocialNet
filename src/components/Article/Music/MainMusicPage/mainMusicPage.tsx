@@ -60,7 +60,7 @@ const MainMusicPage:React.FC<mainMusicPageProps> = (props) => {
                 <input ref={search} type="text"/>
             </div>
             <ul className={classes.tracks}>
-                {tracks}
+                {tracks.length !== 0 ? tracks : <h2 className={classes.titleWhenNoTracks}>There're no tracks yet!</h2>}
             </ul>
             <div className={classes.currentMusic}>
                 <audio ref={audio} src="" className={classes.audioControler} controls /> 

@@ -43,22 +43,22 @@ const musicPage = {
         {
           id: 1,
           title: 'Liked Tracks',
-          path: '/likedTracks'
+          path: '/Music/likedTracks'
         },
         {
           id: 2,
           title: 'PlayLists',
-          path: '/PlayLists'
+          path: '/Music/PlayLists'
         },
         {
           id: 3,
           title: 'Albums',
-          path: '/Albums'
+          path: '/Music/Albums'
         },
         {
           id: 4,
           title: 'Following', 
-          path: '/following'  
+          path: '/Music/following'  
         }
     ],
     trackNotifications: [

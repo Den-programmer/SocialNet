@@ -29,3 +29,8 @@
     width: 100%;
     height: 50px;
 }
+.titleWhenNoTracks {
+    text-align: center;
+    color: #FFF;
+    margin: 50px;
+}

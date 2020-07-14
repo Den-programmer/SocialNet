@@ -1,25 +1,27 @@
-import React from 'react';
-import classes from './Article.module.css';
-import ProfileContainer from './Profile/profileContainer';
-import MessagesContainer from './Message/messagesContainer';
-import News from './News/news';
-import Music from './Music/music';
-import OptionsContainer from './Options/optionsContainer';
-import { Route, Redirect, Switch } from 'react-router-dom';
-import FindFriendsContainer from './Friends/FriendsComponents/FindFriends/findFriendsContainer';
-import FriendsNavContainer from './Friends/FriendsNav/friendsNavContainer';
-import FriendsByButtonContainer from './Friends/FriendsComponents/friendsByButton/friendsByButtonContainer';
-import OptionsNav from './Options/OptionsNavigation/optionsNav';
-import GeneralOptionsContainer from './Options/mainOptionsPage/generalOptions/generalOptionsContainer';
-import AccountOptionsContainer from './Options/mainOptionsPage/accountOptions/accountOptionsContainer';
-import ErrorPage from '../common/ErrorPage/errorPage';
+import React from 'react'
+import classes from './Article.module.css'
+import ProfileContainer from './Profile/profileContainer'
+import MessagesContainer from './Message/messagesContainer'
+import News from './News/news'
+import Music from './Music/music'
+import OptionsContainer from './Options/optionsContainer'
+import { Route, Redirect, Switch } from 'react-router-dom'
+import FindFriendsContainer from './Friends/FriendsComponents/FindFriends/findFriendsContainer'
+import FriendsNavContainer from './Friends/FriendsNav/friendsNavContainer'
+import FriendsByButtonContainer from './Friends/FriendsComponents/friendsByButton/friendsByButtonContainer'
+import OptionsNav from './Options/OptionsNavigation/optionsNav'
+import GeneralOptionsContainer from './Options/mainOptionsPage/generalOptions/generalOptionsContainer'
+import AccountOptionsContainer from './Options/mainOptionsPage/accountOptions/accountOptionsContainer'
+import ErrorPage from '../common/ErrorPage/errorPage'
+import LikedTracksContainer from './Music/LikedTracks/likedTracksContainer'
+import MusicPageNavContainer from './Music/MusicPageNavigation/musicPageNavContainer'
 
 // const Music = React.lazy(() => import('./Music/music'));
 // const OptionsContainer = React.lazy(() => import('./Options/optionsContainer'));
 
-interface ArticlePropTypes {}
+interface ArticclePropType {}
 
-const Article:React.FC<ArticlePropTypes> = (props) => {
+const Article:React.FC<ArticclePropType> = (props) => {
     return (
         <article className={classes.article}>
             <Switch>
@@ -30,6 +32,7 @@ const Article:React.FC<ArticlePropTypes> = (props) => {
                 {/* News! */}
                 <Route path='/News' render={() => (<News />)} />
                 {/* Music! */}
+                <Route path='/Music/likedTracks' render={() => (<><MusicPageNavContainer /><LikedTracksContainer /></>)}/>
                 <Route exact path='/Music' render={() => (<Music />)} />
                 {/* Options! */}
                 <Route path="/Options/account" render={() => (<div className={classes.dFlex}>
