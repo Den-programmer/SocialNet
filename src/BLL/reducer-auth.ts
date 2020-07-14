@@ -1,12 +1,12 @@
-import { AuthAPI } from '../DAL/api'
-import { SecurityAPI } from '../DAL/api'
+import { AuthAPI } from '../DAL/authApi'
+import { SecurityAPI } from '../DAL/securityApi'
 import { stopSubmit } from 'redux-form'
 import { ThunkAction } from 'redux-thunk'
 import { RootState } from './redux'
 import { resultCode, captchaCode } from '../DAL/api'
 
-const SET_AUTH_USER_DATA = 'auth/SET_AUTH_USER_DATA';
-const SET_CAPTCHA_URL = 'SET_CAPTCHA_URL';
+const SET_AUTH_USER_DATA = 'auth/SET_AUTH_USER_DATA'
+const SET_CAPTCHA_URL = 'SET_CAPTCHA_URL'
 
 type authType = {
   userId: number | null

@@ -1,11 +1,11 @@
-import defaultUser from './../components/Article/Profile/images/withoutAvatar/defaultUserPhoto.jpg';
-import { ProfileAPI } from '../DAL/api';
-import { OptionsAPI } from "../DAL/api";
-import { resultCode } from '../DAL/api';
-import { setTextError, setTextErrorActionType } from './reducer-app';
-import { stopSubmit } from 'redux-form';
-import { RootState } from './redux';
-import { ThunkAction } from 'redux-thunk';
+import defaultUser from './../components/Article/Profile/images/withoutAvatar/defaultUserPhoto.jpg'
+import { ProfileAPI } from '../DAL/profileApi'
+import { OptionsAPI } from "../DAL/optionsApi"
+import { resultCode } from '../DAL/api'
+import { setTextError, setTextErrorActionType } from './reducer-app'
+import { stopSubmit } from 'redux-form'
+import { RootState } from './redux'
+import { ThunkAction } from 'redux-thunk'
 
 const ADD_POST = 'profilePage/ADD-POST';
 const DELETE_POST = 'profilePage/DELETE_POST';

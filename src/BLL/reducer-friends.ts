@@ -1,4 +1,4 @@
-import { UsersAPI } from '../DAL/api'
+import { UsersAPI } from '../DAL/usersApi'
 import { userType } from '../types/FriendsType/friendsType'
 import { RootState } from './redux'
 import { ThunkAction } from 'redux-thunk'
