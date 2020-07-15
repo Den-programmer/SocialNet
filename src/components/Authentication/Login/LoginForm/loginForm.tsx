@@ -39,8 +39,8 @@ const LoginForm:React.FC<InjectedFormProps<LoginFormDataType, LoginFormPropType>
                 </div>
             </form>
         </div>
-    );
+    )
 }
-const ReduxLoginForm = reduxForm<LoginFormDataType, LoginFormPropType>( { form: 'login' } )(LoginForm);
+const ReduxLoginForm = reduxForm<LoginFormDataType, LoginFormPropType>( { form: 'login' } )(LoginForm)
 
-export default ReduxLoginForm;
+export default ReduxLoginForm

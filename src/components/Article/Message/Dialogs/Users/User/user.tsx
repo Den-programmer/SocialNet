@@ -1,8 +1,15 @@
-import React from 'react';
-import classes from './user.module.css';
-import { NavLink } from 'react-router-dom';
+import React from 'react'
+import classes from './user.module.css'
+import { NavLink } from 'react-router-dom'
 
-const User = ({id, avatar, nickname, lastMessage}) => {
+interface UserPropType {
+    id: number
+    avatar: string
+    nickname: string
+    lastMessage: string
+}
+
+const User:React.FC<UserPropType> = ({id, avatar, nickname, lastMessage}) => {
 
     let path = "/Messages/dialog" + id;
 
@@ -18,8 +25,8 @@ const User = ({id, avatar, nickname, lastMessage}) => {
                 </div>
             </div>
         </NavLink>
-    );
+    )
 }
 
 
-export default User;
+export default User

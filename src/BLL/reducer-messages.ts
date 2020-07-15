@@ -1,20 +1,9 @@
-import { ThunkAction } from "redux-thunk";
-import { RootState } from "./redux";
+import { ThunkAction } from "redux-thunk"
+import { RootState } from "./redux"
+import { userDialogType, message } from '../types/MessagesTypes/messagesTypes'
 
-const ADD_MESSAGE = 'messagesPage/ADD-MESSAGE';
-const SET_DIALOGS = 'SET-DIALOGS';
-
-type userDialogType = {
-    id: number
-    nickname: string
-    name: string
-    lastMessage: string
-    avatar: any
-}
-type message = {
-    id: number
-    messageText: string | null
-}
+const ADD_MESSAGE = 'messagesPage/ADD-MESSAGE'
+const SET_DIALOGS = 'SET-DIALOGS'
 
 type messagesPageType = {
     dialogsData: Array<userDialogType>
@@ -28,21 +17,21 @@ let messagesPage = {
             nickname: 'John',
             name: 'John',
             lastMessage: 'Hello!',
-            avatar: '',
+            avatar: ''
         },
         {
             id: 2,
             nickname: 'Alan',
             name: 'Alan',
             lastMessage: 'Hi!',
-            avatar: '',
+            avatar: ''
         },
         {
             id: 3,
             nickname: 'Josh',
             name: 'Josh',
             lastMessage: 'The last message I\'ve written you!',
-            avatar: '',
+            avatar: ''
         },
         {
             id: 4,
@@ -50,63 +39,63 @@ let messagesPage = {
             name: 'Jake',
             family: 'Hill',
             lastMessage: 'See you soon!',
-            avatar: '',
+            avatar: ''
         },
         {
             id: 5,
             nickname: 'Chris',
             name: 'Chris Heria',
             lastMessage: 'I Love You!',
-            avatar: '',
+            avatar: ''
         },
         {
             id: 6,
             nickname: 'LilPipka',
             name: 'Lil',
             lastMessage: 'Rate my new song please!',
-            avatar: '',
+            avatar: ''
         },
         {
             id: 7,
             nickname: 'Thomas',
             name: 'Thomas',
             lastMessage: 'Hey, how is it going?',
-            avatar: '',
+            avatar: ''
         },
         {
             id: 8,
             nickname: 'Static_Alex',
             name: 'Alex',
             lastMessage: 'She was the one with the broken smile...',
-            avatar: '',
+            avatar: ''
         },
         {
             id: 9,
             nickname: 'Hayden',
             name: 'Hayden',
             lastMessage: 'Car engine died!',
-            avatar: '',
+            avatar: ''
         },
         {
             id: 10,
             nickname: "Yana",
             name: 'Yana',
             lastMessage: "Everything will be alright!",
-            avatar: '',
+            avatar: ''
         }
     ],
     messages: [
         {
             id: 1,
-            messageText: 'Hello World !!!',
+            messageText: 'Hello World !!!'
         },
         {
             id: 2,
-            messageText: 'How is it going?',
+            messageText: 'How is it going?'
         },
         {
             id: 3,
-            messageText: 'Would u like to go for a walk?',
+            messageText: 'Would u like to go for a walk?'
         }
     ],
 } as messagesPageType
@@ -116,12 +105,12 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPag
         case ADD_MESSAGE:
             let newMessage = {
                 id: state.messages.length + 1,
-                messageText: action.messageText,
+                messageText: action.messageText
             }
             return {
                 ...state,
                 messages: [...state.messages, newMessage]
-            };
+            }
         default:
             return state;
     }
@@ -153,4 +142,4 @@ const setDialogs = (dialogs: Array<userDialogType>):setDialogsActionType => {
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
-export default reducerMessages;
+export default reducerMessages
