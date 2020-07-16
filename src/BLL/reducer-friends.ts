@@ -4,14 +4,14 @@ import { RootState } from './redux'
 import { ThunkAction } from 'redux-thunk'
 import { resultCode } from '../DAL/api'
 
-const FOLLOW = 'Friends/FOLLOW';
-const UNFOLLOW = 'Friends/UNFOLLOW';
-const SET_USERS = 'Friends/SET-USERS';
-const CHANGE_PAGE = 'Friends/CHANGE-PAGE';
-const SET_USERSINF = 'Friends/SET-USERSINF';
-const IS_FETCHING = 'Friends/IS_FETCHING';
-const SET_FRIENDS = 'SET_FRIENDS';
-const TOGGLE_IS_FOLLOWING_PROCESS = 'Friends/TOGGLE_IS_FOLLOWING_PROCESS';
+const FOLLOW = 'Friends/FOLLOW'
+const UNFOLLOW = 'Friends/UNFOLLOW'
+const SET_USERS = 'Friends/SET-USERS'
+const CHANGE_PAGE = 'Friends/CHANGE-PAGE'
+const SET_USERSINF = 'Friends/SET-USERSINF'
+const IS_FETCHING = 'Friends/IS_FETCHING'
+const SET_FRIENDS = 'SET_FRIENDS'
+const TOGGLE_IS_FOLLOWING_PROCESS = 'Friends/TOGGLE_IS_FOLLOWING_PROCESS'
 
 type FriendsType = {
     friends: Array<userType>
@@ -45,7 +45,7 @@ const reducerFriends = (state = Friends, action: ActionTypes): FriendsType => {
             return {
                 ...state,
                 users: action.users
-            };
+            }
         case SET_FRIENDS:
             return {
                 ...state,
@@ -55,7 +55,7 @@ const reducerFriends = (state = Friends, action: ActionTypes): FriendsType => {
             let currentUserArray:Array<object> = state.users.filter(user => {
                 if (user.id === action.userId) return true;
             });
-            let currentUser:any = currentUserArray.find(item => item);
+            let currentUser:any = currentUserArray.find(item => item)
             let newFriend = {
                 id: action.userId,
                 name: currentUser.name,
@@ -68,42 +68,42 @@ const reducerFriends = (state = Friends, action: ActionTypes): FriendsType => {
                 ...state,
                 users: state.users.map(user => {
                     if (user.id === action.userId) return { ...user, followed: true }
-                    return user;
+                    return user
                 }),
                 friends: [...state.friends, newFriend]
-            };
+            }
         case UNFOLLOW:
             return {
                 ...state,
                 users: state.users.map(user => {
                     if (user.id === action.userId) return { ...user, followed: false }
-                    return user;
+                    return user
                 }),
                 friends: state.friends.filter(friend => friend.id !== action.userId)
-            };
+            }
         case TOGGLE_IS_FOLLOWING_PROCESS:
             return {
                 ...state,
                 followingInProcess: action.isFetching ? [...state.followingInProcess, action.userId]
                     : state.followingInProcess.filter(id => id !== action.userId)
-            };
+            }
         case CHANGE_PAGE:
             return {
                 ...state,
-                usersInf: { ...state.usersInf, currentPage: action.currentPage },
-            };
+                usersInf: { ...state.usersInf, currentPage: action.currentPage }
+            }
         case SET_USERSINF:
             return {
                 ...state,
-                usersInf: { ...state.usersInf, totalCount: action.data.totalCount },
-            };
+                usersInf: { ...state.usersInf, totalCount: action.data.totalCount }
+            }
         case IS_FETCHING:
             return {
                 ...state,
                 usersInf: { ...state.usersInf, isFetching: action.isFetching }
-            };
+            }
         default:
-            return state;
+            return state
     }
 }
 
@@ -201,39 +201,39 @@ type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
 export const requestUsers = (pageSize: number, currentPage: number):ThunkType => async (dispatch) => {
     try {
-        dispatch(isFetching(true));
-        let data = await UsersAPI.requestUsers(pageSize, currentPage);
-        dispatch(isFetching(false));
-        dispatch(setUsers(data.items));
-        dispatch(setUsersInf(data));
-        dispatch(setFriends(data.items));
+        dispatch(isFetching(true))
+        let data = await UsersAPI.requestUsers(pageSize, currentPage)
+        dispatch(isFetching(false))
+        dispatch(setUsers(data.items))
+        dispatch(setUsersInf(data))
+        dispatch(setFriends(data.items))
     } catch (error) {
-        alert(`Something's gone wrong, error status: ${error.status}`);
+        alert(`Something's gone wrong, error status: ${error.status}`)
     }
 }
 export const followThunk = (userId: number):ThunkType => async (dispatch) => {
     try {
-        dispatch(toggleFollowingInProcess(true, userId));
-        let data = await UsersAPI.follow(userId);
+        dispatch(toggleFollowingInProcess(true, userId))
+        let data = await UsersAPI.follow(userId)
         if (data.resultCode === resultCode.Success) {
-            dispatch(follow(userId));
+            dispatch(follow(userId))
         }
-        dispatch(toggleFollowingInProcess(false, userId));
+        dispatch(toggleFollowingInProcess(false, userId))
     } catch (error) {
-        alert(`Something's gone wrong, error status: ${error.status}`);
+        alert(`Something's gone wrong, error status: ${error.status}`)
     }
 }
 export const unfollowThunk = (userId: number):ThunkType => async (dispatch) => {
     try {
-        dispatch(toggleFollowingInProcess(true, userId));
-        let data = await UsersAPI.unfollow(userId);
+        dispatch(toggleFollowingInProcess(true, userId))
+        let data = await UsersAPI.unfollow(userId)
         if (data.resultCode === resultCode.Success) {
-            dispatch(unfollow(userId));
+            dispatch(unfollow(userId))
         }
-        dispatch(toggleFollowingInProcess(false, userId));
+        dispatch(toggleFollowingInProcess(false, userId))
     } catch (error) {
-        alert(`Something's gone wrong, error status: ${error.status}`);
+        alert(`Something's gone wrong, error status: ${error.status}`)
     }
 }
 
-export default reducerFriends;
+export default reducerFriends

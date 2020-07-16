@@ -17,7 +17,7 @@ const SET_USERS_PHOTO = 'profilePage/SET_USERS_PHOTO'
 const CHANGE_USER_NAME = 'profilePage/CHANGE_USER_NAME'
 const CHANGE_CONTACT = 'CHANGE_CONTACT'
 
-type profilePhotosType = {
+export type profilePhotosType = {
   large: string
   small: string
 }
@@ -304,7 +304,8 @@ export const setStatusThunk = (userId: number):ThunkType => async (dispatch) => 
     let data = await ProfileAPI.getStatus(userId)
     dispatch(setStatus(data))
   } catch (error) {
-    alert(`Something's gone wrong, error status: ${error.status}`)
+    console.log(error)
+    alert(`Something's gone wrong, error status: 600`)
   }
 }
 export const updateStatusThunk = (status: string):ThunkType => async (dispatch) => {
@@ -312,7 +313,8 @@ export const updateStatusThunk = (status: string):ThunkType => async (dispatch) 
     let data = await ProfileAPI.updateStatus(status)
     dispatch(updateStatus(data))
   } catch (error) {
-    alert(`Something's gone wrong, error status: ${error.status}`)
+    console.log(error)
+    alert(`Something's gone wrong, error status: 500`)
   }
 }
 

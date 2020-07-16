@@ -4,4 +4,5 @@ export type userType = {
     nickname: string
     avatar: any
     followed: boolean
+    photo?: any
 }

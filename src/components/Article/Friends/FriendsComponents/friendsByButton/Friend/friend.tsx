@@ -1,15 +1,23 @@
-import React from 'react';
-import classes from './friend.module.css';
-import defaultUserPhoto from './img/defaultUserPhoto.jpg';
-import { NavLink } from 'react-router-dom';
+import React from 'react'
+import classes from './friend.module.css'
+import defaultUserPhoto from './img/defaultUserPhoto.jpg'
+import { NavLink } from 'react-router-dom'
 
-const Friend = (props) => {
-    
+interface IFriend {
+    id: number
+    avatar: string
+    nickname: string
+    name: string
+    followed: boolean
+    follow: (id: number) => void
+    unfollow: (id: number) => void
+}
+
+const Friend: React.FC<IFriend> = (props) => {
     let following = () => {
-        if (props.followed === false) props.follow(props.id);
-        props.unfollow(props.id);
+        if (props.followed === false) props.follow(props.id)
+        props.unfollow(props.id)
     }
-
     return (
         <div className={classes.ObjectUser}>
             <div className={classes.user}>
@@ -22,7 +30,7 @@ const Friend = (props) => {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
-export default Friend;
+export default Friend

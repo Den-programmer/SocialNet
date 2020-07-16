@@ -3,7 +3,7 @@ import classes from './generalOptionsTitle.module.css'
 
 interface PropsType {}
 
-const GeneralOptionsTitle:React.FC<PropsType> = ({}) => {
+const GeneralOptionsTitle:React.FC<PropsType> = (props) => {
     return (
         <div className={classes.title}>
             <h2>General Options</h2>

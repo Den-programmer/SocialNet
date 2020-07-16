@@ -1,8 +1,10 @@
-import React from 'react';
-import classes from './NOfriendsComponent.module.css';
-import { NavLink }  from 'react-router-dom';
+import React from 'react'
+import classes from './NOfriendsComponent.module.css'
+import { NavLink }  from 'react-router-dom'
 
-const NoFriendsComponent = (props) => {
+interface INoFriendsComponent {}
+
+const NoFriendsComponent: React.FC<INoFriendsComponent> = (props) => {
     return (
         <div className={classes.noFriendsMessage}>
             <div className={classes.title}>
@@ -14,7 +16,7 @@ const NoFriendsComponent = (props) => {
                 </NavLink>
             </div>
         </div>
-    );
+    )
 }
 
-export default NoFriendsComponent;
+export default NoFriendsComponent

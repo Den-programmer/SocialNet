@@ -2,7 +2,9 @@ import React from 'react';
 import classes from './friendsNav.module.css';
 import { createFriendsNavBtn } from '../../../../utils/helpers/functions/function-helpers';
 
-const FriendsNav = (props) => {
+interface IFriendsNav {}
+
+const FriendsNav: React.FC<IFriendsNav> = (props) => {
     return (
         <div className={classes.friendsButtons}>
             <div className={classes.btn_friends}>
