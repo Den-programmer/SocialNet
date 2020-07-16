@@ -1,8 +1,10 @@
-import React from 'react';
-import s from './optionsNav.module.css';
-import { NavLink } from 'react-router-dom';
+import React from 'react'
+import s from './optionsNav.module.css'
+import { NavLink } from 'react-router-dom'
 
-const OptionsNav = (props) => {
+interface PropsType {}
+
+const OptionsNav:React.FC<PropsType> = ({}) => {
     return (
         <nav className={s.navigation}>
             <div className={s.navItem + ' ' + s.myProfileOptionsLinkNav}>
@@ -12,7 +14,7 @@ const OptionsNav = (props) => {
                 <NavLink to="/Options/general">General options</NavLink>
             </div>
         </nav>
-    );
+    )
 }
 
-export default OptionsNav;
+export default OptionsNav

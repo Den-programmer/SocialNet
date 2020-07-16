@@ -7,32 +7,32 @@ import { stopSubmit } from 'redux-form'
 import { RootState } from './redux'
 import { ThunkAction } from 'redux-thunk'
 
-const ADD_POST = 'profilePage/ADD-POST';
-const DELETE_POST = 'profilePage/DELETE_POST';
-const EDIT_POST = 'profilePage/EDIT-POST';
-const SET_USER_PROFILE = 'profilePage/SET_USER_PROFILE';
-const SET_STATUS = 'profilePage/SET_STATUS';
-const UPDATE_STATUS = 'profilePage/UPDATE_STATUS';
-const SET_USERS_PHOTO = 'profilePage/SET_USERS_PHOTO';
-const CHANGE_USER_NAME = 'profilePage/CHANGE_USER_NAME';
-const CHANGE_CONTACT = 'CHANGE_CONTACT';
+const ADD_POST = 'profilePage/ADD-POST'
+const DELETE_POST = 'profilePage/DELETE_POST'
+const EDIT_POST = 'profilePage/EDIT-POST'
+const SET_USER_PROFILE = 'profilePage/SET_USER_PROFILE'
+const SET_STATUS = 'profilePage/SET_STATUS'
+const UPDATE_STATUS = 'profilePage/UPDATE_STATUS'
+const SET_USERS_PHOTO = 'profilePage/SET_USERS_PHOTO'
+const CHANGE_USER_NAME = 'profilePage/CHANGE_USER_NAME'
+const CHANGE_CONTACT = 'CHANGE_CONTACT'
 
 type profilePhotosType = {
   large: string
   small: string
 }
-type contactsType = {
-  facebook: null | string,
-  website: null | string,
-  vk: null | string,
-  twitter: null | string,
-  instagram: null | string,
-  youtube: null | string,
-  github: null | string,
+export type contactsType = {
+  facebook: null | string
+  website: null | string
+  vk: null | string
+  twitter: null | string
+  instagram: null | string
+  youtube: null | string
+  github: null | string
   mainLink: null | string
 }
 
-type saveProfileType = {
+export type saveProfileType = {
   fullName: string
   contacts: contactsType
 }
@@ -41,7 +41,7 @@ export type profileType = {
   status: null | string
   aboutMe: null | string
   contacts: contactsType
-  fullName: string | null
+  fullName: string
   photos: profilePhotosType
   userId: null | number
 }
@@ -58,9 +58,9 @@ type postNotificationType = {
 }
 
 export type profilePageType = {
-  posts: Array<postType>,
-  postNotification: Array<postNotificationType>,
-  profile: profileType,
+  posts: Array<postType>
+  postNotification: Array<postNotificationType>
+  profile: profileType
 }
 
 let profilePage = {
@@ -89,9 +89,9 @@ let profilePage = {
     fullName: "Your nickname",
     photos: {
       large: defaultUser,
-      small: defaultUser,
+      small: defaultUser
     },
-    userId: null,
+    userId: null
   } 
 } as profilePageType
 
@@ -102,32 +102,32 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
         id: state.posts.length + 1,
         postTitle: action.newPostTitle,
         postInf: action.newPostInformat,
-        likesCount: 200000,
+        likesCount: 200000
       } 
 
       return {
         ...state,
         posts: [...state.posts as Array<postType>, newPost as postType]
-      };
+      }
     case DELETE_POST:
       return {
         ...state,
         posts: state.posts.filter(post => post.id !== action.postId)
-      };
+      }
     case SET_USER_PROFILE:
       return {
         ...state,
         profile: action.profile
-      };
+      }
     case SET_STATUS:
       return {
         ...state,
         profile: { ...state.profile, status: action.status }
-      };
+      }
     case SET_USERS_PHOTO:
       return {
         ...state,
-        profile: { ...state.profile, photos: { large: action.photo, small: action.photo } },
+        profile: { ...state.profile, photos: { large: action.photo, small: action.photo } }
       };
     case CHANGE_USER_NAME:
       return {
@@ -167,7 +167,7 @@ type addPostActionType = {
 }
 
 export const addPost = (newPostTitle: string, newPostInformat: string):addPostActionType => {
-  return { type: ADD_POST, newPostTitle, newPostInformat };
+  return { type: ADD_POST, newPostTitle, newPostInformat }
 }
 
 type deletePostActionType = {
@@ -222,7 +222,7 @@ type setUserPhotoActionType = {
   photo: any
 }
 
-const setUserPhoto = (photo: string):setUserPhotoActionType => {
+const setUserPhoto = (photo: any):setUserPhotoActionType => {
   return { type: SET_USERS_PHOTO, photo }
 }
 
@@ -249,34 +249,34 @@ export const changeContacts = (contactId: number, val: string):changeContactsAct
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
-export const setUserPhotoThunk = (photo: string):ThunkType => async (dispatch) => {
+export const setUserPhotoThunk = (photo: any):ThunkType => async (dispatch) => {
   try {
-    let data = await OptionsAPI.setUserPhoto(photo);
+    let data = await OptionsAPI.setUserPhoto(photo)
     debugger
     if (data.resultCode === resultCode.Success) {
-      dispatch(setUserPhoto(photo));
+      dispatch(setUserPhoto(photo))
     } else {
-      let message = data.messages[0];
-      dispatch(setTextError(message));
+      let message = data.messages[0]
+      dispatch(setTextError(message))
     }
   } catch (error) {
-    alert(`Something's gone wrong, error status: ${error.status}`);
+    alert(`Something's gone wrong, error status: ${error.status}`)
   }
 }
 
 export const setUserProfileThunk = (userId: number | null):ThunkType => async (dispatch) => {
   try {
-    let data = await ProfileAPI.getUsersProfile(userId);
-    dispatch(setUserProfile(data));
+    let data = await ProfileAPI.getUsersProfile(userId)
+    dispatch(setUserProfile(data))
   } catch (error) {
-    alert(`Something's gone wrong, error status: ${error.status}`);
+    alert(`Something's gone wrong, error status: ${error.status}`)
   }
 }
 export const saveProfile = (profile: saveProfileType):ThunkType => async (dispatch, getState) => {
   try {
-    let userId = getState().auth.userId;
+    let userId = getState().auth.userId
     let profileStatus = getState().profilePage.profile.status
-    let userProfilePhoto = getState().profilePage.profile.photos;
+    let userProfilePhoto = getState().profilePage.profile.photos
     let trueProfile = {
       status: profileStatus,
       aboutMe: 'I\'m GODNESS!!!',
@@ -287,33 +287,33 @@ export const saveProfile = (profile: saveProfileType):ThunkType => async (dispat
       contacts: profile.contacts,
       photos: userProfilePhoto
     }
-    let data = await ProfileAPI.saveProfile(trueProfile);
+    let data = await ProfileAPI.saveProfile(trueProfile)
     if (data.resultCode === resultCode.Success) {
-      dispatch(setUserProfileThunk(userId));
+      dispatch(setUserProfileThunk(userId))
     } else {
-      let error = data.messages[0];
+      let error = data.messages[0]
       let action: any = stopSubmit('ChangeContacts', { _error: error })
-      dispatch(action);
+      dispatch(action)
     }
   } catch (error) {
-    alert(`Something's gone wrong, error status: ${error.status}`);
+    alert(`Something's gone wrong, error status: ${error.status}`)
   }
 }
 export const setStatusThunk = (userId: number):ThunkType => async (dispatch) => {
   try {
     let data = await ProfileAPI.getStatus(userId)
-    dispatch(setStatus(data));
+    dispatch(setStatus(data))
   } catch (error) {
-    alert(`Something's gone wrong, error status: ${error.status}`);
+    alert(`Something's gone wrong, error status: ${error.status}`)
   }
 }
 export const updateStatusThunk = (status: string):ThunkType => async (dispatch) => {
   try {
-    let data = await ProfileAPI.updateStatus(status);
-    dispatch(updateStatus(data));
+    let data = await ProfileAPI.updateStatus(status)
+    dispatch(updateStatus(data))
   } catch (error) {
-    alert(`Something's gone wrong, error status: ${error.status}`);
+    alert(`Something's gone wrong, error status: ${error.status}`)
   }
 }
 
-export default reducerProfile;
+export default reducerProfile

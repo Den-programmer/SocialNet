@@ -1,16 +1,11 @@
 import { authentication } from "./reducer-auth"
 import { ThunkAction } from "redux-thunk"
 import { RootState } from "./redux"
+import { fontSizeObjectType } from '../types/AppTypes/appTypes'
 
-const SET_INITIALIZED = 'app/SET_INITIALIZED';
-const SET_FONT_SIZE = 'app/SET_FONT_SIZE';
-const SET_TEXT_ERROR = 'SET_TEXT_ERROR';
-
-type fontSizeObjectType = {
-  id: number
-  title: string
-  size: number
-}
+const SET_INITIALIZED = 'app/SET_INITIALIZED'
+const SET_FONT_SIZE = 'app/SET_FONT_SIZE'
+const SET_TEXT_ERROR = 'SET_TEXT_ERROR'
 
 type optionsType = {
   fontSize: Array<fontSizeObjectType>
@@ -71,7 +66,7 @@ let AppState = {
 const reducerApp = (state = AppState, action: ActionTypes):appStateType => {
   let stateCopy = { ...state }
   stateCopy.options = { ...state.options }
-  stateCopy.options.fontSize = [...state.options.fontSize];
+  stateCopy.options.fontSize = [...state.options.fontSize]
   switch (action.type) {
     case SET_INITIALIZED:
       return {
@@ -80,7 +75,7 @@ const reducerApp = (state = AppState, action: ActionTypes):appStateType => {
       }
     case SET_FONT_SIZE:
       stateCopy.options.fontSize.forEach(item => {
-        if (item.id === action.id) stateCopy.options.appFontSize = item.size;
+        if (item.id === action.id) stateCopy.options.appFontSize = item.size
       });
 
       return stateCopy;
@@ -127,13 +122,13 @@ export const setTextError = (text: string):setTextErrorActionType => {
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
 export const initialize = ():ThunkType => async (dispatch) => {
-  let promise = dispatch(authentication());
+  let promise = dispatch(authentication())
 
   promise.then(() => {
-    dispatch(initializedSuccessful());
+    dispatch(initializedSuccessful())
   });
 }
 
 
 
-export default reducerApp;
+export default reducerApp
