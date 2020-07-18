@@ -54,16 +54,19 @@ const reducerFriends = (state = Friends, action: ActionTypes): FriendsType => {
         case FOLLOW:
             let currentUserArray:Array<object> = state.users.filter(user => {
                 if (user.id === action.userId) return true;
-            });
-            let currentUser:any = currentUserArray.find(item => item)
+            })
+            let currentUser: any = currentUserArray.find(item => item)
             let newFriend = {
                 id: action.userId,
                 name: currentUser.name,
+                status: null,
                 nickname: currentUser.nickname,
-                avatar: currentUser.avatar,
-                followed: true,
+                photos: {
+                    large: currentUser.avatar,
+                    small: currentUser.avatar
+                },
+                followed: true
             }
-
             return {
                 ...state,
                 users: state.users.map(user => {

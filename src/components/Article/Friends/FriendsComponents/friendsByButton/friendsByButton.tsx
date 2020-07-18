@@ -16,7 +16,7 @@ const FriendsByButton: React.FC<IFriendsByButton> = (props) => {
                        key={f.id} 
                        nickname={f.nickname} 
                        name={f.name} 
-                       avatar={f.avatar} 
+                       avatar={f.photos.large} 
                        followed={f.followed} 
                        follow={props.followThunk} 
                        unfollow={props.unfollowThunk}/>

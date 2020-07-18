@@ -20,7 +20,7 @@ const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
             followed={user.followed}
             nickname={user.nickname}
             name={user.name}
-            photo={user.photo}/>})
+            photo={user.photos.large}/>})
     return (
         <div className={classes.usersColumn}>
             <div className={classes.users}>

@@ -20,9 +20,9 @@ const FindFriends: React.FC<IFindFriends> = (props) => {
             <SearchNewfriends />
             <UsersColumnContainer  />
             <Paginator pageSize={props.usersInf.pageSize} 
-                               totalItemsCount={props.usersInf.totalCount}
-                               currentPage={props.usersInf.currentPage}
-                               changePage={props.changePage}/>
+            totalItemsCount={props.usersInf.totalCount}
+            currentPage={props.usersInf.currentPage}
+            changePage={props.changePage}/>
         </div>
     )
 }

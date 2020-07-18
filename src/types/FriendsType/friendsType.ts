@@ -2,7 +2,10 @@ export type userType = {
     id: number
     name: string
     nickname: string
-    avatar: any
+    photos: {
+        large: string
+        small: string
+    }
+    status: null | string
     followed: boolean
-    photo?: any
 }
