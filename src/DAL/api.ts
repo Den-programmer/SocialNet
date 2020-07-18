@@ -8,12 +8,10 @@ export const instance = axios.create({
     }
 });
 
-export type basicDataType = {
+export type ServerResType<T> = {
     resultCode: number
     messages: Array<string>
-    data: {
-        userId?: number
-    }
+    data: T
 }
 
 export enum resultCode {

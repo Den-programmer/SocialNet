@@ -15,7 +15,7 @@ const SET_STATUS = 'profilePage/SET_STATUS'
 const UPDATE_STATUS = 'profilePage/UPDATE_STATUS'
 const SET_USERS_PHOTO = 'profilePage/SET_USERS_PHOTO'
 const CHANGE_USER_NAME = 'profilePage/CHANGE_USER_NAME'
-const CHANGE_CONTACT = 'CHANGE_CONTACT'
+const CHANGE_CONTACT = 'profilePage/CHANGE_CONTACT'
 
 export type profilePhotosType = {
   large: string
@@ -71,6 +71,10 @@ let profilePage = {
     {
       id: 1,
       name: 'Delete Post',
+    },
+    {
+      id: 2,
+      name: 'Edit Post'
     }
   ],
   profile: {

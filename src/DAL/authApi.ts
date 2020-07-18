@@ -1,37 +1,33 @@
-import { instance, basicDataType } from './api'
+import { instance, ServerResType } from './api'
 
 type authType = {
-    data: { id: number, email: string, login: string }
-    resultCode: number
-    messages: Array<string>
+    id: number
+    email: string
+    login: string 
 }
 type loginType = {
-    resultCode: number
-    messages: Array<string>
-    data: {
-        userId?: number
-    }
+    userId: number
 }
 
 export const AuthAPI = {
     auth: () => {
-        return instance.get<authType>(`auth/me`).then(response => {
-            return response.data;
-        });
+        return instance.get<ServerResType<authType>>(`auth/me`).then(response => {
+            return response.data
+        })
     },
     login: (email: string | null, password: string | null, rememberMe: boolean, captcha = null as string | null) => {
-        return instance.post<loginType>(`auth/login`, {
+        return instance.post<ServerResType<loginType>>(`auth/login`, {
             email,
             password,
             rememberMe,
             captcha
         }).then(response => {
-            return response.data;
-        });
+            return response.data
+        })
     },
     logout: () => {
-        return instance.delete<basicDataType>(`auth/login`).then(response => {
-            return response.data;
-        });
+        return instance.delete<ServerResType<{}>>(`auth/login`).then(response => {
+            return response.data
+        })
     }
 }
