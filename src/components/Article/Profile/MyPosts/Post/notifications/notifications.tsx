@@ -3,37 +3,48 @@ import classes from './notifications.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 
-class Notifications extends React.Component {
+interface INotifications {
+    id: number
+    activateEditMode: () => void
+    deletePost: (postId: number) => void
+}
+interface IState {
+    menu: {
+        hidden: boolean
+    }
+}
+
+class Notifications extends React.Component<INotifications> {
     state = {
         menu: {
             hidden: true
         }
-    }
+    } as IState
     toggleMenuEmersion = () => {
         if(this.state.menu.hidden) {
             this.setState({
                 menu: {
                     hidden: false
                 }
-            });
+            })
         } else {
             this.setState({
                 menu: {
                     hidden: true
                 }
-            });
+            })
         }
     }
     editPost = () => {
-        this.toggleMenuEmersion();
-        this.props.activateEditMode();
+        this.toggleMenuEmersion()
+        this.props.activateEditMode()
     }
     deletePost = () => {
-        this.props.deletePost(this.props.id);
+        this.props.deletePost(this.props.id)
     }
     render() {
         return (
-            <div id={this.props.id} className={classes.notification}>
+            <div className={classes.notification}>
                 <FontAwesomeIcon onClick={this.toggleMenuEmersion} className={classes.notificationIcon} icon={faEllipsisV} />
                 {this.state.menu.hidden ? null : 
                 <div className={classes.menu}>
@@ -54,8 +65,8 @@ class Notifications extends React.Component {
                     </div>
                 </div>}
             </div>
-        );
+        )
     }
 }
 
-export default Notifications;
+export default Notifications

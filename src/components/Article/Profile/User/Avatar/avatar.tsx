@@ -1,7 +1,12 @@
-import React from 'react';
-import classes from './avatar.module.css';
+import React from 'react'
+import classes from './avatar.module.css'
 
-const Avatar = (props) => {
+interface IUserAvatar {
+    name: string
+    avatar: string
+}
+
+const Avatar: React.FC<IUserAvatar> = (props) => {
     return (
         <div className={classes.avatar}>
             <img src={props.avatar} alt="avatar" />
@@ -11,7 +16,7 @@ const Avatar = (props) => {
                 </h2>
             </div>
         </div>
-    );
+    )
 }
 
-export default Avatar;
+export default Avatar

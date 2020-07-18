@@ -16,16 +16,16 @@ import ErrorPage from '../common/ErrorPage/errorPage'
 import LikedTracksContainer from './Music/LikedTracks/likedTracksContainer'
 import MusicPageNavContainer from './Music/MusicPageNavigation/musicPageNavContainer'
 
-// const Music = React.lazy(() => import('./Music/music'));
-// const OptionsContainer = React.lazy(() => import('./Options/optionsContainer'));
+// const Music = React.lazy(() => import('./Music/music'))
+// const OptionsContainer = React.lazy(() => import('./Options/optionsContainer'))
 
-interface ArticclePropType {}
+interface ArticlePropType {}
 
-const Article:React.FC<ArticclePropType> = (props) => {
+const Article:React.FC<ArticlePropType> = (props) => {
     return (
         <article className={classes.article}>
             <Switch>
-                {/* Profile! */}
+                {/* Profile! */} 
                 <Route exact path='/Profile/:userId?' render={() => (<ProfileContainer />)} />
                 {/* Messages! */}
                 <Route exact path='/Messages' render={() => (<MessagesContainer />)} />
@@ -62,6 +62,6 @@ const Article:React.FC<ArticclePropType> = (props) => {
                 <Route path="*" render={() => <ErrorPage />} />
             </Switch>
         </article>
-    );
+    )
 }
-export default Article; 
+export default Article

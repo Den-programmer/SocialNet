@@ -1,25 +1,30 @@
-import React from 'react';
-import classes from './status.module.css';
-import { useState, useEffect } from 'react';
+import React from 'react'
+import classes from './status.module.css'
+import { useState, useEffect } from 'react'
 
-const Status = (props) => {
+interface IStatus {
+    status: string
+    updateStatus: (status: string) => void
+}
 
-    let [editMode, setEditMode] = useState(false);
-    let [status, setStatus] = useState(props.status);
+const Status: React.FC<IStatus> = (props) => {
+
+    let [editMode, setEditMode] = useState<boolean>(false)
+    let [status, setStatus] = useState<string>(props.status)
 
     useEffect(() => {
-        setStatus(props.status);
-    }, [props.status]);
+        setStatus(props.status)
+    }, [props.status])
 
     let activateEditMode = () => {
-        setEditMode(true);
+        setEditMode(true)
     }
     let deactivateEditMode = () => {
-        setEditMode(false);
-        props.updateStatus(status);
+        setEditMode(false)
+        props.updateStatus(status)
     }
-    let onStatusChange = (e) => {
-        setStatus(e.currentTarget.value);
+    let onStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setStatus(e.currentTarget.value)
     }
 
     return (
@@ -37,7 +42,7 @@ const Status = (props) => {
                 </div>
             }
         </div>
-    );
+    )
 }
 
-export default Status;
+export default Status

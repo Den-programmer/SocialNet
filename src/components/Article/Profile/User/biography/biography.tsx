@@ -1,7 +1,11 @@
-import React from 'react';
-import classes from './biography.module.css';
+import React from 'react'
+import classes from './biography.module.css'
 
-const Biography = (props) => {
+interface IBiography {
+    biography: string
+}
+
+const Biography: React.FC<IBiography> = (props) => {
     return (
         <div className={classes.biography}>
             <div className={classes.aboutMe}>
@@ -9,7 +13,7 @@ const Biography = (props) => {
                 <p>{props.biography}</p>
             </div>
         </div>
-    );
+    )
 }
 
-export default Biography;
+export default Biography

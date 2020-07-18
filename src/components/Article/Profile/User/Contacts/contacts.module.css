@@ -4,9 +4,6 @@
 .contacts {
     margin:10px;
 }
-.information {
-    padding-left: 50px;
-}
 .information h4:first-letter {
     text-transform: uppercase;
 }

@@ -1,7 +1,15 @@
-import React from 'react';
-import classes from './followingInformation.module.css';
+import React from 'react'
+import classes from './followingInformation.module.css'
+import { postType } from '../../../../../BLL/reducer-profile'
+import { userType } from '../../../../../types/FriendsType/friendsType'
 
-const FollowingInformation = (props) => {
+interface IFollowingInformation {
+    posts: Array<postType>
+    userId: number | null
+    friends: Array<userType>
+}
+
+const FollowingInformation: React.FC<IFollowingInformation> = (props) => {
     return (
         <div className={classes.followingBlock}>
             <div className={classes.followingContainer}>
@@ -24,7 +32,7 @@ const FollowingInformation = (props) => {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
-export default FollowingInformation;
+export default FollowingInformation

@@ -22,14 +22,14 @@ export type profilePhotosType = {
   small: string
 }
 export type contactsType = {
-  facebook: null | string
-  website: null | string
-  vk: null | string
-  twitter: null | string
-  instagram: null | string
-  youtube: null | string
-  github: null | string
-  mainLink: null | string
+  facebook: string | null
+  website: string | null
+  vk: string | null
+  twitter: string | null
+  instagram: string | null
+  youtube: string | null
+  github: string | null
+  mainLink: string | null
 }
 
 export type saveProfileType = {
@@ -38,7 +38,7 @@ export type saveProfileType = {
 }
 
 export type profileType = {
-  status: null | string
+  status: string
   aboutMe: null | string
   contacts: contactsType
   fullName: string
@@ -46,7 +46,7 @@ export type profileType = {
   userId: null | number
 }
 
-type postType = {
+export type postType = {
   id: number
   postTitle: string
   postInf: string
@@ -128,22 +128,22 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
       return {
         ...state,
         profile: { ...state.profile, photos: { large: action.photo, small: action.photo } }
-      };
+      }
     case CHANGE_USER_NAME:
       return {
         ...state,
-        profile: { ...state.profile, fullName: action.userName },
-      };
+        profile: { ...state.profile, fullName: action.userName }
+      }
     case EDIT_POST:
       return {
         ...state,
         posts: state.posts.map(post => {
           if (post.id === action.postId) return { ...post, postTitle: action.newPostTitle, postInf: action.newPostInformat }
-          return post;
+          return post
         })
       }
     default:
-      return state;
+      return state
   }
 }
 
@@ -260,7 +260,7 @@ export const setUserPhotoThunk = (photo: any):ThunkType => async (dispatch) => {
       dispatch(setTextError(message))
     }
   } catch (error) {
-    alert(`Something's gone wrong, error status: ${error.status}`)
+    alert(`Something's gone wrong, error status: 500`)
   }
 }
 
@@ -269,7 +269,7 @@ export const setUserProfileThunk = (userId: number | null):ThunkType => async (d
     let data = await ProfileAPI.getUsersProfile(userId)
     dispatch(setUserProfile(data))
   } catch (error) {
-    alert(`Something's gone wrong, error status: ${error.status}`)
+    alert(`Something's gone wrong, error status: 500`)
   }
 }
 export const saveProfile = (profile: saveProfileType):ThunkType => async (dispatch, getState) => {
@@ -296,7 +296,7 @@ export const saveProfile = (profile: saveProfileType):ThunkType => async (dispat
       dispatch(action)
     }
   } catch (error) {
-    alert(`Something's gone wrong, error status: ${error.status}`)
+    alert(`Something's gone wrong, error status: 500`)
   }
 }
 export const setStatusThunk = (userId: number):ThunkType => async (dispatch) => {
@@ -305,7 +305,7 @@ export const setStatusThunk = (userId: number):ThunkType => async (dispatch) => 
     dispatch(setStatus(data))
   } catch (error) {
     console.log(error)
-    alert(`Something's gone wrong, error status: 600`)
+    alert(`Something's gone wrong, error status: 500`)
   }
 }
 export const updateStatusThunk = (status: string):ThunkType => async (dispatch) => {

@@ -1,17 +1,24 @@
-import React from 'react';
-import classes from './addPostForm.module.css';
-import { reduxForm } from 'redux-form';
-import { maxLengthCreator, enteredNothingError } from '../../../../../../utils/validators/validators';
-import { Input, createField } from '../../../../../common/Forms/forms';
+import React from 'react'
+import classes from './addPostForm.module.css'
+import { reduxForm, InjectedFormProps } from 'redux-form'
+import { maxLengthCreator, enteredNothingError } from '../../../../../../utils/validators/validators'
+import { Input, createField } from '../../../../../common/Forms/forms'
+import { AddPostFD } from '../addPost'
+import { postType } from '../../../../../../BLL/reducer-profile'
 
-const maxLengthPostTitle = maxLengthCreator(20);
-const maxLengthPostText = maxLengthCreator(300);
+interface IAddPostForm {
+    posts: Array<postType>
+    deletePost: (postId: number) => void
+}
 
-const AddPostForm = (props) => {
+const maxLengthPostTitle = maxLengthCreator(20)
+const maxLengthPostText = maxLengthCreator(300)
+
+const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPostForm> = (props) => {
 
     let deleteLastPost = () => {
-        let lastPostId = props.posts.length;
-        props.deletePost(lastPostId);
+        let lastPostId = props.posts.length
+        props.deletePost(lastPostId)
     }
 
     return (
@@ -32,10 +39,10 @@ const AddPostForm = (props) => {
                 </div>}
             </div>
         </form>
-    );
+    )
 }
-const AddPostReduxForm = reduxForm({
+const AddPostReduxForm = reduxForm<AddPostFD, IAddPostForm>({
     form: 'addPost'
-})(AddPostForm);
+})(AddPostForm)
 
-export default AddPostReduxForm;
+export default AddPostReduxForm

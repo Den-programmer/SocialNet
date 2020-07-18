@@ -1,12 +1,17 @@
-import React from 'react';
-import Avatar from './Avatar/avatar';
-import Contacts from './Contacts/contacts';
-import classes from './user.module.css';
-import defaultAvatar from '../../Profile/images/withoutAvatar/defaultUserPhoto.jpg';
-import FollowingInformation from './followingInformation/followingInformation';
-import Status from './Status/status';
+import React from 'react'
+import Avatar from './Avatar/avatar'
+import Contacts from './Contacts/contacts'
+import classes from './user.module.css'
+import defaultAvatar from '../../Profile/images/withoutAvatar/defaultUserPhoto.jpg'
+import FollowingInformation from './followingInformation/followingInformation'
+import Status from './Status/status'
+import { IProfile } from '../profile'
 
-const User = (props) => {
+interface IUser extends IProfile {
+    biography: string | null
+}
+
+const User: React.FC<IUser> = (props) => {
     return (
         <div className={classes.user}>
             <div className={classes.row}>
@@ -18,8 +23,8 @@ const User = (props) => {
                 <Contacts contacts={props.profile.contacts}/>
             </div>
         </div>
-    );
+    )
 } 
 
 
-export default User;
+export default User
