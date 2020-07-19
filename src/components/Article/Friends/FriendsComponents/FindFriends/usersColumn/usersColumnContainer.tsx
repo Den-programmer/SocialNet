@@ -25,6 +25,11 @@ class UsersColumnAPI extends React.Component<IUserColumnAPI> {
     componentDidMount() {
         this.props.requestUsers(this.props.usersInf.pageSize, this.props.usersInf.currentPage)
     }
+    componentDidUpdate(prevProps: IUserColumnAPI) {
+        if (prevProps.usersInf.currentPage !== this.props.usersInf.currentPage) {
+            this.props.requestUsers(this.props.usersInf.pageSize, this.props.usersInf.currentPage)
+        }
+    }
     render() {
         return (
             <>
