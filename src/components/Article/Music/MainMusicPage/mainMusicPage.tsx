@@ -5,7 +5,7 @@ import Track from './track/track'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
-interface mainMusicPageProps {
+export interface IMainMusicPageProps {
     tracks: Array<trackType>
     trackNotifications: Array<trackNotificationType>
     setTrackCurrentTime: (trackId: number, time: number) => void
@@ -13,7 +13,7 @@ interface mainMusicPageProps {
     chooseTrack: (trackId: number) => void
 }
 
-const MainMusicPage:React.FC<mainMusicPageProps> = (props) => {
+const MainMusicPage:React.FC<IMainMusicPageProps> = (props) => {
     const audio = React.createRef<HTMLAudioElement>()
     const search = React.createRef<HTMLInputElement>()
 

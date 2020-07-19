@@ -8,6 +8,7 @@ import mydemons from '../components/Article/Music/MainMusicPage/track/music/MyDe
 const LIKE_TRACK = 'LIKE_TRACK'
 const CHOOSE_TRACK = 'CHOOSE_TRACK'
 const SET_CURRENT_TRACK_TIME = 'SET_CURRENT_TRACK_TIME'
+const SET_LIKED_TRACKS = 'SET_LIKED_TRACKS' 
 
 export type trackType = {
     id: number
@@ -136,13 +137,17 @@ const reducerMusic = (state = musicPage, action:ActionTypes) => {
                         if (track.liked) return { ...track, liked: false }
                         return { ...track, liked: true }
                     } else {
-                        return track;
+                        return track
                     }
-                }),
-                likedTracks: state.tracks.filter((track: trackType) => {
-                    if (track.liked) return true 
                 })
             }
+        case SET_LIKED_TRACKS: 
+            return {
+                ...state,
+                likedTracks: state.tracks.filter((track: trackType) => {
+                    if(track.liked) return true 
+                })
+            }    
         case CHOOSE_TRACK:
             return {
                 ...state,
@@ -154,7 +159,7 @@ const reducerMusic = (state = musicPage, action:ActionTypes) => {
                             return { ...track, isMusicPlaying: true }
                         }
                     } else {
-                        return { ...track, isMusicPlaying: false };
+                        return { ...track, isMusicPlaying: false }
                     }
                 })
             }
@@ -171,7 +176,7 @@ const reducerMusic = (state = musicPage, action:ActionTypes) => {
     }
 }
 
-type ActionTypes = likeTrackActionType | chooseTrackActionType | setTrackCurrentTimeActionType
+type ActionTypes = likeTrackActionType | chooseTrackActionType | setTrackCurrentTimeActionType | setLikedTracksActionType
 
 type likeTrackActionType = {
     type: typeof LIKE_TRACK
@@ -180,6 +185,14 @@ type likeTrackActionType = {
 
 export const likeTrack = (trackId: number):likeTrackActionType => {
     return { type: LIKE_TRACK, trackId }
+}
+
+type setLikedTracksActionType = {
+    type: typeof SET_LIKED_TRACKS
+}
+
+export const setLikedTracks = () => {
+    return { type: SET_LIKED_TRACKS }
 }
 
 type chooseTrackActionType = {
@@ -201,4 +214,4 @@ export const setTrackCurrentTime = (trackId: number, time: number) => {
     return { type: SET_CURRENT_TRACK_TIME, trackId, time }
 }
 
-export default reducerMusic;
+export default reducerMusic
