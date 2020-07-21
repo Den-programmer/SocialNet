@@ -2,6 +2,13 @@
     font-family:Arial, sans-serif;
 }
 
+h1, h2, h3 {
+    font-family: 'Ubuntu', sans-serif;
+}
+p {
+    font-family: 'Open Sans', sans-serif;
+}
+
 /* Half Selectors and True Selectors! */
 
 .container {
