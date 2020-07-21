@@ -15,6 +15,9 @@ import AccountOptionsContainer from './Options/mainOptionsPage/accountOptions/ac
 import ErrorPage from '../common/ErrorPage/errorPage'
 import LikedTracksContainer from './Music/LikedTracks/likedTracksContainer'
 import MusicPageNavContainer from './Music/MusicPageNavigation/musicPageNavContainer'
+import PlaylistsContainer from './Music/Playlists/playlistsContainer'
+import AlbumsContainer from './Music/Albums/albumsContainer'
+import FollowingContainer from './Music/Following/followingContainer'
 
 // const Music = React.lazy(() => import('./Music/music'))
 // const OptionsContainer = React.lazy(() => import('./Options/optionsContainer'))
@@ -33,6 +36,9 @@ const Article:React.FC<ArticlePropType> = (props) => {
                 <Route path='/News' render={() => (<News />)} />
                 {/* Music! */}
                 <Route path='/Music/likedTracks' render={() => (<><MusicPageNavContainer /><LikedTracksContainer /></>)}/>
+                <Route path='/Music/PlayLists' render={() => (<><MusicPageNavContainer /><PlaylistsContainer /></>)}/>
+                <Route path='/Music/Albums' render={() => (<><MusicPageNavContainer /><AlbumsContainer /></>)}/>
+                <Route path='/Music/following' render={() => (<><MusicPageNavContainer /><FollowingContainer /></>)}/>
                 <Route exact path='/Music' render={() => (<Music />)} />
                 {/* Options! */}
                 <Route path="/Options/account" render={() => (<div className={classes.dFlex}>
@@ -64,4 +70,5 @@ const Article:React.FC<ArticlePropType> = (props) => {
         </article>
     )
 }
+
 export default Article
