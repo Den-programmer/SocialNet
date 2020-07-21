@@ -95,7 +95,7 @@ const musicPage = {
             src: savethatshit,
             duration: 5,
             time: 0,
-            liked: false,
+            liked: true,
             isMusicPlaying: false
         },
         {
@@ -106,7 +106,7 @@ const musicPage = {
             src: deathpunch,
             duration: 4,
             time: 0,
-            liked: false,
+            liked: true,
             isMusicPlaying: false
         },
         {
@@ -117,7 +117,7 @@ const musicPage = {
             src: mydemons,
             duration: 5,
             time: 0,
-            liked: false,
+            liked: true,
             isMusicPlaying: false
         }
     ],
@@ -172,7 +172,7 @@ const reducerMusic = (state = musicPage, action:ActionTypes) => {
                 })
             }    
         default:
-            return state;
+            return state
     }
 }
 

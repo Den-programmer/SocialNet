@@ -5,7 +5,7 @@ import DialogsContainer from './Dialogs/dialogsContainer'
 
 interface MessagesPropsType { }
 
-const Messages: React.FC<MessagesPropsType> = ({}) => {
+const Messages: React.FC<MessagesPropsType> = (props) => {
     return <div className={classes.messages}>
         <DialogsContainer />
         <DialogContainer />

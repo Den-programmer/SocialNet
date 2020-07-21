@@ -1,7 +1,6 @@
 import React from 'react'
 import classes from './friends.module.css'
 import Friend from './Friend/friend'
-import defaultUser from './images/withoutAvatar/defaultUserPhoto.jpg'
 import { NavLink } from 'react-router-dom'
 import { userType } from '../../../types/FriendsType/friendsType'
 
@@ -20,7 +19,7 @@ const Friends:React.FC<FriendsPropsType> = (props) => {
     }
 
     let friends = friendsArray.map(f => {
-        return <Friend id={f.id} key={f.id} name={f.name} nickname={f.nickname} avatar={f.photos.large ? f.photos.large : defaultUser}/>
+        return <Friend id={f.id} key={f.id} name={f.name} nickname={f.nickname} avatar={f.photos.large ? f.photos.large : f.photos.small}/>
     })
     return (
         <div className={classes.friends}>

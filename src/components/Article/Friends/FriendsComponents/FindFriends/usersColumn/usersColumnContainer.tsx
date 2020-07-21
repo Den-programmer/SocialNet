@@ -22,13 +22,14 @@ interface IUserColumnAPI {
 }
 
 class UsersColumnAPI extends React.Component<IUserColumnAPI> {
+    requestUsers = () => {
+        return this.props.requestUsers(this.props.usersInf.pageSize, this.props.usersInf.currentPage)
+    }
     componentDidMount() {
-        this.props.requestUsers(this.props.usersInf.pageSize, this.props.usersInf.currentPage)
+        this.requestUsers()
     }
     componentDidUpdate(prevProps: IUserColumnAPI) {
-        if (prevProps.usersInf.currentPage !== this.props.usersInf.currentPage) {
-            this.props.requestUsers(this.props.usersInf.pageSize, this.props.usersInf.currentPage)
-        }
+        if (prevProps.usersInf.currentPage !== this.props.usersInf.currentPage) this.requestUsers()
     }
     render() {
         return (

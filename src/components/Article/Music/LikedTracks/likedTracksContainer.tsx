@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { RootState } from '../../../../BLL/redux'
 import { getLikedTracks, getTrackNotifications } from '../../../../BLL/selectors/music-selectors'
 import MainMusicPage from '../MainMusicPage/mainMusicPage'
-import { likeTrack, chooseTrack, setTrackCurrentTime, setLikedTracks } from '../../../../BLL/reducer-music'
+import { likeTrack, chooseTrack, setTrackCurrentTime, setLikedTracks, trackType } from '../../../../BLL/reducer-music'
 import { IMainMusicPageProps } from '../MainMusicPage/mainMusicPage'
 
 interface IProps extends IMainMusicPageProps {
@@ -13,6 +13,12 @@ interface IProps extends IMainMusicPageProps {
 class LikedTracksClass extends React.Component<IProps> {
     componentDidMount() {
         this.props.setLikedTracks()
+        this.props.tracks.forEach((track: trackType) => {
+            if(track.isMusicPlaying) {
+                
+            }
+        })
+        // Тут мы должны запускать музыку, если она играет!
     }
     render() {
         return <MainMusicPage tracks={this.props.tracks} trackNotifications={this.props.trackNotifications} likeTrack={this.props.likeTrack}

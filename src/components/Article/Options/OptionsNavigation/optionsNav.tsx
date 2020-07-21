@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 
 interface PropsType {}
 
-const OptionsNav:React.FC<PropsType> = ({}) => {
+const OptionsNav:React.FC<PropsType> = (props) => {
     return (
         <nav className={s.navigation}>
             <div className={s.navItem + ' ' + s.myProfileOptionsLinkNav}>
