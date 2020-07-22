@@ -3,6 +3,7 @@ import classes from './changeContactsForm.module.css'
 import ChangeContact from './changeContact/changeContact'
 import { reduxForm, InjectedFormProps } from 'redux-form'
 import { contactsType } from '../../../../../../../BLL/reducer-profile'
+import Btn_Confirm from '../../../../../../common/Btns/Btn_confirm/btn_confirm'
 
 interface IProps {
     contacts: contactsType
@@ -18,7 +19,7 @@ const ChangeContactsForm:React.FC<InjectedFormProps<contactsType, IProps> & IPro
                 {contacts}
             </div>
             <div className={classes.btn_confirm}>
-                <button>Confirm</button>
+                <Btn_Confirm clickFunction={null}/>
             </div>
             {props.error && <div className={classes.error}>{props.error}</div>}
         </form>

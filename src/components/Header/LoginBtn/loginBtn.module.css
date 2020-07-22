@@ -2,14 +2,26 @@
     margin:20px;
 }
 .btn_login a {
-    color:blue;
-    padding: 10px;
-    background: #EFEFEF;
-    border:1px solid silver;
+    outline: none;
+    display: inline-block;
+    padding: 7px 15px;
+    overflow: hidden;
+    border: 2px solid;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: rgba(30,255,188,1);
+    background: transparent;
+    transition: color .3s, background .5s;
 }
 .btn_login a:hover {
-    text-decoration: underline;
-    color:#3535FF;
-    opacity: 0.9;
+    animation: stripes .75s infinite linear;
+    background: linear-gradient(45deg, rgba(30,255,188,1) 25%, rgba(255,255,255,1) 25%, rgba(255,255,255,1) 50%, rgba(30,255,188,1) 50%,      rgba(30,255,188,1) 75%, rgba(255,255,255,1) 75%, rgba(255,255,255,1));
+    background-size: 10px 10px;
+    color: #FF50E5;
 }
-
+@keyframes stripes {
+    0% {background-position: 0 0;}
+    100% {background-position: 50px 0;}
+}

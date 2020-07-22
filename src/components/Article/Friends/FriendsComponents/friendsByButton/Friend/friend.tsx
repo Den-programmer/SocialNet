@@ -26,7 +26,7 @@ const Friend: React.FC<IFriend> = (props) => {
                     <h5>{props.nickname ? props.nickname : props.name}</h5>
                 </NavLink>
                 <div className={classes.following}>
-                    {props.followed ? <button onClick={following}>Followed</button> : <button onClick={following}>Follow</button>} 
+                    {props.followed ? <button onClick={following}>Following</button> : <button onClick={following}>Follow</button>} 
                 </div>
             </div>
         </div>

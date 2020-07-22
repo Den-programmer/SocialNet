@@ -3,6 +3,7 @@ import classes from './changeUserName.module.css'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { contactsType, saveProfileType } from '../../../../../../BLL/reducer-profile'
+import Btn_Confirm from '../../../../../common/Btns/Btn_confirm/btn_confirm'
 
 interface IChangeUserName {
     userName: string
@@ -34,16 +35,12 @@ const ChangeUserName: React.FC<IChangeUserName> = (props) => {
 
     return (
         <div className={classes.changeUserName}>
-            <label>
-                Change User Nickname <input ref={changeNameInput}
-                    onChange={onUserNameChange}
-                    type="text" value={userName} />
-            </label>
+            <input ref={changeNameInput}
+                onChange={onUserNameChange}
+                type="text" value={userName} />
             <div className={classes.btn_confirmChanges}>
                 <NavLink to={"/Profile"}>
-                    <button onClick={changeUserName}>
-                        Confirm
-                    </button>
+                    <Btn_Confirm clickFunction={changeUserName}/>
                 </NavLink>
             </div>
         </div>

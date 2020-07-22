@@ -9,6 +9,7 @@ const LIKE_TRACK = 'LIKE_TRACK'
 const CHOOSE_TRACK = 'CHOOSE_TRACK'
 const SET_CURRENT_TRACK_TIME = 'SET_CURRENT_TRACK_TIME'
 const SET_LIKED_TRACKS = 'SET_LIKED_TRACKS' 
+const PAUSE_ALL_TRACKS = 'PAUSE_ALL_TRACKS'
 
 export type trackType = {
     id: number
@@ -170,13 +171,24 @@ const reducerMusic = (state = musicPage, action:ActionTypes) => {
                     if(track.id === action.trackId) return { ...track, time: action.time }
                     return track
                 })
+            } 
+        case PAUSE_ALL_TRACKS:
+            return {
+                ...state,
+                tracks: state.tracks.map((track: trackType) => {
+                    return { ...track, isMusicPlaying: false }
+                })
             }    
         default:
             return state
     }
 }
 
-type ActionTypes = likeTrackActionType | chooseTrackActionType | setTrackCurrentTimeActionType | setLikedTracksActionType
+type ActionTypes = likeTrackActionType | 
+chooseTrackActionType | 
+setTrackCurrentTimeActionType | 
+setLikedTracksActionType |
+unsetIsMusicPlayingActionType
 
 type likeTrackActionType = {
     type: typeof LIKE_TRACK
@@ -212,6 +224,14 @@ type setTrackCurrentTimeActionType = {
 
 export const setTrackCurrentTime = (trackId: number, time: number) => {
     return { type: SET_CURRENT_TRACK_TIME, trackId, time }
+}
+
+type unsetIsMusicPlayingActionType = {
+    type: typeof PAUSE_ALL_TRACKS
+}
+
+export const unsetIsMusicPlaying = (): unsetIsMusicPlayingActionType => {
+    return { type: PAUSE_ALL_TRACKS }
 }
 
 export default reducerMusic

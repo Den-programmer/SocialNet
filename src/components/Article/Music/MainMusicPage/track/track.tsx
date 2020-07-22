@@ -55,12 +55,12 @@ class Track extends React.Component<TrackPropsType> {
                 <div className={classes.durationAndNotifications}>
                     <div className={classes.duration}>
                         {this.props.duration}
-                        <TrackNotifications trackNotifications={this.props.trackNotifications}/>
-                    </div>
+                    </div>    
+                    <TrackNotifications trackNotifications={this.props.trackNotifications}/>
                 </div>
             </li>
         )
     }
 }
 
-export default Track;
+export default Track

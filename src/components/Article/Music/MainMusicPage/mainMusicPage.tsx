@@ -10,6 +10,7 @@ export interface IMainMusicPageProps {
     trackNotifications: Array<trackNotificationType>
     setTrackCurrentTime: (trackId: number, time: number) => void
     likeTrack: (trackId: number) => void
+    unsetIsMusicPlaying: () => void
     chooseTrack: (trackId: number) => void
 }
 
@@ -19,13 +20,13 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
 
     useEffect(() => {
         let node = audio.current
-            props.tracks.forEach((track: trackType) => {
-                if (track.isMusicPlaying && node) {
-                    node.src = track.src
-                    node.currentTime = track.time
-                    node.play()
-                }
-            })
+        props.tracks.forEach((track: trackType) => {
+            if (track.isMusicPlaying && node) {
+                node.src = track.src
+                node.currentTime = track.time
+                node.play()
+            }
+        })
     })
 
     let startMusic = (isMusicPlaying: boolean, src: string, id: number, time: number) => {
@@ -46,6 +47,22 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
             }
         }
     }
+
+    const onPlay = () => {
+       // После запуска аудио - не очень хорошая идея что-то в нем изменять, но нужно!
+    }
+    const onPause = () => {
+        let node = audio.current
+        props.tracks.forEach((track: trackType) => {
+            if(node && track.isMusicPlaying) {
+                let time = node.currentTime
+                node.id = track.id.toString()
+                props.setTrackCurrentTime(track.id, time)
+                props.unsetIsMusicPlaying()
+            }
+        })
+    }
+
     const tracks = props.tracks.map((track: trackType) => {
         return <Track key={track.id}
             id={track.id}
@@ -80,10 +97,10 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
                 {tracks.length !== 0 ? tracks : <h2 className={classes.titleWhenNoTracks}>There're no tracks yet!</h2>}
             </ul>
             <div className={classes.currentMusic}>
-                <audio ref={audio} src="" className={classes.audioControler} controls />
+                <audio onPlay={onPlay} onPause={onPause} ref={audio} src="" className={classes.audioControler} controls />
             </div>
         </div>
     )
 }
 
-export default MainMusicPage;
+export default MainMusicPage

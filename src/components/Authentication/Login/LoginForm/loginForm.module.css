@@ -23,3 +23,38 @@
 .captchaInput {
     margin-bottom: 10px;
 }
+.btn_login {
+    display: flex;
+    justify-content: center;
+}
+.btn_login button {
+    outline: none;
+    display: inline-block;
+    padding: 4px 15px;
+    margin: 10px 20px;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #fe6637;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif; 
+    color: #fe6637;
+    transition: .2s ease-in-out;
+}
+.btn_login button:before {
+    content: "";
+    background: linear-gradient(90deg, rgba(255,255,255,.1), rgba(255,255,255,.5));
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    top: -8px;
+    left: -75px;
+    transform: skewX(-45deg);
+}
+.btn_login button:hover {
+    background: #fe6637;
+    color: #fff;
+}
+.btn_login button:hover:before {
+    left: 150px;
+    transition: .5s ease-in-out;
+}  

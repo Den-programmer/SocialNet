@@ -11,7 +11,7 @@ const TrackNotification: React.FC<TrackNotificationPropType> = ({title, id}) => 
         if(e.currentTarget) alert(id)
         e.stopPropagation()
     }
-    return <div onClick={chooseNotification} className={classes.notificationItem}>{title}</div>
+    return <div onClick={chooseNotification} className={classes.notificationItem}><span>{title}</span></div>
 }
 
 export default TrackNotification;

@@ -66,3 +66,6 @@
     transition: all .3s linear;
     color:red;
 }
+.duration {
+    margin-bottom: 5px;
+}

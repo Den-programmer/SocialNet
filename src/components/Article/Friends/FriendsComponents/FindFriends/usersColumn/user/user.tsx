@@ -17,9 +17,9 @@ interface IUser {
 const User: React.FC<IUser> = (props) => {
     let following = () => {
         if (props.followed === false) {
-            props.followThunk(props.id);
+            props.followThunk(props.id)
         } else {
-            props.unfollowThunk(props.id);
+            props.unfollowThunk(props.id)
         }    
     }
     return (
@@ -29,9 +29,9 @@ const User: React.FC<IUser> = (props) => {
                 <h4>{props.nickname}</h4>
                 <h6>{props.name}</h6>
             </NavLink>
-            {props.followed ? <button disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Add this user to list of friends!">Follow</button> 
+            {props.followed ? <button className={classes.btn_following} disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Add this user to list of friends!">Following</button> 
             : 
-            <button disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Delete this user from your list of friends!">Unfollow</button>}
+            <button className={classes.btn_unfollow} disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Delete this user from your list of friends!">Unfollow</button>}
         </div>
     )
 }

@@ -1,9 +1,8 @@
-.notificationIconBlock {
-    margin: 7px;
-}
 .trackNotifications {
     position: absolute;
     right: 25px;
-    background-color: aliceblue;
     border: 1px solid #000;
+    border-radius: 5px;
+    padding: 5px 20px;
+    background-color: #20232A;
 }

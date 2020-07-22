@@ -14,11 +14,21 @@
     color:#FFF;
 }
 .user button {
-    background-color:#0275D8;
-    border:1px solid #4088FA;
     padding:5px 10px;
+    font-family: 'Lato', sans-serif;
+    border-radius: 3px;
 } 
 .user button:hover {
     transition:all .3s linear;
     opacity:0.9;
+}
+.btn_following {
+    border:1px solid #E3E3E3;
+    background-color: #FFF;
+    color: #000;
+    font-weight: bold;
+}
+.btn_unfollow {
+    background-color:#0275D8;
+    border:1px solid #4088FA;
 }
