@@ -21,7 +21,7 @@ class Notifications extends React.Component<INotifications> {
         }
     } as IState
     toggleMenuEmersion = () => {
-        if(this.state.menu.hidden) {
+        if (this.state.menu.hidden) {
             this.setState({
                 menu: {
                     hidden: false
@@ -46,24 +46,27 @@ class Notifications extends React.Component<INotifications> {
         return (
             <div className={classes.notification}>
                 <FontAwesomeIcon onClick={this.toggleMenuEmersion} className={classes.notificationIcon} icon={faEllipsisV} />
-                {this.state.menu.hidden ? null : 
-                <div className={classes.menu}>
-                    <div onClick={this.deletePost} className={classes.menuItem} title="Delete post!">
-                        Delete Post
-                    </div>
-                    <div onClick={this.editPost} className={classes.menuItem} title="Delete post!">
-                        Edit Post
-                    </div>
-                    <div className={classes.menuItem} title="Delete post!">
-                        Copy the post text
-                    </div>
-                    <div className={classes.menuItem} title="Delete post!">
-                        Delete Post4
-                    </div>
-                    <div className={classes.menuItem} title="Delete post!">
-                        Delete Post5
-                    </div>
-                </div>}
+                {this.state.menu.hidden ? null :
+                    <div className={classes.menu}>
+                        <h3>Options</h3>
+                        <ul className={classes.menuList}>
+                            <li onClick={this.deletePost} className={classes.menuItem} title="Delete post!">
+                                Delete Post
+                            </li>
+                            <li onClick={this.editPost} className={classes.menuItem} title="Delete post!">
+                                Edit Post
+                            </li>
+                            <li className={classes.menuItem} title="Delete post!">
+                                Copy the post text
+                            </li>
+                            <li className={classes.menuItem} title="Delete post!">
+                                Delete Post4
+                            </li>
+                            <li className={classes.menuItem} title="Delete post!">
+                                Delete Post5
+                            </li>
+                        </ul>
+                    </div>}
             </div>
         )
     }
