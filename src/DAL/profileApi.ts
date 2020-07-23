@@ -18,8 +18,11 @@ export const ProfileAPI = {
         })
     },
     saveProfile: (profile: profileType) => {
-        return instance.put<ServerResType<{}>>(`/profile`, profile).then(response => {
+        return instance.put<ServerResType<{}>>(`profile`, profile).then(response => {
             return response.data
         })
+    },
+    getIsUserFollowed: (userId: number | null) => {
+        return instance.get(`follow/${userId}`)
     }
 }

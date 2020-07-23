@@ -17,3 +17,6 @@ export const getUsersName = (state: RootState) => {
 export const getContacts = (state: RootState) => {
     return state.profilePage.profile.contacts
 }
+export const getIsUserFollowedStatus = (state: RootState) => {
+    return state.profilePage.followed
+}

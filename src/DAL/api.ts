@@ -6,7 +6,7 @@ export const instance = axios.create({
     headers: {
         "API-KEY": "84df6f8d-3114-43eb-bbd6-9f107dc49f3e"
     }
-});
+})
 
 export type ServerResType<T> = {
     resultCode: number

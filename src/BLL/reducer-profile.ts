@@ -16,6 +16,7 @@ const UPDATE_STATUS = 'profilePage/UPDATE_STATUS'
 const SET_USERS_PHOTO = 'profilePage/SET_USERS_PHOTO'
 const CHANGE_USER_NAME = 'profilePage/CHANGE_USER_NAME'
 const CHANGE_CONTACT = 'profilePage/CHANGE_CONTACT'
+const IS_USER_FOLLOWED = 'profilePage/IS_USER_FOLLOWED'
 
 export type profilePhotosType = {
   large: string
@@ -43,7 +44,7 @@ export type profileType = {
   contacts: contactsType
   fullName: string
   photos: profilePhotosType
-  userId: null | number
+  userId: number
 }
 
 export type postType = {
@@ -61,6 +62,7 @@ export type profilePageType = {
   posts: Array<postType>
   postNotification: Array<postNotificationType>
   profile: profileType
+  followed: boolean
 }
 
 let profilePage = {
@@ -95,8 +97,9 @@ let profilePage = {
       large: defaultUser,
       small: defaultUser
     },
-    userId: null
-  } 
+    userId: 0
+  },
+  followed: false
 } as profilePageType
 
 const reducerProfile = (state = profilePage, action: ActionTypes): profilePageType => {
@@ -146,6 +149,11 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
           return post
         })
       }
+    case IS_USER_FOLLOWED:
+      return {
+        ...state,
+        followed: action.followed
+      }  
     default:
       return state
   }
@@ -158,7 +166,7 @@ deletePostActionType |
 editPostActionType | 
 setUserProfileActionType | 
 setStatusActionType | 
-updateStatusActionType| 
+updateStatusActionType| setIsUserFollowedActionType |
 setUserPhotoActionType | 
 changeUserNameActionType | 
 changeContactsActionType |
@@ -249,6 +257,15 @@ export const changeContacts = (contactId: number, val: string):changeContactsAct
   return { type: CHANGE_CONTACT, contactId, val }
 }
 
+type setIsUserFollowedActionType = {
+  type: typeof IS_USER_FOLLOWED
+  followed: boolean 
+}
+
+const setIsUserFollowed = (followed: boolean): setIsUserFollowedActionType => {
+  return { type: IS_USER_FOLLOWED, followed }
+}
+
 /* Thunks! */
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
@@ -291,6 +308,7 @@ export const saveProfile = (profile: saveProfileType):ThunkType => async (dispat
       contacts: profile.contacts,
       photos: userProfilePhoto
     }
+    // @ts-ignore
     let data = await ProfileAPI.saveProfile(trueProfile)
     if (data.resultCode === resultCode.Success) {
       dispatch(setUserProfileThunk(userId))
@@ -317,7 +335,14 @@ export const updateStatusThunk = (status: string):ThunkType => async (dispatch) 
     let data = await ProfileAPI.updateStatus(status)
     dispatch(updateStatus(data))
   } catch (error) {
-    console.log(error)
+    alert(`Something's gone wrong, error status: 500`)
+  }
+}
+export const getIsUserFollowed = (userId: number | null):ThunkType => async (dispatch) => {
+  try {
+    let res = await ProfileAPI.getIsUserFollowed(userId)
+    dispatch(setIsUserFollowed(res.data))
+  } catch(e) {
     alert(`Something's gone wrong, error status: 500`)
   }
 }

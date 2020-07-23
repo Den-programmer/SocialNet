@@ -1,15 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import classes from './followingInformation.module.css'
 import { postType } from '../../../../../BLL/reducer-profile'
 import { userType } from '../../../../../types/FriendsType/friendsType'
 
 interface IFollowingInformation {
     posts: Array<postType>
-    userId: number | null
+    userId: number
+    followed: boolean
     friends: Array<userType>
+    getIsUserFollowed: (userId: number | null) => void
+    follow: (userId: number) => void
+    unfollow: (userId: number) => void
 }
 
 const FollowingInformation: React.FC<IFollowingInformation> = (props) => {
+    useEffect(() => {
+        props.getIsUserFollowed(props.userId)
+    })
+
+    const following = () => {
+        if(props.followed) {
+            props.unfollow(props.userId)
+        } else {
+            props.follow(props.userId)
+        }
+    }
+
     return (
         <div className={classes.followingBlock}>
             <div className={classes.followingContainer}>
@@ -28,7 +44,11 @@ const FollowingInformation: React.FC<IFollowingInformation> = (props) => {
                     </div>
                 </div>
                 <div className={classes.btn_following}>
-                    {props.userId !== 7149 ? <button>Follow/Unfollow</button> : <div className={classes.horizontal_line}></div>}
+                    {props.userId !== 7149 ? 
+                    props.followed ? 
+                    <button onClick={following} className={classes.followingButton}>Following</button> : 
+                    <button onClick={following} className={classes.unfollowingButton}>Unfollow</button> : 
+                    <div className={classes.horizontal_line}></div>}
                 </div>
             </div>
         </div>

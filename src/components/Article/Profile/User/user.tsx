@@ -16,7 +16,7 @@ const User: React.FC<IUser> = (props) => {
         <div className={classes.user}>
             <div className={classes.row}>
                 <Avatar avatar={props.profile.photos.large ? props.profile.photos.large : defaultAvatar} name={props.profile.fullName}/>
-                <FollowingInformation userId={props.profile.userId} posts={props.posts} friends={props.friends}/>
+                <FollowingInformation follow={props.follow} unfollow={props.unfollow} followed={props.followed} getIsUserFollowed={props.getIsUserFollowed} userId={props.profile.userId} posts={props.posts} friends={props.friends}/>
                 <Status updateStatus={props.updateStatus} status={props.profile.status}/>
             </div>
             <div>
