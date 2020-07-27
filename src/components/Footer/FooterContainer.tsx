@@ -9,6 +9,6 @@ let mapStatetoProps = (state: RootState) => ({
     footInf:getFootInf(state)
 })
 
-const Footercontainer = connect(mapStatetoProps, null)(Footer)
+const Footercontainer = connect(mapStatetoProps, {})(Footer)
 
 export default Footercontainer

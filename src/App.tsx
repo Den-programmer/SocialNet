@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.css'
 import { BrowserRouter } from 'react-router-dom'
-import store from './BLL/redux'
+import store, { RootState } from './BLL/redux'
 import HeaderContainer from './components/Header/HeaderContainer'
 import FooterContainer from './components/Footer/FooterContainer'
 import Article from './components/Article/Article'
@@ -13,7 +13,14 @@ import { getAppInitializationStatus, getAppFontSize } from './BLL/selectors/sele
 import { getIsAuthStatus } from './BLL/selectors/auth-selectors'
 import SideBarContainer from './components/SideBar/SideBarContainer'
 
-class App extends React.Component {
+interface IApp {
+  Initialized: boolean
+  isAuth: boolean
+  size: number
+  initialize: () => void
+}
+
+class App extends React.Component<IApp> {
   style = { fontSize: this.props.size + 'px !important' }
   componentDidMount() {
     this.props.initialize()
@@ -41,7 +48,7 @@ class App extends React.Component {
   }
 }
 
-let mapStateToProps = (state) => ({
+let mapStateToProps = (state: RootState) => ({
   Initialized: getAppInitializationStatus(state),
   isAuth: getIsAuthStatus(state),
   size: getAppFontSize(state)
@@ -49,7 +56,7 @@ let mapStateToProps = (state) => ({
 
 const AppContainer = connect(mapStateToProps, { initialize })(App)
 
-const MyApp = (props) => {
+const MyApp = () => {
   return <BrowserRouter>
     <Provider store={store}>
       <AppContainer />

@@ -1,7 +1,7 @@
-import React from 'react';
-import classes from './Footer.module.css';
-import { footLinkType } from '../../types/FooterTypes/footerTypes';
-import FootLinks from './FootLinks/FootLinks';
+import React from 'react'
+import classes from './Footer.module.css'
+import { footLinkType } from '../../types/FooterTypes/footerTypes'
+import FootLinks from './FootLinks/FootLinks'
 
 interface FooterProps {
     footLinks: Array<footLinkType>
@@ -22,7 +22,7 @@ const Footer:React.FC<FooterProps> = (props) => {
                 </div>
             </div>
         </footer>
-    );
+    )
 }
 
-export default Footer;
+export default Footer
