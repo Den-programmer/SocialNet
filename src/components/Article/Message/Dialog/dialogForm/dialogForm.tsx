@@ -7,7 +7,7 @@ import { DialogFormDataType } from '../dialog'
 
 interface PropsType {}
 
-const maxMessageLength = maxLengthCreator(90)
+const maxMessageLength = maxLengthCreator(300)
 
 const DialogForm:React.FC<InjectedFormProps<DialogFormDataType, PropsType> & PropsType> = ({handleSubmit}) => {
     return (

@@ -16,14 +16,13 @@ import SideBarContainer from './components/SideBar/SideBarContainer'
 class App extends React.Component {
   style = { fontSize: this.props.size + 'px !important' }
   componentDidMount() {
-    this.props.initialize();
+    this.props.initialize()
   }
   render() {
     if (!this.props.Initialized) {
       return <Preloader />
     }
     return (
-      <>
       <BrowserRouter><Provider store={store}>
       {this.props.isAuth ?
         <div style={this.style} className="App">
@@ -38,7 +37,6 @@ class App extends React.Component {
         </div>
         : <Authentication />}
       </Provider></BrowserRouter>
-      </>  
     )
   }
 }

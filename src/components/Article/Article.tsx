@@ -19,9 +19,6 @@ import PlaylistsContainer from './Music/Playlists/playlistsContainer'
 import AlbumsContainer from './Music/Albums/albumsContainer'
 import FollowingContainer from './Music/Following/followingContainer'
 
-// const Music = React.lazy(() => import('./Music/music'))
-// const OptionsContainer = React.lazy(() => import('./Options/optionsContainer'))
-
 interface ArticlePropType {}
 
 const Article:React.FC<ArticlePropType> = (props) => {
