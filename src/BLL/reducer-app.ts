@@ -126,7 +126,7 @@ export const initialize = ():ThunkType => async (dispatch) => {
 
   promise.then(() => {
     dispatch(initializedSuccessful())
-  });
+  })
 }
 
 
