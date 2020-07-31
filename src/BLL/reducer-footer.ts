@@ -1,4 +1,4 @@
-import { footLinkType } from '../types/FooterTypes/footerTypes';
+import { footLinkType } from '../types/FooterTypes/footerTypes'
 
 type FooterType = {
     year: number
@@ -13,38 +13,35 @@ let Footer = {
         {
             id: 1,
             name: 'Profile',
-            path: "/Profile",
+            path: "/Profile"
         },
         {
             id: 2,
             name: 'Messages',
-            path: "/Messages",
+            path: "/Messages"
         },
         {
             id: 3,
             name: 'News',
-            path: "/News",
+            path: "/News"
         },
         {
             id: 4,
             name: 'Music',
-            path: "/Music",
+            path: "/Music"
         },
         {
             id: 5,
             name: 'Options',
-            path: "/Options",
-        },
-    ],
+            path: "/Options"
+        }
+    ]
 } as FooterType
 
 const reducerFooter = (state = Footer, action:any): FooterType => {
 
 
-
-
-
-    return state;
+    return state
 }
 
-export default reducerFooter;
+export default reducerFooter

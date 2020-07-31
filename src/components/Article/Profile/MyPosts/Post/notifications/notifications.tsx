@@ -5,6 +5,7 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 
 interface INotifications {
     id: number
+    isEdit: boolean
     activateEditMode: () => void
     deletePost: (postId: number) => void
 }
@@ -17,7 +18,7 @@ interface IState {
 class Notifications extends React.Component<INotifications> {
     state = {
         menu: {
-            hidden: true
+            hidden: this.props.isEdit
         }
     } as IState
     toggleMenuEmersion = () => {
@@ -53,7 +54,7 @@ class Notifications extends React.Component<INotifications> {
                             <li onClick={this.deletePost} className={classes.menuItem} title="Delete post!">
                                 Delete Post
                             </li>
-                            <li onClick={this.editPost} className={classes.menuItem} title="Delete post!">
+                            <li onClick={this.editPost} className={classes.menuItem} title="Edit post!">
                                 Edit Post
                             </li>
                             <li className={classes.menuItem} title="Delete post!">

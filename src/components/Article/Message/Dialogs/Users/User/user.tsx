@@ -11,7 +11,7 @@ interface UserPropType {
 
 const User:React.FC<UserPropType> = ({id, avatar, nickname, lastMessage}) => {
 
-    let path = "/Messages/dialog" + id;
+    let path = "/Messages/dialog/" + id
 
     return (
         <NavLink to={path}>

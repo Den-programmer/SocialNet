@@ -8,6 +8,15 @@
     display:flex;
     cursor:pointer;
 }
+.user:hover {
+    transition: all .5s ease;
+    background-color: #FFAEFF;
+    border-radius: 0 15px 15px 0;
+}
+.active {
+    background-color: #FFAEFF;
+    border-radius: 0 15px 15px 0;
+}
 .userName {
     font-size: 17px;
     color:#000;

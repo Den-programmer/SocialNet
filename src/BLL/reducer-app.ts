@@ -76,7 +76,7 @@ const reducerApp = (state = AppState, action: ActionTypes):appStateType => {
     case SET_FONT_SIZE:
       stateCopy.options.fontSize.forEach(item => {
         if (item.id === action.id) stateCopy.options.appFontSize = item.size
-      });
+      })
 
       return stateCopy;
     case SET_TEXT_ERROR:

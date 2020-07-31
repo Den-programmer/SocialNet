@@ -17,8 +17,11 @@ const ChangeUserName: React.FC<IChangeUserName> = (props) => {
 
     const [userName, setUserName] = useState<string>(props.userName)
 
+    const [isInputTouched, setInputStatus] = useState<boolean>(false)
+
     const onUserNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUserName(e.currentTarget.value);
+        setInputStatus(true)
+        setUserName(e.currentTarget.value)
     }
     const changeUserName = () => {
         const node = changeNameInput.current
@@ -31,6 +34,7 @@ const ChangeUserName: React.FC<IChangeUserName> = (props) => {
             props.saveProfile(profile)
             props.changeUserName(userNameVal)
         }
+        setInputStatus(false)
     }
 
     return (
@@ -39,9 +43,9 @@ const ChangeUserName: React.FC<IChangeUserName> = (props) => {
                 onChange={onUserNameChange}
                 type="text" value={userName} />
             <div className={classes.btn_confirmChanges}>
-                <NavLink to={"/Profile"}>
+                {isInputTouched && <NavLink to={"/Profile"}>
                     <Btn_Confirm clickFunction={changeUserName}/>
-                </NavLink>
+                </NavLink>}
             </div>
         </div>
     )

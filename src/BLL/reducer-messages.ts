@@ -125,18 +125,14 @@ type addMessageActionType = {
     messageText: string
 }
 
-export const addMessage = (messageText:string):addMessageActionType => {
-    return { type: ADD_MESSAGE, messageText }
-}
+export const addMessage = (messageText:string):addMessageActionType => ({ type: ADD_MESSAGE, messageText })
 
 type setDialogsActionType = {
     type: typeof SET_DIALOGS
     dialogs: Array<userDialogType>
 }
 
-const setDialogs = (dialogs: Array<userDialogType>):setDialogsActionType => {
-    return { type: SET_DIALOGS, dialogs }
-}
+const setDialogs = (dialogs: Array<userDialogType>):setDialogsActionType => ({ type: SET_DIALOGS, dialogs })
 
 /* Thunk Creators! */
 

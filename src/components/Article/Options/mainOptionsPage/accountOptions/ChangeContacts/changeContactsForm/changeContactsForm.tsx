@@ -10,23 +10,27 @@ interface IProps {
 }
 
 const ChangeContactsForm:React.FC<InjectedFormProps<contactsType, IProps> & IProps> = (props) => {
-    let contacts = Object.keys(props.contacts).map((key) => {
+    const contactsKeys: string[] = []
+    const contacts = Object.keys(props.contacts).map((key) => {
+        contactsKeys.push(key)
         return <ChangeContact key={key} title={key}/>
-    });
+    })
     return (
         <form onSubmit={props.handleSubmit} className={classes.contactsForm}>
             <div className={classes.contacts}>
                 {contacts}
             </div>
-            <div className={classes.btn_confirm}>
-                <Btn_Confirm clickFunction={null}/>
-            </div>
+            {props.anyTouched && <div className={classes.btn_confirm}>
+                <Btn_Confirm clickFunction={() => props.untouch(...contactsKeys)}/>
+            </div>}
             {props.error && <div className={classes.error}>{props.error}</div>}
         </form>
     )
 }
 const ChangeContactsReduxForm = reduxForm<contactsType, IProps>({
-    form: 'ChangeContacts'
+    form: 'ChangeContacts',
+    touchOnChange: true,
+    touchOnBlur: false
 })(ChangeContactsForm)
 
 export default ChangeContactsReduxForm

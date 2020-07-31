@@ -126,36 +126,28 @@ type followActionType = {
     userId: number
 }
 
-export const follow = (userId: number):followActionType => {
-    return { type: FOLLOW, userId }
-}
+export const follow = (userId: number):followActionType => ({ type: FOLLOW, userId })
 
 type unfollowActionType = {
     type: typeof UNFOLLOW
     userId: number
 }
 
-export const unfollow = (userId: number):unfollowActionType => {
-    return { type: UNFOLLOW, userId }
-}
+export const unfollow = (userId: number):unfollowActionType => ({ type: UNFOLLOW, userId })
 
 type setUsersActionType = {
     type: typeof SET_USERS
     users: Array<userType>
 }
 
-export const setUsers = (users: Array<userType>):setUsersActionType => {
-    return { type: SET_USERS, users }
-}
+const setUsers = (users: Array<userType>):setUsersActionType => ({ type: SET_USERS, users })
 
 type changePageActionType = {
     type: typeof CHANGE_PAGE
     currentPage: number
 }
 
-export const changePage = (currentPage: number):changePageActionType => {
-    return { type: CHANGE_PAGE, currentPage }
-}
+export const changePage = (currentPage: number):changePageActionType => ({ type: CHANGE_PAGE, currentPage })
 
 type setUsersInfData = {
     totalCount: number
@@ -166,18 +158,14 @@ type setUsersInfActionType = {
     data: setUsersInfData
 }
 
-export const setUsersInf = (data:setUsersInfData):setUsersInfActionType => {
-    return { type: SET_USERSINF, data }
-}
+export const setUsersInf = (data:setUsersInfData):setUsersInfActionType => ({ type: SET_USERSINF, data })
 
 type isFetchingActionType = {
     type: typeof IS_FETCHING
     isFetching: boolean
 }
 
-export const isFetching = (isFetching:boolean):isFetchingActionType => {
-    return { type: IS_FETCHING, isFetching }
-}
+export const isFetching = (isFetching:boolean):isFetchingActionType => ({ type: IS_FETCHING, isFetching })
 
 type toggleFollowingInProcessActionType = {
     type: typeof TOGGLE_IS_FOLLOWING_PROCESS
@@ -185,18 +173,14 @@ type toggleFollowingInProcessActionType = {
     userId: number
 }
 
-export const toggleFollowingInProcess = (isFetching: boolean, userId: number):toggleFollowingInProcessActionType => {
-    return { type: TOGGLE_IS_FOLLOWING_PROCESS, isFetching, userId }
-}
+export const toggleFollowingInProcess = (isFetching: boolean, userId: number):toggleFollowingInProcessActionType => ({ type: TOGGLE_IS_FOLLOWING_PROCESS, isFetching, userId })
 
 type setFriendsActionType = {
     type: typeof SET_FRIENDS
     users: Array<userType>
 }
 
-const setFriends = (users:Array<userType>):setFriendsActionType => {
-    return { type: SET_FRIENDS, users }
-}
+const setFriends = (users:Array<userType>):setFriendsActionType => ({ type: SET_FRIENDS, users })
 
 // Thunk Creators!
 
