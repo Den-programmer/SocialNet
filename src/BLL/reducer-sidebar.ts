@@ -1,7 +1,5 @@
-import { navLinkType } from '../types/SidebarTypes/sidebarTypes';
-
-const ADD_SIDEBAR_NAVLINK = 'ADD_SIDEBAR_NAVLINK';
-const DELETE_SIDEBAR_NAVLINK = 'DELETE_SIDEBAR_NAVLINK';
+import { navLinkType } from '../types/SidebarTypes/sidebarTypes'
+import { InferActionTypes } from './redux';
 
 type SidebarType = {
     navigationLinks: Array<navLinkType>
@@ -39,7 +37,7 @@ let Sidebar = {
 
 const reducerSidebar = (state = Sidebar, action: ActionsType): SidebarType => {
     switch (action.type) {
-        case ADD_SIDEBAR_NAVLINK: 
+        case `sn/sidebar/ADD_SIDEBAR_NAVLINK`:
             let newLink = {
                 id: state.navigationLinks.length + 1,
                 name: action.title,
@@ -49,35 +47,21 @@ const reducerSidebar = (state = Sidebar, action: ActionsType): SidebarType => {
                 ...state,
                 navigationLinks: [...state.navigationLinks, newLink]
             }
-        case DELETE_SIDEBAR_NAVLINK:
+        case `sn/sidebar/DELETE_SIDEBAR_NAVLINK`:
             return {
                 ...state,
                 navigationLinks: state.navigationLinks.filter(item => item.id !== action.id)
-            }    
-        default: 
-            return state;
+            }
+        default:
+            return state
     }
 }
 
-type ActionsType = addSideBarNavLinkActionType | deleteSideBarNavLinkActionType
+type ActionsType = InferActionTypes<typeof actions>
 
-type addSideBarNavLinkActionType = {
-    type: typeof ADD_SIDEBAR_NAVLINK
-    title: string
-    path: string
+export const actions = {
+    addSideBarNavLink: (title: string, path: string) => ({ type: `sn/sidebar/ADD_SIDEBAR_NAVLINK`, title, path } as const),
+    deleteSideBarNavLink: (id: number) => ({ type: `sn/sidebar/DELETE_SIDEBAR_NAVLINK`, id } as const)
 }
 
-export const addSideBarNavLink = (title: string, path: string): addSideBarNavLinkActionType => {
-    return { type: ADD_SIDEBAR_NAVLINK, title, path }
-}
-
-type deleteSideBarNavLinkActionType = {
-    type: typeof DELETE_SIDEBAR_NAVLINK
-    id: number
-}
-
-export const deleteSideBarNavLink = (id: number):deleteSideBarNavLinkActionType => {
-    return { type: DELETE_SIDEBAR_NAVLINK, id }
-}
-
-export default reducerSidebar;
+export default reducerSidebar

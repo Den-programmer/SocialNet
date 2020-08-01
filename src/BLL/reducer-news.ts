@@ -6,7 +6,7 @@ const reducerNews = (state = initialState, action: any) => {
 
 
 
-    return state;
+    return state
 }
 
-export default reducerNews;
+export default reducerNews

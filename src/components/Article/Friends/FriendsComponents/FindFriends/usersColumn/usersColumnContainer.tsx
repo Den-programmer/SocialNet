@@ -2,7 +2,7 @@ import React from 'react'
 import UsersColumn from './usersColumn'
 import Preloader from '../../../../../common/preloader/preloader'
 import { connect } from "react-redux"
-import { follow, unfollow, requestUsers, followThunk, unfollowThunk } from "../../../../../../BLL/reducer-friends"
+import { requestUsers, followThunk, unfollowThunk, actions } from "../../../../../../BLL/reducer-friends"
 import { getUsersInf, getUsers, getFollowingInProcess } from '../../../../../../BLL/selectors/users-selectors'
 import { RootState } from '../../../../../../BLL/redux'
 import { userType } from '../../../../../../types/FriendsType/friendsType'
@@ -41,11 +41,13 @@ class UsersColumnAPI extends React.Component<IUserColumnAPI> {
     }
 }
 
-let mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: RootState) => ({
     users: getUsers(state),
     usersInf: getUsersInf(state),
     followingInProcess: getFollowingInProcess(state)
 })
+
+const { follow, unfollow } = actions
 
 const UsersColumnContainer = connect(mapStateToProps, {
     follow,

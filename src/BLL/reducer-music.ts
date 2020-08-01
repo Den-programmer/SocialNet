@@ -6,12 +6,7 @@ import deathpunch from '../components/Article/Music/MainMusicPage/track/music/De
 import mydemons from '../components/Article/Music/MainMusicPage/track/music/MyDemons.mp3'
 import nf from '../components/Article/Music/Following/singer/images/nf.jpg'
 import suicideBoys from '../components/Article/Music/Following/singer/images/suicideBoys.jpg'
-
-const LIKE_TRACK = 'LIKE_TRACK'
-const CHOOSE_TRACK = 'CHOOSE_TRACK'
-const SET_CURRENT_TRACK_TIME = 'SET_CURRENT_TRACK_TIME'
-const SET_LIKED_TRACKS = 'SET_LIKED_TRACKS' 
-const PAUSE_ALL_TRACKS = 'PAUSE_ALL_TRACKS'
+import { InferActionTypes } from './redux'
 
 export type trackType = {
     id: number
@@ -27,7 +22,7 @@ export type trackType = {
 
 export type singerType = {
     id: number
-    photoSinger: string 
+    photoSinger: string
     name: string
     location: string | null
     subscribers: number
@@ -48,32 +43,32 @@ type musicPageType = {
     trackNotifications: Array<trackNotificationType>
     tracks: Array<trackType>
     likedTracks: Array<trackType>
-	playlists: Array<{}>
-	albums: Array<{}>
-	following: Array<singerType>
+    playlists: Array<{}>
+    albums: Array<{}>
+    following: Array<singerType>
 }
 
 const musicPage = {
     navLinks: [
         {
-          id: 1,
-          title: 'Liked Tracks',
-          path: '/Music/likedTracks'
+            id: 1,
+            title: 'Liked Tracks',
+            path: '/Music/likedTracks'
         },
         {
-          id: 2,
-          title: 'PlayLists',
-          path: '/Music/PlayLists'
+            id: 2,
+            title: 'PlayLists',
+            path: '/Music/PlayLists'
         },
         {
-          id: 3,
-          title: 'Albums',
-          path: '/Music/Albums'
+            id: 3,
+            title: 'Albums',
+            path: '/Music/Albums'
         },
         {
-          id: 4,
-          title: 'Following', 
-          path: '/Music/following'  
+            id: 4,
+            title: 'Following',
+            path: '/Music/following'
         }
     ],
     trackNotifications: [
@@ -134,9 +129,9 @@ const musicPage = {
         }
     ],
     likedTracks: [],
-	playlists: [],
-	albums: [],
-	following: [
+    playlists: [],
+    albums: [],
+    following: [
         {
             id: 1,
             photoSinger: nf,
@@ -172,9 +167,9 @@ const musicPage = {
     ],
 } as musicPageType
 
-const reducerMusic = (state = musicPage, action:ActionTypes) => {
-    switch(action.type) {
-        case LIKE_TRACK: 
+const reducerMusic = (state = musicPage, action: ActionTypes) => {
+    switch (action.type) {
+        case `sn/musicPage/LIKE_TRACK`:
             return {
                 ...state,
                 tracks: state.tracks.map((track: trackType) => {
@@ -186,19 +181,19 @@ const reducerMusic = (state = musicPage, action:ActionTypes) => {
                     }
                 })
             }
-        case SET_LIKED_TRACKS: 
+        case `sn/musicPage/SET_LIKED_TRACKS`:
             return {
                 ...state,
                 likedTracks: state.tracks.filter((track: trackType) => {
-                    if(track.liked) return true 
+                    if (track.liked) return true
                 })
-            }    
-        case CHOOSE_TRACK:
+            }
+        case `sn/musicPage/CHOOSE_TRACK`:
             return {
                 ...state,
                 tracks: state.tracks.map((track: trackType) => {
-                    if(track.id === action.trackId) {
-                        if(track.isMusicPlaying) {
+                    if (track.id === action.trackId) {
+                        if (track.isMusicPlaying) {
                             return { ...track, isMusicPlaying: false }
                         } else {
                             return { ...track, isMusicPlaying: true }
@@ -208,74 +203,34 @@ const reducerMusic = (state = musicPage, action:ActionTypes) => {
                     }
                 })
             }
-        case SET_CURRENT_TRACK_TIME: 
+        case `sn/musicPage/SET_CURRENT_TRACK_TIME`:
             return {
                 ...state,
                 tracks: state.tracks.map((track: trackType) => {
-                    if(track.id === action.trackId) return { ...track, time: action.time }
+                    if (track.id === action.trackId) return { ...track, time: action.time }
                     return track
                 })
-            } 
-        case PAUSE_ALL_TRACKS:
+            }
+        case `sn/musicPage/PAUSE_ALL_TRACKS`:
             return {
                 ...state,
                 tracks: state.tracks.map((track: trackType) => {
                     return { ...track, isMusicPlaying: false }
                 })
-            }    
+            }
         default:
             return state
     }
 }
 
-type ActionTypes = likeTrackActionType | 
-chooseTrackActionType | 
-setTrackCurrentTimeActionType | 
-setLikedTracksActionType |
-unsetIsMusicPlayingActionType
+type ActionTypes = InferActionTypes<typeof actions>
 
-type likeTrackActionType = {
-    type: typeof LIKE_TRACK
-    trackId: number
-}
-
-export const likeTrack = (trackId: number):likeTrackActionType => {
-    return { type: LIKE_TRACK, trackId }
-}
-
-type setLikedTracksActionType = {
-    type: typeof SET_LIKED_TRACKS
-}
-
-export const setLikedTracks = () => {
-    return { type: SET_LIKED_TRACKS }
-}
-
-type chooseTrackActionType = {
-    type: typeof CHOOSE_TRACK
-    trackId: number
-}
-
-export const chooseTrack = (trackId: number):chooseTrackActionType => {
-    return { type: CHOOSE_TRACK, trackId }
-}
-
-type setTrackCurrentTimeActionType = {
-    type: typeof SET_CURRENT_TRACK_TIME
-    trackId: number
-    time: number
-}
-
-export const setTrackCurrentTime = (trackId: number, time: number) => {
-    return { type: SET_CURRENT_TRACK_TIME, trackId, time }
-}
-
-type unsetIsMusicPlayingActionType = {
-    type: typeof PAUSE_ALL_TRACKS
-}
-
-export const unsetIsMusicPlaying = (): unsetIsMusicPlayingActionType => {
-    return { type: PAUSE_ALL_TRACKS }
+export const actions = {
+    likeTrack: (trackId: number) => ({ type: `sn/musicPage/LIKE_TRACK`, trackId } as const),
+    setLikedTracks: () => ({ type: `sn/musicPage/SET_LIKED_TRACKS` } as const),
+    chooseTrack: (trackId: number) => ({ type: `sn/musicPage/CHOOSE_TRACK`, trackId } as const),
+    setTrackCurrentTime: (trackId: number, time: number) => ({ type: `sn/musicPage/SET_CURRENT_TRACK_TIME`, trackId, time } as const),
+    unsetIsMusicPlaying: () => ({ type: `sn/musicPage/PAUSE_ALL_TRACKS` } as const)
 }
 
 export default reducerMusic

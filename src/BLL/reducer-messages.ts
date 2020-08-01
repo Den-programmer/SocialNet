@@ -1,9 +1,6 @@
 import { ThunkAction } from "redux-thunk"
-import { RootState } from "./redux"
+import { RootState, InferActionTypes } from "./redux"
 import { userDialogType, message } from '../types/MessagesTypes/messagesTypes'
-
-const ADD_MESSAGE = 'messagesPage/ADD-MESSAGE'
-const SET_DIALOGS = 'SET-DIALOGS'
 
 type messagesPageType = {
     dialogsData: Array<userDialogType>
@@ -102,8 +99,8 @@ let messagesPage = {
 
 const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPageType => {
     switch (action.type) {
-        case ADD_MESSAGE:
-            let newMessage = {
+        case `sn/messagesPage/ADD-MESSAGE`:
+            const newMessage = {
                 id: state.messages.length + 1,
                 messageText: action.messageText
             }
@@ -118,21 +115,12 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPag
 
 /* Action Creators! */
 
-type ActionTypes = addMessageActionType | setDialogsActionType
+type ActionTypes = InferActionTypes<typeof actions>
 
-type addMessageActionType = {
-    type: typeof ADD_MESSAGE
-    messageText: string
+export const actions = {
+    addMessage: (messageText:string) => ({ type: `sn/messagesPage/ADD-MESSAGE`, messageText } as const),
+    setDialogs: (dialogs: Array<userDialogType>) => ({ type: `sn/messagesPage/SET-DIALOGS`, dialogs } as const)
 }
-
-export const addMessage = (messageText:string):addMessageActionType => ({ type: ADD_MESSAGE, messageText })
-
-type setDialogsActionType = {
-    type: typeof SET_DIALOGS
-    dialogs: Array<userDialogType>
-}
-
-const setDialogs = (dialogs: Array<userDialogType>):setDialogsActionType => ({ type: SET_DIALOGS, dialogs })
 
 /* Thunk Creators! */
 

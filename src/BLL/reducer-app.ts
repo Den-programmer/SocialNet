@@ -1,11 +1,11 @@
 import { authentication } from "./reducer-auth"
 import { ThunkAction } from "redux-thunk"
-import { RootState } from "./redux"
+import { RootState, InferActionTypes } from "./redux"
 import { fontSizeObjectType } from '../types/AppTypes/appTypes'
 
 const SET_INITIALIZED = 'app/SET_INITIALIZED'
 const SET_FONT_SIZE = 'app/SET_FONT_SIZE'
-const SET_TEXT_ERROR = 'SET_TEXT_ERROR'
+const SET_TEXT_ERROR = 'app/SET_TEXT_ERROR'
 
 type optionsType = {
   fontSize: Array<fontSizeObjectType>
@@ -63,7 +63,7 @@ let AppState = {
   messageError: ''
 } as appStateType
 
-const reducerApp = (state = AppState, action: ActionTypes):appStateType => {
+const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
   let stateCopy = { ...state }
   stateCopy.options = { ...state.options }
   stateCopy.options.fontSize = [...state.options.fontSize]
@@ -91,41 +91,27 @@ const reducerApp = (state = AppState, action: ActionTypes):appStateType => {
 
 // Action Creators!
 
-type ActionTypes = initializedSuccessfulActionType | setFontSizeActionType | setTextErrorActionType
+type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
 
-type initializedSuccessfulActionType = {
-  type: typeof SET_INITIALIZED
-}
-
-const initializedSuccessful = ():initializedSuccessfulActionType => {
-  return { type: SET_INITIALIZED }
-}
-type setFontSizeActionType = {
-  type: typeof SET_FONT_SIZE
-  id: number
-}
-export const setFontSize = (id: number):setFontSizeActionType => {
-  return { type: SET_FONT_SIZE, id }
+export const actions = {
+  initializedSuccessful: () => ({ type: SET_INITIALIZED } as const),
+  setFontSize: (id: number) => ({ type: SET_FONT_SIZE, id } as const)
 }
 
-export type setTextErrorActionType = {
-  type: typeof SET_TEXT_ERROR,
-  text: string
-}
+// Common Action Creators!
 
-export const setTextError = (text: string):setTextErrorActionType => {
-  return { type: SET_TEXT_ERROR, text }
-}
+export type setTextErrorActionType = ({ type: typeof SET_TEXT_ERROR, text: string })
+export const setTextError = (text: string): setTextErrorActionType => ({ type: SET_TEXT_ERROR, text })
 
 // Thunk Creators!
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
-export const initialize = ():ThunkType => async (dispatch) => {
+export const initialize = (): ThunkType => async (dispatch) => {
   let promise = dispatch(authentication())
 
   promise.then(() => {
-    dispatch(initializedSuccessful())
+    dispatch(actions.initializedSuccessful())
   })
 }
 

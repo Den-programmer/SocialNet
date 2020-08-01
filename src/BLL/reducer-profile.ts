@@ -4,19 +4,10 @@ import { OptionsAPI } from "../DAL/optionsApi"
 import { resultCode } from '../DAL/api'
 import { setTextError, setTextErrorActionType } from './reducer-app'
 import { stopSubmit } from 'redux-form'
-import { RootState } from './redux'
+import { RootState, InferActionTypes } from './redux'
 import { ThunkAction } from 'redux-thunk'
 
-const ADD_POST = 'profilePage/ADD-POST'
-const DELETE_POST = 'profilePage/DELETE_POST'
-const EDIT_POST = 'profilePage/EDIT-POST'
-const SET_USER_PROFILE = 'profilePage/SET_USER_PROFILE'
-const SET_STATUS = 'profilePage/SET_STATUS'
-const UPDATE_STATUS = 'profilePage/UPDATE_STATUS'
-const SET_USERS_PHOTO = 'profilePage/SET_USERS_PHOTO'
-const CHANGE_USER_NAME = 'profilePage/CHANGE_USER_NAME'
-const CHANGE_CONTACT = 'profilePage/CHANGE_CONTACT'
-const IS_USER_FOLLOWED = 'profilePage/IS_USER_FOLLOWED'
+const entity = 'sn/profilePage/'
 
 export type profilePhotosType = {
   large: string
@@ -104,44 +95,49 @@ let profilePage = {
 
 const reducerProfile = (state = profilePage, action: ActionTypes): profilePageType => {
   switch (action.type) {
-    case ADD_POST:
-      let newPost = {
+    case `/sn/profilePage/ADD-POST`:
+      const newPost = {
         id: state.posts.length + 1,
         postTitle: action.newPostTitle,
         postInf: action.newPostInformat,
         likesCount: 200000
-      } 
+      }
 
       return {
         ...state,
         posts: [...state.posts as Array<postType>, newPost as postType]
       }
-    case DELETE_POST:
+    case `/sn/profilePage/DELETE_POST`:
       return {
         ...state,
         posts: state.posts.filter(post => post.id !== action.postId)
       }
-    case SET_USER_PROFILE:
+    case `/sn/profilePage/SET_USER_PROFILE`:
       return {
         ...state,
         profile: action.profile
       }
-    case SET_STATUS:
+    case `/sn/profilePage/SET_STATUS`:
       return {
         ...state,
         profile: { ...state.profile, status: action.status }
       }
-    case SET_USERS_PHOTO:
+    case `/sn/profilePage/SET_USERS_PHOTO`:
       return {
         ...state,
         profile: { ...state.profile, photos: { large: action.photo, small: action.photo } }
       }
-    case CHANGE_USER_NAME:
+    case `/sn/profilePage/UPDATE_STATUS`:
+      return {
+        ...state,
+        profile: { ...state.profile, status: action.status }
+      }
+    case `/sn/profilePage/CHANGE_USER_NAME`:
       return {
         ...state,
         profile: { ...state.profile, fullName: action.userName }
       }
-    case EDIT_POST:
+    case `/sn/profilePage/EDIT-POST`:
       return {
         ...state,
         posts: state.posts.map(post => {
@@ -149,11 +145,11 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
           return post
         })
       }
-    case IS_USER_FOLLOWED:
+    case `/sn/profilePage/IS_USER_FOLLOWED`:
       return {
         ...state,
         followed: action.followed
-      }  
+      }
     default:
       return state
   }
@@ -161,121 +157,31 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
 
 /* Action Creators! */
 
-type ActionTypes = addPostActionType | 
-deletePostActionType | 
-editPostActionType | 
-setUserProfileActionType | 
-setStatusActionType | 
-updateStatusActionType| setIsUserFollowedActionType |
-setUserPhotoActionType | 
-changeUserNameActionType | 
-changeContactsActionType |
-setTextErrorActionType
+type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
 
-type addPostActionType = {
-  type: typeof ADD_POST
-  newPostTitle: string
-  newPostInformat: string
-}
-
-export const addPost = (newPostTitle: string, newPostInformat: string):addPostActionType => {
-  return { type: ADD_POST, newPostTitle, newPostInformat }
-}
-
-type deletePostActionType = {
-  type: typeof DELETE_POST
-  postId: number
-}
-
-export const deletePost = (postId: number):deletePostActionType => {
-  return { type: DELETE_POST, postId }
-}
-
-type editPostActionType = {
-  type: typeof EDIT_POST
-  postId: number
-  newPostTitle: string
-  newPostInformat: string
-}
-
-export const editPost = (postId: number, newPostTitle: string, newPostInformat: string):editPostActionType => {
-  return { type: EDIT_POST, postId, newPostTitle, newPostInformat }
-}
-
-type setUserProfileActionType = {
-  type: typeof SET_USER_PROFILE
-  profile: profileType
-}
-
-const setUserProfile = (profile: profileType):setUserProfileActionType => {
-  return { type: SET_USER_PROFILE, profile }
-}
-
-type setStatusActionType = {
-  type: typeof SET_STATUS
-  status: string
-}
-
-const setStatus = (status: string):setStatusActionType => {
-  return { type: SET_STATUS, status }
-}
-
-type updateStatusActionType = {
-  type: typeof UPDATE_STATUS
-  status: string
-}
-
-const updateStatus = (status: string):updateStatusActionType => {
-  return { type: UPDATE_STATUS, status }
-}
-
-type setUserPhotoActionType = {
-  type: typeof SET_USERS_PHOTO
-  photo: any
-}
-
-const setUserPhoto = (photo: any):setUserPhotoActionType => {
-  return { type: SET_USERS_PHOTO, photo }
-}
-
-type changeUserNameActionType = {
-  type: typeof CHANGE_USER_NAME
-  userName: string
-}
-
-export const changeUserName = (userName: string):changeUserNameActionType => {
-  return { type: CHANGE_USER_NAME, userName }
-}
-
-type changeContactsActionType = {
-  type: typeof CHANGE_CONTACT
-  contactId: number
-  val: string
-}
-
-export const changeContacts = (contactId: number, val: string):changeContactsActionType => {
-  return { type: CHANGE_CONTACT, contactId, val }
-}
-
-type setIsUserFollowedActionType = {
-  type: typeof IS_USER_FOLLOWED
-  followed: boolean 
-}
-
-const setIsUserFollowed = (followed: boolean): setIsUserFollowedActionType => {
-  return { type: IS_USER_FOLLOWED, followed }
+export const actions = {
+  addPost: (newPostTitle: string, newPostInformat: string) => ({ type: `/sn/profilePage/ADD-POST`, newPostTitle, newPostInformat } as const),
+  deletePost: (postId: number) => ({ type: `/sn/profilePage/DELETE_POST`, postId } as const),
+  editPost: (postId: number, newPostTitle: string, newPostInformat: string) => ({ type: `/sn/profilePage/EDIT-POST`, postId, newPostTitle, newPostInformat } as const),
+  setUserProfile: (profile: profileType) => ({ type: `/sn/profilePage/SET_USER_PROFILE`, profile } as const),
+  setStatus: (status: string) => ({ type: `/sn/profilePage/SET_STATUS`, status } as const),
+  updateStatus: (status: string) => ({ type: `/sn/profilePage/UPDATE_STATUS`, status } as const),
+  setUserPhoto: (photo: any) => ({ type: `/sn/profilePage/SET_USERS_PHOTO`, photo } as const),
+  changeUserName: (userName: string) => ({ type: `/sn/profilePage/CHANGE_USER_NAME`, userName } as const),
+  changeContacts: (contactId: number, val: string) => ({ type: `/sn/profilePage/CHANGE_CONTACT`, contactId, val } as const),
+  setIsUserFollowed: (followed: boolean) => ({ type: `/sn/profilePage/IS_USER_FOLLOWED`, followed } as const)
 }
 
 /* Thunks! */
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
-export const setUserPhotoThunk = (photo: any):ThunkType => async (dispatch) => {
+export const setUserPhotoThunk = (photo: any): ThunkType => async (dispatch) => {
   try {
     let data = await OptionsAPI.setUserPhoto(photo)
     debugger
     if (data.resultCode === resultCode.Success) {
-      dispatch(setUserPhoto(photo))
+      dispatch(actions.setUserPhoto(photo))
     } else {
       let message = data.messages[0]
       dispatch(setTextError(message))
@@ -285,20 +191,20 @@ export const setUserPhotoThunk = (photo: any):ThunkType => async (dispatch) => {
   }
 }
 
-export const setUserProfileThunk = (userId: number | null):ThunkType => async (dispatch) => {
+export const setUserProfileThunk = (userId: number | null): ThunkType => async (dispatch) => {
   try {
     let data = await ProfileAPI.getUsersProfile(userId)
-    dispatch(setUserProfile(data))
+    dispatch(actions.setUserProfile(data))
   } catch (error) {
     alert(`Something's gone wrong, error status: 500`)
   }
 }
-export const saveProfile = (profile: saveProfileType):ThunkType => async (dispatch, getState) => {
+export const saveProfile = (profile: saveProfileType): ThunkType => async (dispatch, getState) => {
   try {
-    let userId = getState().auth.userId
-    let profileStatus = getState().profilePage.profile.status
-    let userProfilePhoto = getState().profilePage.profile.photos
-    let trueProfile = {
+    const userId = getState().auth.userId
+    const profileStatus = getState().profilePage.profile.status
+    const userProfilePhoto = getState().profilePage.profile.photos
+    const trueProfile = {
       status: profileStatus,
       aboutMe: 'I\'m GODNESS!!!',
       userId: userId,
@@ -309,40 +215,40 @@ export const saveProfile = (profile: saveProfileType):ThunkType => async (dispat
       photos: userProfilePhoto
     }
     // @ts-ignore
-    let data = await ProfileAPI.saveProfile(trueProfile)
+    const data = await ProfileAPI.saveProfile(trueProfile)
     if (data.resultCode === resultCode.Success) {
       dispatch(setUserProfileThunk(userId))
     } else {
-      let error = data.messages[0]
-      let action: any = stopSubmit('ChangeContacts', { _error: error })
+      const error = data.messages[0]
+      const action: any = stopSubmit('ChangeContacts', { _error: error })
       dispatch(action)
     }
   } catch (error) {
     alert(`Something's gone wrong, error status: 500`)
   }
 }
-export const setStatusThunk = (userId: number):ThunkType => async (dispatch) => {
+export const setStatusThunk = (userId: number): ThunkType => async (dispatch) => {
   try {
     let data = await ProfileAPI.getStatus(userId)
-    dispatch(setStatus(data))
+    dispatch(actions.setStatus(data))
   } catch (error) {
     console.log(error)
     alert(`Something's gone wrong, error status: 500`)
   }
 }
-export const updateStatusThunk = (status: string):ThunkType => async (dispatch) => {
+export const updateStatusThunk = (status: string): ThunkType => async (dispatch) => {
   try {
     let data = await ProfileAPI.updateStatus(status)
-    dispatch(updateStatus(data))
+    dispatch(actions.updateStatus(data))
   } catch (error) {
     alert(`Something's gone wrong, error status: 500`)
   }
 }
-export const getIsUserFollowed = (userId: number | null):ThunkType => async (dispatch) => {
+export const getIsUserFollowed = (userId: number | null): ThunkType => async (dispatch) => {
   try {
     let res = await ProfileAPI.getIsUserFollowed(userId)
-    dispatch(setIsUserFollowed(res.data))
-  } catch(e) {
+    dispatch(actions.setIsUserFollowed(res.data))
+  } catch (e) {
     alert(`Something's gone wrong, error status: 500`)
   }
 }

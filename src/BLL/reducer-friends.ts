@@ -1,17 +1,8 @@
 import { UsersAPI } from '../DAL/usersApi'
 import { userType } from '../types/FriendsType/friendsType'
-import { RootState } from './redux'
+import { RootState, InferActionTypes } from './redux'
 import { ThunkAction } from 'redux-thunk'
 import { resultCode } from '../DAL/api'
-
-const FOLLOW = 'Friends/FOLLOW'
-const UNFOLLOW = 'Friends/UNFOLLOW'
-const SET_USERS = 'Friends/SET-USERS'
-const CHANGE_PAGE = 'Friends/CHANGE-PAGE'
-const SET_USERSINF = 'Friends/SET-USERSINF'
-const IS_FETCHING = 'Friends/IS_FETCHING'
-const SET_FRIENDS = 'SET_FRIENDS'
-const TOGGLE_IS_FOLLOWING_PROCESS = 'Friends/TOGGLE_IS_FOLLOWING_PROCESS'
 
 type FriendsType = {
     friends: Array<userType>
@@ -41,18 +32,18 @@ const Friends = {
 
 const reducerFriends = (state = Friends, action: ActionTypes): FriendsType => {
     switch (action.type) {
-        case SET_USERS:
+        case `sn/Friends/SET-USERS`:
             return {
                 ...state,
                 users: action.users
             }
-        case SET_FRIENDS:
+        case `sn/Friends/SET_FRIENDS`:
             return {
                 ...state,
                 friends: action.users.filter((user: userType) => user.followed === true)
             }
-        case FOLLOW:
-            let currentUserArray:Array<object> = state.users.filter(user => {
+        case `sn/Friends/FOLLOW`:
+            let currentUserArray: Array<object> = state.users.filter(user => {
                 if (user.id === action.userId) return true;
             })
             let currentUser: any = currentUserArray.find(item => item)
@@ -75,7 +66,7 @@ const reducerFriends = (state = Friends, action: ActionTypes): FriendsType => {
                 }),
                 friends: [...state.friends, newFriend]
             }
-        case UNFOLLOW:
+        case `sn/Friends/UNFOLLOW`:
             return {
                 ...state,
                 users: state.users.map(user => {
@@ -84,23 +75,23 @@ const reducerFriends = (state = Friends, action: ActionTypes): FriendsType => {
                 }),
                 friends: state.friends.filter(friend => friend.id !== action.userId)
             }
-        case TOGGLE_IS_FOLLOWING_PROCESS:
+        case `sn/Friends/TOGGLE_IS_FOLLOWING_PROCESS`:
             return {
                 ...state,
                 followingInProcess: action.isFetching ? [...state.followingInProcess, action.userId]
                     : state.followingInProcess.filter(id => id !== action.userId)
             }
-        case CHANGE_PAGE:
+        case `sn/Friends/CHANGE-PAGE`:
             return {
                 ...state,
                 usersInf: { ...state.usersInf, currentPage: action.currentPage }
             }
-        case SET_USERSINF:
+        case `sn/Friends/SET-USERSINF`:
             return {
                 ...state,
                 usersInf: { ...state.usersInf, totalCount: action.data.totalCount }
             }
-        case IS_FETCHING:
+        case `sn/Friends/IS_FETCHING`:
             return {
                 ...state,
                 usersInf: { ...state.usersInf, isFetching: action.isFetching }
@@ -112,112 +103,59 @@ const reducerFriends = (state = Friends, action: ActionTypes): FriendsType => {
 
 // Action Creators!
 
-type ActionTypes = followActionType | 
-unfollowActionType | 
-setUsersActionType | 
-changePageActionType | 
-setUsersInfActionType | 
-isFetchingActionType | 
-toggleFollowingInProcessActionType | 
-setFriendsActionType 
- 
-type followActionType = {
-    type: typeof FOLLOW
-    userId: number
-}
-
-export const follow = (userId: number):followActionType => ({ type: FOLLOW, userId })
-
-type unfollowActionType = {
-    type: typeof UNFOLLOW
-    userId: number
-}
-
-export const unfollow = (userId: number):unfollowActionType => ({ type: UNFOLLOW, userId })
-
-type setUsersActionType = {
-    type: typeof SET_USERS
-    users: Array<userType>
-}
-
-const setUsers = (users: Array<userType>):setUsersActionType => ({ type: SET_USERS, users })
-
-type changePageActionType = {
-    type: typeof CHANGE_PAGE
-    currentPage: number
-}
-
-export const changePage = (currentPage: number):changePageActionType => ({ type: CHANGE_PAGE, currentPage })
+type ActionTypes = InferActionTypes<typeof actions>
 
 type setUsersInfData = {
     totalCount: number
 }
 
-type setUsersInfActionType = {
-    type: typeof SET_USERSINF
-    data: setUsersInfData
+export const actions = {
+    follow: (userId: number) => ({ type: `sn/Friends/FOLLOW`, userId } as const),
+    unfollow: (userId: number) => ({ type: `sn/Friends/UNFOLLOW`, userId } as const),
+    setUsers: (users: Array<userType>) => ({ type: `sn/Friends/SET-USERS`, users } as const),
+    changePage: (currentPage: number) => ({ type: `sn/Friends/CHANGE-PAGE`, currentPage } as const),
+    setUsersInf: (data: setUsersInfData) => ({ type: `sn/Friends/SET-USERSINF`, data } as const),
+    isFetching: (isFetching: boolean) => ({ type: `sn/Friends/IS_FETCHING`, isFetching } as const),
+    toggleFollowingInProcess: (isFetching: boolean, userId: number) => ({ type: `sn/Friends/TOGGLE_IS_FOLLOWING_PROCESS`, isFetching, userId } as const),
+    setFriends: (users: Array<userType>) => ({ type: `sn/Friends/SET_FRIENDS`, users } as const)
 }
-
-export const setUsersInf = (data:setUsersInfData):setUsersInfActionType => ({ type: SET_USERSINF, data })
-
-type isFetchingActionType = {
-    type: typeof IS_FETCHING
-    isFetching: boolean
-}
-
-export const isFetching = (isFetching:boolean):isFetchingActionType => ({ type: IS_FETCHING, isFetching })
-
-type toggleFollowingInProcessActionType = {
-    type: typeof TOGGLE_IS_FOLLOWING_PROCESS
-    isFetching: boolean
-    userId: number
-}
-
-export const toggleFollowingInProcess = (isFetching: boolean, userId: number):toggleFollowingInProcessActionType => ({ type: TOGGLE_IS_FOLLOWING_PROCESS, isFetching, userId })
-
-type setFriendsActionType = {
-    type: typeof SET_FRIENDS
-    users: Array<userType>
-}
-
-const setFriends = (users:Array<userType>):setFriendsActionType => ({ type: SET_FRIENDS, users })
 
 // Thunk Creators!
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
-export const requestUsers = (pageSize: number, currentPage: number):ThunkType => async (dispatch) => {
+export const requestUsers = (pageSize: number, currentPage: number): ThunkType => async (dispatch) => {
     try {
-        dispatch(isFetching(true))
+        dispatch(actions.isFetching(true))
         let data = await UsersAPI.requestUsers(pageSize, currentPage)
-        dispatch(isFetching(false))
-        dispatch(setUsers(data.items))
-        dispatch(setUsersInf(data))
-        dispatch(setFriends(data.items))
+        dispatch(actions.isFetching(false))
+        dispatch(actions.setUsers(data.items))
+        dispatch(actions.setUsersInf(data))
+        dispatch(actions.setFriends(data.items))
     } catch (error) {
         alert(`Something's gone wrong, error status: ${error.status}`)
     }
 }
-export const followThunk = (userId: number):ThunkType => async (dispatch) => {
+export const followThunk = (userId: number): ThunkType => async (dispatch) => {
     try {
-        dispatch(toggleFollowingInProcess(true, userId))
+        dispatch(actions.toggleFollowingInProcess(true, userId))
         let data = await UsersAPI.follow(userId)
         if (data.resultCode === resultCode.Success) {
-            dispatch(follow(userId))
+            dispatch(actions.follow(userId))
         }
-        dispatch(toggleFollowingInProcess(false, userId))
+        dispatch(actions.toggleFollowingInProcess(false, userId))
     } catch (error) {
         alert(`Something's gone wrong, error status: ${error.status}`)
     }
 }
-export const unfollowThunk = (userId: number):ThunkType => async (dispatch) => {
+export const unfollowThunk = (userId: number): ThunkType => async (dispatch) => {
     try {
-        dispatch(toggleFollowingInProcess(true, userId))
+        dispatch(actions.toggleFollowingInProcess(true, userId))
         let data = await UsersAPI.unfollow(userId)
         if (data.resultCode === resultCode.Success) {
-            dispatch(unfollow(userId))
+            dispatch(actions.unfollow(userId))
         }
-        dispatch(toggleFollowingInProcess(false, userId))
+        dispatch(actions.toggleFollowingInProcess(false, userId))
     } catch (error) {
         alert(`Something's gone wrong, error status: ${error.status}`)
     }
