@@ -5,6 +5,8 @@ import { getLikedTracks, getTrackNotifications } from '../../../../BLL/selectors
 import MainMusicPage from '../MainMusicPage/mainMusicPage'
 import { likeTrack, chooseTrack, setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying } from '../../../../BLL/reducer-music'
 import { IMainMusicPageProps } from '../MainMusicPage/mainMusicPage'
+import { withAuthRedirect } from '../../../../HOC/withAuthRedirect'
+import { compose } from 'redux'
 
 interface IProps extends IMainMusicPageProps {
     setLikedTracks: () => void
@@ -25,6 +27,7 @@ const mapStateToProps = (state:RootState) => ({
     trackNotifications: getTrackNotifications(state)
 })
 
-const LikedTracksContainer = connect(mapStateToProps, { likeTrack, chooseTrack, setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying })(LikedTracksClass)
-
-export default LikedTracksContainer
+export default compose<React.ComponentType>(
+    connect(mapStateToProps, { likeTrack, chooseTrack, setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying }),
+    withAuthRedirect
+)(LikedTracksClass)
