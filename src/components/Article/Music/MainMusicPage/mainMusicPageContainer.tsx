@@ -11,9 +11,9 @@ let mapStateToProps = (state: RootState) => ({
     trackNotifications: getTrackNotifications(state)
 })
 
-const { likeTrack, chooseTrack, setTrackCurrentTime, unsetIsMusicPlaying } = actions
+const { likeTrack, chooseTrack, setTrackCurrentTime, unsetIsMusicPlaying, addTrackToPlaylist } = actions
 
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, { likeTrack, chooseTrack, setTrackCurrentTime, unsetIsMusicPlaying }),
+    connect(mapStateToProps, { likeTrack, chooseTrack, setTrackCurrentTime, unsetIsMusicPlaying, addTrackToPlaylist }),
     withAuthRedirect
 )(MainMusicPage)

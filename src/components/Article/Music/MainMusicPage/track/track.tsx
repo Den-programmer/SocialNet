@@ -19,6 +19,7 @@ interface TrackPropsType {
     startMusic: (isMusicPlaying: boolean, src: string, id: number, time: number) => void
     likeTrack: (trackId: number) => void
     chooseTrack: (trackId: number) => void
+    addTrackToPlaylist: (trackId: number, playlistId: number) => void
 }
 
 class Track extends React.Component<TrackPropsType> {
@@ -56,7 +57,7 @@ class Track extends React.Component<TrackPropsType> {
                     <div className={classes.duration}>
                         {this.props.duration}
                     </div>    
-                    <TrackNotifications trackNotifications={this.props.trackNotifications}/>
+                    <TrackNotifications addTrackToPlaylist={this.props.addTrackToPlaylist} trackNotifications={this.props.trackNotifications}/>
                 </div>
             </li>
         )

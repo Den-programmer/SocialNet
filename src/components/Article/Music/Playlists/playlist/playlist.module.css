@@ -1,0 +1,24 @@
+.playlist {
+    cursor: pointer;
+    margin:0 1em;
+}
+.playlistsInf h4 {
+    color: #455172;
+    font-family: 'Open Sans', sans-serif;
+}
+.playlistsInf p {
+    color: #FFF;
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+}
+.playlistImg {
+    display: flex;
+    flex-wrap: wrap;
+    width: 208px;
+    height: 208px;
+} 
+.image img {
+    width: 100px;
+    height: 100px;
+    margin-right: 4px;
+}

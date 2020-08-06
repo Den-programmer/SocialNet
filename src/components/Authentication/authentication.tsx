@@ -1,6 +1,6 @@
-import React from 'react';
-import classes from './authentication.module.css';
-import LoginContainer from './Login/loginContainer';
+import React from 'react'
+import classes from './authentication.module.css'
+import LoginContainer from './Login/loginContainer'
 
 const Authentication:React.FC<{}> = (props) => {
     return (
@@ -9,7 +9,7 @@ const Authentication:React.FC<{}> = (props) => {
                 <LoginContainer />
             </div>
         </div>
-    );
+    )
 }
 
-export default Authentication;
+export default Authentication

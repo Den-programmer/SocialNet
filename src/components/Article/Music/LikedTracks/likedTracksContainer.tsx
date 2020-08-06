@@ -17,7 +17,7 @@ class LikedTracksClass extends React.Component<IProps> {
         this.props.setLikedTracks()
     }
     render() {
-        return <MainMusicPage unsetIsMusicPlaying={this.props.unsetIsMusicPlaying} tracks={this.props.tracks} trackNotifications={this.props.trackNotifications} likeTrack={this.props.likeTrack}
+        return <MainMusicPage addTrackToPlaylist={this.props.addTrackToPlaylist} unsetIsMusicPlaying={this.props.unsetIsMusicPlaying} tracks={this.props.tracks} trackNotifications={this.props.trackNotifications} likeTrack={this.props.likeTrack}
         chooseTrack={this.props.chooseTrack} setTrackCurrentTime={this.props.setTrackCurrentTime}/>
     }
 }
@@ -27,9 +27,9 @@ const mapStateToProps = (state:RootState) => ({
     trackNotifications: getTrackNotifications(state)
 })
 
-const { likeTrack, chooseTrack, setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying } = actions
+const { likeTrack, chooseTrack, setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying, addTrackToPlaylist } = actions
 
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, { likeTrack, chooseTrack, setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying }),
+    connect(mapStateToProps, { likeTrack, chooseTrack, setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying, addTrackToPlaylist }),
     withAuthRedirect
 )(LikedTracksClass)

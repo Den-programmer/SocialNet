@@ -1,9 +1,11 @@
 import React from 'react'
 import classes from './login.module.css'
 import ReduxLoginForm from './LoginForm/loginForm'
+import { RouteComponentProps } from 'react-router-dom'
 
 interface LoginPropType {
     captcha: string | null
+    isAuth: boolean
     login: (email: string | null, password: string | null, rememberMe: boolean, captcha: string | null) => void
 }
 
@@ -14,9 +16,9 @@ export interface LoginFormDataType {
     captcha: string | null
 }
 
-const Login:React.FC<LoginPropType> = (props) => {
-    let onSubmit = (FormData:LoginFormDataType):void => {
-        let { email, password, RememberMe, captcha } = FormData
+const Login:React.FC<LoginPropType & RouteComponentProps> = (props) => {
+    const onSubmit = (FormData:LoginFormDataType): void => {
+        const { email, password, RememberMe, captcha } = FormData
         props.login(email, password, RememberMe, captcha)
     }
     return (

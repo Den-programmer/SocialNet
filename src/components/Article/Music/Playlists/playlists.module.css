@@ -1,0 +1,18 @@
+.playlists {
+    text-align: center;
+    margin: 70px 0;
+}
+.search {
+    width: 60%;
+    color: #363652;
+}
+.title h2 {
+    color: #FFF;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 2em;
+}
+.list {
+    display: flex;
+    flex-wrap: wrap;
+    padding-inline-start: 0px;
+}

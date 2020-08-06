@@ -7,6 +7,7 @@ import TrackNotification from './trackNotification/trackNotification'
 
 interface TrackNotificationsPropType {
     trackNotifications: Array<trackNotificationType>
+    addTrackToPlaylist: (trackId: number, playlistId: number) => void
 }
 
 interface trackStateType {
@@ -19,7 +20,7 @@ class TrackNotifications extends React.Component<TrackNotificationsPropType> {
     } as trackStateType
 
     trackNotifications = this.props.trackNotifications.map((item: trackNotificationType) => {
-        return <TrackNotification key={item.id} id={item.id} title={item.title}/>
+        return <TrackNotification key={item.id} id={item.id} title={item.title} addTrackToPlaylist={this.props.addTrackToPlaylist}/>
     })
 
     openMenu = (e:React.MouseEvent<HTMLDivElement>) => {

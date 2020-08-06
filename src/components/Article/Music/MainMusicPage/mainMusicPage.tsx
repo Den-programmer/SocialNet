@@ -12,6 +12,7 @@ export interface IMainMusicPageProps {
     likeTrack: (trackId: number) => void
     unsetIsMusicPlaying: () => void
     chooseTrack: (trackId: number) => void
+    addTrackToPlaylist: (trackId: number, playlistId: number) => void
 }
 
 const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
@@ -76,7 +77,7 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
             isMusicPlaying={track.isMusicPlaying}
             likeTrack={props.likeTrack}
             chooseTrack={props.chooseTrack}
-            trackNotifications={props.trackNotifications} startMusic={startMusic} />
+            trackNotifications={props.trackNotifications} startMusic={startMusic} addTrackToPlaylist={props.addTrackToPlaylist}/>
     })
 
     const onSearchIconClick = () => {
