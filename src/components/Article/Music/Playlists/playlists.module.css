@@ -1,17 +1,38 @@
 .playlists {
-    text-align: center;
-    margin: 70px 0;
+    margin: 25px 0;
+}
+.btn_addPlaylist {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    margin: 0px 1em;
+    color: #FFF;
+    font-weight: bold;
+    cursor: pointer;
+}
+.btn_addPlaylist:hover {
+    transition: all .5s ease-in-out;
+    color: rgb(201, 201, 201);
+}
+.btn_addPlaylist > * {
+    margin: 5px;
 }
 .search {
+    display: flex;
+    justify-content: center;
+}
+.search input {
     width: 60%;
     color: #363652;
 }
 .title h2 {
+    text-align: center;
     color: #FFF;
     font-family: 'Ubuntu', sans-serif;
     font-size: 2em;
 }
 .list {
+    text-align: center;
     display: flex;
     flex-wrap: wrap;
     padding-inline-start: 0px;

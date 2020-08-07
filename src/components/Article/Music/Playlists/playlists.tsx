@@ -2,6 +2,8 @@ import React from 'react'
 import classes from './playlists.module.css'
 import { playlistType } from '../../../../BLL/reducer-music'
 import Playlist from './playlist/playlist'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 interface IPlaylists {
     playlists: Array<playlistType>
@@ -14,7 +16,13 @@ const Playlists: React.FC<IPlaylists> = ({ playlists }) => {
     const count = playlists.length
     return (
         <div className={classes.playlists}>
-            <input className={classes.search} title="Search your playlists!" type="text" placeholder="Enter the playlist's title"/>
+            <div className={classes.btn_addPlaylist}>
+                <FontAwesomeIcon className={classes.plusIcon} icon={faPlus}/>
+                <p>Add Playlist</p>
+            </div>
+            <div className={classes.search}>
+                <input title="Search your playlists!" type="text" placeholder="Enter the playlist's title"/>
+            </div>
             <div className={classes.title}>
                 <h2>You've got {count === 1 ? count + ' playlist' : count + ' playlists'}</h2>
             </div>
