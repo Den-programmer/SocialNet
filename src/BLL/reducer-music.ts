@@ -298,8 +298,8 @@ const reducerMusic = (state = musicPage, action: ActionTypes):musicPageType => {
             }
         case `sn/musicPage/ADD_PLAYLIST`:   
             const newPlaylist = {
-                id: state.playlists.length,
-                title: action.title,
+                id: state.playlists.length + 1,
+                title: action.title === '' ? 'Untitled' : action.title,
                 music: [],
                 count: 0
             }

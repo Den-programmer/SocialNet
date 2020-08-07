@@ -17,6 +17,17 @@
 .btn_addPlaylist > * {
     margin: 5px;
 }
+.playlistTitle {
+    transition: all .3s ease;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid silver;
+    width: 60%;
+}
+.playlistTitle:focus {
+    border-bottom: 1px solid purple;
+    padding-bottom: 5px;
+}
 .search {
     display: flex;
     justify-content: center;

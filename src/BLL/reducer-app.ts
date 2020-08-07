@@ -6,6 +6,7 @@ import { fontSizeObjectType } from '../types/AppTypes/appTypes'
 const SET_INITIALIZED = 'app/SET_INITIALIZED'
 const SET_FONT_SIZE = 'app/SET_FONT_SIZE'
 const SET_TEXT_ERROR = 'app/SET_TEXT_ERROR'
+const SET_IS_MODAL_OPEN_STATUS = 'SET_IS_MODAL_OPEN_STATUS' 
 
 type optionsType = {
   fontSize: Array<fontSizeObjectType>
@@ -16,9 +17,10 @@ type appStateType = {
   isInitialized: boolean
   options: optionsType
   messageError: null | string
+  isModalOpen: boolean
 }
 
-let AppState = {
+const AppState = {
   isInitialized: false,
   options: {
     fontSize: [
@@ -58,9 +60,10 @@ let AppState = {
         size: 50
       }
     ],
-    appFontSize: 16,
+    appFontSize: 16
   },
-  messageError: ''
+  messageError: '',
+  isModalOpen: false
 } as appStateType
 
 const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
@@ -84,8 +87,13 @@ const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
         ...state,
         messageError: action.text
       }
+    case SET_IS_MODAL_OPEN_STATUS: 
+      return {
+        ...state,
+        isModalOpen: action.modalStatus
+      }
     default:
-      return state;
+      return state
   }
 }
 
@@ -95,7 +103,8 @@ type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
 
 export const actions = {
   initializedSuccessful: () => ({ type: SET_INITIALIZED } as const),
-  setFontSize: (id: number) => ({ type: SET_FONT_SIZE, id } as const)
+  setFontSize: (id: number) => ({ type: SET_FONT_SIZE, id } as const),
+  setIsModalOpenStatus: (modalStatus: boolean) => ({ type: SET_IS_MODAL_OPEN_STATUS, modalStatus } as const)
 }
 
 // Common Action Creators!
