@@ -4,10 +4,11 @@ import Playlists from './playlists'
 import { getPlaylists } from '../../../../BLL/selectors/music-selectors'
 import { actions } from '../../../../BLL/reducer-music'
 import { actions as actions2 } from '../../../../BLL/reducer-app'
+import { getIsModalOpenStatus } from '../../../../BLL/selectors/selectors'
 
 const mapStateToProps = (state: RootState) => ({
     playlists: getPlaylists(state),
-    isModalOpen: state.app.isModalOpen
+    isModalOpen: getIsModalOpenStatus(state)
 })
 
 const { addPlaylist } = actions

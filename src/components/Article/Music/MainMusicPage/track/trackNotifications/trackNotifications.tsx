@@ -2,11 +2,14 @@ import React from 'react'
 import classes from './trackNotifications.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons'
-import { trackNotificationType } from '../../../../../../BLL/reducer-music'
+import { trackNotificationType, playlistType } from '../../../../../../BLL/reducer-music'
 import TrackNotification from './trackNotification/trackNotification'
 
 interface TrackNotificationsPropType {
+    playlists: Array<playlistType>
+    isModalOpen: boolean
     trackNotifications: Array<trackNotificationType>
+    setIsModalOpenStatus: (modalStatus: boolean) => void
     addTrackToPlaylist: (trackId: number, playlistId: number) => void
 }
 
@@ -20,7 +23,9 @@ class TrackNotifications extends React.Component<TrackNotificationsPropType> {
     } as trackStateType
 
     trackNotifications = this.props.trackNotifications.map((item: trackNotificationType) => {
-        return <TrackNotification key={item.id} id={item.id} title={item.title} addTrackToPlaylist={this.props.addTrackToPlaylist}/>
+        return <TrackNotification key={item.id} id={item.id} 
+        title={item.title} addTrackToPlaylist={this.props.addTrackToPlaylist} 
+        isModalOpen={this.props.isModalOpen} setIsModalOpenStatus={this.props.setIsModalOpenStatus} playlists={this.props.playlists}/>
     })
 
     openMenu = (e:React.MouseEvent<HTMLDivElement>) => {
@@ -46,4 +51,4 @@ class TrackNotifications extends React.Component<TrackNotificationsPropType> {
     }
 }
 
-export default TrackNotifications;
+export default TrackNotifications

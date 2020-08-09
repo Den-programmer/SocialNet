@@ -3,7 +3,7 @@ import classes from './track.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faHeart } from '@fortawesome/free-solid-svg-icons'
 import TrackNotifications from './trackNotifications/trackNotifications'
-import { trackNotificationType } from '../../../../../BLL/reducer-music'
+import { trackNotificationType, playlistType } from '../../../../../BLL/reducer-music'
 
 interface TrackPropsType {
     id: number
@@ -16,6 +16,9 @@ interface TrackPropsType {
     src: string
     isMusicPlaying: boolean
     trackNotifications: Array<trackNotificationType>
+    isModalOpen: boolean
+    playlists: Array<playlistType>
+    setIsModalOpenStatus: (modalStatus: boolean) => void
     startMusic: (isMusicPlaying: boolean, src: string, id: number, time: number) => void
     likeTrack: (trackId: number) => void
     chooseTrack: (trackId: number) => void
@@ -57,7 +60,9 @@ class Track extends React.Component<TrackPropsType> {
                     <div className={classes.duration}>
                         {this.props.duration}
                     </div>    
-                    <TrackNotifications addTrackToPlaylist={this.props.addTrackToPlaylist} trackNotifications={this.props.trackNotifications}/>
+                    <TrackNotifications playlists={this.props.playlists} setIsModalOpenStatus={this.props.setIsModalOpenStatus} isModalOpen={this.props.isModalOpen}
+                    addTrackToPlaylist={this.props.addTrackToPlaylist} 
+                    trackNotifications={this.props.trackNotifications}/>
                 </div>
             </li>
         )

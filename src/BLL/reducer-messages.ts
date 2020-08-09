@@ -1,13 +1,15 @@
 import { ThunkAction } from "redux-thunk"
 import { RootState, InferActionTypes } from "./redux"
 import { userDialogType, message } from '../types/MessagesTypes/messagesTypes'
+import { MessagesAPI } from "../DAL/messagesApi"
+import { resultCode } from "../DAL/api"
 
 type messagesPageType = {
     dialogsData: Array<userDialogType>
     messages: Array<message>
 }
 
-let messagesPage = {
+const messagesPage = {
     dialogsData: [
         {
             id: 1,
@@ -108,6 +110,11 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPag
                 ...state,
                 messages: [...state.messages, newMessage]
             }
+        case `sn/messagesPage/SET-DIALOGS`:
+            return {
+                ...state,
+                dialogsData: action.dialogs
+            }    
         default:
             return state;
     }
@@ -119,11 +126,47 @@ type ActionTypes = InferActionTypes<typeof actions>
 
 export const actions = {
     addMessage: (messageText:string) => ({ type: `sn/messagesPage/ADD-MESSAGE`, messageText } as const),
-    setDialogs: (dialogs: Array<userDialogType>) => ({ type: `sn/messagesPage/SET-DIALOGS`, dialogs } as const)
+    setMessages: (messages: Array<message>) => ({ type: `sn/messagesPage/SET-MESSAGES`, messages } as const),
+    setDialogs: (dialogs: Array<userDialogType>) => ({ type: `sn/messagesPage/SET-DIALOGS`, dialogs } as const),
 }
 
 /* Thunk Creators! */
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
+
+export const getALLDialogs = ():ThunkType => async (dispatch) => {
+   try {
+    const data = await MessagesAPI.getALLDialogs()
+
+    dispatch(actions.setDialogs(data))
+   } catch(e) {
+    alert(`Something's gone wrong, error status: 500`)
+   }
+}
+export const startDialog = (userId: number): ThunkType => async (dispatch) => {
+    try {
+        const data = await MessagesAPI.startDialog(userId)
+        if(data.resultCode === resultCode.Success) {
+            dispatch(getALLDialogs())    
+        } else {
+            alert(`Some error!!!!!!!`)
+        }
+    } catch(e) {
+        alert(`Something's gone wrong, error status: 500`)
+    }
+}
+export const getDialogMessages = (userId: number): ThunkType => async (dispatch) => {
+    try {
+        const data = await MessagesAPI.getDialogMessages(userId)
+
+        if(!data.error) {
+            dispatch(actions.setMessages(data.items))
+        } else {
+            alert(`There's error at server request: getDialogMessages!`)
+        }
+    } catch(e) {
+        alert(`Something's gone wrong, error status: 500`)
+    }
+}
 
 export default reducerMessages

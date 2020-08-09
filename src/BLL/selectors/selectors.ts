@@ -12,3 +12,6 @@ export const getMessageError = (state: RootState) => {
 export const getFontSizeValues = (state: RootState) => {
     return state.app.options.fontSize
 }
+export const getIsModalOpenStatus = (state: RootState) => {
+    return state.app.isModalOpen
+}

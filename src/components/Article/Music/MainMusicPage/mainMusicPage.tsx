@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import classes from './mainMusicPage.module.css'
-import { trackType, trackNotificationType } from '../../../../BLL/reducer-music'
+import { trackType, trackNotificationType, playlistType } from '../../../../BLL/reducer-music'
 import Track from './track/track'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -8,6 +8,9 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 export interface IMainMusicPageProps {
     tracks: Array<trackType>
     trackNotifications: Array<trackNotificationType>
+    isModalOpen: boolean
+    playlists: Array<playlistType>
+    setIsModalOpenStatus: (modalStatus: boolean) => void
     setTrackCurrentTime: (trackId: number, time: number) => void
     likeTrack: (trackId: number) => void
     unsetIsMusicPlaying: () => void
@@ -77,7 +80,10 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
             isMusicPlaying={track.isMusicPlaying}
             likeTrack={props.likeTrack}
             chooseTrack={props.chooseTrack}
-            trackNotifications={props.trackNotifications} startMusic={startMusic} addTrackToPlaylist={props.addTrackToPlaylist}/>
+            trackNotifications={props.trackNotifications} 
+            startMusic={startMusic} 
+            addTrackToPlaylist={props.addTrackToPlaylist}
+            isModalOpen={props.isModalOpen} setIsModalOpenStatus={props.setIsModalOpenStatus} playlists={props.playlists}/>
     })
 
     const onSearchIconClick = () => {
