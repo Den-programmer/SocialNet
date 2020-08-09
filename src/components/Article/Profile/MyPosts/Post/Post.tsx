@@ -3,6 +3,7 @@ import classes from './Post.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import Notifications from './notifications/notifications'
+import Btn_Confirm from '../../../../common/Btns/Btn_confirm/btn_confirm'
 
 interface IPost {
     postTitle: string
@@ -62,7 +63,7 @@ class Post extends React.Component<IPost> {
                 </div> : <p onClick={this.activateEditMode} className={classes.post__text}>
                         {this.props.postInf}
                     </p>}
-                {this.state.isEdit ? <div className={classes.confirm_btn} onClick={this.deactivateEditMode}><button>Confirm</button></div> : <div className={classes.dFlex}>
+                {this.state.isEdit ? <div className={classes.confirm_btn}><Btn_Confirm clickFunction={this.deactivateEditMode}/></div> : <div className={classes.dFlex}>
                     <FontAwesomeIcon icon={faHeart} /><p className={classes.m}>{this.props.likesCount}</p>
                 </div>}
             </div>

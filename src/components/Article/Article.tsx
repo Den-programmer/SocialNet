@@ -19,15 +19,18 @@ import PlaylistsContainer from './Music/Playlists/playlistsContainer'
 import AlbumsContainer from './Music/Albums/albumsContainer'
 import FollowingContainer from './Music/Following/followingContainer'
 
-interface ArticlePropType {}
+interface ArticlePropType { 
+    userDialogId: number | null
+}
 
-const Article:React.FC<ArticlePropType> = (props) => {
+const Article:React.FC<ArticlePropType> = ({ userDialogId }) => {
     return (
         <article className={classes.article}>
             <Switch>
                 {/* Profile! */} 
                 <Route exact path='/Profile/:userId?' render={() => (<ProfileContainer />)} />
                 {/* Messages! */}
+                <Route path={'/Messages/dialog/' + userDialogId} render={() => <MessagesContainer />}/>
                 <Route exact path='/Messages' render={() => (<MessagesContainer />)} />
                 {/* News! */}
                 <Route path='/News' render={() => (<News />)} />
@@ -64,6 +67,7 @@ const Article:React.FC<ArticlePropType> = (props) => {
 
                 <Route path="*" render={() => <ErrorPage />} />
             </Switch>
+            
         </article>
     )
 }

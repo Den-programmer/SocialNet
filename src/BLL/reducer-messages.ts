@@ -7,23 +7,11 @@ import { resultCode } from "../DAL/api"
 type messagesPageType = {
     dialogsData: Array<userDialogType>
     messages: Array<message>
+    userDialogId: number | null
 }
 
 const messagesPage = {
-    dialogsData: [
-        {
-            hasNewMessages: false,
-            id: 9777,
-            lastDialogActivityDate: "2020-08-09T08:14:40.09",
-            lastUserActivityDate: "2020-08-09T05:27:35.777",
-            newMessagesCount: 0,
-            photos: {
-                small: null,
-                large: null
-            },
-            userName: "Torshin"
-        }
-    ],
+    dialogsData: [],
     messages: [
         {
             id: 1,
@@ -38,6 +26,7 @@ const messagesPage = {
             messageText: 'Would u like to go for a walk?'
         }
     ],
+    userDialogId: null
 } as messagesPageType
 
 const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPageType => {
@@ -55,9 +44,19 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPag
             return {
                 ...state,
                 dialogsData: action.dialogs
+            } 
+        case `sn/messagesPage/SET-MESSAGES`: 
+            return {
+                ...state,
+                messages: action.messages
             }    
+        case `sn/messagesPage/SET-USER-DIALOG-ID`: 
+            return {
+                ...state,
+                userDialogId: action.userId
+            }
         default:
-            return state;
+            return state
     }
 }
 
@@ -69,6 +68,7 @@ export const actions = {
     addMessage: (messageText:string) => ({ type: `sn/messagesPage/ADD-MESSAGE`, messageText } as const),
     setMessages: (messages: Array<message>) => ({ type: `sn/messagesPage/SET-MESSAGES`, messages } as const),
     setDialogs: (dialogs: Array<userDialogType>) => ({ type: `sn/messagesPage/SET-DIALOGS`, dialogs } as const),
+    setUserDialogId: (userId: number) => ({ type: `sn/messagesPage/SET-USER-DIALOG-ID`, userId } as const)
 }
 
 /* Thunk Creators! */
@@ -99,6 +99,7 @@ export const startDialog = (userId: number): ThunkType => async (dispatch) => {
 export const getDialogMessages = (userId: number): ThunkType => async (dispatch) => {
     try {
         const data = await MessagesAPI.getDialogMessages(userId)
+        debugger
 
         if(!data.error) {
             dispatch(actions.setMessages(data.items))

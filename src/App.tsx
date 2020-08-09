@@ -2,16 +2,16 @@ import React from 'react'
 import './App.css'
 import { BrowserRouter } from 'react-router-dom'
 import store, { RootState } from './BLL/redux'
-import HeaderContainer from './components/Header/HeaderContainer'
-import FooterContainer from './components/Footer/FooterContainer'
-import Article from './components/Article/Article'
+import Header from './components/Header/HeaderContainer'
+import Footer from './components/Footer/FooterContainer'
+import Article from './components/Article/ArticleContainer'
 import { connect, Provider } from 'react-redux'
 import { initialize } from './BLL/reducer-app'
 import Preloader from './components/common/preloader/preloader'
 import Authentication from './components/Authentication/authentication'
 import { getAppInitializationStatus, getAppFontSize } from './BLL/selectors/selectors'
 import { getIsAuthStatus } from './BLL/selectors/auth-selectors'
-import SideBarContainer from './components/SideBar/SideBarContainer'
+import SideBar from './components/SideBar/SideBarContainer'
 
 interface IApp {
   Initialized: boolean
@@ -34,12 +34,12 @@ class App extends React.Component<IApp> {
       {this.props.isAuth ?
         <div style={this.style} className="App">
           <div className="main-page">
-            <HeaderContainer />
+            <Header />
             <div className="flex-container">
-              <SideBarContainer />
+              <SideBar />
               <Article />
             </div>
-            <FooterContainer />
+            <Footer />
           </div>
         </div>
         : <Authentication />}

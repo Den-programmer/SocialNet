@@ -11,14 +11,21 @@ interface UserPropType {
     newMessagesCount: number
     userName: string
     lastMessage: string | null | undefined
+    setUserDialogId: (userId: number) => void
+    getDialogMessages: (userId: number) => void
 }
 
 const User: React.FC<UserPropType> = (props) => {
 
     const path = "/Messages/dialog/" + props.id
+    
+    const getUserMessages = () => {
+        props.setUserDialogId(props.id)
+        props.getDialogMessages(props.id)
+    }
 
     return (
-        <NavLink to={path}>
+        <NavLink onClick={getUserMessages} to={path}>
             <div className={classes.user}>
                 <div className={classes.avatar}>
                     <img src={props.photo} alt="user" />

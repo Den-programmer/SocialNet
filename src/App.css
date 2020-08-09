@@ -13,6 +13,10 @@ p {
     font-family: 'Open Sans', sans-serif;
 }
 
+a {
+    text-decoration: none;
+}
+
 /* Half Selectors and True Selectors! */
 
 .container {

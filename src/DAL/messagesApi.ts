@@ -8,6 +8,10 @@ type dialogMessagesResType = {
     totalCount: number
     error: null | string
 }
+// Not exact type
+type isMessageViewedtype = {
+    isViewed: boolean
+}
 
 export const MessagesAPI = {
     getALLDialogs: () => {
@@ -21,5 +25,11 @@ export const MessagesAPI = {
     },
     sendDialogMessages: (userId: number, message: string) => {
         return instance.post<ServerResType<{}>>(`dialogs/${userId}/messages`, message).then(res => res.data)
+    },
+    isMessageViewed: (messageId: number) => {
+        return instance.get<ServerResType<isMessageViewedtype>>(`dialogs/messages/${messageId}/viewed`).then(res => res.data)
+    },
+    getNewDialogs: () => {
+        return instance.get<ServerResType<{}>>(`dialogs/messages/new/count`).then(res => res.data)
     }
 }

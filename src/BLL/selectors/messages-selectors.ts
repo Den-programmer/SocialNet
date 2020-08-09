@@ -7,3 +7,6 @@ export const getDialogsData = (state: RootState) => {
 export const getMessages = (state: RootState) => {
     return state.messagesPage.messages
 }
+export const getUserDialogId = (state: RootState) => {
+    return state.messagesPage.userDialogId
+}

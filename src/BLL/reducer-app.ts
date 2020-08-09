@@ -3,10 +3,7 @@ import { ThunkAction } from "redux-thunk"
 import { RootState, InferActionTypes } from "./redux"
 import { fontSizeObjectType } from '../types/AppTypes/appTypes'
 
-const SET_INITIALIZED = 'app/SET_INITIALIZED'
-const SET_FONT_SIZE = 'app/SET_FONT_SIZE'
 const SET_TEXT_ERROR = 'app/SET_TEXT_ERROR'
-const SET_IS_MODAL_OPEN_STATUS = 'SET_IS_MODAL_OPEN_STATUS' 
 
 type optionsType = {
   fontSize: Array<fontSizeObjectType>
@@ -71,12 +68,12 @@ const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
   stateCopy.options = { ...state.options }
   stateCopy.options.fontSize = [...state.options.fontSize]
   switch (action.type) {
-    case SET_INITIALIZED:
+    case `app/SET_INITIALIZED`:
       return {
         ...state,
         isInitialized: true
       }
-    case SET_FONT_SIZE:
+    case `app/SET_FONT_SIZE`:
       stateCopy.options.fontSize.forEach(item => {
         if (item.id === action.id) stateCopy.options.appFontSize = item.size
       })
@@ -87,7 +84,7 @@ const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
         ...state,
         messageError: action.text
       }
-    case SET_IS_MODAL_OPEN_STATUS: 
+    case `SET_IS_MODAL_OPEN_STATUS`: 
       return {
         ...state,
         isModalOpen: action.modalStatus
@@ -102,9 +99,9 @@ const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
 type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
 
 export const actions = {
-  initializedSuccessful: () => ({ type: SET_INITIALIZED } as const),
-  setFontSize: (id: number) => ({ type: SET_FONT_SIZE, id } as const),
-  setIsModalOpenStatus: (modalStatus: boolean) => ({ type: SET_IS_MODAL_OPEN_STATUS, modalStatus } as const)
+  initializedSuccessful: () => ({ type: `app/SET_INITIALIZED` } as const),
+  setFontSize: (id: number) => ({ type: `app/SET_FONT_SIZE`, id } as const),
+  setIsModalOpenStatus: (modalStatus: boolean) => ({ type: `SET_IS_MODAL_OPEN_STATUS`, modalStatus } as const)
 }
 
 // Common Action Creators!

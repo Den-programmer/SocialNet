@@ -3,7 +3,7 @@ import classes from './conversation.module.css'
 
 interface ConversationPropType {
     id: number
-    messageText: string
+    messageText: string | null
 }
 
 const Conversation:React.FC<ConversationPropType> = ({ messageText }) => {

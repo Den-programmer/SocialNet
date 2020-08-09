@@ -7,14 +7,16 @@ import { userDialogType } from '../../../../types/MessagesTypes/messagesTypes'
 
 interface DialogsPropsType {
     dialogsData: Array<userDialogType>
+    setUserDialogId: (userId: number) => void
+    getDialogMessages: (userId: number) => void
 }
 
-const Dialogs:React.FC<DialogsPropsType> = ({dialogsData}) => {
+const Dialogs: React.FC<DialogsPropsType> = ({ dialogsData, setUserDialogId, getDialogMessages }) => {
     return (
         <div className={classes.dialogs}>
             <Search />
-            <MessagesTitle title="Dialogs"/>
-            <Users dialogsData={dialogsData}/>
+            <MessagesTitle title="Dialogs" />
+            <Users dialogsData={dialogsData} setUserDialogId={setUserDialogId} getDialogMessages={getDialogMessages} />
         </div>
     )
 }

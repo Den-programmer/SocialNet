@@ -18,7 +18,7 @@ interface IState {
 class Notifications extends React.Component<INotifications> {
     state = {
         menu: {
-            hidden: this.props.isEdit
+            hidden: true
         }
     } as IState
     toggleMenuEmersion = () => {
