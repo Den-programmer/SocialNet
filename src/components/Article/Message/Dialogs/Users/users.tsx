@@ -1,7 +1,7 @@
 import React from 'react'
 import classes from './users.module.css'
 import User from './User/user'
-import user from './User/images/user.jpg'
+import defaultUser from '../../../../Article/Profile/images/withoutAvatar/defaultUserPhoto.jpg'
 import { userDialogType } from '../../../../../types/MessagesTypes/messagesTypes'
 
 interface UsersPropType {
@@ -10,7 +10,13 @@ interface UsersPropType {
 
 const Users: React.FC<UsersPropType> = ({dialogsData}) => {
     const dialogs = dialogsData.map((d: userDialogType) => {
-        return <User key={d.id} avatar={user} id={d.id} nickname={d.nickname} lastMessage={d.lastMessage}/>
+        return <User key={d.id} photo={d.photos.large ? d.photos.large : d.photos.small ? d.photos.small : defaultUser} id={d.id} 
+                     hasNewMessages={d.hasNewMessages} 
+                     lastDialogActivity={d.lastDialogActivityDate} 
+                     lastUserActivityDate={d.lastUserActivityDate}
+                     newMessagesCount={d.newMessagesCount}
+                     userName={d.userName}
+                     lastMessage={d.lastMessage}/>
     })
     return (
         <div className={classes.users}>
@@ -20,4 +26,3 @@ const Users: React.FC<UsersPropType> = ({dialogsData}) => {
 } 
 
 export default Users
-

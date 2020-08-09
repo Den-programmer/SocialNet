@@ -1,4 +1,7 @@
 .dialog {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
     margin:0 auto;
     
 }

@@ -1,7 +1,7 @@
 import React, { useState, MouseEvent } from 'react'
 import classes from './user.module.css'
 import defaultUserPhoto from './img/defaultUserPhoto.jpg'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Redirect } from 'react-router-dom'
 
 interface IUser {
     followed: boolean
@@ -12,6 +12,7 @@ interface IUser {
     photo: any
     followThunk: (id: number) => void
     unfollowThunk: (id: number) => void
+    startDialog: (userId: number) => void
 }
 
 type MenuStyleType = {
@@ -36,6 +37,12 @@ const User: React.FC<IUser> = (props) => {
         setStyleMenu({ top: realHigh + 'px', left: realWidth + 'px' })
         e.preventDefault()
     }
+
+    const startChatting = () => {
+        props.startDialog(props.id)
+        return <Redirect to={"/Messages/dialog/" + props.id}/>
+    }
+
     document.addEventListener('click', event => {
         if(event.button !== 2) {
             setIsMenuOpenStatus(false)
@@ -48,11 +55,11 @@ const User: React.FC<IUser> = (props) => {
                 <h4>{props.nickname}</h4>
                 <h6>{props.name}</h6>
             </NavLink>
-            {isMenuOpen && <div style={styleMenu} className={classes.contextMenu}>
-                <ul className={classes.list}>
-                    <li>Write the message</li>
-                    <li>Follow</li>
-                    <li>Unfollow</li>
+            {isMenuOpen && <div style={styleMenu} className="contextMenu">
+                <ul className="contextMenu__list">
+                    <li onClick={startChatting} className="contextMenu__list-item">Write the message</li>
+                    <li className="contextMenu__list-item">Follow</li>
+                    <li className="contextMenu__list-item">Unfollow</li>
                 </ul>
             </div>}
             {props.followed ? <button className={classes.btn_following} disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Add this user to list of friends!">Following</button> 

@@ -8,10 +8,11 @@ interface UsersColumnPropsType {
     followingInProcess: Array<number>
     followThunk: (id: number) => void
     unfollowThunk: (id: number) => void
+    startDialog: (userId: number) => void
 }
 
 const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
-    let users = props.users.map((user: userType) => {
+    const users = props.users.map((user: userType) => {
         return <User id={user.id}
             followThunk={props.followThunk}
             unfollowThunk={props.unfollowThunk}
@@ -20,7 +21,7 @@ const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
             followed={user.followed}
             nickname={user.nickname}
             name={user.name}
-            photo={user.photos.large}/>})
+            photo={user.photos.large} startDialog={props.startDialog}/>})
     return (
         <div className={classes.usersColumn}>
             <div className={classes.users}>

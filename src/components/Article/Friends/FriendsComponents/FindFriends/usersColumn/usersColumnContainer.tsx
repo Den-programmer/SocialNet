@@ -6,6 +6,7 @@ import { requestUsers, followThunk, unfollowThunk, actions } from "../../../../.
 import { getUsersInf, getUsers, getFollowingInProcess } from '../../../../../../BLL/selectors/users-selectors'
 import { RootState } from '../../../../../../BLL/redux'
 import { userType } from '../../../../../../types/FriendsType/friendsType'
+import { startDialog } from '../../../../../../BLL/reducer-messages'
 
 interface IUserColumnAPI {
     usersInf: {
@@ -19,6 +20,7 @@ interface IUserColumnAPI {
     followThunk: (id: number) => void
     unfollowThunk: (id: number) => void
     requestUsers: (pageSize: number, currentPage: number) => void
+    startDialog: (userId: number) => void
 }
 
 class UsersColumnAPI extends React.Component<IUserColumnAPI> {
@@ -34,7 +36,7 @@ class UsersColumnAPI extends React.Component<IUserColumnAPI> {
     render() {
         return (
             <>
-                {this.props.usersInf.isFetching ? <Preloader /> : <UsersColumn followThunk={this.props.followThunk} unfollowThunk={this.props.unfollowThunk}
+                {this.props.usersInf.isFetching ? <Preloader /> : <UsersColumn startDialog={this.props.startDialog} followThunk={this.props.followThunk} unfollowThunk={this.props.unfollowThunk}
                 followingInProcess={this.props.followingInProcess} users={this.props.users} />}
             </>
         )
@@ -54,7 +56,8 @@ const UsersColumnContainer = connect(mapStateToProps, {
     unfollow,
     requestUsers,
     followThunk,
-    unfollowThunk
+    unfollowThunk,
+    startDialog
 })(UsersColumnAPI)
 
 export default UsersColumnContainer

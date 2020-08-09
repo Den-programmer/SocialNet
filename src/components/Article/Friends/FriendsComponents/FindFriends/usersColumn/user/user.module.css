@@ -32,28 +32,5 @@
     background-color:#0275D8;
     border:1px solid #4088FA;
 }
-.contextMenu {
-    position: absolute;
-}
-.list {
-    display: flex;
-    flex-direction: column;
-    padding-inline-start: 0;
-    margin: 0;
-    background: #222;
-    font-size: 12px;
-    min-width: 170px;
-    z-index: 99;
-    transition: all .1s ease;
-}
-.list li {
-    cursor: pointer;
-    padding: 5px 10px;
-    font-family: 'Open Sans', sans-serif;
-    color: #777;
-}
 
-.list li:hover {
-	background: #930659;
-	color: #fff !important;
-}
+

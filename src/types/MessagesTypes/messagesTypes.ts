@@ -3,10 +3,15 @@ export type message = {
     messageText: string | null
 }
 export type userDialogType = {
+    hasNewMessages: false
     id: number
-    nickname: string
-    name: string
-    messages: Array<message>
-    lastMessage: string
-    avatar: any
+    lastDialogActivityDate: string
+    lastUserActivityDate: string 
+    newMessagesCount: number
+    photos: {
+        small: null | string,
+        large: null | string
+    }
+    userName: string
+    lastMessage?: string | null
 }
