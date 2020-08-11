@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, createRef } from 'react'
 import classes from './playlist.module.css'
 import { trackType } from '../../../../../BLL/reducer-music'
 import playlistWithoutUserImg from './img/playlist_default.jpg'
@@ -28,6 +28,8 @@ const Playlist: React.FC<IPlaylist> = (props) => {
     }
     const countTracks = props.countTracks === 1 ? `${props.countTracks} track` : `${props.countTracks} tracks` 
 
+    const editingInput = createRef<HTMLInputElement>()
+
     const [isMenuOpen, setIsMenuOpenStatus] = useState<boolean>(false)
     const [menuStyle, setMenuStyle] = useState<IMenuStyleState>({ top: 0 + 'px', left: 0 + 'px' })
     const [isEdit, setEditingStatus] = useState<boolean>(false)
@@ -41,9 +43,17 @@ const Playlist: React.FC<IPlaylist> = (props) => {
         props.changePlaylistTitle(editInputVal, props.id)
         setEditingStatus(false)
     }
+    // const enterPressedWithEditingInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    //     if(e.keyCode === 13) {
+    //         finishEditing()
+    //         let node = editingInput.current
+    //         // @ts-ignore
+    //         if(node) node.onblur() 
+    //     }
+    // }
 
     const isEditCheck = isEdit ? 
-    <input onChange={onEditInputChange} onBlur={finishEditing} className={classes.editInput} placeholder="Enter playlist's title" value={editInputVal}/> 
+    <input ref={editingInput} onChange={onEditInputChange} onBlur={finishEditing} className={classes.editInput} placeholder="Enter playlist's title" value={editInputVal}/> 
     : <h4>{props.title}</h4>
 
     const callContextMenu = (e: React.MouseEvent<HTMLLIElement>) => {

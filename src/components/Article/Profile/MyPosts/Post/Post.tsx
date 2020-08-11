@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import classes from './Post.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
@@ -14,61 +14,49 @@ interface IPost {
     editPost: (postId: number, newPostTitle: string, newPostInf: string) => void
     deletePost: (postId: number) => void
 }
-interface IState { isEdit: boolean }
 
-class Post extends React.Component<IPost> {
+const Post: React.FC<IPost> = (props) => {
+    const [isEdit, setIsEditStatus] = useState<boolean>(false)
+    const [postTitle, setPostTitle] = useState<string>(props.postTitle)
+    const [postInf, setPostInf] = useState<string>(props.postInf) 
 
-    state = {
-        isEdit: false
-    } as IState
-    postTitle = React.createRef<HTMLInputElement>()
-    postInf = React.createRef<HTMLInputElement>()
-
-    onPostChange = () => {
-        // It would be better if I had current API, so I could save previous value of post title and post information!
-        let newPostTitle = this.postTitle.current?.value
-        let newPostInf = this.postInf.current?.value
-        if (newPostTitle && newPostInf) {
-            if (newPostTitle === '') {
-                newPostTitle = 'Untitled'
-            } else if (newPostInf === '') newPostInf = 'This is some text that has no meaning!'
-            this.props.editPost(this.props.id, newPostTitle, newPostInf)
-        }
+    const onPostTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let newPostTitle = e.currentTarget.value
+        if(newPostTitle === '') newPostTitle = 'Untitled'
+        setPostTitle(newPostTitle)
+        props.editPost(props.id, postTitle, postInf)
     }
-    activateEditMode = () => {
-        this.setState({
-            isEdit: true
-        })
-    }
-    deactivateEditMode = () => {
-        this.setState({
-            isEdit: false
-        })
+    const onPostInfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let newPostInf = e.currentTarget.value
+        if(newPostInf === '') newPostInf = 'This is some text that has no meaning!'
+        setPostInf(newPostInf)
+        props.editPost(props.id, postTitle, postInf)
     }
 
-    render() {
-        return (
-            <div className={classes.post}>
-                <div className={classes.wrapper}>
-                    <img className={classes.post__author} src={this.props.avatar} alt="author" />
-                    <Notifications isEdit={this.state.isEdit} activateEditMode={this.deactivateEditMode} id={this.props.id} deletePost={this.props.deletePost} />
-                </div>
-                {this.state.isEdit ? <div className={classes.editPostTitle}>
-                    <input className={classes.editInputs} ref={this.postTitle} onChange={this.onPostChange} value={this.props.postTitle} />
-                </div> : <h3 onClick={this.activateEditMode} className={classes.post__title}>
-                        {this.props.postTitle}
-                    </h3>}
-                {this.state.isEdit ? <div className={classes.editPostInf}>
-                    <input className={classes.editInputs} ref={this.postInf} onChange={this.onPostChange} value={this.props.postInf} />
-                </div> : <p onClick={this.activateEditMode} className={classes.post__text}>
-                        {this.props.postInf}
-                    </p>}
-                {this.state.isEdit ? <div className={classes.confirm_btn}><Btn_Confirm clickFunction={this.deactivateEditMode}/></div> : <div className={classes.dFlex}>
-                    <FontAwesomeIcon icon={faHeart} /><p className={classes.m}>{this.props.likesCount}</p>
-                </div>}
+    const activateEditMode = () => setIsEditStatus(true)
+    const deactivateEditMode = () => setIsEditStatus(false)
+
+    return (
+        <div className={classes.post}>
+            <div className={classes.wrapper}>
+                <img className={classes.post__author} src={props.avatar} alt="author" />
+                <Notifications isEdit={isEdit} activateEditMode={activateEditMode} id={props.id} deletePost={props.deletePost} />
             </div>
-        )
-    }
+            {isEdit ? <div className={classes.editPostTitle}>
+                <input className={classes.editInputs} onChange={onPostTitleChange} value={postTitle} />
+            </div> : <h3 onClick={activateEditMode} className={classes.post__title}>
+                    {postTitle}
+                </h3>}
+            {isEdit ? <div className={classes.editPostInf}>
+                <input className={classes.editInputs} onChange={onPostInfChange} value={postInf} />
+            </div> : <p onClick={activateEditMode} className={classes.post__text}>
+                    {postInf}
+                </p>}
+            {isEdit ? <div className={classes.confirm_btn}><Btn_Confirm clickFunction={deactivateEditMode} /></div> : <div className={classes.dFlex}>
+                <FontAwesomeIcon icon={faHeart} /><p className={classes.m}>{props.likesCount}</p>
+            </div>}
+        </div>
+    )
 }
 
 export default Post
