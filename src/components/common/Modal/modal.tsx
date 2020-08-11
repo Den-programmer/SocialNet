@@ -10,7 +10,6 @@ interface IModal {
 }
 
 export const Modal: React.FC<IModal> = ({ title, isOpen, onCancel, onSubmit, children }) => {
-    console.log(isOpen)
     return (
         <>
             {isOpen && <Portal>

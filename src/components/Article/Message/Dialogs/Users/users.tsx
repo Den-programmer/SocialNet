@@ -3,6 +3,7 @@ import classes from './users.module.css'
 import User from './User/user'
 import defaultUser from '../../../../Article/Profile/images/withoutAvatar/defaultUserPhoto.jpg'
 import { userDialogType } from '../../../../../types/MessagesTypes/messagesTypes'
+import { NavLink } from 'react-router-dom'
 
 interface UsersPropType {
     dialogsData: Array<userDialogType>
@@ -24,7 +25,12 @@ const Users: React.FC<UsersPropType> = ({ dialogsData, setUserDialogId, getDialo
     })
     return (
         <div className={classes.users}>
-            {dialogs.length === 0 ? <h3 className={classes.titleNoDialogs}>You have no dialogs yet!</h3> : dialogs}
+            {dialogs.length === 0 ? <div className={classes.noDialogs}>
+                <h3 className={classes.titleNoDialogs}>You have no dialogs yet!</h3>
+                <div className={classes.btn_findDialogs}>
+                    <NavLink to='/Friends/FindUsers'>Find dialogs</NavLink>
+                </div>
+            </div> : dialogs}
         </div>
     )
 }

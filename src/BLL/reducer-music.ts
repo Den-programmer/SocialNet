@@ -318,7 +318,7 @@ const reducerMusic = (state = musicPage, action: ActionTypes):musicPageType => {
             return {
                 ...state,
                 playlists: state.playlists.map((playlist: playlistType) => {
-                    if(playlist.id === action.playlistId) return { ...playlist, title: action.newTitle }
+                    if(playlist.id === action.playlistId) return { ...playlist, title: action.newTitle === '' ? 'Untitled' : action.newTitle }
                     return playlist
                 })
             }    
