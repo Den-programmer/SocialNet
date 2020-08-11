@@ -10,12 +10,13 @@ interface IPlaylists {
     playlists: Array<playlistType>
     isModalOpen: boolean
     addPlaylist: (title: string) => void
+    deletePlaylist: (playlistId: number) => void
     setIsModalOpenStatus: (modalStatus: boolean) => void
 }
 
-const Playlists: React.FC<IPlaylists> = ({ playlists, addPlaylist, setIsModalOpenStatus, isModalOpen }) => {
+const Playlists: React.FC<IPlaylists> = ({ playlists, addPlaylist, setIsModalOpenStatus, isModalOpen, deletePlaylist }) => {
     const Playlists = playlists.map((p: playlistType) => {
-        return <Playlist key={p.id} id={p.id} title={p.title} countTracks={p.count} music={p.music} />
+        return <Playlist key={p.id} id={p.id} title={p.title} countTracks={p.count} music={p.music} deletePlaylist={deletePlaylist}/>
     })
     const count = playlists.length
     const [playlistTitleValue, setPlaylistTitleValue] = useState<string>('')

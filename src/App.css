@@ -54,7 +54,9 @@ button {
 }
 
 .contextMenu__list-item:hover {
-	background: #930659;
+    transition: all .1s linear;
+    background: #930659;
+    font-weight: bold;
 	color: #fff !important;
 }
 

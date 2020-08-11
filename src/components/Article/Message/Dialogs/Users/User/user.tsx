@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { Component } from 'react'
 import classes from './user.module.css'
 import { NavLink } from 'react-router-dom'
 
 interface UserPropType {
     id: number
+    userDialogId: number | null
     photo: string
     hasNewMessages: boolean
     lastDialogActivity: string
@@ -15,28 +16,42 @@ interface UserPropType {
     getDialogMessages: (userId: number) => void
 }
 
-const User: React.FC<UserPropType> = (props) => {
+interface IState {
+    isUserActive: boolean
+}
 
-    const path = "/Messages/dialog/" + props.id
+class User extends Component<UserPropType> {
+    state = {
+        isUserActive: false
+    } as IState
+
+    path = "/Messages/dialog/" + this.props.id
     
-    const getUserMessages = () => {
-        props.setUserDialogId(props.id)
-        props.getDialogMessages(props.id)
+    getUserMessages = () => {
+        this.props.setUserDialogId(this.props.id)
+        this.props.getDialogMessages(this.props.id)
+        // if(this.props.id === this.props.userDialogId) {
+        //     this.setState({ isUserActive: true })
+        // } else {
+        //     this.setState({ isUserActive: false })
+        // }
     }
 
-    return (
-        <NavLink onClick={getUserMessages} to={path}>
-            <div className={classes.user}>
-                <div className={classes.avatar}>
-                    <img src={props.photo} alt="user" />
+    render() {
+        return (
+            <NavLink onClick={this.getUserMessages} to={this.path}>
+                <div className={`${classes.user} ${this.state.isUserActive && classes.active}`}>
+                    <div className={classes.avatar}>
+                        <img src={this.props.photo} alt="user" />
+                    </div>
+                    <div className={classes.userInf}>
+                        <h3 className={classes.userName}>{this.props.userName}</h3>
+                        <p className={classes.lastMessage}>{this.props.lastMessage}</p>
+                    </div>
                 </div>
-                <div className={classes.userInf}>
-                    <h3 className={classes.userName}>{props.userName}</h3>
-                    <p className={classes.lastMessage}>{props.lastMessage}</p>
-                </div>
-            </div>
-        </NavLink>
-    )
+            </NavLink>
+        )
+    }
 }
 
 

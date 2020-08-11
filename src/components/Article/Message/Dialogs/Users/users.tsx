@@ -6,13 +6,14 @@ import { userDialogType } from '../../../../../types/MessagesTypes/messagesTypes
 
 interface UsersPropType {
     dialogsData: Array<userDialogType>
+    userDialogId: number | null
     setUserDialogId: (userId: number) => void
     getDialogMessages: (userId: number) => void
 }
 
-const Users: React.FC<UsersPropType> = ({ dialogsData, setUserDialogId, getDialogMessages }) => {
+const Users: React.FC<UsersPropType> = ({ dialogsData, setUserDialogId, getDialogMessages, userDialogId }) => {
     const dialogs = dialogsData.map((d: userDialogType) => {
-        return <User key={d.id} photo={d.photos.large ? d.photos.large : d.photos.small ? d.photos.small : defaultUser} id={d.id}
+        return <User userDialogId={userDialogId} key={d.id} photo={d.photos.large ? d.photos.large : d.photos.small ? d.photos.small : defaultUser} id={d.id}
             hasNewMessages={d.hasNewMessages}
             lastDialogActivity={d.lastDialogActivityDate}
             lastUserActivityDate={d.lastUserActivityDate}

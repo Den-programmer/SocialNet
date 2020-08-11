@@ -11,9 +11,9 @@ const mapStateToProps = (state: RootState) => ({
     isModalOpen: getIsModalOpenStatus(state)
 })
 
-const { addPlaylist } = actions
+const { addPlaylist, deletePlaylist } = actions
 const { setIsModalOpenStatus } = actions2
 
-const PlaylistsContainer = connect(mapStateToProps, { addPlaylist, setIsModalOpenStatus })(Playlists)
+const PlaylistsContainer = connect(mapStateToProps, { addPlaylist, setIsModalOpenStatus, deletePlaylist })(Playlists)
 
 export default PlaylistsContainer

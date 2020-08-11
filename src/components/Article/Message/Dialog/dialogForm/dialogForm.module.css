@@ -9,6 +9,9 @@
     height: 40px;
     width: 200px;
 }
+.sendMessage input:focus {
+    outline: none;
+}
 .sendMessage__btn {
     margin:5px auto;
 }

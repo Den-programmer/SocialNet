@@ -15,15 +15,7 @@ const messagesPage = {
     messages: [
         {
             id: 1,
-            messageText: 'Hello World !!!'
-        },
-        {
-            id: 2,
-            messageText: 'How is it going?'
-        },
-        {
-            id: 3,
-            messageText: 'Would u like to go for a walk?'
+            messageText: 'Choose the user to see his messages!'
         }
     ],
     userDialogId: null
@@ -99,7 +91,6 @@ export const startDialog = (userId: number): ThunkType => async (dispatch) => {
 export const getDialogMessages = (userId: number): ThunkType => async (dispatch) => {
     try {
         const data = await MessagesAPI.getDialogMessages(userId)
-        debugger
 
         if(!data.error) {
             dispatch(actions.setMessages(data.items))
