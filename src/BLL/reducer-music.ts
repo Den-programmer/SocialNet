@@ -314,6 +314,14 @@ const reducerMusic = (state = musicPage, action: ActionTypes):musicPageType => {
                     if(playlist.id !== action.playlistId) return true
                 })
             } 
+        case `sn/musicPage/EDIT_PLAYLIST`: 
+            return {
+                ...state,
+                playlists: state.playlists.map((playlist: playlistType) => {
+                    if(playlist.id === action.playlistId) return { ...playlist, title: action.newTitle }
+                    return playlist
+                })
+            }    
         case `sn/musicPage/ADD_TRACK_TO_PLAYLIST`:
             const newTrack = state.tracks.filter((t: trackType) => {
                 if(t.id === action.trackId) return true
@@ -342,6 +350,7 @@ export const actions = {
     unsetIsMusicPlaying: () => ({ type: `sn/musicPage/PAUSE_ALL_TRACKS` } as const),
     addPlaylist: (title: string) => ({ type: `sn/musicPage/ADD_PLAYLIST`, title } as const),
     deletePlaylist: (playlistId: number) => ({ type: `sn/musicPage/DELETE_PLAYLIST`, playlistId } as const),
+    changePlaylistTitle: (newTitle: string, playlistId: number) => ({ type: `sn/musicPage/EDIT_PLAYLIST`, newTitle, playlistId } as const),
     addTrackToPlaylist: (trackId: number, playlistId: number) => ({ type: `sn/musicPage/ADD_TRACK_TO_PLAYLIST`, trackId, playlistId } as const)
 }
 

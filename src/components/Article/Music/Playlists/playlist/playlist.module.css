@@ -6,6 +6,23 @@
     color: #455172;
     font-family: 'Open Sans', sans-serif;
 }
+.editInput {
+    margin-top: 18px;
+    outline: none;
+    border: none;
+    color: #455172;
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    background: transparent;
+    border-bottom: 1px solid silver; 
+}
+.editInput:focus {
+    transition: all .3s ease;
+    padding: 5px;
+    border-bottom: 1px solid purple;
+}
 .playlistsInf p {
     color: #FFF;
     font-family: 'Lato', sans-serif;

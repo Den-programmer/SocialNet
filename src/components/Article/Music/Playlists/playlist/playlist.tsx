@@ -10,6 +10,7 @@ interface IPlaylist {
     countTracks: number
     music: Array<trackType>
     deletePlaylist: (playlistId: number) => void
+    changePlaylistTitle: (title: string, playlistId: number) => void
 }
 
 export interface IMenuStyleState {
@@ -29,6 +30,21 @@ const Playlist: React.FC<IPlaylist> = (props) => {
 
     const [isMenuOpen, setIsMenuOpenStatus] = useState<boolean>(false)
     const [menuStyle, setMenuStyle] = useState<IMenuStyleState>({ top: 0 + 'px', left: 0 + 'px' })
+    const [isEdit, setEditingStatus] = useState<boolean>(false)
+    const [editInputVal, setEditInputVal] = useState<string>(props.title)
+
+    const onEditInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEditInputVal(e.currentTarget.value)
+    }
+
+    const finishEditing = () => {
+        props.changePlaylistTitle(editInputVal, props.id)
+        setEditingStatus(false)
+    }
+
+    const isEditCheck = isEdit ? 
+    <input onChange={onEditInputChange} onBlur={finishEditing} className={classes.editInput} placeholder="Enter playlist's title" value={editInputVal}/> 
+    : <h4>{props.title}</h4>
 
     const callContextMenu = (e: React.MouseEvent<HTMLLIElement>) => {
         setIsMenuOpenStatus(true)
@@ -47,18 +63,18 @@ const Playlist: React.FC<IPlaylist> = (props) => {
                 <div className={classes.playlistImg}>
                     <div className={classes.image}><img className={classes.playlistWithoutUserImg} src={playlistWithoutUserImg} alt=""/></div>
                 </div>
-                {isMenuOpen && <PlaylistContextMenu playlistId={props.id} styleMenu={menuStyle} deletePlaylist={props.deletePlaylist}/>}
+                {isMenuOpen && <PlaylistContextMenu setEditingStatus={setEditingStatus} playlistId={props.id} styleMenu={menuStyle} deletePlaylist={props.deletePlaylist}/>}
                 <div className={classes.playlistsInf}>
-                    <h4>{props.title}</h4>
+                    {isEditCheck}
                     <p>{countTracks}</p>
                 </div>
             </li> : <li onContextMenu={callContextMenu} className={classes.playlist}>
                 <div className={classes.playlistImg}>
                     {images}
                 </div>
-                {isMenuOpen && <PlaylistContextMenu playlistId={props.id} styleMenu={menuStyle} deletePlaylist={props.deletePlaylist}/>}
+                {isMenuOpen && <PlaylistContextMenu setEditingStatus={setEditingStatus} playlistId={props.id} styleMenu={menuStyle} deletePlaylist={props.deletePlaylist}/>}
                 <div className={classes.playlistsInf}>
-                    <h4>{props.title}</h4>
+                    {isEditCheck}
                     <p>{countTracks}</p>
                 </div>
             </li>}
