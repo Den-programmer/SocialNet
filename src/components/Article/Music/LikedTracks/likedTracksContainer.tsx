@@ -19,7 +19,7 @@ class LikedTracksClass extends React.Component<IProps> {
         this.props.setLikedTracks()
     }
     render() {
-        return <MainMusicPage isModalOpen={this.props.isModalOpen} setIsModalOpenStatus={this.props.setIsModalOpenStatus} playlists={this.props.playlists} addTrackToPlaylist={this.props.addTrackToPlaylist} unsetIsMusicPlaying={this.props.unsetIsMusicPlaying} tracks={this.props.tracks} trackNotifications={this.props.trackNotifications} likeTrack={this.props.likeTrack}
+        return <MainMusicPage ignoreTrack={this.props.ignoreTrack} isModalOpen={this.props.isModalOpen} setIsModalOpenStatus={this.props.setIsModalOpenStatus} playlists={this.props.playlists} addTrackToPlaylist={this.props.addTrackToPlaylist} unsetIsMusicPlaying={this.props.unsetIsMusicPlaying} tracks={this.props.tracks} trackNotifications={this.props.trackNotifications} likeTrack={this.props.likeTrack}
         chooseTrack={this.props.chooseTrack} setTrackCurrentTime={this.props.setTrackCurrentTime}/>
     }
 }
@@ -31,7 +31,7 @@ const mapStateToProps = (state:RootState) => ({
     playlists: getPlaylists(state)
 })
 
-const { likeTrack, chooseTrack, setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying, addTrackToPlaylist } = actions
+const { likeTrack, chooseTrack, setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying, addTrackToPlaylist, ignoreTrack } = actions
 const { setIsModalOpenStatus } = actions2
 
 export default compose<React.ComponentType>(
@@ -41,6 +41,7 @@ export default compose<React.ComponentType>(
         setLikedTracks, 
         unsetIsMusicPlaying, 
         addTrackToPlaylist, 
+        ignoreTrack,
         setIsModalOpenStatus }),
     withAuthRedirect
 )(LikedTracksClass)

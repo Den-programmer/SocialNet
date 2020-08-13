@@ -10,7 +10,7 @@ interface AccountOptionsPropsType {
     photo: any | null
     userName: string
     contacts: contactsType
-    setUserPhotoThunk: (photo: any) => void
+    setUserPhotoThunk: (photo: File) => void
     changeUserName: (userName: string) => void
     saveProfile: (profile: saveProfileType) => void
 }

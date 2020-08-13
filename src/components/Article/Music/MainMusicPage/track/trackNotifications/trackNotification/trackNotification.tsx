@@ -5,18 +5,25 @@ import { playlistType } from '../../../../../../../BLL/reducer-music'
 
 interface TrackNotificationPropType {
     id: number
+    trackId: number
     title: string
     isModalOpen: boolean
     playlists: Array<playlistType>
     setIsModalOpenStatus: (modalStatus: boolean) => void
     addTrackToPlaylist: (trackId: number, playlistId: number) => void
+    ignoreTrack: (trackId: number) => void
 }
 
 const TrackNotification: React.FC<TrackNotificationPropType> = (props) => {
     const chooseNotification = (e:React.MouseEvent<HTMLDivElement>) => {
-        if(props.id === 1) {
-            // props.setIsModalOpenStatus(true)
-        } 
+        switch(props.id) {
+            case 1:
+                // props.setIsModalOpenStatus(true)
+            case 2:
+                props.ignoreTrack(props.trackId)
+            default:
+                console.log(`The last Id!`)
+        }
 
         e.stopPropagation()
     }

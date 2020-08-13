@@ -4,17 +4,16 @@ import defaultAvatar from '../../../../Profile/images/withoutAvatar/defaultUserP
 
 interface IEditPhoto {
     error: string | null
-    setUserPhoto: (photo: any) => void
-    photo: any | null
+    setUserPhoto: (photo: File) => void
+    photo: string | undefined
 }
 
 const EditPhoto: React.FC<IEditPhoto> = ({error, setUserPhoto, photo}) => {
-    let filePhotoInput = React.createRef<HTMLInputElement>()
-    let getUserPhoto = () => {
-        let node = filePhotoInput.current
-        if(node) {
-            // @ts-ignorets-ignore
-            let file = node.files[0]
+    const filePhotoInput = React.createRef<HTMLInputElement>()
+    const getUserPhoto = () => {
+        const node = filePhotoInput.current
+        if(node?.files) {
+            const file = node.files[0]
             setUserPhoto(file)
         }
     }

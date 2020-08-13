@@ -1,8 +1,13 @@
-import { instance, ServerResType } from './api'
+import { instance } from './api'
 
 type photosType = {
     small: string
     large: string
+}
+type setUserPhotoType = {
+    photos: photosType
+    messages: Array<string>
+    resultCode: number
 }
 
 export const OptionsAPI = {
@@ -10,7 +15,7 @@ export const OptionsAPI = {
         const formData = new FormData()
         formData.append("image", photo)
 
-        return instance.put<ServerResType<photosType>>(`profile/photo`, formData, {
+        return instance.put<setUserPhotoType>(`profile/photo`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

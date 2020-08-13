@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import classes from './trackNotifications.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons'
@@ -6,49 +6,40 @@ import { trackNotificationType, playlistType } from '../../../../../../BLL/reduc
 import TrackNotification from './trackNotification/trackNotification'
 
 interface TrackNotificationsPropType {
+    trackId: number
     playlists: Array<playlistType>
     isModalOpen: boolean
     trackNotifications: Array<trackNotificationType>
     setIsModalOpenStatus: (modalStatus: boolean) => void
     addTrackToPlaylist: (trackId: number, playlistId: number) => void
+    ignoreTrack: (trackId: number) => void
 }
 
-interface trackStateType {
-    isMenu: boolean
-}
+const TrackNotifications: React.FC<TrackNotificationsPropType> = (props) => {
+    const [isMenu, setIsMenuStatus] = useState<boolean>(false)
 
-class TrackNotifications extends React.Component<TrackNotificationsPropType> {
-    state = {
-        isMenu: false
-    } as trackStateType
-
-    trackNotifications = this.props.trackNotifications.map((item: trackNotificationType) => {
+    const trackNotifications = props.trackNotifications.map((item: trackNotificationType) => {
         return <TrackNotification key={item.id} id={item.id} 
-        title={item.title} addTrackToPlaylist={this.props.addTrackToPlaylist} 
-        isModalOpen={this.props.isModalOpen} setIsModalOpenStatus={this.props.setIsModalOpenStatus} playlists={this.props.playlists}/>
+        title={item.title} addTrackToPlaylist={props.addTrackToPlaylist} 
+        ignoreTrack={props.ignoreTrack}
+        trackId={props.trackId}
+        isModalOpen={props.isModalOpen} setIsModalOpenStatus={props.setIsModalOpenStatus} playlists={props.playlists}/>
     })
 
-    openMenu = (e:React.MouseEvent<HTMLDivElement>) => {
-        if (this.state.isMenu) {
-            this.setState({ isMenu: false })
-        } else {
-            this.setState({ isMenu: true })
-        }
+    const openMenu = (e:React.MouseEvent<HTMLDivElement>) => {
+        setIsMenuStatus(!isMenu)
         e.stopPropagation()
     }
-
-    render() {
         return (
             <div className={classes.notifications}>
-                <div onClick={this.openMenu} className={classes.notificationIconBlock}>
+                <div onClick={openMenu} className={classes.notificationIconBlock}>
                     <FontAwesomeIcon className={classes.notificationIcon} icon={faEllipsisV} />
                 </div>
-                {this.state.isMenu && <div className={classes.trackNotifications}>
-                    {this.trackNotifications}
+                {isMenu && <div className={classes.trackNotifications}>
+                    {trackNotifications}
                 </div>}
             </div>
         )
-    }
 }
 
 export default TrackNotifications

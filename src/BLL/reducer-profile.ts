@@ -56,10 +56,8 @@ export type profilePageType = {
   followed: boolean
 }
 
-let profilePage = {
-  posts: [
-
-  ],
+const profilePage = {
+  posts: [],
   postNotification: [
     {
       id: 1,
@@ -166,7 +164,7 @@ export const actions = {
   setUserProfile: (profile: profileType) => ({ type: `/sn/profilePage/SET_USER_PROFILE`, profile } as const),
   setStatus: (status: string) => ({ type: `/sn/profilePage/SET_STATUS`, status } as const),
   updateStatus: (status: string) => ({ type: `/sn/profilePage/UPDATE_STATUS`, status } as const),
-  setUserPhoto: (photo: any) => ({ type: `/sn/profilePage/SET_USERS_PHOTO`, photo } as const),
+  setUserPhoto: (photo: string) => ({ type: `/sn/profilePage/SET_USERS_PHOTO`, photo } as const),
   changeUserName: (userName: string) => ({ type: `/sn/profilePage/CHANGE_USER_NAME`, userName } as const),
   changeContacts: (contactId: number, val: string) => ({ type: `/sn/profilePage/CHANGE_CONTACT`, contactId, val } as const),
   setIsUserFollowed: (followed: boolean) => ({ type: `/sn/profilePage/IS_USER_FOLLOWED`, followed } as const)
@@ -176,14 +174,13 @@ export const actions = {
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
-export const setUserPhotoThunk = (photo: any): ThunkType => async (dispatch) => {
+export const setUserPhotoThunk = (photo: File): ThunkType => async (dispatch) => {
   try {
-    let data = await OptionsAPI.setUserPhoto(photo)
-    debugger
+    const data = await OptionsAPI.setUserPhoto(photo)
     if (data.resultCode === resultCode.Success) {
-      dispatch(actions.setUserPhoto(photo))
+      dispatch(actions.setUserPhoto(data.photos.large))
     } else {
-      let message = data.messages[0]
+      const message = data.messages[0]
       dispatch(setTextError(message))
     }
   } catch (error) {
@@ -191,9 +188,9 @@ export const setUserPhotoThunk = (photo: any): ThunkType => async (dispatch) => 
   }
 }
 
-export const setUserProfileThunk = (userId: number | null): ThunkType => async (dispatch) => {
+export const setUserProfileThunk = (userId: number): ThunkType => async (dispatch) => {
   try {
-    let data = await ProfileAPI.getUsersProfile(userId)
+    const data = await ProfileAPI.getUsersProfile(userId)
     dispatch(actions.setUserProfile(data))
   } catch (error) {
     alert(`Something's gone wrong, error status: 500`)
@@ -204,24 +201,25 @@ export const saveProfile = (profile: saveProfileType): ThunkType => async (dispa
     const userId = getState().auth.userId
     const profileStatus = getState().profilePage.profile.status
     const userProfilePhoto = getState().profilePage.profile.photos
-    const trueProfile = {
-      status: profileStatus,
-      aboutMe: 'I\'m GODNESS!!!',
-      userId: userId,
-      lookingForAJob: true,
-      lookingForAJobDescription: 'I\'m developer that has some skills: JavaScript, React.Js, TypeScript, Redux, C#, HTML, CSS, BootsTrap, SCSS and many others!',
-      fullName: profile.fullName,
-      contacts: profile.contacts,
-      photos: userProfilePhoto
-    }
-    // @ts-ignore
-    const data = await ProfileAPI.saveProfile(trueProfile)
-    if (data.resultCode === resultCode.Success) {
-      dispatch(setUserProfileThunk(userId))
-    } else {
-      const error = data.messages[0]
-      const action: any = stopSubmit('ChangeContacts', { _error: error })
-      dispatch(action)
+    if(userId) {
+      const trueProfile = {
+        status: profileStatus,
+        aboutMe: 'I\'m GODNESS!!!',
+        userId: userId,
+        lookingForAJob: true,
+        lookingForAJobDescription: 'I\'m developer that has some skills: JavaScript, React.Js, TypeScript, Redux, C#, HTML, CSS, BootsTrap, SCSS and many others!',
+        fullName: profile.fullName,
+        contacts: profile.contacts,
+        photos: userProfilePhoto
+      }
+      const data = await ProfileAPI.saveProfile(trueProfile)
+      if (data.resultCode === resultCode.Success) {
+        dispatch(setUserProfileThunk(userId))
+      } else {
+        const error = data.messages[0]
+        const action: any = stopSubmit('ChangeContacts', { _error: error })
+        dispatch(action)
+      }
     }
   } catch (error) {
     alert(`Something's gone wrong, error status: 500`)
@@ -229,7 +227,7 @@ export const saveProfile = (profile: saveProfileType): ThunkType => async (dispa
 }
 export const setStatusThunk = (userId: number): ThunkType => async (dispatch) => {
   try {
-    let data = await ProfileAPI.getStatus(userId)
+    const data = await ProfileAPI.getStatus(userId)
     dispatch(actions.setStatus(data))
   } catch (error) {
     console.log(error)
@@ -238,15 +236,15 @@ export const setStatusThunk = (userId: number): ThunkType => async (dispatch) =>
 }
 export const updateStatusThunk = (status: string): ThunkType => async (dispatch) => {
   try {
-    let data = await ProfileAPI.updateStatus(status)
+    const data = await ProfileAPI.updateStatus(status)
     dispatch(actions.updateStatus(data))
   } catch (error) {
     alert(`Something's gone wrong, error status: 500`)
   }
 }
-export const getIsUserFollowed = (userId: number | null): ThunkType => async (dispatch) => {
+export const getIsUserFollowed = (userId: number): ThunkType => async (dispatch) => {
   try {
-    let res = await ProfileAPI.getIsUserFollowed(userId)
+    const res = await ProfileAPI.getIsUserFollowed(userId)
     dispatch(actions.setIsUserFollowed(res.data))
   } catch (e) {
     alert(`Something's gone wrong, error status: 500`)

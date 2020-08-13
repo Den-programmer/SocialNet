@@ -23,6 +23,7 @@ interface TrackPropsType {
     likeTrack: (trackId: number) => void
     chooseTrack: (trackId: number) => void
     addTrackToPlaylist: (trackId: number, playlistId: number) => void
+    ignoreTrack: (trackId: number) => void
 }
 
 class Track extends React.Component<TrackPropsType> {
@@ -60,9 +61,13 @@ class Track extends React.Component<TrackPropsType> {
                     <div className={classes.duration}>
                         {this.props.duration}
                     </div>    
-                    <TrackNotifications playlists={this.props.playlists} setIsModalOpenStatus={this.props.setIsModalOpenStatus} isModalOpen={this.props.isModalOpen}
+                    <TrackNotifications playlists={this.props.playlists} 
+                    setIsModalOpenStatus={this.props.setIsModalOpenStatus} 
+                    isModalOpen={this.props.isModalOpen}
                     addTrackToPlaylist={this.props.addTrackToPlaylist} 
-                    trackNotifications={this.props.trackNotifications}/>
+                    trackNotifications={this.props.trackNotifications} 
+                    ignoreTrack={this.props.ignoreTrack}
+                    trackId={this.props.id}/>
                 </div>
             </li>
         )

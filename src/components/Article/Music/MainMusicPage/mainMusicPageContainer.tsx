@@ -15,10 +15,10 @@ let mapStateToProps = (state: RootState) => ({
     isModalOpen: getIsModalOpenStatus(state)
 })
 
-const { likeTrack, chooseTrack, setTrackCurrentTime, unsetIsMusicPlaying, addTrackToPlaylist } = actions
+const { likeTrack, chooseTrack, setTrackCurrentTime, unsetIsMusicPlaying, addTrackToPlaylist, ignoreTrack } = actions
 const { setIsModalOpenStatus } = actions2
 
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, { likeTrack, chooseTrack, setTrackCurrentTime, unsetIsMusicPlaying, addTrackToPlaylist, setIsModalOpenStatus }),
+    connect(mapStateToProps, { likeTrack, chooseTrack, setTrackCurrentTime, unsetIsMusicPlaying, addTrackToPlaylist, setIsModalOpenStatus, ignoreTrack }),
     withAuthRedirect
 )(MainMusicPage)

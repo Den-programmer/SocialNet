@@ -334,7 +334,25 @@ const reducerMusic = (state = musicPage, action: ActionTypes):musicPageType => {
                         count: state.playlists[action.playlistId - 1].music.length }
                     return p
                 })
-            }    
+            }  
+        // case `sn/musicPage/IGNORE-TRACK`: 
+        //     return {
+        //         ...state,
+        //         tracks: state.tracks.map((track: trackType) => {
+        //             if(track.id === action.trackId) {
+        //                 if(track.isMusicPlaying && state.tracks.length >= action.trackId + 1) {
+        //                     return { ...state.tracks[action.trackId + 2], isMusicPlaying: true }
+        //                 } else if(track.isMusicPlaying && state.tracks.length <= action.trackId) {
+        //                     return { ...state.tracks[0], isMusicPlaying: true }
+        //                 } else {
+        //                     return track
+        //                 }
+        //             }
+        //             return track
+        //         }).filter((track: trackType) => {
+        //             if(track.id !== action.trackId)  return true
+        //         })
+        //     }      
         default:
             return state
     }
@@ -351,7 +369,8 @@ export const actions = {
     addPlaylist: (title: string) => ({ type: `sn/musicPage/ADD_PLAYLIST`, title } as const),
     deletePlaylist: (playlistId: number) => ({ type: `sn/musicPage/DELETE_PLAYLIST`, playlistId } as const),
     changePlaylistTitle: (newTitle: string, playlistId: number) => ({ type: `sn/musicPage/EDIT_PLAYLIST`, newTitle, playlistId } as const),
-    addTrackToPlaylist: (trackId: number, playlistId: number) => ({ type: `sn/musicPage/ADD_TRACK_TO_PLAYLIST`, trackId, playlistId } as const)
+    addTrackToPlaylist: (trackId: number, playlistId: number) => ({ type: `sn/musicPage/ADD_TRACK_TO_PLAYLIST`, trackId, playlistId } as const),
+    ignoreTrack: (trackId: number) => ({ type: `sn/musicPage/IGNORE-TRACK`, trackId  } as const)
 }
 
 export default reducerMusic

@@ -31,16 +31,16 @@ const Notifications: React.FC<INotifications> = (props) => {
                     <ul className={classes.menuList}>
                         <li onClick={deletePost} className={classes.menuItem} title="Delete post!">
                             Delete Post
-                            </li>
+                        </li>
                         <li onClick={editPost} className={classes.menuItem} title="Edit post!">
                             Edit Post
-                            </li>
+                        </li>
                         <li className={classes.menuItem} title="Delete post!">
                             Copy the post text
-                            </li>
+                        </li>
                         <li className={classes.menuItem} title="Delete post!">
                             Delete Post4
-                            </li>
+                        </li>
                         <li className={classes.menuItem} title="Delete post!">
                             Delete Post5
                         </li>

@@ -16,6 +16,7 @@ export interface IMainMusicPageProps {
     unsetIsMusicPlaying: () => void
     chooseTrack: (trackId: number) => void
     addTrackToPlaylist: (trackId: number, playlistId: number) => void
+    ignoreTrack: (trackId: number) => void
 }
 
 const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
@@ -82,6 +83,7 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
             chooseTrack={props.chooseTrack}
             trackNotifications={props.trackNotifications} 
             startMusic={startMusic} 
+            ignoreTrack={props.ignoreTrack}
             addTrackToPlaylist={props.addTrackToPlaylist}
             isModalOpen={props.isModalOpen} setIsModalOpenStatus={props.setIsModalOpenStatus} playlists={props.playlists}/>
     })
