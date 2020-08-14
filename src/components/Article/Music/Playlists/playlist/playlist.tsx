@@ -66,7 +66,6 @@ const Playlist: React.FC<IPlaylist> = (props) => {
     document.addEventListener('click', event => {
         if(event.button !== 2) setIsMenuOpenStatus(false)
     })
-
     return (
         <React.Fragment>
             {props.music.length < 4 ? <li onContextMenu={callContextMenu} className={classes.playlist}>

@@ -1,22 +1,14 @@
 import React, { useEffect } from 'react'
 import classes from './mainMusicPage.module.css'
-import { trackType, trackNotificationType, playlistType } from '../../../../BLL/reducer-music'
-import Track from './track/track'
+import { trackType } from '../../../../BLL/reducer-music'
+import Track from './track/trackContainer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 export interface IMainMusicPageProps {
     tracks: Array<trackType>
-    trackNotifications: Array<trackNotificationType>
-    isModalOpen: boolean
-    playlists: Array<playlistType>
-    setIsModalOpenStatus: (modalStatus: boolean) => void
     setTrackCurrentTime: (trackId: number, time: number) => void
-    likeTrack: (trackId: number) => void
     unsetIsMusicPlaying: () => void
-    chooseTrack: (trackId: number) => void
-    addTrackToPlaylist: (trackId: number, playlistId: number) => void
-    ignoreTrack: (trackId: number) => void
 }
 
 const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
@@ -34,7 +26,7 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
         })
     })
 
-    let startMusic = (isMusicPlaying: boolean, src: string, id: number, time: number) => {
+    const startMusic = (isMusicPlaying: boolean, src: string, id: number, time: number) => {
         let node = audio.current
         // time - сохраняеться в state, если трек был остановлен!
         // Eсли компонента умирает - тогда сохраняем время играющего трека!
@@ -79,13 +71,7 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
             duration={track.duration}
             liked={track.liked}
             isMusicPlaying={track.isMusicPlaying}
-            likeTrack={props.likeTrack}
-            chooseTrack={props.chooseTrack}
-            trackNotifications={props.trackNotifications} 
-            startMusic={startMusic} 
-            ignoreTrack={props.ignoreTrack}
-            addTrackToPlaylist={props.addTrackToPlaylist}
-            isModalOpen={props.isModalOpen} setIsModalOpenStatus={props.setIsModalOpenStatus} playlists={props.playlists}/>
+            startMusic={startMusic} />
     })
 
     const onSearchIconClick = () => {

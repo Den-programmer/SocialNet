@@ -26,52 +26,50 @@ interface TrackPropsType {
     ignoreTrack: (trackId: number) => void
 }
 
-class Track extends React.Component<TrackPropsType> {
-    chooseTrack = (): void => {
-        this.props.chooseTrack(this.props.id)
-        setTimeout(() => this.props.startMusic(this.props.isMusicPlaying, this.props.src, this.props.id, this.props.time))   
+const Track: React.FC<TrackPropsType> = (props) => {
+    const chooseTrack = (): void => {
+        props.chooseTrack(props.id)
+        setTimeout(() => props.startMusic(props.isMusicPlaying, props.src, props.id, props.time))
     }
-    likeTrack = (event:React.MouseEvent<SVGSVGElement>): void => {
-        this.props.likeTrack(this.props.id)
+    const likeTrack = (event: React.MouseEvent<SVGSVGElement>): void => {
+        props.likeTrack(props.id)
         event.stopPropagation()
     }
-    render() {
-        return (
-            <li onClick={this.chooseTrack} className={classes.track}>
-                <div className={classes.trackInf}>
-                    <div className={classes.icon}>
-                        <img src={this.props.singerPhoto} alt="singer" />
+    return (
+        <li onClick={chooseTrack} className={classes.track}>
+            <div className={classes.trackInf}>
+                <div className={classes.icon}>
+                    <img src={props.singerPhoto} alt="singer" />
+                </div>
+                <div className={classes.Inf}>
+                    <div className={classes.singer}>
+                        <h4>{props.singer}</h4>
                     </div>
-                    <div className={classes.Inf}>
-                        <div className={classes.singer}>
-                            <h4>{this.props.singer}</h4>
-                        </div>
-                        <div className={classes.songTitle}>
-                            <h5>{this.props.songTitle}</h5>
-                        </div>
-                        <div className={classes.btns}>
-                            {this.props.isMusicPlaying ? <FontAwesomeIcon className={classes.pauseIcon} icon={faPause} /> : 
+                    <div className={classes.songTitle}>
+                        <h5>{props.songTitle}</h5>
+                    </div>
+                    <div className={classes.btns}>
+                        {props.isMusicPlaying ? <FontAwesomeIcon className={classes.pauseIcon} icon={faPause} /> :
                             <FontAwesomeIcon className={classes.playTrackIcon} icon={faPlay} />}
-                            {this.props.liked ? <FontAwesomeIcon onClick={this.likeTrack} className={classes.likedIcon} icon={faHeart} /> :
-                            <FontAwesomeIcon onClick={this.likeTrack} className={classes.likeIcon} icon={faHeart} />}
-                        </div>
+                        {props.liked ? <FontAwesomeIcon onClick={likeTrack} className={classes.likedIcon} icon={faHeart} /> :
+                            <FontAwesomeIcon onClick={likeTrack} className={classes.likeIcon} icon={faHeart} />}
                     </div>
                 </div>
-                <div className={classes.durationAndNotifications}>
-                    <div className={classes.duration}>
-                        {this.props.duration}
-                    </div>    
-                    <TrackNotifications playlists={this.props.playlists} 
-                    setIsModalOpenStatus={this.props.setIsModalOpenStatus} 
-                    isModalOpen={this.props.isModalOpen}
-                    addTrackToPlaylist={this.props.addTrackToPlaylist} 
-                    trackNotifications={this.props.trackNotifications} 
-                    ignoreTrack={this.props.ignoreTrack}
-                    trackId={this.props.id}/>
+            </div>
+            <div className={classes.durationAndNotifications}>
+                <div className={classes.duration}>
+                    {props.duration}
                 </div>
-            </li>
-        )
-    }
+                <TrackNotifications playlists={props.playlists}
+                    setIsModalOpenStatus={props.setIsModalOpenStatus}
+                    isModalOpen={props.isModalOpen}
+                    addTrackToPlaylist={props.addTrackToPlaylist}
+                    trackNotifications={props.trackNotifications}
+                    ignoreTrack={props.ignoreTrack}
+                    trackId={props.id} />
+            </div>
+        </li>
+    )
 }
 
 export default Track

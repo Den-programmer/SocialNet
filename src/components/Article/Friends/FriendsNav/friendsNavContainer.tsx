@@ -3,7 +3,7 @@ import FriendsNav from './friendsNav'
 import { withAuthRedirect } from '../../../../HOC/withAuthRedirect'
 import { compose } from 'redux'
 
-export default compose(
-    withAuthRedirect,
-    connect(null, null)
+export default compose<React.ComponentType>(
+    connect(null, null),
+    withAuthRedirect
 )(FriendsNav)

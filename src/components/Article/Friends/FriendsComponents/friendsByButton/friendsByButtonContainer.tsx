@@ -6,11 +6,11 @@ import { compose } from 'redux'
 import { getFriends } from '../../../../../BLL/selectors/users-selectors'
 import { RootState } from '../../../../../BLL/redux'
 
-let mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: RootState) => ({
     friends: getFriends(state)
 })
 
-export default compose(
-    withAuthRedirect,
-    connect(mapStateToProps, { followThunk, unfollowThunk })
+export default compose<React.ComponentType>(
+    connect(mapStateToProps, { followThunk, unfollowThunk }),
+    withAuthRedirect
 )(FriendsByButton)

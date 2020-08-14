@@ -4,7 +4,6 @@ import { RootState } from '../../../../BLL/redux'
 import { getLikedTracks, getTrackNotifications, getPlaylists } from '../../../../BLL/selectors/music-selectors'
 import MainMusicPage from '../MainMusicPage/mainMusicPage'
 import { actions } from '../../../../BLL/reducer-music'
-import { actions as actions2 } from '../../../../BLL/reducer-app'
 import { IMainMusicPageProps } from '../MainMusicPage/mainMusicPage'
 import { withAuthRedirect } from '../../../../HOC/withAuthRedirect'
 import { compose } from 'redux'
@@ -19,8 +18,8 @@ class LikedTracksClass extends React.Component<IProps> {
         this.props.setLikedTracks()
     }
     render() {
-        return <MainMusicPage ignoreTrack={this.props.ignoreTrack} isModalOpen={this.props.isModalOpen} setIsModalOpenStatus={this.props.setIsModalOpenStatus} playlists={this.props.playlists} addTrackToPlaylist={this.props.addTrackToPlaylist} unsetIsMusicPlaying={this.props.unsetIsMusicPlaying} tracks={this.props.tracks} trackNotifications={this.props.trackNotifications} likeTrack={this.props.likeTrack}
-        chooseTrack={this.props.chooseTrack} setTrackCurrentTime={this.props.setTrackCurrentTime}/>
+        return <MainMusicPage unsetIsMusicPlaying={this.props.unsetIsMusicPlaying} 
+        tracks={this.props.tracks} setTrackCurrentTime={this.props.setTrackCurrentTime}/>
     }
 }
 
@@ -31,17 +30,12 @@ const mapStateToProps = (state:RootState) => ({
     playlists: getPlaylists(state)
 })
 
-const { likeTrack, chooseTrack, setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying, addTrackToPlaylist, ignoreTrack } = actions
-const { setIsModalOpenStatus } = actions2
+const { setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying } = actions
 
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, { likeTrack, 
-        chooseTrack, 
+    connect(mapStateToProps, {
         setTrackCurrentTime, 
         setLikedTracks, 
-        unsetIsMusicPlaying, 
-        addTrackToPlaylist, 
-        ignoreTrack,
-        setIsModalOpenStatus }),
+        unsetIsMusicPlaying}),
     withAuthRedirect
 )(LikedTracksClass)

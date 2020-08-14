@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { setUserProfileThunk, setStatusThunk, updateStatusThunk, profileType, getIsUserFollowed } from '../../../BLL/reducer-profile'
 import { followThunk, unfollowThunk } from '../../../BLL/reducer-friends'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
-import { withAuthRedirect } from '../../../HOC/withAuthRedirect'
 import { compose } from 'redux'
 import { getFriends } from '../../../BLL/selectors/users-selectors'
 import { getAuthorizedUserId } from '../../../BLL/selectors/auth-selectors'
@@ -26,6 +25,7 @@ interface IProfileContainer {
     profile: profileType
     posts: Array<postType>
 }
+
 interface IRouteParams {
     userId: string 
 }
@@ -51,8 +51,12 @@ class ProfileContainer extends React.Component<IProfileContainer & RouteComponen
         }
     }
     render() {
-        return <Profile follow={this.props.followThunk} unfollow={this.props.unfollowThunk} followed={this.props.followed} getIsUserFollowed={this.props.getIsUserFollowed} profile={this.props.profile} 
-                        posts={this.props.posts} friends={this.props.friends} updateStatus={this.props.updateStatusThunk} />
+        return <Profile follow={this.props.followThunk}
+        unfollow={this.props.unfollowThunk} 
+        followed={this.props.followed} 
+        getIsUserFollowed={this.props.getIsUserFollowed} 
+        profile={this.props.profile} 
+        posts={this.props.posts} friends={this.props.friends} updateStatus={this.props.updateStatusThunk} />
     }
 }
 
@@ -64,8 +68,7 @@ const mapStateToProps = (state: RootState) => ({
     followed: getIsUserFollowedStatus(state)
 })
 
-export default compose(
-    withAuthRedirect,
-    withRouter,
-    connect(mapStateToProps, { setUserProfileThunk, setStatusThunk, updateStatusThunk, getIsUserFollowed, followThunk, unfollowThunk })
+export default compose<React.ComponentType>(
+    connect(mapStateToProps, { setUserProfileThunk, setStatusThunk, updateStatusThunk, getIsUserFollowed, followThunk, unfollowThunk }),
+    withRouter
 )(ProfileContainer)

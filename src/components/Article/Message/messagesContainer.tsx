@@ -26,7 +26,7 @@ class MessagesContainer extends React.Component<MessagesContainerPropsType> {
     }
 }
 
-export default compose(
-    withAuthRedirect,
-    connect(mapStateToProps, { getALLDialogs  })
+export default compose<React.ComponentType>(
+    connect(mapStateToProps, { getALLDialogs  }),
+    withAuthRedirect
 )(MessagesContainer)

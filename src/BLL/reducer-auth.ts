@@ -30,7 +30,7 @@ const auth = {
 const reducerAuth = (state = auth, action: ActionTypes): authType => {
   switch (action.type) {
     case `sn/auth/SET_AUTH_USER_DATA`:
-      let { userId, email, login, password, rememberMe, isAuth } = action.data
+      const { userId, email, login, password, rememberMe, isAuth } = action.data
       return {
         ...state,
         userId,

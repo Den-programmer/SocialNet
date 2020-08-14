@@ -6,21 +6,24 @@ import { RootState } from '../BLL/redux'
 
 const mapStateToPropsForRedirect = (state: RootState) => ({
     isAuth: getIsAuthStatus(state)
-})
+} as mapStatePropsType)
 
+type mapStatePropsType = { isAuth: boolean }
+
+type mapDispatchPropsType = {}
 
 interface IRedirectComponent { isAuth: boolean }
 
-export const withAuthRedirect = (Component: ComponentType) => {
-    class RedirectComponent extends React.Component<IRedirectComponent> {
-        render() {
-            if(!this.props.isAuth) return <Redirect to="/login" />
+export function withAuthRedirect<WCP>(Component: ComponentType<WCP>) {
+    const RedirectComponent: React.FC<IRedirectComponent> = (props) => {
+        const { isAuth, ...restProps } = props
+        if (!isAuth) return <Redirect to="/login" />
 
-            return <Component {...this.props}/>
-        }
+        return <Component {...restProps as WCP} />
     }
 
-    const ConnectedAuthRedirectComponent = connect(mapStateToPropsForRedirect)(RedirectComponent)
+    const ConnectedAuthRedirectComponent = 
+    connect<mapStatePropsType, mapDispatchPropsType, WCP, RootState>(mapStateToPropsForRedirect)(RedirectComponent)
 
     return ConnectedAuthRedirectComponent
 }

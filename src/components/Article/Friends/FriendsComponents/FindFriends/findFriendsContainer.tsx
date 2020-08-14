@@ -12,7 +12,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const { changePage } = actions
 
-export default compose(
-    withAuthRedirect,
-    connect(mapStateToProps, { changePage })
+export default compose<React.ComponentType>(
+    connect(mapStateToProps, { changePage }),
+    withAuthRedirect
 )(FindFriends)

@@ -1,8 +1,8 @@
-import React from 'react';
-import classes from './friendsNav.module.css';
-import { createFriendsNavBtn } from '../../../../utils/helpers/functions/function-helpers';
+import React from 'react'
+import classes from './friendsNav.module.css'
+import { createFriendsNavBtn } from '../../../../utils/helpers/functions/function-helpers'
 
-interface IFriendsNav {}
+interface IFriendsNav {  }
 
 const FriendsNav: React.FC<IFriendsNav> = (props) => {
     return (
@@ -14,7 +14,7 @@ const FriendsNav: React.FC<IFriendsNav> = (props) => {
                 {createFriendsNavBtn("You can find new friend here!", "/Friends/FindUsers", "Find Friends")}
             </div>
         </div>
-    );
+    )
 }
 
-export default FriendsNav;
+export default FriendsNav
