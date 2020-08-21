@@ -8,7 +8,9 @@ import mydemons from '../components/Article/Music/MainMusicPage/track/music/MyDe
 import TherapySession from '../components/Article/Music/MainMusicPage/track/music/Therapy_Session.mp3'
 import nf from '../components/Article/Music/Following/singer/images/nf.jpg'
 import suicideBoys from '../components/Article/Music/Following/singer/images/suicideBoys.jpg'
-import { InferActionTypes } from './redux'
+import { InferActionTypes, RootState } from './redux'
+import { ThunkAction } from 'redux-thunk'
+import { MusicAPI } from '../DAL/musicApi'
 
 export type trackType = {
     id: number
@@ -55,6 +57,7 @@ type musicPageType = {
     playlists: Array<playlistType>
     albums: Array<{}>
     following: Array<singerType>
+    currentTrack: trackType
 }
 
 const musicPage = {
@@ -243,10 +246,26 @@ const musicPage = {
             music: []
         }
     ],
+    currentTrack: {
+        id: 1,
+        singer: 'Lil Peep',
+        singerPhoto: 'https://outstyle.org/images/news/5/7/6/unnamed.jpg',
+        song: 'Save that shit',
+        src: savethatshit,
+        duration: 5,
+        time: 0,
+        liked: true,
+        isMusicPlaying: false
+    }
 } as musicPageType
 
-const reducerMusic = (state = musicPage, action: ActionTypes):musicPageType => {
+const reducerMusic = (state = musicPage, action: ActionTypes): musicPageType => {
     switch (action.type) {
+        case `sn/musicPage/SET_TRACKS`:
+            return {
+                ...state,
+                tracks: action.tracks
+            }
         case `sn/musicPage/LIKE_TRACK`:
             return {
                 ...state,
@@ -281,22 +300,32 @@ const reducerMusic = (state = musicPage, action: ActionTypes):musicPageType => {
                     }
                 })
             }
+        case `sn/musicPage/SET_CURRENT_TRACK`:
+            return {
+                ...state,
+                // @ts-ignore
+                currentTrack: state.tracks.filter((track: trackType) => {
+                    if (track.id === action.trackId) return true
+                }).find((track: trackType) => track)
+            }
         case `sn/musicPage/SET_CURRENT_TRACK_TIME`:
             return {
                 ...state,
                 tracks: state.tracks.map((track: trackType) => {
                     if (track.id === action.trackId) return { ...track, time: action.time }
                     return track
-                })
+                }),
+                currentTrack: { ...state.currentTrack, time: action.time }
             }
         case `sn/musicPage/PAUSE_ALL_TRACKS`:
             return {
                 ...state,
                 tracks: state.tracks.map((track: trackType) => {
                     return { ...track, isMusicPlaying: false }
-                })
+                }),
+                currentTrack: { ...state.currentTrack, isMusicPlaying: false }
             }
-        case `sn/musicPage/ADD_PLAYLIST`:   
+        case `sn/musicPage/ADD_PLAYLIST`:
             const newPlaylist = {
                 id: state.playlists.length + 1,
                 title: action.title === '' ? 'Untitled' : action.title,
@@ -311,30 +340,32 @@ const reducerMusic = (state = musicPage, action: ActionTypes):musicPageType => {
             return {
                 ...state,
                 playlists: state.playlists.filter((playlist: playlistType) => {
-                    if(playlist.id !== action.playlistId) return true
+                    if (playlist.id !== action.playlistId) return true
                 })
-            } 
-        case `sn/musicPage/EDIT_PLAYLIST`: 
+            }
+        case `sn/musicPage/EDIT_PLAYLIST`:
             return {
                 ...state,
                 playlists: state.playlists.map((playlist: playlistType) => {
-                    if(playlist.id === action.playlistId) return { ...playlist, title: action.newTitle === '' ? 'Untitled' : action.newTitle }
+                    if (playlist.id === action.playlistId) return { ...playlist, title: action.newTitle === '' ? 'Untitled' : action.newTitle }
                     return playlist
                 })
-            }    
+            }
         case `sn/musicPage/ADD_TRACK_TO_PLAYLIST`:
             const newTrack = state.tracks.filter((t: trackType) => {
-                if(t.id === action.trackId) return true
+                if (t.id === action.trackId) return true
             }).find(track => track)
             return {
                 ...state,
                 // @ts-ignore
-                playlists: state.playlists.map((p:playlistType) => {
-                    if(p.id === action.playlistId) return { ...p, music: [...state.playlists[action.playlistId - 1].music, newTrack], 
-                        count: state.playlists[action.playlistId - 1].music.length }
+                playlists: state.playlists.map((p: playlistType) => {
+                    if (p.id === action.playlistId) return {
+                        ...p, music: [...state.playlists[action.playlistId - 1].music, newTrack],
+                        count: state.playlists[action.playlistId - 1].music.length
+                    }
                     return p
                 })
-            }  
+            }
         // case `sn/musicPage/IGNORE-TRACK`: 
         //     return {
         //         ...state,
@@ -358,19 +389,35 @@ const reducerMusic = (state = musicPage, action: ActionTypes):musicPageType => {
     }
 }
 
+// ignore track - относиться к currentTrack, если удаляеться трек равный текущему треку - мы должны заменить current track
+// на следующий по id или на первый если тот трек был последним!
+
+// Action Creators!
+
 type ActionTypes = InferActionTypes<typeof actions>
 
 export const actions = {
+    setTracks: (tracks: Array<trackType>) => ({ type: `sn/musicPage/SET_TRACKS`, tracks } as const),
     likeTrack: (trackId: number) => ({ type: `sn/musicPage/LIKE_TRACK`, trackId } as const),
     setLikedTracks: () => ({ type: `sn/musicPage/SET_LIKED_TRACKS` } as const),
     chooseTrack: (trackId: number) => ({ type: `sn/musicPage/CHOOSE_TRACK`, trackId } as const),
+    setCurrentTrack: (trackId: number) => ({ type: `sn/musicPage/SET_CURRENT_TRACK`, trackId } as const),
     setTrackCurrentTime: (trackId: number, time: number) => ({ type: `sn/musicPage/SET_CURRENT_TRACK_TIME`, trackId, time } as const),
     unsetIsMusicPlaying: () => ({ type: `sn/musicPage/PAUSE_ALL_TRACKS` } as const),
     addPlaylist: (title: string) => ({ type: `sn/musicPage/ADD_PLAYLIST`, title } as const),
     deletePlaylist: (playlistId: number) => ({ type: `sn/musicPage/DELETE_PLAYLIST`, playlistId } as const),
     changePlaylistTitle: (newTitle: string, playlistId: number) => ({ type: `sn/musicPage/EDIT_PLAYLIST`, newTitle, playlistId } as const),
     addTrackToPlaylist: (trackId: number, playlistId: number) => ({ type: `sn/musicPage/ADD_TRACK_TO_PLAYLIST`, trackId, playlistId } as const),
-    ignoreTrack: (trackId: number) => ({ type: `sn/musicPage/IGNORE-TRACK`, trackId  } as const)
+    ignoreTrack: (trackId: number) => ({ type: `sn/musicPage/IGNORE-TRACK`, trackId } as const)
+}
+
+// Thunk Creators!
+
+type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
+
+export const requireTracks = ():ThunkType => async (dispatch) => {
+    const data = await MusicAPI.getTracks()
+    console.log(data)
 }
 
 export default reducerMusic

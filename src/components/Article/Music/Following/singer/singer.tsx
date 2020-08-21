@@ -2,7 +2,6 @@ import React from 'react'
 import classes from './singer.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers } from '@fortawesome/free-solid-svg-icons'
-import { trackType } from '../../../../../BLL/reducer-music'
 
 interface ISinger {
     id: number

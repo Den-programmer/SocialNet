@@ -2,62 +2,57 @@ import React, { useEffect } from 'react'
 import classes from './mainMusicPage.module.css'
 import { trackType } from '../../../../BLL/reducer-music'
 import Track from './track/trackContainer'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import Audio from '../../../common/audio/audio'
+import TracksSearching from './tracksSearching/tracksSearching'
 
 export interface IMainMusicPageProps {
     tracks: Array<trackType>
+    currentTrack: trackType
     setTrackCurrentTime: (trackId: number, time: number) => void
     unsetIsMusicPlaying: () => void
 }
 
 const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
     const audio = React.createRef<HTMLAudioElement>()
-    const search = React.createRef<HTMLInputElement>()
-
     useEffect(() => {
-        let node = audio.current
-        props.tracks.forEach((track: trackType) => {
-            if (track.isMusicPlaying && node) {
-                node.src = track.src
-                node.currentTime = track.time
+        setTimeout(() => {
+            let node = audio.current
+            if (props.currentTrack.isMusicPlaying && node) {
+                node.src = props.currentTrack.src
+                node.currentTime = props.currentTrack.time
                 node.play()
+            } else {
+                // Clean the state!
             }
         })
     })
 
-    const startMusic = (isMusicPlaying: boolean, src: string, id: number, time: number) => {
-        let node = audio.current
-        // time - сохраняеться в state, если трек был остановлен!
-        // Eсли компонента умирает - тогда сохраняем время играющего трека!
-        if (isMusicPlaying) {
-            if (node) {
-                node.src = src
-                node.currentTime = time
-                node.play()
-            }
+    // В таком случае остаеться только починить редьюсеры
+
+    const toggleMusicStatus = () => {
+        if (!props.currentTrack.isMusicPlaying) {
+            onPlay()
         } else {
-            if (node) {
-                let time = node.currentTime
-                props.setTrackCurrentTime(id, time)
-                node.pause()
-            }
+            setTimeout(() => onPause())
         }
     }
 
     const onPlay = () => {
-       // После запуска аудио - не очень хорошая идея что-то в нем изменять, но нужно!
+        let node = audio.current
+        if (node) {
+            node.src = props.currentTrack.src
+            node.currentTime = props.currentTrack.time
+            node.play()
+        }
     }
     const onPause = () => {
         let node = audio.current
-        props.tracks.forEach((track: trackType) => {
-            if(node && track.isMusicPlaying) {
-                let time = node.currentTime
-                node.id = track.id.toString()
-                props.setTrackCurrentTime(track.id, time)
-                props.unsetIsMusicPlaying()
-            }
-        })
+        if (props.currentTrack.isMusicPlaying && node) {
+            let time = node.currentTime
+            console.log(time)
+            props.setTrackCurrentTime(props.currentTrack.id, time)
+            props.unsetIsMusicPlaying()
+        }
     }
 
     const tracks = props.tracks.map((track: trackType) => {
@@ -70,30 +65,22 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
             time={track.time}
             duration={track.duration}
             liked={track.liked}
-            isMusicPlaying={track.isMusicPlaying}
-            startMusic={startMusic} />
+            isMusicPlaying={track.isMusicPlaying} toggleMusicStatus={toggleMusicStatus} />
     })
-
-    const onSearchIconClick = () => {
-        const node = search.current
-        if (node) node.focus()
-    }
 
     return (
         <div className={classes.mainMusicPage}>
-            <div className={classes.musicTitle}>
-                <h1>Tracks for you!</h1>
-            </div>
-            <div className={classes.searchInput}>
-                <FontAwesomeIcon title="Click to search!" onClick={onSearchIconClick} className={classes.searchIcon} icon={faSearch} />
-                <input ref={search} type="text" />
-            </div>
+            <TracksSearching />
             <ul className={classes.tracks}>
                 {tracks.length !== 0 ? tracks : <h2 className={classes.titleWhenNoTracks}>There're no tracks yet!</h2>}
             </ul>
-            <div className={classes.currentMusic}>
-                <audio onPlay={onPlay} onPause={onPause} ref={audio} src="" className={classes.audioControler} controls />
-            </div>
+            {props.currentTrack.isMusicPlaying && <audio src="" ref={audio} />}
+            {<div className={classes.currentMusic}>
+                <Audio songTitle={props.currentTrack.song}
+                    singerName={props.currentTrack.singer}
+                    singerPhoto={props.currentTrack.singerPhoto}
+                    isMusicPlaying={props.currentTrack.isMusicPlaying}/>
+            </div>}
         </div>
     )
 }

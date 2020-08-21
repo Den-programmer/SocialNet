@@ -19,10 +19,13 @@ const TrackNotification: React.FC<TrackNotificationPropType> = (props) => {
         switch(props.id) {
             case 1:
                 // props.setIsModalOpenStatus(true)
+                break
             case 2:
                 props.ignoreTrack(props.trackId)
+                break
             default:
                 console.log(`The last Id!`)
+                break
         }
 
         e.stopPropagation()

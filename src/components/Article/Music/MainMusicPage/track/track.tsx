@@ -19,8 +19,9 @@ interface TrackPropsType {
     isModalOpen: boolean
     playlists: Array<playlistType>
     setIsModalOpenStatus: (modalStatus: boolean) => void
-    startMusic: (isMusicPlaying: boolean, src: string, id: number, time: number) => void
+    setCurrentTrack: (trackId: number) => void
     likeTrack: (trackId: number) => void
+    toggleMusicStatus: () => void
     chooseTrack: (trackId: number) => void
     addTrackToPlaylist: (trackId: number, playlistId: number) => void
     ignoreTrack: (trackId: number) => void
@@ -29,7 +30,8 @@ interface TrackPropsType {
 const Track: React.FC<TrackPropsType> = (props) => {
     const chooseTrack = (): void => {
         props.chooseTrack(props.id)
-        setTimeout(() => props.startMusic(props.isMusicPlaying, props.src, props.id, props.time))
+        props.setCurrentTrack(props.id)
+        setTimeout(() => props.toggleMusicStatus())
     }
     const likeTrack = (event: React.MouseEvent<SVGSVGElement>): void => {
         props.likeTrack(props.id)
@@ -49,8 +51,8 @@ const Track: React.FC<TrackPropsType> = (props) => {
                         <h5>{props.songTitle}</h5>
                     </div>
                     <div className={classes.btns}>
-                        {props.isMusicPlaying ? <FontAwesomeIcon className={classes.pauseIcon} icon={faPause} /> :
-                            <FontAwesomeIcon className={classes.playTrackIcon} icon={faPlay} />}
+                        {props.isMusicPlaying ? <FontAwesomeIcon className="pauseIcon" icon={faPause} /> :
+                            <FontAwesomeIcon className="playTrackIcon" icon={faPlay} />}
                         {props.liked ? <FontAwesomeIcon onClick={likeTrack} className={classes.likedIcon} icon={faHeart} /> :
                             <FontAwesomeIcon onClick={likeTrack} className={classes.likeIcon} icon={faHeart} />}
                     </div>

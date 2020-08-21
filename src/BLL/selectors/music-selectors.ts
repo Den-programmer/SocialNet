@@ -17,3 +17,7 @@ export const getLikedTracks = (state: RootState) => {
 export const getPlaylists = (state: RootState) => {
     return state.musicPage.playlists
 }
+
+export const getCurrentTrack = (state: RootState) => {
+    return state.musicPage.currentTrack
+}

@@ -60,6 +60,21 @@ button {
 	color: #fff !important;
 }
 
+/* Fontawesome default icons! */
+
+.playTrackIcon {
+    cursor:pointer;
+    color: red;
+    font-size: 18px;
+    margin-right:10px;
+}
+.pauseIcon {
+    color:rgb(255, 255, 255);
+    cursor: pointer;
+    font-size: 18px;
+    margin-right:10px;
+}
+
 /* Font Size! */
 
 .fontSizeEqual10 {

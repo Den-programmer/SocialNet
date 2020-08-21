@@ -12,9 +12,9 @@ const mapStateToProps = (state: RootState) => ({
     playlists: getPlaylists(state)
 })
 
-const { likeTrack, chooseTrack, ignoreTrack, addTrackToPlaylist } = actions
+const { likeTrack, chooseTrack, ignoreTrack, addTrackToPlaylist, setCurrentTrack } = actions
 const { setIsModalOpenStatus } = actions_2
 
-const TrackContainer = connect(mapStateToProps, { likeTrack, chooseTrack, ignoreTrack, addTrackToPlaylist, setIsModalOpenStatus })(Track)
+const TrackContainer = connect(mapStateToProps, { likeTrack, chooseTrack, ignoreTrack, addTrackToPlaylist, setIsModalOpenStatus, setCurrentTrack })(Track)
 
 export default TrackContainer

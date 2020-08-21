@@ -31,18 +31,6 @@
 .Inf {
     padding:0 20px;
 }
-.playTrackIcon {
-    cursor:pointer;
-    color: red;
-    font-size: 18px;
-    margin-right:10px;
-}
-.pauseIcon {
-    color:rgb(255, 255, 255);
-    cursor: pointer;
-    font-size: 18px;
-    margin-right:10px;
-}
 .singer h4:hover {
     transition: all .3s ease;
     color: #333333;
