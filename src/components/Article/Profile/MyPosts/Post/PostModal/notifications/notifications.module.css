@@ -2,11 +2,13 @@
     display: flex;
     flex-direction:column;
     justify-content: right;
+    order: 1;
 }
 .notificationIcon {
+    font-size: 18px;
+    margin-top: 9px;
     cursor:pointer;
-    margin-left: auto;
-    padding: 4px;
+    padding: 10px;
 }
 .menu {
     padding: 15px;
@@ -15,8 +17,8 @@
     box-shadow: 2px 2px 8px rgba(0,0,0,.1);
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     position: absolute;
-    right: 20px;
-    margin-top: 25px;
+    right: 49px;
+    margin-top: 35px;
 }
 .menu h3 {
     font-size: 16px;
@@ -50,14 +52,6 @@
     transition: .3s linear;
     cursor: pointer;
 }
-/* .menuItem:after {
-    content:"\f18e";
-    font-family: FontAwesome;
-    position: absolute;
-    right: 5px;
-    color: white;
-    transition: .2s linear;
-} */
 .menuItem:hover {
     background: #80C8A0;
     color: white;

@@ -20,3 +20,9 @@ export const getContacts = (state: RootState) => {
 export const getIsUserFollowedStatus = (state: RootState) => {
     return state.profilePage.followed
 }
+export const getIsAddPostModalOpenStatus = (state: RootState) => {
+    return state.profilePage.isAddPostModalOpen
+}
+export const getIsPostModalOpenStatus = (state: RootState) => {
+    return state.profilePage.isPostModalOpen
+}

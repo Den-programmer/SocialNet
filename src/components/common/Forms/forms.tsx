@@ -3,7 +3,7 @@ import classes from './forms.module.css'
 import { Field, WrappedFieldProps } from 'redux-form'
 import { FieldValidator } from '../../../utils/validators/validators'
 
-export const Input: React.FC<WrappedFieldProps>= ({input, meta: { touched, error }, ...props}) => {
+export const Input: React.FC<WrappedFieldProps> = ({input, meta: { touched, error }, ...props}) => {
     const hasError = error && touched
     return (
         <div className={classes.Input}>

@@ -1,7 +1,88 @@
+.postForm {
+    margin: 0 auto;
+}
 .dFlex {
     display:flex;
+    justify-content: center;
     align-items: center;
 }
+.btn_closeTheWindow p {
+    color: #222222;
+    font-size: 30px;
+    margin: 0 10px;
+    cursor: pointer;
+    width: min-content;
+    margin-left: auto;
+}
+.modalTitle {
+    display: flex;
+    justify-content: center;
+}
+.modalTitle h4 {
+    font-size: 16px;
+}
+
+.photo {
+    display: flex;
+    justify-content: center;
+}
+.photo img {
+    height: 200px;
+}
+.btn_selectPhoto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btn_selectPhoto label {
+    outline: none;
+    margin: 7px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 40px;
+    background: rgb(64,199,129);
+    box-shadow: 0 -3px rgb(53,167,110) inset;
+    transition: 0.2s;
+}
+.btn_selectPhoto label:hover { 
+    background: rgb(53, 167, 110); 
+}
+.btn_selectPhoto label:active {
+    background: rgb(33,147,90);
+    box-shadow: 0 3px rgb(33,147,90) inset;
+}
+
+.btn_selectPhoto input {
+    position: absolute;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.postForm input {
+    margin: 10px;
+    height: 20px;
+    width: 290px;
+}
+.postTitle, .postInf {
+    display: flex;
+    justify-content: center;
+}
+.postTitle input, .postInf input {
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #ADADAD;
+}
+.postTitle input:focus, .postInf input:focus {
+    transition: all .5s linear;
+    border-bottom: 1px solid purple;
+}
+
 .Block_btn_addPost {
     margin: 10px;
 }
@@ -24,39 +105,4 @@
      0 0 3px rgba(0,0,0,0) inset,
      0 1px 1px 1px rgba(0,255,255,.5),
      0 -1px 1px 1px rgba(0,255,255,.5);
-}
-
-.postForm {
-    display:inline-flex;
-    flex-direction:column;            
-}
-
-.postForm input {
-    margin: 10px;
-    height: 20px;
-    width: 290px;
-}
-.postForm p {
-    margin: 10px;
-}
-.deleteLastPostBtn {
-    letter-spacing: normal;
-    word-spacing: normal;
-    display: inline-block;
-    text-align: center;
-    align-items: flex-start;
-    cursor: default;
-    background-color:#EFEFEF;
-    cursor: pointer;
-    box-sizing: border-box;
-    font: 400 13.3333px Arial;
-    padding: 1px 6px;
-    border-width: 2px;
-    border-style: outset;
-    border-color: -internal-light-dark-color(rgb(118, 118, 118), rgb(195, 195, 195));
-    border-image: initial;
-}
-.deleteLastPostBtn:hover {
-    border-width: 2px;
-    border-color:rgb(94, 94, 88);
 }

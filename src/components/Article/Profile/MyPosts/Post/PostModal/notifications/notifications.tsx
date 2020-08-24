@@ -25,7 +25,7 @@ const Notifications: React.FC<INotifications> = (props) => {
     return (
         <div className={classes.notification}>
             <FontAwesomeIcon onClick={toggleMenuEmersion} className={classes.notificationIcon} icon={faEllipsisV} />
-            {isMenuHidden ? null :
+            {!isMenuHidden &&
                 <div className={classes.menu}>
                     <h3>Options</h3>
                     <ul className={classes.menuList}>

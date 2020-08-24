@@ -1,62 +1,16 @@
-.dFlex {
-    display:flex;
-    align-items: center;
-}
-.m {
-    margin: 7px;
-}
-.post:first-child {
-    border-top:1px solid #000000;
-}
 .post {
-    border-bottom:1px solid #000000;
-    padding: 20px;
+    position: relative;
+    border: 2px solid #000000;
+    width: 33%;
+    cursor: pointer;
 }
-.post__title {
-    font-size: 25px;
-    font-weight:bold;
-    color:#FFF;
-    text-align:center;
+.post:hover {
+    opacity: 0.9;
 }
-.post__author {
-    border-radius: 350px;
-    width: 70px;
-    height: 70px;
+.post:active {
+    opacity: 0.7;
 }
-.post__text {
-    color:silver;
-    font-size: 17px;
-    font-weight: bold;
-}
-
-.wrapper {
-    display:flex;
-    justify-content: space-between;
-}
-.editInputs {
-    outline: none;
-    border:none;
-    background: #FF80FF;
-    color:#FFF;
-    border-bottom:3px solid #FFF;
-}
-.editPostTitle {
-    text-align: center;
-}
-.editPostTitle input {
-    text-align: center;
-    font-size: 25px;
-    width:300px;
-}
-.editPostInf {
-    padding: 20px;
-}
-.editPostInf input {
-    color:#C0C0C0;
-    font-size: 17px;
+.postImage {
     width: 100%;
-}
-.confirm_btn {
-    display: flex;
-    justify-content: center;
+    height: 100%;
 }

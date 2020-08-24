@@ -1,42 +1,57 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 import classes from './addPostForm.module.css'
-import { reduxForm, InjectedFormProps } from 'redux-form'
+import { reduxForm, InjectedFormProps, Field } from 'redux-form'
 import { maxLengthCreator, enteredNothingError } from '../../../../../../utils/validators/validators'
 import { Input, createField } from '../../../../../common/Forms/forms'
 import { AddPostFD } from '../addPost'
-import { postType } from '../../../../../../BLL/reducer-profile'
+import noPostPhoto from '../../../../../../images/noPhoto/nophoto.png'
 
 interface IAddPostForm {
-    posts: Array<postType>
-    deletePost: (postId: number) => void
+    setIsAddPostWindowOpen: (status: boolean) => void
+    getPostImg: (photo: string) => void
+    postPhoto: string
 }
 
 const maxLengthPostTitle = maxLengthCreator(20)
 const maxLengthPostText = maxLengthCreator(300)
 
 const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPostForm> = (props) => {
-
-    let deleteLastPost = () => {
-        let lastPostId = props.posts.length
-        props.deletePost(lastPostId)
+    const closeModalWindow = () => props.setIsAddPostWindowOpen(false)
+    const onInputFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if(e.currentTarget.files) {
+            const file = e.currentTarget.files[0] 
+            const postImg = URL.createObjectURL(file)
+            props.getPostImg(postImg)
+        } 
     }
-
     return (
         <form className={classes.postForm} onSubmit={props.handleSubmit}>
+            <div className={classes.btn_closeTheWindow}>
+                <p onClick={closeModalWindow}>&times;</p>
+            </div>
+            <div className={classes.modalTitle}>
+                <h4>Adding a new post!</h4>
+            </div>
+            <div className={classes.photo}>
+                <img src={props.postPhoto ? props.postPhoto : noPostPhoto} alt=""/>
+            </div>
+            <div className={classes.btn_selectPhoto}>
+                <label htmlFor="fileInputAddPostPhoto">Select photo</label>
+                <input onChange={onInputFileChange} type="file" accept="/image*" id="fileInputAddPostPhoto" name="postPhoto"/>
+            </div>
             <div className={classes.postTitle}>
                 {createField("text", "Post Name", "postName", Input, [maxLengthPostTitle, enteredNothingError])}
             </div>
             <div className={classes.postInf}>
                 {createField("text", "Post Text", "postInf", Input, [maxLengthPostText, enteredNothingError])}
             </div>
+            {props.error && <div className={classes.error}>
+                <span>{props.error}</span>
+            </div>}
             <div className={classes.dFlex}>
                 <div className={classes.Block_btn_addPost}>
                     <button className={classes.btn_addPost}>Add Post</button>
                 </div>
-                {props.posts.length !== 0 && 
-                <div onClick={deleteLastPost} title="Delete last post!" className={classes.deleteLastPostBtn}>
-                    Delete Last Post!
-                </div>}
             </div>
         </form>
     )

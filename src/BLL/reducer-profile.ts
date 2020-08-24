@@ -42,6 +42,7 @@ export type postType = {
   id: number
   postTitle: string
   postInf: string
+  postImg: any
   likesCount: number
 }
 type postNotificationType = {
@@ -54,10 +55,14 @@ export type profilePageType = {
   postNotification: Array<postNotificationType>
   profile: profileType
   followed: boolean
+  isAddPostModalOpen: boolean
+  isPostModalOpen: boolean
 }
 
 const profilePage = {
-  posts: [],
+  posts: [
+    
+  ],
   postNotification: [
     {
       id: 1,
@@ -88,7 +93,9 @@ const profilePage = {
     },
     userId: 0
   },
-  followed: false
+  followed: false,
+  isAddPostModalOpen: false,
+  isPostModalOpen: false
 } as profilePageType
 
 const reducerProfile = (state = profilePage, action: ActionTypes): profilePageType => {
@@ -98,6 +105,7 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
         id: state.posts.length + 1,
         postTitle: action.newPostTitle,
         postInf: action.newPostInformat,
+        postImg: action.postPhoto,
         likesCount: 200000
       }
 
@@ -148,6 +156,16 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
         ...state,
         followed: action.followed
       }
+    case `/sn/profilePage/SET_IS_ADD_POST_WINDOW_OPEN`: 
+      return {
+        ...state,
+        isAddPostModalOpen: action.modalStatus
+      }  
+    case `/sn/profilePage/SET_IS__POST_MODAL_OPEN`: 
+      return {
+        ...state,
+        isPostModalOpen: action.modalStatus
+      }  
     default:
       return state
   }
@@ -158,7 +176,7 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
 type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
 
 export const actions = {
-  addPost: (newPostTitle: string, newPostInformat: string) => ({ type: `/sn/profilePage/ADD-POST`, newPostTitle, newPostInformat } as const),
+  addPost: (newPostTitle: string, newPostInformat: string, postPhoto: any) => ({ type: `/sn/profilePage/ADD-POST`, newPostTitle, newPostInformat, postPhoto } as const),
   deletePost: (postId: number) => ({ type: `/sn/profilePage/DELETE_POST`, postId } as const),
   editPost: (postId: number, newPostTitle: string, newPostInformat: string) => ({ type: `/sn/profilePage/EDIT-POST`, postId, newPostTitle, newPostInformat } as const),
   setUserProfile: (profile: profileType) => ({ type: `/sn/profilePage/SET_USER_PROFILE`, profile } as const),
@@ -167,7 +185,9 @@ export const actions = {
   setUserPhoto: (photo: string) => ({ type: `/sn/profilePage/SET_USERS_PHOTO`, photo } as const),
   changeUserName: (userName: string) => ({ type: `/sn/profilePage/CHANGE_USER_NAME`, userName } as const),
   changeContacts: (contactId: number, val: string) => ({ type: `/sn/profilePage/CHANGE_CONTACT`, contactId, val } as const),
-  setIsUserFollowed: (followed: boolean) => ({ type: `/sn/profilePage/IS_USER_FOLLOWED`, followed } as const)
+  setIsUserFollowed: (followed: boolean) => ({ type: `/sn/profilePage/IS_USER_FOLLOWED`, followed } as const),
+  setIsAddPostWindowOpen: (modalStatus: boolean) => ({ type: `/sn/profilePage/SET_IS_ADD_POST_WINDOW_OPEN`, modalStatus } as const),
+  setIsPostModalOpen: (modalStatus: boolean) => ({ type: `/sn/profilePage/SET_IS__POST_MODAL_OPEN`, modalStatus } as const)
 }
 
 /* Thunks! */

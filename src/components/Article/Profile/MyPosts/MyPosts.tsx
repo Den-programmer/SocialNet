@@ -6,31 +6,36 @@ import defaultUser from '../images/withoutAvatar/defaultUserPhoto.jpg'
 import { postType, profileType } from '../../../../BLL/reducer-profile'
 
 interface IMyPosts {
+    userName: string
     posts: Array<postType>
     profile: profileType
+    isAddPostModalOpen: boolean
+    isPostModalOpen: boolean
     deletePost: (postId: number) => void
     editPost: (postId: number, newPostTitle: string, newPostInf: string) => void
-    addPost: (postName: string, postInf: string) => void
+    addPost: (postName: string, postInf: string, postPhoto: any) => void
+    setIsAddPostWindowOpen: (status: boolean) => void
+    setIsPostModalOpen: (modalStatus: boolean) => void
 }
 
 const MyPosts: React.FC<IMyPosts> = React.memo(props => {
-    let posts = props.posts.map((post: postType) => {
-        return <Post id={post.id} key={post.id}
+    const posts = props.posts.map((post: postType) => {
+        return <Post userName={props.userName} id={post.id} key={post.id}
             postTitle={post.postTitle}
             postInf={post.postInf}
+            postImg={post.postImg}
             likesCount={post.likesCount} avatar={props.profile.photos.large ? props.profile.photos.large : defaultUser} 
-            deletePost={props.deletePost} editPost={props.editPost}/>
+            deletePost={props.deletePost} editPost={props.editPost} isModalOpen={props.isPostModalOpen} setIsPostModalOpen={props.setIsPostModalOpen}/>
     })
+    const onAddPost = () => props.setIsAddPostWindowOpen(true)
     return (
         <div className={classes.postPage}>
-            <div className={classes.title}>
-                <h2>Add New Great Post!</h2>
-            </div>
-            <div className={classes.addPostBlock}>
-                <AddPost addPost={props.addPost} deletePost={props.deletePost} posts={props.posts}/>
+            <div className={classes.addPost}>
+                <button className={classes.btn_addPost} onClick={onAddPost}>Add Post</button>
+                {props.isAddPostModalOpen && <AddPost addPost={props.addPost} setIsAddPostWindowOpen={props.setIsAddPostWindowOpen}/>}
             </div>
             <div className={classes.posts}>
-                {posts.length !== 0 ? posts : <h2 className={classes.postedNothingTitle}>You haven't posted anything yet!</h2>}
+                {posts.length !== 0 ? posts : <div className={classes.postedNothingBlock}><h2 className={classes.postedNothingTitle}>You haven't posted anything yet!</h2></div>}
             </div>
         </div>
     )
