@@ -15,3 +15,6 @@ export const getFontSizeValues = (state: RootState) => {
 export const getIsModalOpenStatus = (state: RootState) => {
     return state.app.isModalOpen
 }
+export const getDate = (state: RootState) => {
+    return state.app.date
+}

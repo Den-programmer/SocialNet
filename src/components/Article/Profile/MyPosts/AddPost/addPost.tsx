@@ -6,6 +6,8 @@ import { Portal } from '../../../../common/Portal/portal'
 interface IAddPost {
     addPost: (postName: string, postInf: string, postPhoto: string | File) => void
     setIsAddPostWindowOpen: (status: boolean) => void
+    messageError: string
+    setTextError: (text: string) => void
 }
 
 export interface AddPostFD {
@@ -13,19 +15,27 @@ export interface AddPostFD {
     postInf: string
 }
 
-const AddPost: React.FC<IAddPost> = ({ addPost, setIsAddPostWindowOpen }) => {
+const AddPost: React.FC<IAddPost> = ({ addPost, setIsAddPostWindowOpen, messageError, setTextError }) => {
     const [postPhoto, setPostPhoto] = useState<string>('')
     const getPostImg = (photo: string) => setPostPhoto(photo)
     const onSubmit = (FormData: AddPostFD) => {
         const { postName, postInf } = FormData
-        addPost(postName, postInf, postPhoto)
-        setIsAddPostWindowOpen(false)
+        if(postPhoto !== '') {
+            addPost(postName, postInf, postPhoto)
+            setIsAddPostWindowOpen(false)
+        } else {
+            setTextError('You must choose the post image!')
+        }
     }
     return (
         <Portal>
             <div className={classes.addPostContainer}>
                 <div className={classes.addPost}>
-                    <AddPostReduxForm onSubmit={onSubmit} setIsAddPostWindowOpen={setIsAddPostWindowOpen} postPhoto={postPhoto} getPostImg={getPostImg}/>
+                    <AddPostReduxForm onSubmit={onSubmit} 
+                    setIsAddPostWindowOpen={setIsAddPostWindowOpen} 
+                    postPhoto={postPhoto} 
+                    getPostImg={getPostImg}
+                    postPhotoError={messageError}/>
                 </div>
             </div>
         </Portal>

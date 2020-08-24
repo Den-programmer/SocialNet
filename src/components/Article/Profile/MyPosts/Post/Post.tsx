@@ -12,6 +12,7 @@ interface IPost {
     likesCount: number
     avatar: string
     isModalOpen: boolean
+    currentDate: string
     setIsPostModalOpen: (modalStatus: boolean) => void
     editPost: (postId: number, newPostTitle: string, newPostInf: string) => void
     deletePost: (postId: number) => void
@@ -37,7 +38,8 @@ class Post extends Component<IPost> {
                 id={this.props.id} avatar={this.props.avatar}
                 likesCount={this.props.likesCount} editPost={this.props.editPost}
                 deletePost={this.props.deletePost}
-                setIsPostModalOpen={this.props.setIsPostModalOpen}/>}
+                setIsPostModalOpen={this.props.setIsPostModalOpen}
+                currentDate={this.props.currentDate}/>}
             </div>
         )
     }

@@ -11,11 +11,14 @@ interface IMyPosts {
     profile: profileType
     isAddPostModalOpen: boolean
     isPostModalOpen: boolean
+    currentDate: string
+    messageError: string
     deletePost: (postId: number) => void
     editPost: (postId: number, newPostTitle: string, newPostInf: string) => void
     addPost: (postName: string, postInf: string, postPhoto: any) => void
     setIsAddPostWindowOpen: (status: boolean) => void
     setIsPostModalOpen: (modalStatus: boolean) => void
+    setTextError: (text: string) => void
 }
 
 const MyPosts: React.FC<IMyPosts> = React.memo(props => {
@@ -25,6 +28,7 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
             postInf={post.postInf}
             postImg={post.postImg}
             likesCount={post.likesCount} avatar={props.profile.photos.large ? props.profile.photos.large : defaultUser} 
+            currentDate={props.currentDate}
             deletePost={props.deletePost} editPost={props.editPost} isModalOpen={props.isPostModalOpen} setIsPostModalOpen={props.setIsPostModalOpen}/>
     })
     const onAddPost = () => props.setIsAddPostWindowOpen(true)
@@ -32,7 +36,10 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
         <div className={classes.postPage}>
             <div className={classes.addPost}>
                 <button className={classes.btn_addPost} onClick={onAddPost}>Add Post</button>
-                {props.isAddPostModalOpen && <AddPost addPost={props.addPost} setIsAddPostWindowOpen={props.setIsAddPostWindowOpen}/>}
+                {props.isAddPostModalOpen && <AddPost addPost={props.addPost} 
+                setIsAddPostWindowOpen={props.setIsAddPostWindowOpen} 
+                messageError={props.messageError}
+                setTextError={props.setTextError}/>}
             </div>
             <div className={classes.posts}>
                 {posts.length !== 0 ? posts : <div className={classes.postedNothingBlock}><h2 className={classes.postedNothingTitle}>You haven't posted anything yet!</h2></div>}

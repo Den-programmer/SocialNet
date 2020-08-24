@@ -8,6 +8,7 @@ import { Portal } from '../../../../../common/Portal/portal'
 import noPostImg from '../../../../../../images/noPhoto/nophoto.png'
 
 interface IPost {
+    currentDate: string
     userName: string
     postTitle: string
     postInf: string
@@ -56,7 +57,7 @@ const PostModal: React.FC<IPost> = (props) => {
                                 <img src={props.avatar} alt="" />
                                 <div className={classes.userInf}>
                                     <h4>{props.userName}</h4>
-                                    <p>21.08.20</p>
+                                    <p>{props.currentDate}</p>
                                 </div>
                             </div>
                             <div className={classes.functional_btns}>

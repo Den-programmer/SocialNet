@@ -10,6 +10,7 @@ interface IAddPostForm {
     setIsAddPostWindowOpen: (status: boolean) => void
     getPostImg: (photo: string) => void
     postPhoto: string
+    postPhotoError: string
 }
 
 const maxLengthPostTitle = maxLengthCreator(20)
@@ -39,15 +40,15 @@ const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPos
                 <label htmlFor="fileInputAddPostPhoto">Select photo</label>
                 <input onChange={onInputFileChange} type="file" accept="/image*" id="fileInputAddPostPhoto" name="postPhoto"/>
             </div>
+            {props.postPhotoError && <div className={classes.error}>
+                <span>{props.postPhotoError}</span>
+            </div>}
             <div className={classes.postTitle}>
                 {createField("text", "Post Name", "postName", Input, [maxLengthPostTitle, enteredNothingError])}
             </div>
             <div className={classes.postInf}>
                 {createField("text", "Post Text", "postInf", Input, [maxLengthPostText, enteredNothingError])}
             </div>
-            {props.error && <div className={classes.error}>
-                <span>{props.error}</span>
-            </div>}
             <div className={classes.dFlex}>
                 <div className={classes.Block_btn_addPost}>
                     <button className={classes.btn_addPost}>Add Post</button>

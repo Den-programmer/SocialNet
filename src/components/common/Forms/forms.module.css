@@ -1,19 +1,21 @@
 .Input .error {
-    border:3px solid #0048BA;
+    border:3px solid #FF0000;
 }
 .Input .errorText {
-    color: #0048BA;
+    color: #FF0000;
 }
 .textarea .error {
-    border:3px solid #0048BA;
+    border:3px solid #FF0000;
 }
 .textarea .errorText {
-    color: #0048BA;
+    color: #FF0000;
 }
 .RememberMe .errorText {
-    color: #0048BA;
+    color: #FF0000;
 }
 .dFlexRememberMe {
     display:flex;
     align-items:center;
 }
+
+/* Old error color: #0048BA */

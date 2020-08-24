@@ -12,18 +12,26 @@ import Authentication from './components/Authentication/authentication'
 import { getAppInitializationStatus, getAppFontSize } from './BLL/selectors/selectors'
 import { getIsAuthStatus } from './BLL/selectors/auth-selectors'
 import SideBar from './components/SideBar/SideBarContainer'
+import { actions } from './BLL/reducer-app'
 
 interface IApp {
   Initialized: boolean
   isAuth: boolean
   size: number
   initialize: () => void
+  getCurrentDate: (date: string) => void
 }
 
 class App extends React.Component<IApp> {
   style = { fontSize: this.props.size + 'px !important' }
   componentDidMount() {
     this.props.initialize()
+    const date = new Date()
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const monthNumber = date.getDate()
+    const stringDate = `${monthNumber}.0${month}.${year}`
+    this.props.getCurrentDate(stringDate)
   }
   render() {
     if (!this.props.Initialized) {
@@ -48,13 +56,15 @@ class App extends React.Component<IApp> {
   }
 }
 
-let mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: RootState) => ({
   Initialized: getAppInitializationStatus(state),
   isAuth: getIsAuthStatus(state),
   size: getAppFontSize(state)
 }) 
 
-const AppContainer = connect(mapStateToProps, { initialize })(App)
+const { getCurrentDate } = actions
+
+const AppContainer = connect(mapStateToProps, { initialize, getCurrentDate })(App)
 
 const MyApp = () => {
   return <BrowserRouter>

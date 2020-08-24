@@ -13,8 +13,9 @@ type optionsType = {
 type appStateType = {
   isInitialized: boolean
   options: optionsType
-  messageError: null | string
+  messageError: string
   isModalOpen: boolean
+  date: string
 }
 
 const AppState = {
@@ -60,7 +61,8 @@ const AppState = {
     appFontSize: 16
   },
   messageError: '',
-  isModalOpen: false
+  isModalOpen: false,
+  date: ''
 } as appStateType
 
 const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
@@ -84,10 +86,15 @@ const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
         ...state,
         messageError: action.text
       }
-    case `SET_IS_MODAL_OPEN_STATUS`: 
+    case `app/SET_IS_MODAL_OPEN_STATUS`: 
       return {
         ...state,
         isModalOpen: action.modalStatus
+      }
+    case `app/SET_CURRENT_DATE`:
+      return {
+        ...state,
+        date: action.date
       }
     default:
       return state
@@ -101,7 +108,8 @@ type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
 export const actions = {
   initializedSuccessful: () => ({ type: `app/SET_INITIALIZED` } as const),
   setFontSize: (id: number) => ({ type: `app/SET_FONT_SIZE`, id } as const),
-  setIsModalOpenStatus: (modalStatus: boolean) => ({ type: `SET_IS_MODAL_OPEN_STATUS`, modalStatus } as const)
+  setIsModalOpenStatus: (modalStatus: boolean) => ({ type: `app/SET_IS_MODAL_OPEN_STATUS`, modalStatus } as const), 
+  getCurrentDate: (date: string) => ({ type: `app/SET_CURRENT_DATE`, date } as const)
 }
 
 // Common Action Creators!
