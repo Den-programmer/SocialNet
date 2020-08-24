@@ -42,7 +42,7 @@ export type postType = {
   id: number
   postTitle: string
   postInf: string
-  postImg: any
+  postImg: string
   likesCount: number
 }
 type postNotificationType = {
@@ -176,7 +176,7 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
 type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
 
 export const actions = {
-  addPost: (newPostTitle: string, newPostInformat: string, postPhoto: any) => ({ type: `/sn/profilePage/ADD-POST`, newPostTitle, newPostInformat, postPhoto } as const),
+  addPost: (newPostTitle: string, newPostInformat: string, postPhoto: string) => ({ type: `/sn/profilePage/ADD-POST`, newPostTitle, newPostInformat, postPhoto } as const),
   deletePost: (postId: number) => ({ type: `/sn/profilePage/DELETE_POST`, postId } as const),
   editPost: (postId: number, newPostTitle: string, newPostInformat: string) => ({ type: `/sn/profilePage/EDIT-POST`, postId, newPostTitle, newPostInformat } as const),
   setUserProfile: (profile: profileType) => ({ type: `/sn/profilePage/SET_USER_PROFILE`, profile } as const),

@@ -7,7 +7,7 @@ interface IPost {
     userName: string
     postTitle: string
     postInf: string
-    postImg: any
+    postImg: string
     id: number
     likesCount: number
     avatar: string

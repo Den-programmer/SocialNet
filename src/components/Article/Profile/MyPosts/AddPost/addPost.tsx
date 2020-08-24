@@ -4,7 +4,7 @@ import AddPostReduxForm from './AddPostForm/addPostForm'
 import { Portal } from '../../../../common/Portal/portal'
 
 interface IAddPost {
-    addPost: (postName: string, postInf: string, postPhoto: string | File) => void
+    addPost: (postName: string, postInf: string, postPhoto: string) => void
     setIsAddPostWindowOpen: (status: boolean) => void
     messageError: string
     setTextError: (text: string) => void

@@ -15,7 +15,7 @@ interface IMyPosts {
     messageError: string
     deletePost: (postId: number) => void
     editPost: (postId: number, newPostTitle: string, newPostInf: string) => void
-    addPost: (postName: string, postInf: string, postPhoto: any) => void
+    addPost: (postName: string, postInf: string, postPhoto: string) => void
     setIsAddPostWindowOpen: (status: boolean) => void
     setIsPostModalOpen: (modalStatus: boolean) => void
     setTextError: (text: string) => void
