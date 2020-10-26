@@ -1,8 +1,8 @@
 import React, { ChangeEvent } from 'react'
 import classes from './addPostForm.module.css'
-import { reduxForm, InjectedFormProps, Field } from 'redux-form'
+import { reduxForm, InjectedFormProps } from 'redux-form'
 import { maxLengthCreator, enteredNothingError } from '../../../../../../utils/validators/validators'
-import { Input, createField } from '../../../../../common/Forms/forms'
+import { Input, createField, Textarea } from '../../../../../common/Forms/forms'
 import { AddPostFD } from '../addPost'
 import noPostPhoto from '../../../../../../images/noPhoto/nophoto.png'
 
@@ -17,6 +17,7 @@ const maxLengthPostTitle = maxLengthCreator(20)
 const maxLengthPostText = maxLengthCreator(300)
 
 const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPostForm> = (props) => {
+    const fileInputAddPostPhoto = React.createRef<HTMLInputElement>()
     const closeModalWindow = () => props.setIsAddPostWindowOpen(false)
     const onInputFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if(e.currentTarget.files) {
@@ -38,7 +39,7 @@ const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPos
             </div>
             <div className={classes.btn_selectPhoto}>
                 <label htmlFor="fileInputAddPostPhoto">Select photo</label>
-                <input onChange={onInputFileChange} type="file" accept="/image*" id="fileInputAddPostPhoto" name="postPhoto"/>
+                <input ref={fileInputAddPostPhoto} onChange={onInputFileChange} type="file" accept="/image*" id="fileInputAddPostPhoto" name="postPhoto"/>
             </div>
             {props.postPhotoError && <div className={classes.error}>
                 <span>{props.postPhotoError}</span>
@@ -47,7 +48,7 @@ const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPos
                 {createField("text", "Post Name", "postName", Input, [maxLengthPostTitle, enteredNothingError])}
             </div>
             <div className={classes.postInf}>
-                {createField("text", "Post Text", "postInf", Input, [maxLengthPostText, enteredNothingError])}
+                {createField("text", "Post Text", "postInf", Textarea, [maxLengthPostText, enteredNothingError])}
             </div>
             <div className={classes.dFlex}>
                 <div className={classes.Block_btn_addPost}>

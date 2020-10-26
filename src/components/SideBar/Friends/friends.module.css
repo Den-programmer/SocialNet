@@ -2,9 +2,11 @@
     margin:50px 0 40px 40px;
 }
 .titleNavLink {
-    color:#DCD079;
     cursor:pointer;
     width: 30%;
+}
+.titleNavLink h2 {
+    color:#DCD079 !important;
 }
 .titleNavLink:hover {
     transition:all .7s ease;

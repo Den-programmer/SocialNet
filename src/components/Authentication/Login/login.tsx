@@ -23,9 +23,6 @@ const Login:React.FC<LoginPropType & RouteComponentProps> = (props) => {
     }
     return (
         <div className={classes.login}>
-            <div className={classes.title}>
-                <h3>Login</h3>
-            </div>
             <ReduxLoginForm captcha={props.captcha} onSubmit={onSubmit}/>
         </div>
     )

@@ -9,16 +9,15 @@ interface FriendsPropsType {
 }
 
 const Friends:React.FC<FriendsPropsType> = (props) => {
-    let Friends = props.friends
-    let friendsArray = []
+    const friendsArray = []
 
-    for (let i = 0; i < Friends.length; i++) {
+    for (let i = 0; i < props.friends.length; i++) {
         if (i <= 2) {
-            friendsArray.push(Friends[i])
+            friendsArray.push(props.friends[i])
         }
     }
 
-    let friends = friendsArray.map(f => {
+    const friends = friendsArray.map(f => {
         return <Friend id={f.id} key={f.id} name={f.name} nickname={f.nickname} avatar={f.photos.large ? f.photos.large : f.photos.small}/>
     })
     return (

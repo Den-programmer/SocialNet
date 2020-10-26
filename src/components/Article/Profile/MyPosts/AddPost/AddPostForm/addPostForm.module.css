@@ -69,16 +69,24 @@
     height: 20px;
     width: 290px;
 }
+.postForm textarea {
+    margin: 10px;
+    height: 90px;
+    width: 290px;
+    text-overflow: clip;
+    resize: none;
+}
+
 .postTitle, .postInf {
     display: flex;
     justify-content: center;
 }
-.postTitle input, .postInf input {
+.postTitle input, .postInf textarea {
     outline: none;
     border: none;
     border-bottom: 1px solid #ADADAD;
 }
-.postTitle input:focus, .postInf input:focus {
+.postTitle input:focus, .postInf textarea:focus {
     transition: all .5s linear;
     border-bottom: 1px solid purple;
 }

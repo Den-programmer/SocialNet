@@ -1,0 +1,7 @@
+.loginEnterImage {
+    display: flex;
+}
+.loginEnterImage img {
+    width: 316px;
+    height: 290px;
+}

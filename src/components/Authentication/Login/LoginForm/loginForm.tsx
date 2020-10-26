@@ -1,37 +1,43 @@
 import React from 'react'
 import classes from './loginForm.module.css'
-import Email from './Email/email'
-import Password from './Password/password'
-import Remembering from './Remembering/remembering'
 import { reduxForm, InjectedFormProps } from 'redux-form'
-import { createField, Input } from '../../../common/Forms/forms'
-import { required } from '../../../../utils/validators/validators'
+import { createField, Input, RememberMe, PasswordInputValidate, EmailInputValidate } from '../../../common/Forms/forms'
 import { LoginFormDataType } from '../../Login/login'
+import { maxLengthCreator, required, minLengthCreator } from '../../../../utils/validators/validators'
+import LoginImg from './LoginImg/loginImg'
 
 interface LoginFormPropType {
     captcha: string | null
 }
 
-const LoginForm:React.FC<InjectedFormProps<LoginFormDataType, LoginFormPropType> & LoginFormPropType> = ({ handleSubmit, error, captcha }) => {
+const maxLengthLogin = maxLengthCreator(90)
+const maxLengthPassword = maxLengthCreator(90)
+const minLengthPassword = minLengthCreator(7)
+
+const LoginForm: React.FC<InjectedFormProps<LoginFormDataType, LoginFormPropType> & LoginFormPropType> = (props) => {
     return (
-        <div className={classes.formBlock}>
-            <form onSubmit={handleSubmit}>
-                <div className={classes.formItem}>
-                    <Email />
+        <div className={classes.formWrapper}>
+            <LoginImg />
+            <form onSubmit={props.handleSubmit}>
+                <div className={classes.formTitle}>
+                    <h3>Login</h3>
                 </div>
                 <div className={classes.formItem}>
-                    <Password />
+                    {createField("text", 'Email', "email", EmailInputValidate, [maxLengthLogin, required])}
+                </div>
+                <div className={classes.formItem}>
+                    {createField("password", 'Password', "password", PasswordInputValidate, [required, minLengthPassword, maxLengthPassword])}
                 </div>
                 <div className={classes.confirmation}>
                     <div className={classes.rememberMe}>
-                        <Remembering />
+                        {createField("checkbox", '', "RememberMe", RememberMe, [])}
                     </div>
 
-                    {captcha && <img className={classes.captcha} src={captcha} alt="captcha"/>}
-                    {captcha && <div className={classes.captchaInput}>{createField("text", "", "captcha", Input, [required])}</div>}
+                    {props.captcha && <img className={classes.captcha} src={props.captcha} alt="captcha" />}
+                    {props.captcha && <div className={classes.captchaInput}>{createField("text", "", "captcha", Input, [required])}</div>}
 
-                    {error && <div className={classes.error}>
-                        <p>{error}</p>
+                    {props.error && <div className={classes.error}>
+                        <p>{props.error}</p>
                     </div>}
                     <div className={classes.btn_login}>
                         <button>Login</button>
@@ -41,6 +47,6 @@ const LoginForm:React.FC<InjectedFormProps<LoginFormDataType, LoginFormPropType>
         </div>
     )
 }
-const ReduxLoginForm = reduxForm<LoginFormDataType, LoginFormPropType>( { form: 'login' } )(LoginForm)
+const ReduxLoginForm = reduxForm<LoginFormDataType, LoginFormPropType>({ form: 'login' })(LoginForm)
 
 export default ReduxLoginForm

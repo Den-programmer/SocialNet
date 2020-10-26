@@ -1,5 +1,8 @@
 .login {
-    display:flex;
-    flex-direction:column;
-    align-items: center;
+    width: 960px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 510px;
+    margin: auto;
 }

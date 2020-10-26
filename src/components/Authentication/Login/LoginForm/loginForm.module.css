@@ -1,17 +1,67 @@
-.formItem h4 {
-    cursor: pointer;
+.formWrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    margin: 0 auto; 
+    justify-content: center;
+    align-items: center;
 }
+.formWrapper > * {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.formTitle {
+    width: 100%;
+    display: block;
+    line-height: 1.2;
+}
+
+.formTitle h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    color: #333333;
+}
+
+.formItem {
+    position: relative;
+    width: 285px;
+    z-index: 1;
+    margin-bottom: 10px;
+}
+.formItem input {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #666666;
+    display: block;
+    width: 100%;
+    background: #e6e6e6;
+    height: 50px;
+    border-radius: 25px;
+    padding: 0 30px 0 68px;
+    outline: none;
+    border: none;
+    overflow: visible;
+}
+
 .rememberMe {
     display:flex;
+    justify-content: center;
     align-items: center;
+    margin: 10px;
 }
 .rememberMe input {
     cursor:pointer;
 }
 .rememberMe p {
-    cursor:pointer;
-    color:#FFF;
-    font-weight: normal;
+    color: #333333;
+    font-weight: bold;
+    margin:0 7px;
 }    
 .error p {
     color:red;
@@ -24,37 +74,30 @@
     margin-bottom: 10px;
 }
 .btn_login {
+    width: 300px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    padding-top: 20px;
 }
 .btn_login button {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #fff;
+    text-transform: uppercase;
+    width: 100%;
     outline: none;
-    display: inline-block;
-    padding: 4px 15px;
-    margin: 10px 20px;
-    position: relative;
-    overflow: hidden;
-    border: 2px solid #fe6637;
-    border-radius: 8px;
-    font-family: 'Montserrat', sans-serif; 
-    color: #fe6637;
-    transition: .2s ease-in-out;
-}
-.btn_login button:before {
-    content: "";
-    background: linear-gradient(90deg, rgba(255,255,255,.1), rgba(255,255,255,.5));
+    border: none;
     height: 50px;
-    width: 50px;
-    position: absolute;
-    top: -8px;
-    left: -75px;
-    transform: skewX(-45deg);
+    border-radius: 25px;
+    background: #57b846;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 25px;
+    transition: all 0.4s;
 }
 .btn_login button:hover {
-    background: #fe6637;
-    color: #fff;
+    background: #333333;
 }
-.btn_login button:hover:before {
-    left: 150px;
-    transition: .5s ease-in-out;
-}  

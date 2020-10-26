@@ -1,7 +1,15 @@
 .authentication {
-    width:100%;
-    background: linear-gradient(to left top, rgb(0, 0, 255), rgb(0, 225, 255));
-    height: 755px;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: #9053c7;
+    background: linear-gradient(-135deg, #c850c0, #4158d0);
+}
+
+.authentication * {
+    box-sizing: border-box;
 }
 
 .login {

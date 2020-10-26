@@ -290,11 +290,7 @@ const reducerMusic = (state = musicPage, action: ActionTypes): musicPageType => 
                 ...state,
                 tracks: state.tracks.map((track: trackType) => {
                     if (track.id === action.trackId) {
-                        if (track.isMusicPlaying) {
-                            return { ...track, isMusicPlaying: false }
-                        } else {
-                            return { ...track, isMusicPlaying: true }
-                        }
+                        return { ...track, isMusicPlaying: !track.isMusicPlaying }
                     } else {
                         return { ...track, isMusicPlaying: false }
                     }
@@ -360,7 +356,16 @@ const reducerMusic = (state = musicPage, action: ActionTypes): musicPageType => 
                 // @ts-ignore
                 playlists: state.playlists.map((p: playlistType) => {
                     if (p.id === action.playlistId) return {
-                        ...p, music: [...state.playlists[action.playlistId - 1].music, newTrack],
+                        ...p, music: state.playlists[action.playlistId - 1].music.map((track: trackType) => {
+                            if(track.id !== action.trackId) {
+                                // @ts-ignore
+                                state.playlists[action.playlistId - 1].music.push(newTrack)
+                            }
+                            else {
+                                //set error message as true! 
+                                return track
+                            }
+                        }),
                         count: state.playlists[action.playlistId - 1].music.length
                     }
                     return p
