@@ -9,6 +9,7 @@ interface IContacts {
 
 const Contacts: React.FC<IContacts> = (props) => {
     const contacts = Object.keys(props.contacts).map(key => {
+        // @ts-ignore
         return <Contact key={key} contactTitle={key} contactValue={props.contacts[key as keyof contactsType]}/>
     })
     return (

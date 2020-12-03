@@ -5,6 +5,7 @@ import { maxLengthCreator, enteredNothingError } from '../../../../../../utils/v
 import { Input, createField, Textarea } from '../../../../../common/Forms/forms'
 import { AddPostFD } from '../addPost'
 import noPostPhoto from '../../../../../../images/noPhoto/nophoto.png'
+import Button from '@material-ui/core/Button/Button'
 
 interface IAddPostForm {
     setIsAddPostWindowOpen: (status: boolean) => void
@@ -20,11 +21,11 @@ const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPos
     const fileInputAddPostPhoto = React.createRef<HTMLInputElement>()
     const closeModalWindow = () => props.setIsAddPostWindowOpen(false)
     const onInputFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if(e.currentTarget.files) {
-            const file = e.currentTarget.files[0] 
+        if (e.currentTarget.files) {
+            const file = e.currentTarget.files[0]
             const postImg = URL.createObjectURL(file)
             props.getPostImg(postImg)
-        } 
+        }
     }
     return (
         <form className={classes.postForm} onSubmit={props.handleSubmit}>
@@ -34,12 +35,13 @@ const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPos
             <div className={classes.modalTitle}>
                 <h4>Adding a new post!</h4>
             </div>
+            <Button variant="contained" color="primary">Hello Wrld!</Button>
             <div className={classes.photo}>
-                <img src={props.postPhoto ? props.postPhoto : noPostPhoto} alt=""/>
+                <img src={props.postPhoto ? props.postPhoto : noPostPhoto} alt="" />
             </div>
             <div className={classes.btn_selectPhoto}>
                 <label htmlFor="fileInputAddPostPhoto">Select photo</label>
-                <input ref={fileInputAddPostPhoto} onChange={onInputFileChange} type="file" accept="/image*" id="fileInputAddPostPhoto" name="postPhoto"/>
+                <input ref={fileInputAddPostPhoto} onChange={onInputFileChange} type="file" accept="/image*" id="fileInputAddPostPhoto" name="postPhoto" />
             </div>
             {props.postPhotoError && <div className={classes.error}>
                 <span>{props.postPhotoError}</span>

@@ -1,6 +1,5 @@
 import React from 'react'
 import './App.css'
-import 'antd/dist/antd.css'
 import { BrowserRouter } from 'react-router-dom'
 import store, { RootState } from './BLL/redux'
 import Header from './components/Header/HeaderContainer'

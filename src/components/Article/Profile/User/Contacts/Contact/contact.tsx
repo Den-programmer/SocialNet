@@ -3,7 +3,7 @@ import classes from './contact.module.css'
 
 interface IContact {
     contactTitle: string | null
-    contactValue: string | null
+    contactValue: string | undefined
 }
 
 const Contact: React.FC<IContact> = ({ contactTitle, contactValue }) => {
