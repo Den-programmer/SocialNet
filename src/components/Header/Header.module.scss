@@ -1,10 +1,11 @@
+@import '../../index.scss';
+
 .header {
     background-color:#20232A;
     height:200px;
 }
 .container {
-    width:1200px;
-    margin: 0 auto;
+    @extend .container;
     display:flex;
     justify-content: space-between;
     height: 200px;

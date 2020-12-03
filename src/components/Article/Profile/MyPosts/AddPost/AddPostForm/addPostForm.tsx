@@ -5,7 +5,6 @@ import { maxLengthCreator, enteredNothingError } from '../../../../../../utils/v
 import { Input, createField, Textarea } from '../../../../../common/Forms/forms'
 import { AddPostFD } from '../addPost'
 import noPostPhoto from '../../../../../../images/noPhoto/nophoto.png'
-import Button from '@material-ui/core/Button/Button'
 
 interface IAddPostForm {
     setIsAddPostWindowOpen: (status: boolean) => void
@@ -35,7 +34,6 @@ const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPos
             <div className={classes.modalTitle}>
                 <h4>Adding a new post!</h4>
             </div>
-            <Button variant="contained" color="primary">Hello Wrld!</Button>
             <div className={classes.photo}>
                 <img src={props.postPhoto ? props.postPhoto : noPostPhoto} alt="" />
             </div>
