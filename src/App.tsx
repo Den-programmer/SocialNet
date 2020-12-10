@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './App.css'
 import { BrowserRouter } from 'react-router-dom'
 import store, { RootState } from './BLL/redux'
@@ -13,54 +13,55 @@ import { getAppInitializationStatus, getAppFontSize } from './BLL/selectors/sele
 import { getIsAuthStatus } from './BLL/selectors/auth-selectors'
 import SideBar from './components/SideBar/SideBarContainer'
 import { actions } from './BLL/reducer-app'
+import { getSidebarWidth, getIsSidebarOpenStatus } from './BLL/selectors/sidebar-selectors'
 
 interface IApp {
   Initialized: boolean
   isAuth: boolean
   size: number
+  drawerWidth: number
+  isSidebarOpen: boolean
   initialize: () => void
   getCurrentDate: (date: string) => void
 }
 
-class App extends React.Component<IApp> {
-  style = { fontSize: this.props.size + 'px !important' }
-  componentDidMount() {
-    this.props.initialize()
+const App: React.FC<IApp> = (props) => {
+  const style = { fontSize: props.size + 'px !important' }
+  useEffect(() => {
+    props.initialize()
     const date = new Date()
     const year = date.getFullYear()
     const month = date.getMonth() + 1
     const monthNumber = date.getDate()
     const stringDate = `${monthNumber}.0${month}.${year}`
-    this.props.getCurrentDate(stringDate)
+    props.getCurrentDate(stringDate)
+  }, [])
+  if (!props.Initialized) {
+    return <Preloader />
   }
-  render() {
-    if (!this.props.Initialized) {
-      return <Preloader />
-    }
-    return (
-      <BrowserRouter><Provider store={store}>
-      {this.props.isAuth ?
-        <div style={this.style} className="App">
-          <div className="main-page">
-            <Header />
-            <div className="flex-container">
-              <SideBar />
-              <Article />
-            </div>
-            <Footer />
-          </div>
+  return (
+    <BrowserRouter><Provider store={store}>
+      {props.isAuth ? <div style={style} className="App">
+        <SideBar />
+        <div>
+          <Header />
+          <Article isSidebarOpen={props.isSidebarOpen} drawerWidth={props.drawerWidth}/>
+          <Footer />
         </div>
+      </div>
         : <Authentication />}
-      </Provider></BrowserRouter>
-    )
-  }
+    </Provider></BrowserRouter>
+  )
 }
+
 
 const mapStateToProps = (state: RootState) => ({
   Initialized: getAppInitializationStatus(state),
   isAuth: getIsAuthStatus(state),
-  size: getAppFontSize(state)
-}) 
+  size: getAppFontSize(state),
+  drawerWidth: getSidebarWidth(state),
+  isSidebarOpen: getIsSidebarOpenStatus(state)
+})
 
 const { getCurrentDate } = actions
 

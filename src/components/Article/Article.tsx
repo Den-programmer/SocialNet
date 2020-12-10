@@ -1,5 +1,5 @@
 import React from 'react'
-import classes from './Article.module.css'
+import '../../App.css'
 import ProfileContainer from './Profile/profileContainer'
 import MessagesContainer from './Message/messagesContainer'
 import News from './News/news'
@@ -18,38 +18,67 @@ import MusicPageNavContainer from './Music/MusicPageNavigation/musicPageNavConta
 import PlaylistsContainer from './Music/Playlists/playlistsContainer'
 import AlbumsContainer from './Music/Albums/albumsContainer'
 import FollowingContainer from './Music/Following/followingContainer'
+import MembersContainer from '../Members/membersContainer'
+import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
-interface ArticlePropType { 
+interface ArticlePropType {
     userDialogId: number | null
+    isSidebarOpen: boolean
+    drawerWidth: number
 }
 
-const Article:React.FC<ArticlePropType> = ({ userDialogId }) => {
+const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawerWidth }) => {
+    const useStyles = makeStyles((theme: Theme) => createStyles({
+        content: {
+            flexGrow: 1,
+            padding: theme.spacing(3),
+            transition: theme.transitions.create('margin', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            }),
+            marginLeft: drawerWidth,
+        },
+        contentShift: {
+            transition: theme.transitions.create('margin', {
+                easing: theme.transitions.easing.easeOut,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+            marginLeft: 0,
+        },
+        profileContainer: {
+            display: 'flex',
+            padding: '60px 0px'
+        }
+    }))
+    const classes = useStyles()
     return (
-        <article className={classes.article}>
+        <article className={!isSidebarOpen ? classes.contentShift : classes.content}>
             <Switch>
-                {/* Profile! */} 
-                <Route exact path='/Profile/:userId?' render={() => (<ProfileContainer />)} />
+                {/* Profile! */}
+                <Route exact path='/Profile/:userId?' render={() => (<div className={classes.profileContainer}><ProfileContainer /><MembersContainer /></div>)} />
                 {/* Messages! */}
-                <Route path={'/Messages/dialog/' + userDialogId} render={() => <MessagesContainer />}/>
+                <Route path={'/Messages/dialog/' + userDialogId} render={() => <MessagesContainer />} />
                 <Route exact path='/Messages' render={() => (<MessagesContainer />)} />
                 {/* News! */}
                 <Route path='/News' render={() => (<News />)} />
                 {/* Music! */}
-                <Route path='/Music/likedTracks' render={() => (<><MusicPageNavContainer /><LikedTracksContainer /></>)}/>
-                <Route path='/Music/PlayLists' render={() => (<><MusicPageNavContainer /><PlaylistsContainer /></>)}/>
-                <Route path='/Music/Albums' render={() => (<><MusicPageNavContainer /><AlbumsContainer /></>)}/>
-                <Route path='/Music/following' render={() => (<><MusicPageNavContainer /><FollowingContainer /></>)}/>
+                <Route path='/Music/likedTracks' render={() => (<><MusicPageNavContainer /><LikedTracksContainer /></>)} />
+                <Route path='/Music/PlayLists' render={() => (<><MusicPageNavContainer /><PlaylistsContainer /></>)} />
+                <Route path='/Music/Albums' render={() => (<><MusicPageNavContainer /><AlbumsContainer /></>)} />
+                <Route path='/Music/following' render={() => (<><MusicPageNavContainer /><FollowingContainer /></>)} />
                 <Route exact path='/Music' render={() => (<Music />)} />
                 {/* Options! */}
-                <Route path="/Options/account" render={() => (<div className={classes.dFlex}>
+                <Route path="/Options/account" render={() => (<div className="flex-container">
                     <OptionsNav />
                     <AccountOptionsContainer />
                 </div>)} />
-                <Route path='/Options/general' render={() => (<div className={classes.dFlex}>
+                <Route path='/Options/general' render={() => (<div className="flex-container">
                     <OptionsNav />
                     <GeneralOptionsContainer />
                 </div>)} />
                 <Route path='/Options' render={() => (<OptionsContainer />)} />
+                {/* Notifications! */}
+                <Route path='' render={() => (<div>Here is Notifications in developing!</div>)} />
                 {/* Friends! */}
                 <Route path='/Friends/DataFriends' render={() => (<React.Fragment>
                     <FriendsNavContainer />
@@ -60,14 +89,16 @@ const Article:React.FC<ArticlePropType> = ({ userDialogId }) => {
                     <FindFriendsContainer />
                 </React.Fragment>)} />
                 <Route path='/Friends' render={() => (<FriendsNavContainer />)} />
+
+                {/* Another! */}
+
                 <Route exact path='/SocialNet' render={() => (<Redirect to={'/Profile'} />)} />
                 <Route exact path='/' render={() => (<Redirect to={'/Profile'} />)} />
 
-                  {/* 404 NOT FOUND! */}
+                {/* 404 NOT FOUND! */}
 
                 <Route path="*" render={() => <ErrorPage />} />
             </Switch>
-            
         </article>
     )
 }
