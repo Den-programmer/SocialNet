@@ -1,5 +1,5 @@
 import React from 'react'
-import classes from './friend.module.css'
+import classes from './friend.module.scss'
 import { NavLink } from 'react-router-dom'
 import defaultUser from '../images/withoutAvatar/defaultUserPhoto.jpg'
 
@@ -14,8 +14,8 @@ const Friend:React.FC<FriendPropsType> = ({avatar, nickname, name, id}) => {
     return (
         <div className={classes.friend}>
             <NavLink className={classes.friendLink} to={`/Profile/${id}`}>
-                <img src={avatar ? avatar : defaultUser} alt="" />
-                <h6 className={classes.friendsName}>
+                <img className={classes.avatar} src={avatar ? avatar : defaultUser} alt="" />
+                <h6 className={classes.userName}>
                     {nickname ? nickname : name}
                 </h6>
             </NavLink>

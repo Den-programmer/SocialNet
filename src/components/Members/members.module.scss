@@ -1,4 +1,25 @@
+@import '../../index.scss';
+
 .members {
-    background-color: black;
     margin-left: auto;
+    min-width: 300px;
+    border: 1px solid #E0E0E0;
+    .title {
+        padding: 30px;
+        h3 {
+            text-transform: uppercase;
+            font-family: $Poppins;
+        }
+    }
+    .membersPanel {
+        .membersPanel_items {
+            display: flex;
+            padding: 5px 30px;
+            .membersPanel_items_item {
+                margin: 0px 5px;
+                color: #999999;
+                cursor: pointer;
+            }
+        }
+    }
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import Avatar from './Avatar/avatar'
 import Contacts from './Contacts/contacts'
-import classes from './user.module.css'
 import defaultAvatar from '../../Profile/images/withoutAvatar/defaultUserPhoto.jpg'
 import FollowingInformation from './followingInformation/followingInformation'
 import Status from './Status/status'
@@ -13,8 +12,8 @@ interface IUser extends IProfile {
 
 const User: React.FC<IUser> = (props) => {
     return (
-        <div className={classes.user}>
-            <div className={classes.row}>
+        <div>
+            <div>
                 <Avatar avatar={props.profile.photos.large ? props.profile.photos.large : defaultAvatar} name={props.profile.fullName}/>
                 <FollowingInformation follow={props.follow} unfollow={props.unfollow} followed={props.followed} getIsUserFollowed={props.getIsUserFollowed} userId={props.profile.userId} posts={props.posts} friends={props.friends}/>
                 <Status updateStatus={props.updateStatus} status={props.profile.status}/>

@@ -4,7 +4,7 @@ import { getFriends } from "../../../BLL/selectors/users-selectors"
 import { getSideBarNavLinks } from "../../../BLL/selectors/sidebar-selectors"
 import { RootState } from "../../../BLL/redux"
 
-let mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: RootState) => ({
     friends: getFriends(state),
     navLinks: getSideBarNavLinks(state)
 })

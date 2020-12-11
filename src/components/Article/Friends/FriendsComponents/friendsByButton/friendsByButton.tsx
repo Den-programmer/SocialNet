@@ -11,7 +11,7 @@ interface IFriendsByButton {
 }
 
 const FriendsByButton: React.FC<IFriendsByButton> = (props) => {
-    let friends = props.friends.map((f: userType) => {
+    const friends = props.friends.map((f: userType) => {
         return <Friend id={f.id} 
                        key={f.id} 
                        nickname={f.nickname} 

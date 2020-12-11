@@ -47,7 +47,13 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
         },
         profileContainer: {
             display: 'flex',
-            padding: '60px 0px'
+            padding: '64px 0px'
+        },
+        DataFriendsContainer: {
+            padding: '64px 0px'
+        },
+        FindFriendsContainer: {
+            padding: '64px 0px'
         }
     }))
     const classes = useStyles()
@@ -78,16 +84,16 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
                 </div>)} />
                 <Route path='/Options' render={() => (<OptionsContainer />)} />
                 {/* Notifications! */}
-                <Route path='' render={() => (<div>Here is Notifications in developing!</div>)} />
+                <Route path='/Notifications' render={() => (<div>Here is Notifications in developing!</div>)} />
                 {/* Friends! */}
-                <Route path='/Friends/DataFriends' render={() => (<React.Fragment>
+                <Route path='/Friends/DataFriends' render={() => (<div className={classes.DataFriendsContainer}>
                     <FriendsNavContainer />
                     <FriendsByButtonContainer />
-                </React.Fragment>)} />
-                <Route exact path='/Friends/FindUsers' render={() => (<React.Fragment>
+                </div>)} />
+                <Route exact path='/Friends/FindUsers' render={() => (<div className={classes.FindFriendsContainer}>
                     <FriendsNavContainer />
                     <FindFriendsContainer />
-                </React.Fragment>)} />
+                </div>)} />
                 <Route path='/Friends' render={() => (<FriendsNavContainer />)} />
 
                 {/* Another! */}

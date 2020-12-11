@@ -1,8 +1,7 @@
 import React from 'react'
-import classes from './friends.module.css'
 import Friend from './Friend/friend'
-import { NavLink } from 'react-router-dom'
 import { userType } from '../../../types/FriendsType/friendsType'
+import classes from './friends.module.scss'
 
 interface FriendsPropsType {
     friends: Array<userType>
@@ -11,9 +10,9 @@ interface FriendsPropsType {
 const Friends:React.FC<FriendsPropsType> = (props) => {
     const friendsArray = []
 
-    for (let i = 0; i < props.friends.length; i++) {
-        if (i <= 2) {
-            friendsArray.push(props.friends[i])
+    for (let i = 1; i <= props.friends.length; i++) {
+        if (i <= 4) {
+            friendsArray.push(props.friends[i - 1])
         }
     }
 
@@ -22,12 +21,7 @@ const Friends:React.FC<FriendsPropsType> = (props) => {
     })
     return (
         <div className={classes.friends}>
-            <div className={classes.title}>
-                <NavLink className={classes.titleNavLink} to="/Friends/DataFriends"><h2>Friends</h2></NavLink> 
-            </div>
-            {friends.length !== 0 && <div className={classes.friendsList}>
-                {friends}
-            </div>}
+            {friends.length !== 0 && <div>{friends}</div>}
         </div>
     )
 }

@@ -7,6 +7,7 @@ import NewReleasesIcon from '@material-ui/icons/NewReleases'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import SettingsIcon from '@material-ui/icons/Settings'
+import PeopleIcon from '@material-ui/icons/People'
 
 type SidebarType = {
     navigationLinks: Array<navLinkType>
@@ -32,27 +33,34 @@ const Sidebar = {
         },
         {
             id: 3,
+            name: 'Friends',
+            path: '/Friends/DataFriends',
+            icon: PeopleIcon,
+            isChosen: false
+        },
+        {
+            id: 4,
             name: 'Notifications',
             path: '/Notifications',
             icon: NotificationsIcon,
             isChosen: false
         },
         {
-            id: 4,
+            id: 5,
             name: 'News',
             path: '/News',
             icon: NewReleasesIcon,
             isChosen: false
         },
         {
-            id: 5,
+            id: 6,
             name: 'Music',
             path: '/Music',
             icon: MusicNoteIcon,
             isChosen: false
         },
         {
-            id: 6,
+            id: 7,
             name: 'Options',
             path: '/Options',
             icon: SettingsIcon,
