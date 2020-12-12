@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import classes from './followingInformation.module.css'
+import classes from './followingInformation.module.scss'
 import { postType } from '../../../../../BLL/reducer-profile'
 import { userType } from '../../../../../types/FriendsType/friendsType'
 

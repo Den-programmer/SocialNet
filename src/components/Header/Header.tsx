@@ -44,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ isAuth, logout, changeSidebarIsOpenStat
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
       }),
-    }
+    },
   }))
   const classes = useStyles()
   return (
@@ -72,11 +72,11 @@ const Header: React.FC<HeaderProps> = ({ isAuth, logout, changeSidebarIsOpenStat
                 Logout
               </Button>
             </NavLink> :
-            <NavLink to='/login'>
-              <Button className={classes.logButton} variant="contained" color="primary">
-                Login
+              <NavLink to='/login'>
+                <Button className={classes.logButton} variant="contained" color="primary">
+                  Login
               </Button>
-            </NavLink>}
+              </NavLink>}
           </Box>
         </Toolbar>
       </Container>

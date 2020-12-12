@@ -1,0 +1,18 @@
+@import '../../../../../index.scss';
+
+.userInf {
+    padding-top: 90px;
+}
+
+.contacts {
+    margin:10px;
+    .title {
+        h2 {
+            text-transform: uppercase;
+            font-family: $Poppins;
+        }
+    }
+}
+.information h4:first-letter {
+    text-transform: uppercase;
+}

@@ -26,3 +26,11 @@ export const getIsAddPostModalOpenStatus = (state: RootState) => {
 export const getIsPostModalOpenStatus = (state: RootState) => {
     return state.profilePage.isPostModalOpen
 }
+
+export const getUserBackground = (state: RootState) => {
+    return state.profilePage.background
+}
+
+export const getProfileNavigationMenu = (state: RootState) => {
+    return state.profilePage.profileNavigationMenu
+}

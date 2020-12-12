@@ -6,6 +6,7 @@ import { setTextError, setTextErrorActionType } from './reducer-app'
 import { stopSubmit } from 'redux-form'
 import { RootState, InferActionTypes } from './redux'
 import { ThunkAction } from 'redux-thunk'
+import beautifulLight from '../components/Article/Profile/User/images/profileBackground.jpg'
 
 const entity = 'sn/profilePage/'
 
@@ -45,24 +46,32 @@ export type postType = {
   postImg: string
   likesCount: number
 }
+
 type postNotificationType = {
   id: number
   name: string
+}
+
+export type profileNavItem = {
+  id: number
+  title: string
+  isChosen: boolean
+  path: string
 }
 
 export type profilePageType = {
   posts: Array<postType>
   postNotification: Array<postNotificationType>
   profile: profileType
+  profileNavigationMenu: Array<profileNavItem>
   followed: boolean
+  background: string
   isAddPostModalOpen: boolean
   isPostModalOpen: boolean
 }
 
 const profilePage = {
-  posts: [
-    
-  ],
+  posts: [],
   postNotification: [
     {
       id: 1,
@@ -93,7 +102,46 @@ const profilePage = {
     },
     userId: 0
   },
+  profileNavigationMenu: [
+    {
+      id: 1,
+      title: 'Wall',
+      isChosen: false,
+      path: '/'
+    },
+    {
+      id: 2,
+      title: 'Profile',
+      isChosen: true,
+      path: '/Profile'
+    },
+    {
+      id: 3,
+      title: 'Notifications',
+      isChosen: false,
+      path: '/Notifications'
+    },
+    {
+      id: 4,
+      title: 'Messages',
+      isChosen: false,
+      path: '/Messages'
+    },
+    {
+      id: 5,
+      title: 'Friends',
+      isChosen: false,
+      path: '/Friends/DataFriends'
+    },
+    {
+      id: 6,
+      title: 'Following',
+      isChosen: false,
+      path: '/'
+    },
+  ],
   followed: false,
+  background: beautifulLight,
   isAddPostModalOpen: false,
   isPostModalOpen: false
 } as profilePageType
@@ -166,6 +214,22 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
         ...state,
         isPostModalOpen: action.modalStatus
       }  
+    case `/sn/profilePage/CHANGE_PROFILE_NAVITEM_CHOSEN_STATUS`:
+      return {
+        ...state,
+        profileNavigationMenu: state.profileNavigationMenu.map((item: profileNavItem) => {
+          if(item.id === action.itemId) return { ...item, isChosen: true }
+          return { ...item, isChosen: false }
+        })
+      } 
+    case `/sn/profilePage/SET_STANDART_PROFILE_NAV_OPTIONS`:
+      return {
+        ...state,
+        profileNavigationMenu: state.profileNavigationMenu.map((item: profileNavItem) => {
+          if(item.id === 2) return { ...item, isChosen: true }
+          return { ...item, isChosen: false }
+        })
+      }   
     default:
       return state
   }
@@ -187,7 +251,9 @@ export const actions = {
   changeContacts: (contactId: number, val: string) => ({ type: `/sn/profilePage/CHANGE_CONTACT`, contactId, val } as const),
   setIsUserFollowed: (followed: boolean) => ({ type: `/sn/profilePage/IS_USER_FOLLOWED`, followed } as const),
   setIsAddPostWindowOpen: (modalStatus: boolean) => ({ type: `/sn/profilePage/SET_IS_ADD_POST_WINDOW_OPEN`, modalStatus } as const),
-  setIsPostModalOpen: (modalStatus: boolean) => ({ type: `/sn/profilePage/SET_IS__POST_MODAL_OPEN`, modalStatus } as const)
+  setIsPostModalOpen: (modalStatus: boolean) => ({ type: `/sn/profilePage/SET_IS__POST_MODAL_OPEN`, modalStatus } as const),
+  changeProfileNavItemChosenStatus: (itemId: number) => ({ type: `/sn/profilePage/CHANGE_PROFILE_NAVITEM_CHOSEN_STATUS`, itemId } as const),
+  setStandartProfileNavOptions: () => ({ type: `/sn/profilePage/SET_STANDART_PROFILE_NAV_OPTIONS` } as const)
 }
 
 /* Thunks! */

@@ -1,0 +1,37 @@
+@import '../../../../../index.scss';
+
+.biography {
+   .title {
+       text-transform: uppercase;
+       font-family: $Poppins;
+   }
+   .bioTable {
+       .bioTableItem {
+           display: flex;
+           align-items: center;
+           border-top: 1px solid #E3E3E3;
+           border-bottom: 1px solid #E3E3E3;
+           .bioTableItem__property {
+               padding: 0px 10px;
+               width: 200px;
+               border-right: 1px solid #E3E3E3;
+                p {
+                    font-size: 14px;
+                    color: #737373;
+                }
+           }
+           .bioTableItem__value {
+               padding: 0px 10px;
+               p {
+                    font-size: 14px;
+                    color: #737373;
+               }
+               .bioTableItem__value_second_style {
+                    color: #222222;
+                    font-size: 12px;
+                    font-family: $Lato;
+               }
+           }
+       }
+   }
+}

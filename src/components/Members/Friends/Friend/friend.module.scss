@@ -15,6 +15,10 @@
             font-family: $Lato;
             font-size: 12px;
             margin:0 5px;
+            &:hover {
+                transition: all .1s linear;
+                color: #4dcadd;
+            }
         }
     }
 }
