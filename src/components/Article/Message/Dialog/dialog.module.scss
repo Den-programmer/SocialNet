@@ -1,0 +1,56 @@
+.infoIcon {
+    color: #1F93FF;
+    cursor: pointer;
+}
+
+.dialog {
+    width: 100%;
+    .dialog__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #EFEFEF;
+        padding: 10px;
+        .dialog__header_profile {
+            display: flex;
+            align-items: center;
+            .dialog_userName {
+                margin-left: 10px;
+                font-weight: normal;
+            }
+        }
+        .dialog__header_panel {
+
+        }
+    }
+    .dialogContent {
+        .userProfileContainer {
+           display: flex;
+           justify-content: center;
+           .userProfile {
+               display: flex;
+               flex-direction: column;
+               height: 75vh;
+               .avatar {
+                    width: 100px;
+                    height: 100px;
+                    margin: 20px;
+                    margin-bottom: 0;
+               }
+               .avatarTitle {
+                    text-align: center;
+               }
+           }
+        }
+    }
+}
+
+.titleNoMessages {
+    text-align: center;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

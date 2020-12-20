@@ -34,3 +34,7 @@ export const getUserBackground = (state: RootState) => {
 export const getProfileNavigationMenu = (state: RootState) => {
     return state.profilePage.profileNavigationMenu
 }
+
+export const getBiography = (state: RootState) => {
+    return state.profilePage.profile.aboutMe
+} 

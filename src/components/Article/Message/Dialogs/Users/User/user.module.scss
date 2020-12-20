@@ -1,0 +1,47 @@
+.userContainer {
+    .user {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        padding-left: 10px;
+        .avatar {
+            height: 5rem;
+            width: 5rem;
+        }
+        .userInf {
+            margin-left: 10px;
+            .userName {
+                font-weight: normal;
+            }
+            .lastMessage {
+                color: #9F9F9F;
+            }
+        }
+        &:hover {
+            background-color: rgb(250, 250, 250);
+            border-radius: 10px;
+        }
+    }
+    .userActive {
+        display: flex;
+        align-items: center;
+        padding: 10px 0px;
+        background-color: #E9F3FF;
+        border-radius: 10px;
+        padding-left: 10px;
+        .avatar {
+            height: 5rem;
+            width: 5rem;
+        }
+        .userInf {
+            margin-left: 10px;
+            .userName {
+                font-weight: normal;
+            }
+            .lastMessage {
+                color: #9F9F9F;
+            }
+        }
+    }
+}
+

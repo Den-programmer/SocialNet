@@ -5,6 +5,7 @@
     color: #FF0000;
     font-weight: bold;
     margin: 7px 0px;
+    text-align: center;
 }
 .textarea .error {
     border:3px solid #FF0000;

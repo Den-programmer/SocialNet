@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
-import classes from './user.module.css'
+import React from 'react'
+import classes from './user.module.scss'
 import { NavLink } from 'react-router-dom'
+import { Avatar } from '@material-ui/core'
 
 interface UserPropType {
     id: number
@@ -11,47 +12,33 @@ interface UserPropType {
     lastUserActivityDate: string
     newMessagesCount: number
     userName: string
+    isActive: boolean
     lastMessage: string | null | undefined
     setUserDialogId: (userId: number) => void
     getDialogMessages: (userId: number) => void
+    setUserActiveStatus: (userId: number) => void
 }
 
-interface IState {
-    isUserActive: boolean
-}
+const User: React.FC<UserPropType> = (props) => {
+    const path = "/Messages/dialog/" + props.id
 
-class User extends Component<UserPropType> {
-    state = {
-        isUserActive: false
-    } as IState
-
-    path = "/Messages/dialog/" + this.props.id
-    
-    getUserMessages = () => {
-        this.props.setUserDialogId(this.props.id)
-        this.props.getDialogMessages(this.props.id)
-        // if(this.props.id === this.props.userDialogId) {
-        //     this.setState({ isUserActive: true })
-        // } else {
-        //     this.setState({ isUserActive: false })
-        // }
+    const getUserMessages = () => {
+        props.setUserDialogId(props.id)
+        props.getDialogMessages(props.id)
+        props.setUserActiveStatus(props.id)
     }
 
-    render() {
-        return (
-            <NavLink onClick={this.getUserMessages} to={this.path}>
-                <div className={`${classes.user} ${this.state.isUserActive && classes.active}`}>
-                    <div className={classes.avatar}>
-                        <img src={this.props.photo} alt="user" />
-                    </div>
-                    <div className={classes.userInf}>
-                        <h3 className={classes.userName}>{this.props.userName}</h3>
-                        <p className={classes.lastMessage}>{this.props.lastMessage}</p>
-                    </div>
+    return (
+        <NavLink className={classes.userContainer} onClick={getUserMessages} to={path}>
+            <div className={props.isActive ? classes.userActive : classes.user}>
+                <Avatar className={classes.avatar} alt="user" src={props.photo}/>
+                <div className={classes.userInf}>
+                    <h3 className={classes.userName}>{props.userName}</h3>
+                    <p className={classes.lastMessage}>{props.lastMessage ? props.lastMessage : 'Be the first to write if you want'}</p>
                 </div>
-            </NavLink>
-        )
-    }
+            </div>
+        </NavLink>
+    )
 }
 
 

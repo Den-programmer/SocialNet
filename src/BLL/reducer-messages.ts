@@ -8,17 +8,14 @@ type messagesPageType = {
     dialogsData: Array<userDialogType>
     messages: Array<message>
     userDialogId: number | null
+    isUserProfileMenuOpen: boolean
 }
 
 const messagesPage = {
     dialogsData: [],
-    messages: [
-        {
-            id: 1,
-            messageText: 'Choose the user to see his messages!'
-        }
-    ],
-    userDialogId: null
+    messages: [],
+    userDialogId: null,
+    isUserProfileMenuOpen: false
 } as messagesPageType
 
 const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPageType => {
@@ -33,9 +30,12 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPag
                 messages: [...state.messages, newMessage]
             }
         case `sn/messagesPage/SET-DIALOGS`:
+            const dialogsData = action.dialogs.map((item: userDialogType) => {
+                return { ...item, isActive: false }
+            })
             return {
                 ...state,
-                dialogsData: action.dialogs
+                dialogsData
             } 
         case `sn/messagesPage/SET-MESSAGES`: 
             return {
@@ -47,6 +47,19 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPag
                 ...state,
                 userDialogId: action.userId
             }
+        case `sn/messagesPage/SET-USER-ACTIVE-STATUS`:
+            return {
+                ...state,
+                dialogsData: state.dialogsData.map((item: userDialogType) => {
+                    if(action.userId === item.id) return { ...item, isActive: true }
+                    return { ...item, isActive: false }
+                })
+            }
+        case `sn/messagesPage/SET_USER_PROFILE_MENU_STATUS`:
+            return {
+                ...state,
+                isUserProfileMenuOpen: action.status
+            }    
         default:
             return state
     }
@@ -60,7 +73,9 @@ export const actions = {
     addMessage: (messageText:string) => ({ type: `sn/messagesPage/ADD-MESSAGE`, messageText } as const),
     setMessages: (messages: Array<message>) => ({ type: `sn/messagesPage/SET-MESSAGES`, messages } as const),
     setDialogs: (dialogs: Array<userDialogType>) => ({ type: `sn/messagesPage/SET-DIALOGS`, dialogs } as const),
-    setUserDialogId: (userId: number) => ({ type: `sn/messagesPage/SET-USER-DIALOG-ID`, userId } as const)
+    setUserDialogId: (userId: number) => ({ type: `sn/messagesPage/SET-USER-DIALOG-ID`, userId } as const),
+    setUserActiveStatus: (userId: number) => ({ type: `sn/messagesPage/SET-USER-ACTIVE-STATUS`, userId } as const),
+    setUserProfileMenuStatus: (status: boolean) => ({ type: `sn/messagesPage/SET_USER_PROFILE_MENU_STATUS`, status } as const) 
 }
 
 /* Thunk Creators! */

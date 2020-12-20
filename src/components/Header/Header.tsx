@@ -14,7 +14,7 @@ interface HeaderProps {
   changeSidebarIsOpenStatus: (status: boolean) => void
 }
 
-const Header: React.FC<HeaderProps> = ({ isAuth, logout, changeSidebarIsOpenStatus, isSidebarOpen, drawerWidth }) => {
+const Header: React.FC<HeaderProps> = (props) => {
   const useStyles = makeStyles((theme: Theme) => createStyles({
     searchInput: {
       width: '320px'
@@ -38,8 +38,8 @@ const Header: React.FC<HeaderProps> = ({ isAuth, logout, changeSidebarIsOpenStat
       }),
     },
     appBarShift: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
+      width: `calc(100% - ${props.drawerWidth}px)`,
+      marginLeft: props.drawerWidth,
       transition: theme.transitions.create(['margin', 'width'], {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
@@ -48,11 +48,11 @@ const Header: React.FC<HeaderProps> = ({ isAuth, logout, changeSidebarIsOpenStat
   }))
   const classes = useStyles()
   return (
-    <AppBar className={isSidebarOpen ? classes.appBarShift : classes.appBar} color="secondary" position="fixed">
+    <AppBar className={props.isSidebarOpen ? classes.appBarShift : classes.appBar} color="secondary" position="fixed">
       <Container>
         <Toolbar className={classes.toolbarWrapper}>
           <Box component="div">
-            <IconButton onClick={() => changeSidebarIsOpenStatus(!isSidebarOpen)} edge="start" aria-label="menu" color="inherit" >
+            <IconButton onClick={() => props.changeSidebarIsOpenStatus(!props.isSidebarOpen)} edge="start" aria-label="menu" color="inherit" >
               <MenuIcon />
             </IconButton>
           </Box>
@@ -67,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({ isAuth, logout, changeSidebarIsOpenStat
                 <NotificationsIcon />
               </IconButton>
             </NavLink>
-            {isAuth ? <NavLink onClick={logout} to="/login">
+            {props.isAuth ? <NavLink onClick={props.logout} to="/login">
               <Button className={classes.logButton} variant="contained" color="primary">
                 Logout
               </Button>

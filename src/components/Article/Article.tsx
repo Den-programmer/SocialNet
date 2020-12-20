@@ -14,12 +14,12 @@ import GeneralOptionsContainer from './Options/mainOptionsPage/generalOptions/ge
 import AccountOptionsContainer from './Options/mainOptionsPage/accountOptions/accountOptionsContainer'
 import ErrorPage from '../common/ErrorPage/errorPage'
 import LikedTracksContainer from './Music/LikedTracks/likedTracksContainer'
-import MusicPageNavContainer from './Music/MusicPageNavigation/musicPageNavContainer'
 import PlaylistsContainer from './Music/Playlists/playlistsContainer'
 import AlbumsContainer from './Music/Albums/albumsContainer'
 import FollowingContainer from './Music/Following/followingContainer'
 import MembersContainer from '../Members/membersContainer'
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
+import ProfileMainContentContainer from './Profile/ProfileMainContent/profileMainContentContainer'
 
 interface ArticlePropType {
     userDialogId: number | null
@@ -44,7 +44,10 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
             }),
             marginLeft: 0,
         },
-        profileContainer: {
+        container: {
+            paddingTop: '64px'
+        },
+        displayContainer: {
             display: 'flex',
             padding: '64px 0px'
         },
@@ -60,18 +63,22 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
         <article className={!isSidebarOpen ? classes.contentShift : classes.content}>
             <Switch>
                 {/* Profile! */}
-                <Route exact path='/Profile/:userId?' render={() => (<div className={classes.profileContainer}><ProfileContainer /><MembersContainer /></div>)} />
+                <Route exact path='/Profile/:userId?' render={() => (<div className={classes.displayContainer}><ProfileContainer /><MembersContainer /></div>)} />
                 {/* Messages! */}
-                <Route path={'/Messages/dialog/' + userDialogId} render={() => <MessagesContainer />} />
-                <Route exact path='/Messages' render={() => (<MessagesContainer />)} />
+                <Route path={'/Messages/dialog/' + userDialogId} render={() => (<div className={classes.container}>
+                    <div><ProfileMainContentContainer /><MessagesContainer /></div>
+                </div>)} />
+                <Route exact path='/Messages' render={() => (<div className={classes.container}>
+                    <ProfileMainContentContainer /><div className="flex-container"><MessagesContainer /></div>
+                </div>)} />
                 {/* News! */}
                 <Route path='/News' render={() => (<News />)} />
                 {/* Music! */}
-                <Route path='/Music/likedTracks' render={() => (<><MusicPageNavContainer /><LikedTracksContainer /></>)} />
-                <Route path='/Music/PlayLists' render={() => (<><MusicPageNavContainer /><PlaylistsContainer /></>)} />
-                <Route path='/Music/Albums' render={() => (<><MusicPageNavContainer /><AlbumsContainer /></>)} />
-                <Route path='/Music/following' render={() => (<><MusicPageNavContainer /><FollowingContainer /></>)} />
-                <Route exact path='/Music' render={() => (<Music />)} />
+                <Route path='/Music/likedTracks' render={() => (<div className={classes.container}><LikedTracksContainer /></div>)} />
+                <Route path='/Music/PlayLists' render={() => (<div className={classes.container}><PlaylistsContainer /></div>)} />
+                <Route path='/Music/Albums' render={() => (<div className={classes.container}><AlbumsContainer /></div>)} />
+                <Route path='/Music/following' render={() => (<div className={classes.container}><FollowingContainer /></div>)} />
+                <Route exact path='/Music' render={() => (<div className={classes.container}><Music /></div>)} />
                 {/* Options! */}
                 <Route path="/Options/account" render={() => (<div className="flex-container">
                     <OptionsNav />

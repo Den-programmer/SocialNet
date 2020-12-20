@@ -18,7 +18,7 @@ interface IProfileContainer {
     setStatusThunk: (userId: number) => void
     setUserProfileThunk: (userId: number) => void
     updateStatusThunk: (status: string) => void
-    getIsUserFollowed: (userId: number | null) => void
+    getIsUserFollowed: (userId: number) => void
     followThunk: (userId: number) => void
     unfollowThunk: (userId: number) => void
     friends: Array<userType>

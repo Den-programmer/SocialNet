@@ -5,7 +5,7 @@ import { getMusicPageNavLinks } from '../../../../BLL/selectors/music-selectors'
 import { compose } from 'redux'
 import { withAuthRedirect } from '../../../../HOC/withAuthRedirect'
 
-let mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: RootState) => ({
     navLinks: getMusicPageNavLinks(state)
 })
 

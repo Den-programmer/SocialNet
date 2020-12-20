@@ -13,7 +13,7 @@ export interface IProfile {
     friends: Array<userType>
     background: string
     updateStatus: (status: string) => void
-    getIsUserFollowed: (userId: number | null) => void
+    getIsUserFollowed: (userId: number) => void
     follow: (userId: number) => void
     unfollow: (userId: number) => void
 }
@@ -21,7 +21,17 @@ export interface IProfile {
 const Profile: React.FC<IProfile> = (props) => {
     return(
         <div style={{ width: '100%' }}>
-            <User contacts={props.profile.contacts} background={props.background} follow={props.follow} unfollow={props.unfollow} followed={props.followed} getIsUserFollowed={props.getIsUserFollowed} updateStatus={props.updateStatus} profile={props.profile} posts={props.posts} friends={props.friends} biography={props.profile.aboutMe}/>
+            <User followed={props.followed} 
+            posts={props.posts} 
+            friends={props.friends} 
+            background={props.background} 
+            updateStatus={props.updateStatus}
+            follow={props.follow}
+            unfollow={props.unfollow}
+            getIsUserFollowed={props.getIsUserFollowed} 
+            contacts={props.profile.contacts} 
+            biography={props.profile.aboutMe} 
+            profile={props.profile}/>
             <ProfileNav />
             <Biography userName={props.profile.fullName} AboutMe={props.profile.aboutMe}/>
             <Contacts contacts={props.profile.contacts}/>

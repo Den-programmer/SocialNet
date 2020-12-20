@@ -1,29 +1,50 @@
-import React from 'react'
-import classes from './dialogForm.module.css'
-import { reduxForm, InjectedFormProps } from 'redux-form'
-import { maxLengthCreator, enteredNothingError } from '../../../../../utils/validators/validators'
-import { Input, createField } from '../../../../common/Forms/forms'
-import { DialogFormDataType } from '../dialog'
+import React, { useState } from 'react'
+import classes from './dialogForm.module.scss'
+import InsertPhotoIcon from '@material-ui/icons/InsertPhoto'
+import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon'
+import { IconButton } from '@material-ui/core'
+import SendIcon from '@material-ui/icons/Send'
 
-interface PropsType {}
+interface PropsType { 
+    addMessage: (newMessage: string) => void
+}
 
-const maxMessageLength = maxLengthCreator(300)
-
-const DialogForm:React.FC<InjectedFormProps<DialogFormDataType, PropsType> & PropsType> = ({handleSubmit}) => {
+const DialogForm: React.FC<PropsType> = ({ addMessage }) => {
+    const [messageVal, setMessageVal] = useState<string>('')
+    const field = React.createRef<HTMLInputElement>()
+    const fieldHandleChange = () => {
+        field.current && setMessageVal(field.current.value)
+    }
+    const sendMessage = () => {
+        addMessage(messageVal)
+        setMessageVal('')   
+    }
     return (
-        <form onSubmit={handleSubmit}>
+        <form>
             <div className={classes.sendMessage}>
-                {createField("text", "Enter your message...", "dialog", Input, [maxMessageLength, enteredNothingError])}        
-                <div className={classes.sendMessage__btn}>
-                    <button>Send</button>
+                <div className={classes.anotherContentPanel}>
+                    <IconButton>
+                        <InsertEmoticonIcon className={classes.icon} />
+                    </IconButton>
+                </div>
+                <div className={classes.fieldContent}>
+                    <input type="text"
+                        placeholder="Enter your message..."
+                        name="dialog"
+                        value={messageVal}
+                        ref={field}
+                        onChange={fieldHandleChange} />
+                </div>
+                <div className={classes.sendPanel}>
+                    {messageVal === '' ? <IconButton>
+                        <InsertPhotoIcon className={classes.icon} />
+                    </IconButton> : <IconButton onClick={sendMessage}>
+                        <SendIcon className={classes.icon} />
+                    </IconButton>}
                 </div>
             </div>
         </form>
-    );
+    )
 }
 
-const DialogReduxForm = reduxForm<DialogFormDataType, PropsType>({
-    form: 'dialog'
-})(DialogForm)
-
-export default DialogReduxForm
+export default DialogForm

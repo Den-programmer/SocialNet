@@ -64,21 +64,26 @@ const musicPage = {
     navLinks: [
         {
             id: 1,
+            title: 'Music',
+            path: '/Music'
+        },
+        {
+            id: 2,
             title: 'Liked Tracks',
             path: '/Music/likedTracks'
         },
         {
-            id: 2,
+            id: 3,
             title: 'PlayLists',
             path: '/Music/PlayLists'
         },
         {
-            id: 3,
+            id: 4,
             title: 'Albums',
             path: '/Music/Albums'
         },
         {
-            id: 4,
+            id: 5,
             title: 'Following',
             path: '/Music/following'
         }

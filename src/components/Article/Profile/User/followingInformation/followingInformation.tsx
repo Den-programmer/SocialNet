@@ -8,7 +8,7 @@ interface IFollowingInformation {
     userId: number
     followed: boolean
     friends: Array<userType>
-    getIsUserFollowed: (userId: number | null) => void
+    getIsUserFollowed: (userId: number) => void
     follow: (userId: number) => void
     unfollow: (userId: number) => void
 }

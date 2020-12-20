@@ -4,13 +4,13 @@ import { getDialogsData, getUserDialogId } from '../../../../BLL/selectors/messa
 import { RootState } from '../../../../BLL/redux'
 import { actions, getDialogMessages } from '../../../../BLL/reducer-messages'
 
-let mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: RootState) => ({
     dialogsData: getDialogsData(state),
     userDialogId: getUserDialogId(state)
 }) 
 
-const { setUserDialogId } = actions
+const { setUserDialogId, setUserActiveStatus } = actions
 
-const DialogsContainer = connect(mapStateToProps, { setUserDialogId, getDialogMessages })(Dialogs)
+const DialogsContainer = connect(mapStateToProps, { setUserDialogId, getDialogMessages, setUserActiveStatus })(Dialogs)
 
 export default DialogsContainer

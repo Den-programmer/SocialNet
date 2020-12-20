@@ -13,5 +13,6 @@ export type userDialogType = {
         large: null | string
     }
     userName: string
+    isActive: boolean
     lastMessage?: string | null
 }

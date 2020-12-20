@@ -10,3 +10,7 @@ export const getMessages = (state: RootState) => {
 export const getUserDialogId = (state: RootState) => {
     return state.messagesPage.userDialogId
 }
+
+export const getIsUserProfileMenuOpenStatus = (state: RootState) => {
+    return state.messagesPage.isUserProfileMenuOpen
+}

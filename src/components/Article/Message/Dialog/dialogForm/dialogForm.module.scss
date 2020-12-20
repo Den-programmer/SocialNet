@@ -1,0 +1,27 @@
+.icon {
+    color: #1F93FF;
+    cursor: pointer;
+}
+
+.sendMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 5px;
+    .fieldContent {
+        input {
+            width: 750px;
+            border-radius: 50px;
+            padding: 10px 5px;
+            outline: none;
+            border: 1px solid #C4C4C4;
+            &:hover {
+                border: 1px solid #969696;
+            }
+            &:focus {
+                border: 1px solid #4B8BF4;
+            }
+        }
+    }
+    
+}

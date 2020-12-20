@@ -1,0 +1,18 @@
+.userChatProfile {
+    border-left: 1px solid #EFEFEF;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    .userProfile {
+        margin: 0 auto;
+        text-align: center;
+        .avatar {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+        .userName {
+            font-weight: bold;
+        }
+    }
+}

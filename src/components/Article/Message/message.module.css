@@ -1,8 +1,0 @@
-img {
-    user-select:none;
-}
-
-.messages {
-    display:flex;
-    height: 100%;
-}
