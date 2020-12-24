@@ -4,17 +4,18 @@ import MenuIcon from '@material-ui/icons/Menu'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import EmailIcon from '@material-ui/icons/Email'
 import NotificationsIcon from '@material-ui/icons/Notifications'
-import { NavLink } from 'react-router-dom'
+import { NavLink, RouteComponentProps } from 'react-router-dom'
 
 interface HeaderProps {
   isSidebarOpen: boolean
   isAuth: boolean
   drawerWidth: number
+  setLastUrl: (url: string) => void
   logout(): void
   changeSidebarIsOpenStatus: (status: boolean) => void
 }
 
-const Header: React.FC<HeaderProps> = (props) => {
+const Header: React.FC<HeaderProps & RouteComponentProps> = (props) => {
   const useStyles = makeStyles((theme: Theme) => createStyles({
     searchInput: {
       width: '320px'
@@ -47,6 +48,11 @@ const Header: React.FC<HeaderProps> = (props) => {
     },
   }))
   const classes = useStyles()
+
+  const logout = () => {
+    props.setLastUrl(props.location.pathname)
+    props.logout()
+  }
   return (
     <AppBar className={props.isSidebarOpen ? classes.appBarShift : classes.appBar} color="secondary" position="fixed">
       <Container>
@@ -67,7 +73,7 @@ const Header: React.FC<HeaderProps> = (props) => {
                 <NotificationsIcon />
               </IconButton>
             </NavLink>
-            {props.isAuth ? <NavLink onClick={props.logout} to="/login">
+            {props.isAuth ? <NavLink onClick={logout} to="/login">
               <Button className={classes.logButton} variant="contained" color="primary">
                 Logout
               </Button>

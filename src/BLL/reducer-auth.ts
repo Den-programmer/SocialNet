@@ -15,6 +15,7 @@ type authType = {
   rememberMe: boolean
   isAuth: boolean
   captchaUrl: string | null
+  lastUrl: string
 }
 
 const auth = {
@@ -24,7 +25,8 @@ const auth = {
   password: null,
   rememberMe: false,
   isAuth: false,
-  captchaUrl: null
+  captchaUrl: null,
+  lastUrl: ''
 } as authType
 
 const reducerAuth = (state = auth, action: ActionTypes): authType => {
@@ -45,6 +47,11 @@ const reducerAuth = (state = auth, action: ActionTypes): authType => {
         ...state,
         captchaUrl: action.captcha
       }
+    case `sn/auth/SET_LAST_URL`:
+      return {
+        ...state,
+        lastUrl: action.url
+      }  
     default:
       return state
   }
@@ -56,7 +63,8 @@ type ActionTypes = InferActionTypes<typeof actions>
 
 export const actions = {
   setAuthUserData: (userId: number | null, email: string | null, login: string | null, password: string | null, isAuth: boolean, rememberMe: boolean) => ({ type: `sn/auth/SET_AUTH_USER_DATA`, data: { userId, email, login, password, isAuth, rememberMe } } as const),
-  setCaptchaUrl: (captcha: string) => ({ type: `sn/auth/SET_CAPTCHA_URL`, captcha } as const)
+  setCaptchaUrl: (captcha: string) => ({ type: `sn/auth/SET_CAPTCHA_URL`, captcha } as const),
+  setLastUrl: (url: string) => ({ type: `sn/auth/SET_LAST_URL`, url } as const)
 }
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>

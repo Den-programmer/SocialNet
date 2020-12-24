@@ -25,9 +25,11 @@ interface ArticlePropType {
     userDialogId: number | null
     isSidebarOpen: boolean
     drawerWidth: number
+    isAuth: boolean
+    lastUrl: string
 }
 
-const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawerWidth }) => {
+const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawerWidth, isAuth, lastUrl }) => {
     const useStyles = makeStyles((theme: Theme) => createStyles({
         content: {
             flexGrow: 1,
@@ -106,7 +108,8 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
 
                 <Route exact path='/SocialNet' render={() => (<Redirect to={'/Profile'} />)} />
                 <Route exact path='/' render={() => (<Redirect to={'/Profile'} />)} />
-
+                {isAuth && <Route exact path='/login' render={() => (<Redirect to={lastUrl} />)} />}
+                
                 {/* 404 NOT FOUND! */}
 
                 <Route path="*" render={() => <ErrorPage />} />

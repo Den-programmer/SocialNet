@@ -9,3 +9,7 @@ export const getLoginName = (state: RootState) => {
 export const getIsAuthStatus = (state: RootState) => {
     return state.auth.isAuth;
 }
+
+export const getLastUrl = (state: RootState) => {
+    return state.auth.lastUrl
+}
