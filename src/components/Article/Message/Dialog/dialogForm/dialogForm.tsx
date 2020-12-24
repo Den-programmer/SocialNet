@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, ChangeEvent } from 'react'
 import classes from './dialogForm.module.scss'
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto'
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon'
 import { IconButton } from '@material-ui/core'
 import SendIcon from '@material-ui/icons/Send'
 
-interface PropsType { 
+interface PropsType {
     addMessage: (newMessage: string) => void
 }
 
@@ -15,9 +15,16 @@ const DialogForm: React.FC<PropsType> = ({ addMessage }) => {
     const fieldHandleChange = () => {
         field.current && setMessageVal(field.current.value)
     }
+    const onInputFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.currentTarget.files) {
+            const file = e.currentTarget.files[0]
+            const photoMessage = URL.createObjectURL(file)
+            addMessage(photoMessage)
+        }
+    }
     const sendMessage = () => {
         addMessage(messageVal)
-        setMessageVal('')   
+        setMessageVal('')
     }
     return (
         <form>
@@ -36,11 +43,19 @@ const DialogForm: React.FC<PropsType> = ({ addMessage }) => {
                         onChange={fieldHandleChange} />
                 </div>
                 <div className={classes.sendPanel}>
-                    {messageVal === '' ? <IconButton>
-                        <InsertPhotoIcon className={classes.icon} />
-                    </IconButton> : <IconButton onClick={sendMessage}>
-                        <SendIcon className={classes.icon} />
-                    </IconButton>}
+                    {messageVal === '' ?
+                        <div className={classes.PhotoMessageAbility}>
+                                <IconButton>
+                                <label htmlFor="dialogImageFileInput"><InsertPhotoIcon className={classes.icon} /></label>
+                                </IconButton><input accept="/image*"
+                                    name="dialogImage"
+                                    id="dialogImageFileInput"
+                                    onChange={onInputFileChange}
+                                    className={classes.fileInput}
+                                    type="file" />
+                        </div> : <IconButton onClick={sendMessage}>
+                            <SendIcon className={classes.icon} />
+                        </IconButton>}
                 </div>
             </div>
         </form>

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import classes from './addPost.module.css'
 import AddPostReduxForm from './AddPostForm/addPostForm'
 import { Portal } from '../../../../common/Portal/portal'
-// import { message } from 'antd'
 
 interface IAddPost {
     addPost: (postName: string, postInf: string, postPhoto: string) => void
@@ -22,7 +21,6 @@ const AddPost: React.FC<IAddPost> = ({ addPost, setIsAddPostWindowOpen, messageE
     const onSubmit = (FormData: AddPostFD) => {
         const { postName, postInf } = FormData
         if(postPhoto !== '') {
-            // message.info('You have added a new post!')
             addPost(postName, postInf, postPhoto)
             setIsAddPostWindowOpen(false)
         } else {

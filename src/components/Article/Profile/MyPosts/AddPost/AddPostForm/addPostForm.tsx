@@ -17,7 +17,6 @@ const maxLengthPostTitle = maxLengthCreator(20)
 const maxLengthPostText = maxLengthCreator(300)
 
 const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPostForm> = (props) => {
-    const fileInputAddPostPhoto = React.createRef<HTMLInputElement>()
     const closeModalWindow = () => props.setIsAddPostWindowOpen(false)
     const onInputFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.files) {
@@ -39,7 +38,7 @@ const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPos
             </div>
             <div className={classes.btn_selectPhoto}>
                 <label htmlFor="fileInputAddPostPhoto">Select photo</label>
-                <input ref={fileInputAddPostPhoto} onChange={onInputFileChange} type="file" accept="/image*" id="fileInputAddPostPhoto" name="postPhoto" />
+                <input onChange={onInputFileChange} type="file" accept="/image*" id="fileInputAddPostPhoto" name="postPhoto" />
             </div>
             {props.postPhotoError && <div className={classes.error}>
                 <span>{props.postPhotoError}</span>

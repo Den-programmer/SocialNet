@@ -11,6 +11,8 @@ type messagesPageType = {
     isUserProfileMenuOpen: boolean
 }
 
+// Photo may be as a string of message, so can do this logic more simply!
+
 const messagesPage = {
     dialogsData: [],
     messages: [],
