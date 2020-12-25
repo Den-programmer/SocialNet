@@ -122,7 +122,7 @@ export const actions = {
 
 // Thunk Creators!
 
-type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
+type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionTypes>
 
 export const requestUsers = (pageSize: number, currentPage: number): ThunkType => async (dispatch) => {
     try {
@@ -132,6 +132,7 @@ export const requestUsers = (pageSize: number, currentPage: number): ThunkType =
         dispatch(actions.setUsers(data.items))
         dispatch(actions.setUsersInf(data))
         dispatch(actions.setFriends(data.items))
+        return data
     } catch (error) {
         alert(`Something's gone wrong, error status: ${error.status}`)
     }

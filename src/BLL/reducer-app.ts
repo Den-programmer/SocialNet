@@ -3,6 +3,8 @@ import { ThunkAction } from "redux-thunk"
 import { RootState, InferActionTypes } from "./redux"
 import { fontSizeObjectType } from '../types/AppTypes/appTypes'
 import { setUserProfileThunk } from "./reducer-profile"
+import { requestUsers } from "./reducer-friends"
+import { getALLDialogs } from "./reducer-messages"
 
 const SET_TEXT_ERROR = 'app/SET_TEXT_ERROR'
 
@@ -123,12 +125,16 @@ export const setTextError = (text: string): setTextErrorActionType => ({ type: S
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
 export const initialize = (): ThunkType => async (dispatch, getState) => {
-  // Then всегда возвращает promise! 
   let promise = dispatch(authentication())
   debugger
   let initialPromise = promise.then(() => {
     let userId = getState().auth.userId
+    let currentPage = getState().Friends.usersInf.currentPage
+    let pageSize = getState().Friends.usersInf.pageSize
     dispatch(setUserProfileThunk(userId))
+    dispatch(getALLDialogs())
+    dispatch(requestUsers(pageSize, currentPage))
+    // Messages must be with the logic of first dialog!
     debugger
   })
   initialPromise.then(() => {

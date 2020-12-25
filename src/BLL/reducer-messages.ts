@@ -82,13 +82,14 @@ export const actions = {
 
 /* Thunk Creators! */
 
-type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
+type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionTypes>
 
 export const getALLDialogs = ():ThunkType => async (dispatch) => {
    try {
     const data = await MessagesAPI.getALLDialogs()
 
     dispatch(actions.setDialogs(data))
+    return data
    } catch(e) {
     alert(`Something's gone wrong, error status: 500`)
    }
