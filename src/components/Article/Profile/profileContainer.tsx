@@ -33,11 +33,11 @@ interface IRouteParams {
 
 class ProfileContainer extends React.Component<IProfileContainer & RouteComponentProps<IRouteParams>> {
     refreshProfile() {
-        let userId = +this.props.match.params.userId
+        let userId = +this.props.match.params.userId // - if another user's page!
         if (!userId) {
-            userId = this.props.authorizedUserId
+            userId = this.props.authorizedUserId // - if current user's page!
             if (!userId) {
-                this.props.history.push("/login")
+                this.props.history.push("/login") // - user is not authorized!
             }
         }
         this.props.setUserProfileThunk(userId)

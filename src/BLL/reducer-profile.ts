@@ -107,7 +107,7 @@ const profilePage = {
       id: 1,
       title: 'Wall',
       isChosen: false,
-      path: '/'
+      path: '/Wall'
     },
     {
       id: 2,
@@ -258,7 +258,7 @@ export const actions = {
 
 /* Thunks! */
 
-type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
+type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionTypes>
 
 export const setUserPhotoThunk = (photo: File): ThunkType => async (dispatch) => {
   try {
@@ -278,6 +278,7 @@ export const setUserProfileThunk = (userId: number): ThunkType => async (dispatc
   try {
     const data = await ProfileAPI.getUsersProfile(userId)
     dispatch(actions.setUserProfile(data))
+    return data
   } catch (error) {
     alert(`Something's gone wrong, error status: 500`)
   }

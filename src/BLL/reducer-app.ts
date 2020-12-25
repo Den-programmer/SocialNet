@@ -87,7 +87,7 @@ const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
         ...state,
         messageError: action.text
       }
-    case `app/SET_IS_MODAL_OPEN_STATUS`: 
+    case `app/SET_IS_MODAL_OPEN_STATUS`:
       return {
         ...state,
         isModalOpen: action.modalStatus
@@ -109,7 +109,7 @@ type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
 export const actions = {
   initializedSuccessful: () => ({ type: `app/SET_INITIALIZED` } as const),
   setFontSize: (id: number) => ({ type: `app/SET_FONT_SIZE`, id } as const),
-  setIsModalOpenStatus: (modalStatus: boolean) => ({ type: `app/SET_IS_MODAL_OPEN_STATUS`, modalStatus } as const), 
+  setIsModalOpenStatus: (modalStatus: boolean) => ({ type: `app/SET_IS_MODAL_OPEN_STATUS`, modalStatus } as const),
   getCurrentDate: (date: string) => ({ type: `app/SET_CURRENT_DATE`, date } as const)
 }
 
@@ -122,20 +122,16 @@ export const setTextError = (text: string): setTextErrorActionType => ({ type: S
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
-export const initialize = (): ThunkType => async (dispatch) => {
+export const initialize = (): ThunkType => async (dispatch, getState) => {
   // Then всегда возвращает promise! 
-  // const Promises = []
   let promise = dispatch(authentication())
-  // let promise2 = dispatch(setUserProfileThunk())
-  // Promises.push(promise)
-  // Promises.push(promise2)
-  // Promise.all(Promises).then(() => {
-  //   dispatch(actions.initializedSuccessful())
-  // })
-  // Тебе нужно продумать, как в конкретные санки будет провайдиться конкретная информация и параметры (setUserProfileThunk - userId) 
-  
-  // И не забудь про то, что в инициализации должен осуществляться запрос юзеров, профайла и сообщений своеобразно!
-  promise.then(() => {
+  debugger
+  let initialPromise = promise.then(() => {
+    let userId = getState().auth.userId
+    dispatch(setUserProfileThunk(userId))
+    debugger
+  })
+  initialPromise.then(() => {
     dispatch(actions.initializedSuccessful())
   })
 }
