@@ -30,12 +30,12 @@ const Biography: React.FC<IBiography> = ({ userName, AboutMe }) => {
                     </div>
                 </div>
                 <div className={classes.bioTableItem}>
-                    <div className={classes.bioTableItem__property}>
+                    {AboutMe && <div className={classes.bioTableItem__property}>
                         <p>About Me</p>
-                    </div>
-                    <div className={classes.bioTableItem__value}>
+                    </div>}
+                    {AboutMe && <div className={classes.bioTableItem__value}>
                         <span className={classes.bioTableItem__value_second_style}>{AboutMe}</span>
-                    </div>
+                    </div>}
                 </div>
             </div>
             </div>

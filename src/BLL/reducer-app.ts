@@ -2,6 +2,7 @@ import { authentication } from "./reducer-auth"
 import { ThunkAction } from "redux-thunk"
 import { RootState, InferActionTypes } from "./redux"
 import { fontSizeObjectType } from '../types/AppTypes/appTypes'
+import { setUserProfileThunk } from "./reducer-profile"
 
 const SET_TEXT_ERROR = 'app/SET_TEXT_ERROR'
 
@@ -122,8 +123,18 @@ export const setTextError = (text: string): setTextErrorActionType => ({ type: S
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
 export const initialize = (): ThunkType => async (dispatch) => {
+  // Then всегда возвращает promise! 
+  // const Promises = []
   let promise = dispatch(authentication())
-
+  // let promise2 = dispatch(setUserProfileThunk())
+  // Promises.push(promise)
+  // Promises.push(promise2)
+  // Promise.all(Promises).then(() => {
+  //   dispatch(actions.initializedSuccessful())
+  // })
+  // Тебе нужно продумать, как в конкретные санки будет провайдиться конкретная информация и параметры (setUserProfileThunk - userId) 
+  
+  // И не забудь про то, что в инициализации должен осуществляться запрос юзеров, профайла и сообщений своеобразно!
   promise.then(() => {
     dispatch(actions.initializedSuccessful())
   })
