@@ -20,7 +20,7 @@ interface UserPropType {
 }
 
 const User: React.FC<UserPropType> = (props) => {
-    const path = "/Messages/dialog/" + props.id
+    const path = `/Messages/dialog/${props.id}`
 
     const getUserMessages = () => {
         props.setUserDialogId(props.id)

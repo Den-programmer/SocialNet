@@ -8,7 +8,7 @@ interface IMessages {
 }
 
 const Messages: React.FC<IMessages> = ({ isUserProfileMenuOpen }) => {
-    return <div className="flex-container">
+    return <div style={{ width: '100%' }} className="flex-container">
         <DialogsContainer /> 
         <DialogContainer />
         {isUserProfileMenuOpen && <UserChatProfileContainer />}

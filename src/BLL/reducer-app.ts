@@ -4,7 +4,8 @@ import { RootState, InferActionTypes } from "./redux"
 import { fontSizeObjectType } from '../types/AppTypes/appTypes'
 import { setUserProfileThunk } from "./reducer-profile"
 import { requestUsers } from "./reducer-friends"
-import { getALLDialogs } from "./reducer-messages"
+import { getALLDialogs, getDialogMessages } from "./reducer-messages"
+import { userDialogType } from "../types/MessagesTypes/messagesTypes"
 
 const SET_TEXT_ERROR = 'app/SET_TEXT_ERROR'
 
@@ -136,6 +137,10 @@ export const initialize = (): ThunkType => async (dispatch, getState) => {
     dispatch(requestUsers(pageSize, currentPage))
     // Messages must be with the logic of first dialog!
     debugger
+  }).then(() => {
+    const dialog = getState().messagesPage.dialogsData.filter((item: userDialogType) => item.isActive && true).find((item: userDialogType) => item)
+    let dialogId = dialog?.id
+    if(dialogId) dispatch(getDialogMessages(dialogId))
   })
   initialPromise.then(() => {
     dispatch(actions.initializedSuccessful())

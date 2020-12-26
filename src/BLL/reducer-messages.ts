@@ -32,19 +32,20 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPag
                 messages: [...state.messages, newMessage]
             }
         case `sn/messagesPage/SET-DIALOGS`:
-            const dialogsData = action.dialogs.map((item: userDialogType) => {
+            const dialogsData = action.dialogs.map((item: userDialogType, index) => {
+                if (index === 0) return { ...item, isActive: true }
                 return { ...item, isActive: false }
             })
             return {
                 ...state,
                 dialogsData
-            } 
-        case `sn/messagesPage/SET-MESSAGES`: 
+            }
+        case `sn/messagesPage/SET-MESSAGES`:
             return {
                 ...state,
                 messages: action.messages
-            }    
-        case `sn/messagesPage/SET-USER-DIALOG-ID`: 
+            }
+        case `sn/messagesPage/SET-USER-DIALOG-ID`:
             return {
                 ...state,
                 userDialogId: action.userId
@@ -53,7 +54,7 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPag
             return {
                 ...state,
                 dialogsData: state.dialogsData.map((item: userDialogType) => {
-                    if(action.userId === item.id) return { ...item, isActive: true }
+                    if (action.userId === item.id) return { ...item, isActive: true }
                     return { ...item, isActive: false }
                 })
             }
@@ -61,7 +62,7 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPag
             return {
                 ...state,
                 isUserProfileMenuOpen: action.status
-            }    
+            }
         default:
             return state
     }
@@ -72,50 +73,47 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPag
 type ActionTypes = InferActionTypes<typeof actions>
 
 export const actions = {
-    addMessage: (messageText:string) => ({ type: `sn/messagesPage/ADD-MESSAGE`, messageText } as const),
+    addMessage: (messageText: string) => ({ type: `sn/messagesPage/ADD-MESSAGE`, messageText } as const),
     setMessages: (messages: Array<message>) => ({ type: `sn/messagesPage/SET-MESSAGES`, messages } as const),
     setDialogs: (dialogs: Array<userDialogType>) => ({ type: `sn/messagesPage/SET-DIALOGS`, dialogs } as const),
     setUserDialogId: (userId: number) => ({ type: `sn/messagesPage/SET-USER-DIALOG-ID`, userId } as const),
     setUserActiveStatus: (userId: number) => ({ type: `sn/messagesPage/SET-USER-ACTIVE-STATUS`, userId } as const),
-    setUserProfileMenuStatus: (status: boolean) => ({ type: `sn/messagesPage/SET_USER_PROFILE_MENU_STATUS`, status } as const) 
+    setUserProfileMenuStatus: (status: boolean) => ({ type: `sn/messagesPage/SET_USER_PROFILE_MENU_STATUS`, status } as const)
 }
 
 /* Thunk Creators! */
 
 type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionTypes>
 
-export const getALLDialogs = ():ThunkType => async (dispatch) => {
-   try {
-    const data = await MessagesAPI.getALLDialogs()
+export const getALLDialogs = (): ThunkType => async (dispatch) => {
+    try {
+        const data = await MessagesAPI.getALLDialogs()
 
-    dispatch(actions.setDialogs(data))
-    return data
-   } catch(e) {
-    alert(`Something's gone wrong, error status: 500`)
-   }
+        dispatch(actions.setDialogs(data))
+        return data
+    } catch (e) {
+        alert(`Something's gone wrong, error status: 500`)
+    }
 }
 export const startDialog = (userId: number): ThunkType => async (dispatch) => {
     try {
         const data = await MessagesAPI.startDialog(userId)
-        if(data.resultCode === resultCode.Success) {
-            dispatch(getALLDialogs())    
+        if (data.resultCode === resultCode.Success) {
+            dispatch(getALLDialogs())
         } else {
             alert(`Some error!!!!!!!`)
         }
-    } catch(e) {
+    } catch (e) {
         alert(`Something's gone wrong, error status: 500`)
     }
 }
 export const getDialogMessages = (userId: number): ThunkType => async (dispatch) => {
     try {
         const data = await MessagesAPI.getDialogMessages(userId)
-
-        if(!data.error) {
-            dispatch(actions.setMessages(data.items))
-        } else {
-            alert(`There's error at server request: getDialogMessages!`)
-        }
-    } catch(e) {
+        debugger
+        dispatch(actions.setMessages(data.items))
+        return data
+    } catch (e) {
         alert(`Something's gone wrong, error status: 500`)
     }
 }
