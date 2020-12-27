@@ -127,7 +127,6 @@ type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
 export const initialize = (): ThunkType => async (dispatch, getState) => {
   let promise = dispatch(authentication())
-  debugger
   let initialPromise = promise.then(() => {
     let userId = getState().auth.userId
     let currentPage = getState().Friends.usersInf.currentPage
@@ -135,12 +134,11 @@ export const initialize = (): ThunkType => async (dispatch, getState) => {
     dispatch(setUserProfileThunk(userId))
     dispatch(getALLDialogs())
     dispatch(requestUsers(pageSize, currentPage))
-    // Messages must be with the logic of first dialog!
-    debugger
   }).then(() => {
-    const dialog = getState().messagesPage.dialogsData.filter((item: userDialogType) => item.isActive && true).find((item: userDialogType) => item)
-    let dialogId = dialog?.id
-    if(dialogId) dispatch(getDialogMessages(dialogId))
+    setTimeout(() => {
+      let dialogId: number = getState().messagesPage.userDialogId
+      dispatch(getDialogMessages(dialogId))
+    }, 1000)
   })
   initialPromise.then(() => {
     dispatch(actions.initializedSuccessful())

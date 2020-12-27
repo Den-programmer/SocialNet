@@ -22,7 +22,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core'
 import ProfileMainContentContainer from './Profile/ProfileMainContent/profileMainContentContainer'
 
 interface ArticlePropType {
-    userDialogId: number | null
+    userDialogId: number
     isSidebarOpen: boolean
     drawerWidth: number
     isAuth: boolean
@@ -112,7 +112,7 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
                 
                 {/* 404 NOT FOUND! */}
 
-                <Route path="*" render={() => <ErrorPage />} />
+                <Route path="*" render={() => (<div className={classes.container}><ErrorPage /></div>)} />
             </Switch>
         </article>
     )

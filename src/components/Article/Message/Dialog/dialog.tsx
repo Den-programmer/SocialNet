@@ -11,7 +11,7 @@ interface DialogPropsType {
     isUserProfileMenuOpen: boolean
     messages: Array<message>
     dialogsData: Array<userDialogType>
-    addMessage: (newMessage: string) => void
+    addMessage: (message: string) => void
     setUserProfileMenuStatus: (status: boolean) => void
 }
 

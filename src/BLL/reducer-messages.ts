@@ -7,7 +7,7 @@ import { resultCode } from "../DAL/api"
 type messagesPageType = {
     dialogsData: Array<userDialogType>
     messages: Array<message>
-    userDialogId: number | null
+    userDialogId: number
     isUserProfileMenuOpen: boolean
 }
 
@@ -16,7 +16,7 @@ type messagesPageType = {
 const messagesPage = {
     dialogsData: [],
     messages: [],
-    userDialogId: null,
+    userDialogId: 0,
     isUserProfileMenuOpen: false
 } as messagesPageType
 
@@ -36,8 +36,11 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPag
                 if (index === 0) return { ...item, isActive: true }
                 return { ...item, isActive: false }
             })
+            const currentDialog = dialogsData.filter((item: userDialogType) => item.isActive && true).find((item: userDialogType) => item)
+            let currentDialogId = currentDialog !== undefined ? currentDialog.id : 0
             return {
                 ...state,
+                userDialogId: currentDialogId,
                 dialogsData
             }
         case `sn/messagesPage/SET-MESSAGES`:
@@ -53,6 +56,7 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPag
         case `sn/messagesPage/SET-USER-ACTIVE-STATUS`:
             return {
                 ...state,
+                userDialogId: action.userId,
                 dialogsData: state.dialogsData.map((item: userDialogType) => {
                     if (action.userId === item.id) return { ...item, isActive: true }
                     return { ...item, isActive: false }
@@ -88,7 +92,6 @@ type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionType
 export const getALLDialogs = (): ThunkType => async (dispatch) => {
     try {
         const data = await MessagesAPI.getALLDialogs()
-
         dispatch(actions.setDialogs(data))
         return data
     } catch (e) {
@@ -110,9 +113,18 @@ export const startDialog = (userId: number): ThunkType => async (dispatch) => {
 export const getDialogMessages = (userId: number): ThunkType => async (dispatch) => {
     try {
         const data = await MessagesAPI.getDialogMessages(userId)
-        debugger
         dispatch(actions.setMessages(data.items))
         return data
+    } catch (e) {
+        alert(`Something's gone wrong, error status: 500`)
+    }
+}
+
+export const sendMessage = (userId: number, message: string): ThunkType => async (dispatch) => {
+    try {
+        const data = await MessagesAPI.sendDialogMessages(userId, message)
+        debugger
+        // dispatch(actions.addMessage(message))
     } catch (e) {
         alert(`Something's gone wrong, error status: 500`)
     }
