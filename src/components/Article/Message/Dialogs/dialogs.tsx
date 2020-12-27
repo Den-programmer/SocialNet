@@ -7,7 +7,7 @@ import { Container, makeStyles, createStyles, Theme } from '@material-ui/core'
 
 interface DialogsPropsType {
     dialogsData: Array<userDialogType>
-    userDialogId: number | null
+    userDialogId: number
     setUserDialogId: (userId: number) => void
     getDialogMessages: (userId: number) => void
     setUserActiveStatus: (userId: number) => void

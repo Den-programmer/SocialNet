@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom'
 
 interface UsersPropType {
     dialogsData: Array<userDialogType>
-    userDialogId: number | null
+    userDialogId: number
     setUserDialogId: (userId: number) => void
     getDialogMessages: (userId: number) => void
     setUserActiveStatus: (userId: number) => void

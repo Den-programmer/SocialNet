@@ -5,7 +5,7 @@ import { Avatar } from '@material-ui/core'
 
 interface UserPropType {
     id: number
-    userDialogId: number | null
+    userDialogId: number
     photo: string
     hasNewMessages: boolean
     lastDialogActivity: string
