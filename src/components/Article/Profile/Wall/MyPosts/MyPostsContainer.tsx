@@ -1,10 +1,10 @@
 import MyPosts from './MyPosts'
-import { actions } from '../../../../BLL/reducer-profile'
-import { setTextError } from '../../../../BLL/reducer-app'
+import { actions } from '../../../../../BLL/reducer-profile'
+import { setTextError } from '../../../../../BLL/reducer-app'
 import { connect } from 'react-redux'
-import { getUsersProfile, getPosts, getUsersName, getIsAddPostModalOpenStatus, getIsPostModalOpenStatus } from '../../../../BLL/selectors/profile-selectors'
-import { RootState } from '../../../../BLL/redux'
-import { getDate, getMessageError } from '../../../../BLL/selectors/selectors'
+import { getUsersProfile, getPosts, getUsersName, getIsAddPostModalOpenStatus, getIsPostModalOpenStatus } from '../../../../../BLL/selectors/profile-selectors'
+import { RootState } from '../../../../../BLL/redux'
+import { getDate, getMessageError } from '../../../../../BLL/selectors/selectors'
 
 const mapStateToProps = (state: RootState) => ({
     userName: getUsersName(state),

@@ -3,9 +3,9 @@ import classes from './postModal.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import Notifications from './notifications/notifications'
-import Btn_Confirm from '../../../../../common/Btns/Btn_confirm/btn_confirm'
-import { Portal } from '../../../../../common/Portal/portal'
-import noPostImg from '../../../../../../images/noPhoto/nophoto.png'
+import Btn_Confirm from '../../../../../../common/Btns/Btn_confirm/btn_confirm'
+import { Portal } from '../../../../../../common/Portal/portal'
+import noPostImg from '../../../../../../../images/noPhoto/nophoto.png'
 
 interface IPost {
     currentDate: string

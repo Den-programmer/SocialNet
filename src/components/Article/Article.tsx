@@ -20,6 +20,7 @@ import FollowingContainer from './Music/Following/followingContainer'
 import MembersContainer from '../Members/membersContainer'
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
 import ProfileMainContentContainer from './Profile/ProfileMainContent/profileMainContentContainer'
+import Wall from './Profile/Wall/wall'
 
 interface ArticlePropType {
     userDialogId: number
@@ -66,6 +67,7 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
             <Switch>
                 {/* Profile! */}
                 <Route exact path='/Profile/:userId?' render={() => (<div className={classes.displayContainer}><ProfileContainer /><MembersContainer /></div>)} />
+                <Route exact path='/Wall' render={() => (<div className={classes.container}><ProfileMainContentContainer /><Wall /></div>)}/>
                 {/* Messages! */}
                 <Route path={'/Messages/dialog/' + userDialogId} render={() => (<div className={classes.container}>
                     <div><ProfileMainContentContainer /><MessagesContainer /></div>

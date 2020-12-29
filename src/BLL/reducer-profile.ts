@@ -291,7 +291,7 @@ export const saveProfile = (profile: saveProfileType): ThunkType => async (dispa
     if(userId) {
       const trueProfile = {
         status: profileStatus,
-        aboutMe: 'I\'m GODNESS!!!',
+        aboutMe: 'I\'m the one who will destroy facebook!)))', // I\'m GODNESS!!!
         userId: userId,
         lookingForAJob: true,
         lookingForAJobDescription: 'I\'m developer that has some skills: JavaScript, React.Js, TypeScript, Redux, C#, HTML, CSS, BootsTrap, SCSS and many others!',

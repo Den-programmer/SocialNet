@@ -1,0 +1,21 @@
+.posts {
+    display: flex;
+    flex-wrap: wrap;
+}
+.postedNothingBlock {
+    padding: 100px;
+    margin: auto;
+}
+.postedNothingTitle {
+    text-align: center;
+}
+.addPost {
+    display: flex;
+    justify-content: center;
+    padding: 25px 0;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+}

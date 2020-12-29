@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import classes from './addPost.module.css'
 import AddPostReduxForm from './AddPostForm/addPostForm'
-import { Portal } from '../../../../common/Portal/portal'
+import { Portal } from '../../../../../common/Portal/portal'
 
 interface IAddPost {
     addPost: (postName: string, postInf: string, postPhoto: string) => void

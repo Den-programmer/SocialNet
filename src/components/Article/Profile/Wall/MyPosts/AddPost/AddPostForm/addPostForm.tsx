@@ -1,10 +1,10 @@
 import React, { ChangeEvent } from 'react'
 import classes from './addPostForm.module.css'
 import { reduxForm, InjectedFormProps } from 'redux-form'
-import { maxLengthCreator, enteredNothingError } from '../../../../../../utils/validators/validators'
-import { Input, createField, Textarea } from '../../../../../common/Forms/forms'
+import { maxLengthCreator, enteredNothingError } from '../../../../../../../utils/validators/validators'
+import { Input, createField, Textarea } from '../../../../../../common/Forms/forms'
 import { AddPostFD } from '../addPost'
-import noPostPhoto from '../../../../../../images/noPhoto/nophoto.png'
+import noPostPhoto from '../../../../../../../images/noPhoto/nophoto.png'
 
 interface IAddPostForm {
     setIsAddPostWindowOpen: (status: boolean) => void
