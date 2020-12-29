@@ -97,10 +97,12 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
                 <Route path='/Notifications' render={() => (<div className={classes.container}>Here is Notifications in developing!</div>)} />
                 {/* Friends! */}
                 <Route path='/Friends/DataFriends' render={() => (<div className={classes.DataFriendsContainer}>
+                    <ProfileMainContentContainer />
                     <FriendsNavContainer />
                     <FriendsByButtonContainer />
                 </div>)} />
                 <Route exact path='/Friends/FindUsers' render={() => (<div className={classes.FindFriendsContainer}>
+                    <ProfileMainContentContainer />
                     <FriendsNavContainer />
                     <FindFriendsContainer />
                 </div>)} />

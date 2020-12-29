@@ -1,0 +1,12 @@
+@import '../../../index.scss';
+
+.friends_button {
+    font-size: 17px;
+    color: #222222;
+    font-family: $Poppins;
+    padding: 30px;
+    &:hover {
+        color: #4dcadd;
+        border-bottom: 1px solid #4dcadd;
+    }
+}

@@ -1,0 +1,18 @@
+@import '../../../../../../../index.scss';
+
+.user {
+    margin: 20px 175px;
+    text-align: center;
+    .avatar {
+        width:100px;
+        height: 100px;
+        border-radius: 100px;
+    }
+    .followBtn {
+        font-weight: bold;
+        font-family: $Poppins;
+    }
+}
+
+
+

@@ -1,16 +1,25 @@
 import React from 'react'
-import classes from './searchNewFriends.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { Container, TextField, Theme, makeStyles, createStyles } from '@material-ui/core'
 
 interface ISearchNewFriends {}
 
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    container: {
+        display: 'flex',
+        justifyContent: 'center',
+        margin: '15px auto'
+    },
+    textfield: {
+        width: '90%'
+    }
+}))
+
 const SearchNewFriends: React.FC<ISearchNewFriends> = (props) => {
+    const classes = useStyles()
     return (
-        <div className={classes.search}>
-            <label htmlFor="searchInput"><FontAwesomeIcon className={classes.iconSearch} icon={faSearch} /></label>
-            <input id="searchInput" type="text" />
-        </div>
+        <Container className={classes.container}>
+            <TextField className={classes.textfield} label="Search field" type="search" variant="filled" />
+        </Container>
     )
 }
 

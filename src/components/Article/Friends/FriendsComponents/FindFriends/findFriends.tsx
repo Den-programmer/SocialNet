@@ -1,5 +1,4 @@
 import React from 'react'
-import classes from './findFriends.module.css'
 import SearchNewfriends from './SearchNewFriends/searchNewFriends'
 import UsersColumnContainer from './usersColumn/usersColumnContainer'
 import Paginator from '../../../../common/Paginator/Paginator'
@@ -16,7 +15,7 @@ interface IFindFriends {
 
 const FindFriends: React.FC<IFindFriends> = (props) => {
     return (
-        <div className={classes.findFriends}>
+        <div>
             <SearchNewfriends />
             <UsersColumnContainer  />
             <Paginator pageSize={props.usersInf.pageSize} 

@@ -1,7 +1,8 @@
 import React from 'react'
-import classes from './friend.module.css'
+import classes from './friend.module.scss'
 import defaultUserPhoto from './img/defaultUserPhoto.jpg'
 import { NavLink } from 'react-router-dom'
+import { Avatar, Container, makeStyles, Theme, createStyles, Button } from '@material-ui/core'
 
 interface IFriend {
     id: number
@@ -13,23 +14,35 @@ interface IFriend {
     unfollow: (id: number) => void
 }
 
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    container: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    avatar: {
+        width: '100px',
+        height: '100px'
+    }
+}))
+
 const Friend: React.FC<IFriend> = (props) => {
-    let following = () => {
+    const s = useStyles()
+    const following = () => {
         if (props.followed === false) props.follow(props.id)
         props.unfollow(props.id)
     }
     return (
-        <div className={classes.ObjectUser}>
+        <Container className={classes.container}>
             <div className={classes.user}>
-                <NavLink to={"/Profile/" + props.id}>
-                    {props.avatar ? <img src={props.avatar} alt="" /> : <img src={defaultUserPhoto} alt="" />}
-                    <h5>{props.nickname ? props.nickname : props.name}</h5>
+                <NavLink className={classes.navLink} to={"/Profile/" + props.id}>
+                    <Avatar className={s.avatar} src={props.avatar ? props.avatar : defaultUserPhoto} alt="avatar" />
+                    <h5 className={classes.userName}>{props.nickname ? props.nickname : props.name}</h5>
                 </NavLink>
-                <div className={classes.following}>
-                    {props.followed ? <button onClick={following}>Following</button> : <button onClick={following}>Follow</button>} 
-                </div>
+                <Button variant="contained" color="primary" 
+                className={classes.btn_following} 
+                onClick={following}>{props.followed ? 'Following' : 'Follow'}</Button>
             </div>
-        </div>
+        </Container>
     )
 }
 

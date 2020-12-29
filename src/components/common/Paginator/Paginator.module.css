@@ -1,13 +1,14 @@
 .pages {
     display:flex;
     justify-content: center;
+    margin: 10px 0px;
 }
 .selected_page {
     font-weight:bold;
 }
 .pages button {
     margin: 10px;
-    color:#FFF;
+    color:#222222;
     background: none;
     border:none;
     font-size: 17px;

@@ -1,7 +1,7 @@
 import React from 'react'
 import User from './user/user'
-import classes from './usersColumn.module.css'
 import { userType } from '../../../../../../types/FriendsType/friendsType'
+import { Container, makeStyles, Theme, createStyles } from '@material-ui/core'
 
 interface UsersColumnPropsType {
     users: Array<userType>
@@ -11,7 +11,16 @@ interface UsersColumnPropsType {
     startDialog: (userId: number) => void
 }
 
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center'
+    }
+}))
+
 const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
+    const classes = useStyles()
     const users = props.users.map((user: userType) => {
         return <User id={user.id}
             followThunk={props.followThunk}
@@ -21,13 +30,12 @@ const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
             followed={user.followed}
             nickname={user.nickname}
             name={user.name}
-            photo={user.photos.large} startDialog={props.startDialog}/>})
+            photo={user.photos.large} startDialog={props.startDialog} />
+    })
     return (
-        <div className={classes.usersColumn}>
-            <div className={classes.users}>
-                {users}
-            </div>
-        </div>
+        <Container className={classes.container}>
+            {users}
+        </Container>
     )
 }
 

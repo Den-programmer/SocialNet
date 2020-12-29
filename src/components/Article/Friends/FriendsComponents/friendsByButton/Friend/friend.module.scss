@@ -1,0 +1,16 @@
+.user {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 0px;
+    border-bottom: 1px solid #E3E3E3;
+    .navLink {
+        display: flex;
+        align-items: center;
+        .userName {
+            color: #222222;
+            font-size: 14px;
+            padding: 0px 15px;
+        }
+    }
+}

@@ -1,7 +1,8 @@
 import React, { useState, MouseEvent } from 'react'
-import classes from './user.module.css'
+import classes from './user.module.scss'
 import defaultUserPhoto from './img/defaultUserPhoto.jpg'
 import { NavLink, Redirect } from 'react-router-dom'
+import { Button } from '@material-ui/core'
 
 interface IUser {
     followed: boolean
@@ -51,9 +52,8 @@ const User: React.FC<IUser> = (props) => {
     return (
         <div className={classes.user} onContextMenu={callContextMenu}>
             <NavLink to={"/Profile/" + props.id}>
-                {props.photo ? <img src={props.photo} alt="" /> : <img src={defaultUserPhoto} alt="" />}
-                <h4>{props.nickname}</h4>
-                <h6>{props.name}</h6>
+                {props.photo ? <img className={classes.avatar} src={props.photo} alt="" /> : <img className={classes.avatar} src={defaultUserPhoto} alt="" />}
+                <h3 className={classes.userName}>{props.name ? props.name : props.nickname}</h3>
             </NavLink>
             {isMenuOpen && <div style={styleMenu} className="contextMenu">
                 <ul className="contextMenu__list">
@@ -62,9 +62,9 @@ const User: React.FC<IUser> = (props) => {
                     <li className="contextMenu__list-item">Unfollow</li>
                 </ul>
             </div>}
-            {props.followed ? <button className={classes.btn_following} disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Add this user to list of friends!">Following</button> 
+            {props.followed ? <Button className={classes.followBtn} variant="contained" color="primary" disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Add this user to list of friends!">Following</Button> 
             : 
-            <button className={classes.btn_unfollow} disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Delete this user from your list of friends!">Unfollow</button>}
+            <Button className={classes.followBtn} variant="contained" color="primary" disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Delete this user from your list of friends!">Unfollow</Button>}
         </div>
     )
 }
