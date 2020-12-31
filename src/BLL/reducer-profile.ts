@@ -68,6 +68,7 @@ export type profilePageType = {
   background: string
   isAddPostModalOpen: boolean
   isPostModalOpen: boolean
+  gender: string
 }
 
 const profilePage = {
@@ -142,6 +143,7 @@ const profilePage = {
   ],
   followed: false,
   background: beautifulLight,
+  gender: 'Not Chosen',
   isAddPostModalOpen: false,
   isPostModalOpen: false
 } as profilePageType
@@ -230,6 +232,12 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
           return { ...item, isChosen: false }
         })
       }   
+    case `/sn/profilePage/CHANGE_GENDER`:
+      debugger
+      return {
+        ...state,
+        gender: action.gender
+      }  
     default:
       return state
   }
@@ -253,7 +261,8 @@ export const actions = {
   setIsAddPostWindowOpen: (modalStatus: boolean) => ({ type: `/sn/profilePage/SET_IS_ADD_POST_WINDOW_OPEN`, modalStatus } as const),
   setIsPostModalOpen: (modalStatus: boolean) => ({ type: `/sn/profilePage/SET_IS__POST_MODAL_OPEN`, modalStatus } as const),
   changeProfileNavItemChosenStatus: (itemId: number) => ({ type: `/sn/profilePage/CHANGE_PROFILE_NAVITEM_CHOSEN_STATUS`, itemId } as const),
-  setStandartProfileNavOptions: () => ({ type: `/sn/profilePage/SET_STANDART_PROFILE_NAV_OPTIONS` } as const)
+  setStandartProfileNavOptions: () => ({ type: `/sn/profilePage/SET_STANDART_PROFILE_NAV_OPTIONS` } as const),
+  changeGender: (gender: string) => ({ type: `/sn/profilePage/CHANGE_GENDER`, gender } as const)
 }
 
 /* Thunks! */

@@ -6,7 +6,6 @@ import { IProfile } from '../profile'
 import { contactsType } from '../../../../BLL/reducer-profile'
 
 interface IUser extends IProfile {
-    biography: string | null
     contacts: contactsType
 }
 

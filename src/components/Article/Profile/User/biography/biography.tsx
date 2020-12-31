@@ -3,11 +3,12 @@ import classes from './biography.module.scss'
 import { Container } from '@material-ui/core'
 
 interface IBiography {
+    gender: string
     userName: string
     AboutMe: string | null
 }
 
-const Biography: React.FC<IBiography> = ({ userName, AboutMe }) => {
+const Biography: React.FC<IBiography> = ({ userName, AboutMe, gender }) => {
     return (
         <Container>
             <div className={classes.biography}>
@@ -26,7 +27,7 @@ const Biography: React.FC<IBiography> = ({ userName, AboutMe }) => {
                         <p>Gender</p>
                     </div>
                     <div className={classes.bioTableItem__value}>
-                        <p>Male</p>
+                        <p>{gender}</p>
                     </div>
                 </div>
                 <div className={classes.bioTableItem}>

@@ -1,9 +1,0 @@
-.changeUserName {
-    display:flex;
-    flex-direction: column;
-    user-select: none;
-    align-items: center;
-}
-.changeUserName * {
-    margin: 10px;
-}

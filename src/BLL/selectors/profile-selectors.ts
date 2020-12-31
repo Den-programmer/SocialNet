@@ -38,3 +38,7 @@ export const getProfileNavigationMenu = (state: RootState) => {
 export const getBiography = (state: RootState) => {
     return state.profilePage.profile.aboutMe
 } 
+
+export const getGender = (state: RootState) => {
+    return state.profilePage.gender
+}

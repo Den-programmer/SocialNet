@@ -10,6 +10,7 @@ interface IProfileMainContent {
     friends: Array<userType>
     background: string
     profile: profileType
+    gender: string
     followThunk: (userId: number) => void
     unfollowThunk: (userId: number) => void
     getIsUserFollowed: (userId: number) => void
@@ -26,9 +27,9 @@ const ProfileMainContent:React.FC<IProfileMainContent> = (props) => {
             updateStatus={props.updateStatusThunk}
             follow={props.followThunk}
             unfollow={props.unfollowThunk}
+            gender={props.gender}
             getIsUserFollowed={props.getIsUserFollowed} 
             contacts={props.profile.contacts} 
-            biography={props.profile.aboutMe} 
             profile={props.profile}/>
             <ProfileNav />
         </div>

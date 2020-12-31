@@ -5,8 +5,9 @@
 }
 .selected_page {
     font-weight:bold;
+    margin: 10px;
 }
-.pages button {
+.page {
     margin: 10px;
     color:#222222;
     background: none;

@@ -1,16 +1,23 @@
 import React from 'react'
-import classes from './options.module.css'
 import OptionsNav from './OptionsNavigation/optionsNav'
 import MainOptionsPage from './mainOptionsPage/mainOptionsPage'
+import { Container, makeStyles, Theme, createStyles } from '@material-ui/core'
 
 interface PropsType {}
 
+const useStyles = makeStyles((theme: Theme) => createStyles({
+    options: {
+        display: 'flex'
+    }
+}))
+
 const Options:React.FC<PropsType> = (props) => {
+    const classes = useStyles()
     return(
-        <div className={classes.options}>
+        <Container className={classes.options}>
             <OptionsNav />
             <MainOptionsPage />
-        </div>
+        </Container>
     )
 }
 

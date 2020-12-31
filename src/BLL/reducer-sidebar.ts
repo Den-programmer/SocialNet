@@ -62,7 +62,7 @@ const Sidebar = {
         {
             id: 7,
             name: 'Options',
-            path: '/Options',
+            path: '/Options/account',
             icon: SettingsIcon,
             isChosen: false
         }

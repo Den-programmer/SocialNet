@@ -18,9 +18,10 @@ import PlaylistsContainer from './Music/Playlists/playlistsContainer'
 import AlbumsContainer from './Music/Albums/albumsContainer'
 import FollowingContainer from './Music/Following/followingContainer'
 import MembersContainer from '../Members/membersContainer'
-import { makeStyles, createStyles, Theme } from '@material-ui/core'
+import { makeStyles, createStyles, Theme, Container } from '@material-ui/core'
 import ProfileMainContentContainer from './Profile/ProfileMainContent/profileMainContentContainer'
 import Wall from './Profile/Wall/wall'
+import SecurityOptions from './Options/mainOptionsPage/securityOptions/securityOptionsContainer'
 
 interface ArticlePropType {
     userDialogId: number
@@ -36,14 +37,14 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
             flexGrow: 1,
             transition: theme.transitions.create('margin', {
                 easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
+                duration: theme.transitions.duration.leavingScreen
             }),
             marginLeft: drawerWidth,
         },
         contentShift: {
             transition: theme.transitions.create('margin', {
                 easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
+                duration: theme.transitions.duration.enteringScreen
             }),
             marginLeft: 0,
         },
@@ -52,7 +53,8 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
         },
         displayContainer: {
             display: 'flex',
-            padding: '64px 0px'
+            paddingTop: '64px',
+            paddingBottom: '64px'
         },
         DataFriendsContainer: {
             padding: '64px 0px'
@@ -76,7 +78,7 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
                     <ProfileMainContentContainer /><div className="flex-container"><MessagesContainer /></div>
                 </div>)} />
                 {/* News! */}
-                <Route path='/News' render={() => (<News />)} />
+                <Route path='/News' render={() => (<div className={classes.container}><News /></div>)} />
                 {/* Music! */}
                 <Route path='/Music/likedTracks' render={() => (<div className={classes.container}><LikedTracksContainer /></div>)} />
                 <Route path='/Music/PlayLists' render={() => (<div className={classes.container}><PlaylistsContainer /></div>)} />
@@ -84,15 +86,19 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
                 <Route path='/Music/following' render={() => (<div className={classes.container}><FollowingContainer /></div>)} />
                 <Route exact path='/Music' render={() => (<div className={classes.container}><Music /></div>)} />
                 {/* Options! */}
-                <Route path="/Options/account" render={() => (<div className="flex-container">
+                <Route path="/Options/account" render={() => (<Container className={classes.displayContainer}>
                     <OptionsNav />
                     <AccountOptionsContainer />
-                </div>)} />
-                <Route path='/Options/general' render={() => (<div className="flex-container">
+                </Container>)} />
+                <Route path='/Options/general' render={() => (<Container className={classes.displayContainer}>
                     <OptionsNav />
                     <GeneralOptionsContainer />
-                </div>)} />
-                <Route path='/Options' render={() => (<OptionsContainer />)} />
+                </Container>)} />
+                <Route path='/Options/security' render={() => (<Container className={classes.displayContainer}>
+                    <OptionsNav />
+                    <SecurityOptions />
+                </Container>)} />
+                <Route path='/Options' render={() => (<div className={classes.displayContainer}><OptionsContainer /></div>)} />
                 {/* Notifications! */}
                 <Route path='/Notifications' render={() => (<div className={classes.container}>Here is Notifications in developing!</div>)} />
                 {/* Friends! */}

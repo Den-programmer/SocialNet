@@ -7,7 +7,7 @@ type FooterType = {
 }
 
 let Footer = {
-    year: 2020,
+    year: 2021,
     footInf: 'This is footer\'s information!',
     footLinks: [
         {

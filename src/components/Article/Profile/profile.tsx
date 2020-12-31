@@ -12,6 +12,7 @@ export interface IProfile {
     posts: Array<postType>
     friends: Array<userType>
     background: string
+    gender: string
     updateStatus: (status: string) => void
     getIsUserFollowed: (userId: number) => void
     follow: (userId: number) => void
@@ -25,15 +26,15 @@ const Profile: React.FC<IProfile> = (props) => {
             posts={props.posts} 
             friends={props.friends} 
             background={props.background} 
+            gender={props.gender}
             updateStatus={props.updateStatus}
             follow={props.follow}
             unfollow={props.unfollow}
             getIsUserFollowed={props.getIsUserFollowed} 
             contacts={props.profile.contacts} 
-            biography={props.profile.aboutMe} 
             profile={props.profile}/>
             <ProfileNav />
-            <Biography userName={props.profile.fullName} AboutMe={props.profile.aboutMe}/>
+            <Biography gender={props.gender} userName={props.profile.fullName} AboutMe={props.profile.aboutMe}/>
             <Contacts contacts={props.profile.contacts}/>
         </div>
     )

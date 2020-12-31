@@ -1,0 +1,22 @@
+@import '../../../../../../index.scss';
+
+.editContentItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .editContentItem_main {
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        .editContentItem_property {
+            width: 200px;
+            font-size: 14px;
+            color: #222222;
+            font-family: $Lato;
+        }
+        .editContentItem_editInput {
+            width: 400px;
+        }
+    }
+}
+

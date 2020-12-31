@@ -1,0 +1,21 @@
+@import '../../../../../../index.scss';
+
+.changeGender {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .changeGender_content {
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        .property {
+            width: 200px;
+            font-size: 14px;
+            color: #222222;
+            font-family: $Lato;
+        }
+        .selectList {
+            width: 400px;
+        }
+    }
+}

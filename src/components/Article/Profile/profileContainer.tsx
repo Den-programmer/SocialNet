@@ -7,7 +7,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { compose } from 'redux'
 import { getFriends } from '../../../BLL/selectors/users-selectors'
 import { getAuthorizedUserId } from '../../../BLL/selectors/auth-selectors'
-import { getUsersProfile, getPosts, getIsUserFollowedStatus, getUserBackground } from '../../../BLL/selectors/profile-selectors'
+import { getUsersProfile, getPosts, getIsUserFollowedStatus, getUserBackground, getGender } from '../../../BLL/selectors/profile-selectors'
 import { RootState } from '../../../BLL/redux'
 import { userType } from '../../../types/FriendsType/friendsType'
 import { postType } from '../../../BLL/reducer-profile'
@@ -25,6 +25,7 @@ interface IProfileContainer {
     profile: profileType
     posts: Array<postType>
     background: string
+    gender: string
 }
 
 interface IRouteParams {
@@ -57,6 +58,7 @@ class ProfileContainer extends React.Component<IProfileContainer & RouteComponen
         followed={this.props.followed} 
         getIsUserFollowed={this.props.getIsUserFollowed} 
         profile={this.props.profile} 
+        gender={this.props.gender}
         posts={this.props.posts} friends={this.props.friends} updateStatus={this.props.updateStatusThunk} 
         background={this.props.background}/>
     }
@@ -68,7 +70,8 @@ const mapStateToProps = (state: RootState) => ({
     friends: getFriends(state),
     authorizedUserId: getAuthorizedUserId(state),
     followed: getIsUserFollowedStatus(state),
-    background: getUserBackground(state)
+    background: getUserBackground(state),
+    gender: getGender(state)
 })
 
 export default compose<React.ComponentType>(
