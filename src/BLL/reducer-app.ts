@@ -131,9 +131,10 @@ export const initialize = (): ThunkType => async (dispatch, getState) => {
     let userId = getState().auth.userId
     let currentPage = getState().Friends.usersInf.currentPage
     let pageSize = getState().Friends.usersInf.pageSize
+    let term = getState().Friends.filter.term
     dispatch(setUserProfileThunk(userId))
     dispatch(getALLDialogs())
-    dispatch(requestUsers(pageSize, currentPage))
+    dispatch(requestUsers(pageSize, currentPage, term))
   }).then(() => {
     setTimeout(() => {
       let dialogId: number = getState().messagesPage.userDialogId

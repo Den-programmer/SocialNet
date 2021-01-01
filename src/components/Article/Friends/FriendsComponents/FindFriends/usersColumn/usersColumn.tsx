@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     container: {
         display: 'flex',
         flexWrap: 'wrap',
-        justifyContent: 'center'
+        justifyContent: 'space-around',
+        padding: '40px'
     }
 }))
 

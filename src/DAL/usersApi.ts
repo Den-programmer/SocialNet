@@ -8,8 +8,8 @@ type requestUsersDataType = {
 }
 
 export const UsersAPI = {
-    requestUsers: (pageSize: number, currentPage: number) => {
-        return instance.get<requestUsersDataType>(`users?count=${pageSize}&page=${currentPage}`).then(response => {
+    requestUsers: (pageSize: number, currentPage: number, term: string = '') => {
+        return instance.get<requestUsersDataType>(`users?count=${pageSize}&page=${currentPage}&term=${term}`).then(response => {
             return response.data
         })
     },

@@ -10,13 +10,14 @@ interface IFindFriends {
         pageSize: number
         currentPage: number
     } 
+    requestUsers: (pageSize: number, currentPage: number, term: string) => void
     changePage: (p: number) => void
 }
 
 const FindFriends: React.FC<IFindFriends> = (props) => {
     return (
         <div>
-            <SearchNewfriends />
+            <SearchNewfriends pageSize={props.usersInf.pageSize} currentPage={props.usersInf.currentPage} requestUsers={props.requestUsers}/>
             <UsersColumnContainer  />
             <Paginator pageSize={props.usersInf.pageSize} 
             totalItemsCount={props.usersInf.totalCount}

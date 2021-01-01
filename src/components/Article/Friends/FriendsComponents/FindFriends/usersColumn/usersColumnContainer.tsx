@@ -2,8 +2,8 @@ import React from 'react'
 import UsersColumn from './usersColumn'
 import Preloader from '../../../../../common/preloader/preloader'
 import { connect } from "react-redux"
-import { requestUsers, followThunk, unfollowThunk, actions } from "../../../../../../BLL/reducer-friends"
-import { getUsersInf, getUsers, getFollowingInProcess } from '../../../../../../BLL/selectors/users-selectors'
+import { requestUsers, followThunk, unfollowThunk, actions, FriendsFilter } from "../../../../../../BLL/reducer-friends"
+import { getUsersInf, getUsers, getFollowingInProcess, getUsersFilter } from '../../../../../../BLL/selectors/users-selectors'
 import { RootState } from '../../../../../../BLL/redux'
 import { userType } from '../../../../../../types/FriendsType/friendsType'
 import { startDialog } from '../../../../../../BLL/reducer-messages'
@@ -17,15 +17,16 @@ interface IUserColumnAPI {
     }
     followingInProcess: Array<number>
     users: Array<userType>
+    filter: FriendsFilter
     followThunk: (id: number) => void
     unfollowThunk: (id: number) => void
-    requestUsers: (pageSize: number, currentPage: number) => void
+    requestUsers: (pageSize: number, currentPage: number, term: string) => void
     startDialog: (userId: number) => void
 }
 
 class UsersColumnAPI extends React.Component<IUserColumnAPI> {
     requestUsers = () => {
-        return this.props.requestUsers(this.props.usersInf.pageSize, this.props.usersInf.currentPage)
+        return this.props.requestUsers(this.props.usersInf.pageSize, this.props.usersInf.currentPage, this.props.filter.term)
     }
     componentDidMount() {
         this.requestUsers()
@@ -46,7 +47,8 @@ class UsersColumnAPI extends React.Component<IUserColumnAPI> {
 const mapStateToProps = (state: RootState) => ({
     users: getUsers(state),
     usersInf: getUsersInf(state),
-    followingInProcess: getFollowingInProcess(state)
+    followingInProcess: getFollowingInProcess(state),
+    filter: getUsersFilter(state)
 })
 
 const { follow, unfollow } = actions

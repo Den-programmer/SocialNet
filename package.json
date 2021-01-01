@@ -21,6 +21,7 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/redux-form": "^8.3.0",
     "axios": "^0.19.2",
+    "formik": "^2.2.6",
     "gh-pages": "^2.2.0",
     "node-sass": "^4.14.1",
     "react": "^16.14.0",

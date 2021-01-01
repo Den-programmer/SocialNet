@@ -4,6 +4,10 @@ import { RootState, InferActionTypes } from './redux'
 import { ThunkAction } from 'redux-thunk'
 import { resultCode } from '../DAL/api'
 
+export type FriendsFilter = {
+    term: string
+}
+
 type FriendsType = {
     friends: Array<userType>
     friendsInf: null | object
@@ -15,6 +19,7 @@ type FriendsType = {
         currentPage: number
     }
     followingInProcess: Array<number>
+    filter: FriendsFilter
 }
 
 const Friends = {
@@ -27,7 +32,10 @@ const Friends = {
         pageSize: 12,
         currentPage: 1
     },
-    followingInProcess: []
+    followingInProcess: [],
+    filter: {
+        term: ''
+    }
 } as FriendsType
 
 const reducerFriends = (state = Friends, action: ActionTypes): FriendsType => {
@@ -98,6 +106,11 @@ const reducerFriends = (state = Friends, action: ActionTypes): FriendsType => {
             }
         default:
             return state
+        case `sn/Friends/SET_USERS_TERM`:
+            return {
+                ...state,
+                filter: { ...state.filter, term: action.term }
+            }    
     }
 }
 
@@ -117,21 +130,23 @@ export const actions = {
     setUsersInf: (data: setUsersInfData) => ({ type: `sn/Friends/SET-USERSINF`, data } as const),
     isFetching: (isFetching: boolean) => ({ type: `sn/Friends/IS_FETCHING`, isFetching } as const),
     toggleFollowingInProcess: (isFetching: boolean, userId: number) => ({ type: `sn/Friends/TOGGLE_IS_FOLLOWING_PROCESS`, isFetching, userId } as const),
-    setFriends: (users: Array<userType>) => ({ type: `sn/Friends/SET_FRIENDS`, users } as const)
+    setFriends: (users: Array<userType>) => ({ type: `sn/Friends/SET_FRIENDS`, users } as const),
+    setUsersTerm: (term: string) => ({ type: `sn/Friends/SET_USERS_TERM` , term } as const)
 }
 
 // Thunk Creators!
 
 type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionTypes>
 
-export const requestUsers = (pageSize: number, currentPage: number): ThunkType => async (dispatch) => {
+export const requestUsers = (pageSize: number, currentPage: number, term: string): ThunkType => async (dispatch) => {
     try {
         dispatch(actions.isFetching(true))
-        let data = await UsersAPI.requestUsers(pageSize, currentPage)
+        let data = await UsersAPI.requestUsers(pageSize, currentPage, term)
         dispatch(actions.isFetching(false))
         dispatch(actions.setUsers(data.items))
         dispatch(actions.setUsersInf(data))
         dispatch(actions.setFriends(data.items))
+        dispatch(actions.setUsersTerm(term))
         return data
     } catch (error) {
         alert(`Something's gone wrong, error status: ${error.status}`)

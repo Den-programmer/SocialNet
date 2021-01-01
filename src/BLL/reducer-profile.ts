@@ -233,7 +233,6 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
         })
       }   
     case `/sn/profilePage/CHANGE_GENDER`:
-      debugger
       return {
         ...state,
         gender: action.gender

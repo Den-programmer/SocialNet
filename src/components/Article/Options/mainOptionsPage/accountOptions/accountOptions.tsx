@@ -12,6 +12,7 @@ export interface IChangeOptions {
     property: string
     userName: string
     contacts: contactsType
+    gender: string
     accountOptionsMenu: Array<IAccountOption>
     saveProfile: (profile: saveProfileType) => void
     changeUserName: (userName: string) => void
@@ -124,7 +125,7 @@ const AccountOptions: React.FC<IAccountOptions> = (props) => {
         return (
             <div onClick={() => handleClick(item.id)} onMouseEnter={() => handleHover(item.id, true)} onMouseLeave={() => handleHover(item.id, false)} key={item.id} className={classes.accountOptions__itemWrapper}>
                 <div className={classes.accountOptions__item}>
-                    {item.isEdit ? <item.editContent changeGender={props.changeGender} userName={props.userName} contacts={props.contacts} property={item.property} 
+                    {item.isEdit ? <item.editContent changeGender={props.changeGender} gender={props.gender} userName={props.userName} contacts={props.contacts} property={item.property} 
                     setChangesToAccountOptionsMenu={setChangesToAccountOptionsMenu} accountOptionsMenu={accountOptionsMenu} 
                     saveProfile={props.saveProfile} changeUserName={props.changeUserName}/> :
                         <div className={classes.accountOptions__item_content}>

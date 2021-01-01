@@ -15,3 +15,7 @@ export const getUsers = (state: RootState) => {
 export const getFollowingInProcess = (state: RootState) => {
     return state.Friends.followingInProcess
 }  
+
+export const getUsersFilter = (state: RootState) => {
+    return state.Friends.filter
+}
