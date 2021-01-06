@@ -11,9 +11,11 @@ export const createFriendsNavBtn = (hint: string, link: string, nameOfBtn: strin
     )
 }
 
-export const createReviewChangesBtn = (func: (...args: any[]) => void, url: string) => {
+export const createReviewChangesBtn = (func: (...args: any[]) => void, url?: string, error?: string, currentPageUrl?: string) => {
+    const hasError = error && error !== ''
+    const currentPageUrlCheckout = currentPageUrl?currentPageUrl:'/'
     return (
-        <NavLink onClick={func} to={url}>
+        <NavLink onClick={func} to={hasError ? currentPageUrlCheckout : url?url:currentPageUrlCheckout}>
             <Button color="primary" variant="contained">Rewiew Change</Button>
         </NavLink>
     )

@@ -5,7 +5,6 @@ import { fontSizeObjectType } from '../types/AppTypes/appTypes'
 import { setUserProfileThunk } from "./reducer-profile"
 import { requestUsers } from "./reducer-friends"
 import { getALLDialogs, getDialogMessages } from "./reducer-messages"
-import { userDialogType } from "../types/MessagesTypes/messagesTypes"
 
 const SET_TEXT_ERROR = 'app/SET_TEXT_ERROR'
 

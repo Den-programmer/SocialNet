@@ -1,0 +1,74 @@
+@import '../../../index.scss';
+
+.options {
+    margin: 0px 20px;
+    width: 100%;
+    min-height: 100vh;
+    .options_itemWrapper {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #E3E3E3;
+        cursor: pointer;
+        .options_item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 50px;
+            width: 100%;
+            &:hover {
+                background-color: '#f5f6f7'; 
+            }
+            .options_item_content {
+                display: flex;
+                align-items: center;
+                padding: 0 10px;
+                .options_item_content_property {
+                    width: 200px;
+                    font-size: 14px;
+                    color: #222222;
+                    font-family: $Lato;
+                    text-transform: capitalize;
+                }
+                .options_item_content_value {
+                    width: 600px;
+                    font-size: 14px;
+                    color: #2D2D2D;
+                    font-family: $OpenSans;
+                }
+            }
+        }
+    }
+}
+
+
+//  Edit Content!
+
+.editContentItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .editContentItem_main {
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        .editContentItem_property {
+            width: 200px;
+            font-size: 14px;
+            color: #222222;
+            font-family: $Lato;
+            text-transform: capitalize;
+        }
+        .editContentItem_editInput {
+            width: 400px;
+        }
+    }
+}
+
+
+// Options error!
+
+.options_errorInput {
+    outline: none;
+    border: 2px solid #D40000;
+}

@@ -206,37 +206,37 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
         ...state,
         followed: action.followed
       }
-    case `/sn/profilePage/SET_IS_ADD_POST_WINDOW_OPEN`: 
+    case `/sn/profilePage/SET_IS_ADD_POST_WINDOW_OPEN`:
       return {
         ...state,
         isAddPostModalOpen: action.modalStatus
-      }  
-    case `/sn/profilePage/SET_IS__POST_MODAL_OPEN`: 
+      }
+    case `/sn/profilePage/SET_IS__POST_MODAL_OPEN`:
       return {
         ...state,
         isPostModalOpen: action.modalStatus
-      }  
+      }
     case `/sn/profilePage/CHANGE_PROFILE_NAVITEM_CHOSEN_STATUS`:
       return {
         ...state,
         profileNavigationMenu: state.profileNavigationMenu.map((item: profileNavItem) => {
-          if(item.id === action.itemId) return { ...item, isChosen: true }
+          if (item.id === action.itemId) return { ...item, isChosen: true }
           return { ...item, isChosen: false }
         })
-      } 
+      }
     case `/sn/profilePage/SET_STANDART_PROFILE_NAV_OPTIONS`:
       return {
         ...state,
         profileNavigationMenu: state.profileNavigationMenu.map((item: profileNavItem) => {
-          if(item.id === 2) return { ...item, isChosen: true }
+          if (item.id === 2) return { ...item, isChosen: true }
           return { ...item, isChosen: false }
         })
-      }   
+      }
     case `/sn/profilePage/CHANGE_GENDER`:
       return {
         ...state,
         gender: action.gender
-      }  
+      }
     default:
       return state
   }
@@ -293,13 +293,15 @@ export const setUserProfileThunk = (userId: number): ThunkType => async (dispatc
 }
 export const saveProfile = (profile: saveProfileType): ThunkType => async (dispatch, getState) => {
   try {
+    const profileState = getState().profilePage.profile
     const userId = getState().auth.userId
-    const profileStatus = getState().profilePage.profile.status
-    const userProfilePhoto = getState().profilePage.profile.photos
-    if(userId) {
+    const profileStatus = profileState.status
+    const aboutMe = profileState.aboutMe
+    const userProfilePhoto = profileState.photos
+    if (userId) {
       const trueProfile = {
         status: profileStatus,
-        aboutMe: 'I\'m the one who will destroy facebook!)))', // I\'m GODNESS!!!
+        aboutMe: aboutMe, 
         userId: userId,
         lookingForAJob: true,
         lookingForAJobDescription: 'I\'m developer that has some skills: JavaScript, React.Js, TypeScript, Redux, C#, HTML, CSS, BootsTrap, SCSS and many others!',
@@ -312,14 +314,46 @@ export const saveProfile = (profile: saveProfileType): ThunkType => async (dispa
         dispatch(setUserProfileThunk(userId))
       } else {
         const error = data.messages[0]
-        const action: any = stopSubmit('ChangeContacts', { _error: error })
-        dispatch(action)
+        dispatch(setTextError(error))
       }
     }
   } catch (error) {
     alert(`Something's gone wrong, error status: 500`)
   }
 }
+
+export const saveAboutMe = (aboutMe: string | null): ThunkType => async (dispatch, getState) => {
+  try {
+    const profileState = getState().profilePage.profile
+    const userId = getState().auth.userId
+    const profileStatus = profileState.status
+    const userProfilePhoto = profileState.photos
+    const contacts = profileState.contacts
+    const userName = profileState.fullName
+    if (userId) {
+      const trueProfile = {
+        status: profileStatus,
+        aboutMe: aboutMe,
+        userId: userId,
+        lookingForAJob: true,
+        lookingForAJobDescription: 'I\'m developer that has some skills: JavaScript, React.Js, TypeScript, Redux, C#, HTML, CSS, BootsTrap, SCSS and many others!',
+        fullName: userName,
+        contacts: contacts,
+        photos: userProfilePhoto
+      }
+      const data = await ProfileAPI.saveProfile(trueProfile)
+      if (data.resultCode === resultCode.Success) {
+        dispatch(setUserProfileThunk(userId))
+      } else {
+        const error = data.messages[0]
+        dispatch(setTextError(error))
+      }
+    }
+  } catch (error) {
+    alert(`Something's gone wrong, error status: 500`)
+  }
+}
+
 export const setStatusThunk = (userId: number): ThunkType => async (dispatch) => {
   try {
     const data = await ProfileAPI.getStatus(userId)

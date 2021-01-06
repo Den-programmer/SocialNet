@@ -22,6 +22,7 @@ import { makeStyles, createStyles, Theme, Container } from '@material-ui/core'
 import ProfileMainContentContainer from './Profile/ProfileMainContent/profileMainContentContainer'
 import Wall from './Profile/Wall/wall'
 import SecurityOptions from './Options/mainOptionsPage/securityOptions/securityOptionsContainer'
+import ContactsOptions from './Options/mainOptionsPage/ContactsOptions/contactsOptionsContainer'
 
 interface ArticlePropType {
     userDialogId: number
@@ -97,6 +98,10 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
                 <Route path='/Options/security' render={() => (<Container className={classes.displayContainer}>
                     <OptionsNav />
                     <SecurityOptions />
+                </Container>)} />
+                <Route path='/Options/contacts' render={() => (<Container className={classes.displayContainer}>
+                    <OptionsNav />
+                    <ContactsOptions />
                 </Container>)} />
                 <Route path='/Options' render={() => (<div className={classes.displayContainer}><OptionsContainer /></div>)} />
                 {/* Notifications! */}

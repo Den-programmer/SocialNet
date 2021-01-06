@@ -1,97 +1,66 @@
 import React, { useState } from 'react'
 import EditPhoto from './editPhoto/editPhoto'
-import ChangeContacts from './ChangeContacts/changeContacts'
 import ChangeUserName from './ChangeUserName/changeUserName'
 import { contactsType, saveProfileType } from '../../../../../BLL/reducer-profile'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import OptionsTitle from './OptionsTitle/optionsTitle'
 import EditIcon from '@material-ui/icons/Edit'
 import ChangeGender from './ChangeGender/changeGender'
+import ChangeBiography from './ChangeBiography/changeBiography'
 
 export interface IChangeOptions {
     property: string
     userName: string
     contacts: contactsType
     gender: string
+    aboutMe: string | null
     accountOptionsMenu: Array<IAccountOption>
     saveProfile: (profile: saveProfileType) => void
     changeUserName: (userName: string) => void
     changeGender: (gender: string) => void
     setChangesToAccountOptionsMenu: (accountOptions: Array<IAccountOption>) => void
+    saveAboutMe: (aboutMe: string | null) => void
 }
 
 interface IAccountOptions {
-    messageError: string | null
+    messageError: string
     photo: any | null
     userName: string
     gender: string
+    aboutMe: string | null
     contacts: contactsType
     setUserPhotoThunk: (photo: File) => void
     changeUserName: (userName: string) => void
     changeGender: (gender: string) => void
     saveProfile: (profile: saveProfileType) => void
+    saveAboutMe: (aboutMe: string | null) => void
 }
 
 export interface IAccountOption {
     id: number
     property: string
-    value: string
+    value: string | null
     isEditIconActive: boolean
     isEdit: boolean
     editContent: any
 }
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-    container: {
-        margin: '0px 20px',
-        width: '100%',
-        minHeight: '100vh'
-    },
-    accountOptions__itemWrapper: {
-        height: '70px',
-        display: 'flex',
-        alignItems: 'center',
-        borderBottom: '1px solid #E3E3E3',
-        cursor: 'pointer'
-    },
-    accountOptions__item: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        height: '50px',
-        width: '100%',
-        '&:hover': {
-            backgroundColor: '#f5f6f7'
-        }
-    },
-    accountOptions__item_content: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 10px'
-    },
-    accountOptions__item_property: {
-        width: '200px',
-        fontSize: '14px',
-        color: '#222222',
-        fontFamily: 'Lato, sans-serif'
-    },
-    accountOptions__item_value: {
-        width: '600px',
-        fontSize: '14px',
-        color: '#2D2D2D',
-        fontFamily: 'Open Sans, sans-serif'
-    },
+export const useEditIconStyles = makeStyles((theme: Theme) => createStyles({
     editIcon: {
         padding: '0 10px',
         color: '#4DCADD'
+    },
+    errorIcon: {
+        color: '#D40000',
+        padding: '0 20px' 
     }
 }))
 
 const AccountOptions: React.FC<IAccountOptions> = (props) => {
-    const classes = useStyles()
+    const classes = useEditIconStyles()
     const [accountOptionsMenu, setChangesToAccountOptionsMenu] = useState<Array<IAccountOption>>([
         {
-            id: 1,
+            id: 1, 
             property: 'Nickname',
             value: props.userName,
             isEditIconActive: false,
@@ -105,6 +74,14 @@ const AccountOptions: React.FC<IAccountOptions> = (props) => {
             isEditIconActive: false,
             isEdit: false,
             editContent: ChangeGender
+        },
+        {
+            id: 3,
+            property: 'About Me',
+            value: props.aboutMe,
+            isEditIconActive: false,
+            isEdit: false,
+            editContent: ChangeBiography
         }
     ])
     const menuItems = accountOptionsMenu.map((item: IAccountOption) => {
@@ -123,14 +100,14 @@ const AccountOptions: React.FC<IAccountOptions> = (props) => {
             setChangesToAccountOptionsMenu(array)
         }
         return (
-            <div onClick={() => handleClick(item.id)} onMouseEnter={() => handleHover(item.id, true)} onMouseLeave={() => handleHover(item.id, false)} key={item.id} className={classes.accountOptions__itemWrapper}>
-                <div className={classes.accountOptions__item}>
-                    {item.isEdit ? <item.editContent changeGender={props.changeGender} gender={props.gender} userName={props.userName} contacts={props.contacts} property={item.property} 
+            <div onClick={() => handleClick(item.id)} onMouseEnter={() => handleHover(item.id, true)} onMouseLeave={() => handleHover(item.id, false)} key={item.id} className="options_itemWrapper">
+                <div className="options_item">
+                    {item.isEdit ? <item.editContent saveAboutMe={props.saveAboutMe} aboutMe={props.aboutMe} changeGender={props.changeGender} gender={props.gender} userName={props.userName} contacts={props.contacts} property={item.property} 
                     setChangesToAccountOptionsMenu={setChangesToAccountOptionsMenu} accountOptionsMenu={accountOptionsMenu} 
                     saveProfile={props.saveProfile} changeUserName={props.changeUserName}/> :
-                        <div className={classes.accountOptions__item_content}>
-                            <h5 className={classes.accountOptions__item_property}>{item.property}</h5>
-                            <p className={classes.accountOptions__item_value}>{item.value}</p>
+                        <div className="options_item_content">
+                            <h5 className="options_item_content_property">{item.property}</h5>
+                            <p className="options_item_content_value">{item.value}</p>
                         </div>}
                     {item.isEditIconActive && <EditIcon className={classes.editIcon} />}
                 </div>
@@ -138,13 +115,12 @@ const AccountOptions: React.FC<IAccountOptions> = (props) => {
         )
     })
     return (
-        <div className={classes.container}>
+        <div className="options">
             <OptionsTitle title="Profile Options" />
             <div>
                 {menuItems}
             </div>
             {/* <EditPhoto error={props.messageError} setUserPhoto={props.setUserPhotoThunk} photo={props.photo}/> */}
-            {/* <ChangeContacts userName={props.userName} saveProfile={props.saveProfile} contacts={props.contacts}/> */}
         </div>
     )
 }

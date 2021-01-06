@@ -1,22 +1,24 @@
 @import '../../../../../../index.scss';
 
-.editContentItem {
+.changeBiography {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .editContentItem_main {
+    .changeBiography_content {
         display: flex;
         align-items: center;
         padding: 0 10px;
-        .editContentItem_property {
+        .property {
             width: 200px;
             font-size: 14px;
             color: #222222;
             font-family: $Lato;
         }
-        .editContentItem_editInput {
+        .editInputWrapper {
             width: 400px;
+            .editInput {
+
+            }
         }
     }
 }
-

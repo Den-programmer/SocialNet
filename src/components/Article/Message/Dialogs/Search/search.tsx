@@ -1,10 +1,10 @@
 import React from 'react'
-import { createStyles, fade, Theme, withStyles, makeStyles } from '@material-ui/core/styles'
-import { InputBase, OutlinedInput } from '@material-ui/core'
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
+import { OutlinedInput, Button } from '@material-ui/core'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchIcon from '@material-ui/icons/Search'
 
-interface MessagesSearchType { }
+interface IMessagesSearch { }
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     search: {
@@ -20,12 +20,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     }
 }))
 
-const Search: React.FC<MessagesSearchType> = (props) => {
+
+const Search: React.FC<IMessagesSearch> = (props) => {
     const classes = useStyles()
     return (
         <div className={classes.search}>
-            <OutlinedInput className={classes.field} placeholder="Search Messages..." 
-            startAdornment={<InputAdornment position="start"><SearchIcon className={classes.searchIcon}/></InputAdornment>}/>
+            <OutlinedInput className={classes.field} placeholder="Search Messages..."
+            startAdornment={<InputAdornment position="start"><SearchIcon className={classes.searchIcon} /></InputAdornment>} />
         </div>
     )
 }

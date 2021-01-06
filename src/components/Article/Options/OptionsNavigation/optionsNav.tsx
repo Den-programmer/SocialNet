@@ -76,6 +76,10 @@ const OptionsNav: React.FC<PropsType> = (props) => {
                     <AccountBoxIcon  className={classes.navIcon}/>
                     <p className={classes.navlink}>Security options</p>
                 </NavLink>
+                <NavLink to="/Options/contacts" className={classes.navItem}>
+                    <AccountBoxIcon  className={classes.navIcon}/>
+                    <p className={classes.navlink}>Contacts options</p>
+                </NavLink>
             </nav>
         </div>
     )
