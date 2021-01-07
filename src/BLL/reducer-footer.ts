@@ -6,32 +6,32 @@ type FooterType = {
     footLinks: Array<footLinkType>
 }
 
-let Footer = {
+const Footer = {
     year: 2021,
     footInf: 'This is footer\'s information!',
     footLinks: [
         {
-            id: 1,
+            id: 7001,
             name: 'Profile',
             path: "/Profile"
         },
         {
-            id: 2,
+            id: 7002,
             name: 'Messages',
             path: "/Messages"
         },
         {
-            id: 3,
+            id: 7003,
             name: 'News',
             path: "/News"
         },
         {
-            id: 4,
+            id: 7004,
             name: 'Music',
             path: "/Music"
         },
         {
-            id: 5,
+            id: 7005,
             name: 'Options',
             path: "/Options"
         }

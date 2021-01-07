@@ -1,20 +1,22 @@
 import React from 'react'
 import { navLinkType } from '../../types/SidebarTypes/sidebarTypes'
-import { Drawer, List, makeStyles, Theme, createStyles, Divider, IconButton, useTheme, ListItem, ListItemText } from '@material-ui/core'
-import { NavLink } from 'react-router-dom'
+import { Drawer, List, makeStyles, Theme, createStyles, Divider, IconButton, useTheme } from '@material-ui/core'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import SidebarItem from './SidebarItem/sidebarItem'
+import { RouteComponentProps } from 'react-router-dom'
 
 interface SideBarPropsType {
   navLinks: Array<navLinkType>
   isSidebarOpen: boolean
   sidebarWidth: number
+  changeProfileNavItemChosenStatus: (itemId: number) => void
   changeSidebarIsOpenStatus: (status: boolean) => void
   choosePage: (isChosen: number) => void
 }
 
-const SideBar: React.FC<SideBarPropsType> = ({ navLinks, isSidebarOpen, changeSidebarIsOpenStatus, choosePage, sidebarWidth }) => {
-  const drawerWidth = sidebarWidth
+const SideBar: React.FC<SideBarPropsType & RouteComponentProps> = (props) => {
+  const drawerWidth = props.sidebarWidth
 
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,39 +41,6 @@ const SideBar: React.FC<SideBarPropsType> = ({ navLinks, isSidebarOpen, changeSi
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center'
-      },
-      navItemWrapper: {
-        width: '100%',
-        '&:hover': {
-          transition: 'all .5s linear',
-          backgroundColor: '#222F40'
-        }
-      },
-      ActiveNavItemWrapper: {
-        width: '100%',
-        backgroundColor: '#222F40'
-      },
-      navItem: {
-        display: 'flex',
-        justifyContent: 'right',
-        borderBottom: '1px solid #45576D',
-        padding: theme.spacing(2, 0),
-        marginLeft: '20px'
-      },
-      navLink: {
-        display: 'flex',
-        alignItems: 'center',
-        color: '#366076',
-        width: '100%'
-      },
-      navLinkIcon: {
-        color: '#FFFFFF',
-        fontSize: '15px'
-      },
-      navLink_text: {
-        color: '#FFFFFF',
-        margin: theme.spacing(0, 1),
-        fontSize: '15px'
       }
     })
   )
@@ -79,17 +48,12 @@ const SideBar: React.FC<SideBarPropsType> = ({ navLinks, isSidebarOpen, changeSi
   const classes = useStyles()
   const theme = useTheme()
 
-  const handleDrawerClose = () => changeSidebarIsOpenStatus(false)
-  const navItems = navLinks.map(Link => {
-    return <NavLink key={Link.id} className={classes.navLink} to={Link.path}><div onClick={() => choosePage(Link.id)}
-      className={Link.isChosen ? classes.ActiveNavItemWrapper : classes.navItemWrapper}>
-      <ListItem className={classes.navItem}>
-        <Link.icon />
-        <ListItemText className={classes.navLink_text}>{Link.name}</ListItemText>
-      </ListItem></div></NavLink>
+  const handleDrawerClose = () => props.changeSidebarIsOpenStatus(false)
+  const navItems = props.navLinks.map(Link => {
+    return <SidebarItem changeProfileNavItemChosenStatus={props.changeProfileNavItemChosenStatus} location={props.location.pathname} key={Link.id} id={Link.id} isChosen={Link.isChosen} name={Link.name} choosePage={props.choosePage} path={Link.path} icon={Link.icon}/>
   })
   return (
-    <Drawer className={classes.drawer} variant="persistent" open={isSidebarOpen} classes={{ paper: classes.drawerPaper }}>
+    <Drawer className={classes.drawer} variant="persistent" open={props.isSidebarOpen} classes={{ paper: classes.drawerPaper }}>
       <div className={classes.drawerHeader}>
         <IconButton onClick={handleDrawerClose}>
           {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}

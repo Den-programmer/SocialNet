@@ -105,37 +105,37 @@ const profilePage = {
   },
   profileNavigationMenu: [
     {
-      id: 1,
+      id: 7012,
       title: 'Wall',
       isChosen: false,
       path: '/Wall'
     },
     {
-      id: 2,
+      id: 7001,
       title: 'Profile',
       isChosen: true,
       path: '/Profile'
     },
     {
-      id: 3,
+      id: 7013,
       title: 'Notifications',
       isChosen: false,
       path: '/Notifications'
     },
     {
-      id: 4,
+      id: 7002,
       title: 'Messages',
       isChosen: false,
       path: '/Messages'
     },
     {
-      id: 5,
+      id: 7006,
       title: 'Friends',
       isChosen: false,
       path: '/Friends/DataFriends'
     },
     {
-      id: 6,
+      id: 7014,
       title: 'Following',
       isChosen: false,
       path: '/'

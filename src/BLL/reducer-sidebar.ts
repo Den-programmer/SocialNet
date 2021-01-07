@@ -18,49 +18,49 @@ type SidebarType = {
 const Sidebar = {
     navigationLinks: [
         {
-            id: 1,
+            id: 7001,
             name: 'Profile',
             path: '/Profile',
             icon: AccountCircleIcon,
             isChosen: true
         },
         {
-            id: 2,
+            id: 7002,
             name: 'Messages',
             path: '/Messages',
             icon: EmailIcon,
             isChosen: false
         },
         {
-            id: 3,
+            id: 7006,
             name: 'Friends',
             path: '/Friends/DataFriends',
             icon: PeopleIcon,
             isChosen: false
         },
         {
-            id: 4,
+            id: 7013,
             name: 'Notifications',
             path: '/Notifications',
             icon: NotificationsIcon,
             isChosen: false
         },
         {
-            id: 5,
+            id: 7003,
             name: 'News',
             path: '/News',
             icon: NewReleasesIcon,
             isChosen: false
         },
         {
-            id: 6,
+            id: 7004,
             name: 'Music',
             path: '/Music',
             icon: MusicNoteIcon,
             isChosen: false
         },
         {
-            id: 7,
+            id: 7015,
             name: 'Options',
             path: '/Options/account',
             icon: SettingsIcon,

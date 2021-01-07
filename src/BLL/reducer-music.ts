@@ -63,27 +63,27 @@ type musicPageType = {
 const musicPage = {
     navLinks: [
         {
-            id: 1,
+            id: 7004,
             title: 'Music',
             path: '/Music'
         },
         {
-            id: 2,
+            id: 7008,
             title: 'Liked Tracks',
             path: '/Music/likedTracks'
         },
         {
-            id: 3,
+            id: 7009,
             title: 'PlayLists',
             path: '/Music/PlayLists'
         },
         {
-            id: 4,
+            id: 7010,
             title: 'Albums',
             path: '/Music/Albums'
         },
         {
-            id: 5,
+            id: 7011,
             title: 'Following',
             path: '/Music/following'
         }

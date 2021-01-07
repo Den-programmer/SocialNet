@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react'
-import { Toolbar, makeStyles, createStyles, Theme, List, ListItem, ListItemText } from '@material-ui/core'
-import { NavLink } from 'react-router-dom'
+import React from 'react'
+import { Toolbar, makeStyles, createStyles, Theme, List } from '@material-ui/core'
+import { RouteComponentProps } from 'react-router-dom'
 import { profileNavItem } from '../../../../BLL/reducer-profile'
+import ProfileNavItem from './profileNavItem/profileNavItem'
 
 interface IProfileNav {
     profileNav: Array<profileNavItem>
     changeProfileNavItemChosenStatus: (itemId: number) => void
     setStandartProfileNavOptions: () => void
+    choosePage: (LinkId: number) => void
 }
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
+export const useProfileNavStyles = makeStyles((theme: Theme) => createStyles({
     navigation: {
         backgroundColor: '#FAFAFA',
         padding: '0px 200px'
@@ -48,18 +50,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     }
 }))
 
-const ProfileNav: React.FC<IProfileNav> = ({ profileNav, changeProfileNavItemChosenStatus, setStandartProfileNavOptions }) => {
-    useEffect(() => {
-        setStandartProfileNavOptions()
-    }, [])
-    const classes = useStyles()
-    const navItems = profileNav.map((item: profileNavItem) => {
+const ProfileNav: React.FC<IProfileNav & RouteComponentProps> = (props) => {
+    const classes = useProfileNavStyles()
+    const navItems = props.profileNav.map((item: profileNavItem) => {
         return (
-            <NavLink onClick={() => changeProfileNavItemChosenStatus(item.id)} key={item.id} className={item.isChosen ? classes.navListLinkActive : classes.navListLink} to={item.path}>
-                <ListItem className={item.isChosen ? classes.navListItemActive : classes.navListItem}>
-                    <ListItemText>{item.title}</ListItemText>
-                </ListItem>
-            </NavLink>
+            <ProfileNavItem choosePage={props.choosePage} location={props.location.pathname} changeProfileNavItemChosenStatus={props.changeProfileNavItemChosenStatus} key={item.id} id={item.id} title={item.title} isChosen={item.isChosen} path={item.path}/>
         )
     })
     return (
