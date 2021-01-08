@@ -1,15 +1,12 @@
 import { connect } from 'react-redux'
 import GeneralOptions from './generalOptions'
-import { actions } from '../../../../../BLL/reducer-app'
 import { RootState } from '../../../../../BLL/redux'
-import { getFontSizeValues } from '../../../../../BLL/selectors/selectors'
 
-let mapStateToProps = (state: RootState) => ({
-    fontSizeValues: getFontSizeValues(state)
+const mapStateToProps = (state: RootState) => ({
+
 })
 
-const { setFontSize } = actions
 
-const GeneralOptionsContainer = connect(mapStateToProps, { setFontSize })(GeneralOptions)
+const GeneralOptionsContainer = connect(mapStateToProps, {  })(GeneralOptions)
 
 export default GeneralOptionsContainer

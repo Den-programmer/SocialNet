@@ -9,7 +9,7 @@ import { connect, Provider } from 'react-redux'
 import { initialize } from './BLL/reducer-app'
 import Preloader from './components/common/preloader/preloader'
 import Authentication from './components/Authentication/authentication'
-import { getAppInitializationStatus, getAppFontSize } from './BLL/selectors/selectors'
+import { getAppInitializationStatus } from './BLL/selectors/selectors'
 import { getIsAuthStatus } from './BLL/selectors/auth-selectors'
 import SideBar from './components/SideBar/SideBarContainer'
 import { actions } from './BLL/reducer-app'
@@ -18,7 +18,6 @@ import { getSidebarWidth, getIsSidebarOpenStatus } from './BLL/selectors/sidebar
 interface IApp {
   Initialized: boolean
   isAuth: boolean
-  size: number
   drawerWidth: number
   isSidebarOpen: boolean
   initialize: () => void
@@ -26,7 +25,6 @@ interface IApp {
 }
 
 const App: React.FC<IApp> = (props) => {
-  const style = { fontSize: props.size + 'px !important' }
   useEffect(() => {
     props.initialize()
     const date = new Date()
@@ -41,7 +39,7 @@ const App: React.FC<IApp> = (props) => {
   }
   return (
     <BrowserRouter><Provider store={store}>
-      {props.isAuth ? <div style={style} className="App">
+      {props.isAuth ? <div className="App">
         <SideBar />
         <div>
           <Header />
@@ -58,7 +56,6 @@ const App: React.FC<IApp> = (props) => {
 const mapStateToProps = (state: RootState) => ({
   Initialized: getAppInitializationStatus(state),
   isAuth: getIsAuthStatus(state),
-  size: getAppFontSize(state),
   drawerWidth: getSidebarWidth(state),
   isSidebarOpen: getIsSidebarOpenStatus(state)
 })

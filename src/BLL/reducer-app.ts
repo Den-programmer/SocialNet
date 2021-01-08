@@ -1,21 +1,15 @@
 import { authentication } from "./reducer-auth"
 import { ThunkAction } from "redux-thunk"
 import { RootState, InferActionTypes } from "./redux"
-import { fontSizeObjectType } from '../types/AppTypes/appTypes'
 import { setUserProfileThunk } from "./reducer-profile"
 import { requestUsers } from "./reducer-friends"
 import { getALLDialogs, getDialogMessages } from "./reducer-messages"
 
 const SET_TEXT_ERROR = 'app/SET_TEXT_ERROR'
 
-type optionsType = {
-  fontSize: Array<fontSizeObjectType>
-  appFontSize: number
-}
 
 type appStateType = {
   isInitialized: boolean
-  options: optionsType
   messageError: string
   isModalOpen: boolean
   date: string
@@ -23,67 +17,18 @@ type appStateType = {
 
 const AppState = {
   isInitialized: false,
-  options: {
-    fontSize: [
-      {
-        id: 1,
-        title: 'ExtraSmall',
-        size: 10
-      },
-      {
-        id: 2,
-        title: 'Small',
-        size: 12
-      },
-      {
-        id: 3,
-        title: 'Normal',
-        size: 16
-      },
-      {
-        id: 4,
-        title: 'Enlarged',
-        size: 20
-      },
-      {
-        id: 5,
-        title: 'Large',
-        size: 30
-      },
-      {
-        id: 6,
-        title: 'ExtraLarge',
-        size: 40
-      },
-      {
-        id: 7,
-        title: 'MegaLarge',
-        size: 50
-      }
-    ],
-    appFontSize: 16
-  },
   messageError: '',
   isModalOpen: false,
   date: ''
 } as appStateType
 
 const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
-  let stateCopy = { ...state }
-  stateCopy.options = { ...state.options }
-  stateCopy.options.fontSize = [...state.options.fontSize]
   switch (action.type) {
     case `app/SET_INITIALIZED`:
       return {
         ...state,
         isInitialized: true
       }
-    case `app/SET_FONT_SIZE`:
-      stateCopy.options.fontSize.forEach(item => {
-        if (item.id === action.id) stateCopy.options.appFontSize = item.size
-      })
-
-      return stateCopy;
     case SET_TEXT_ERROR:
       return {
         ...state,
@@ -110,7 +55,6 @@ type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
 
 export const actions = {
   initializedSuccessful: () => ({ type: `app/SET_INITIALIZED` } as const),
-  setFontSize: (id: number) => ({ type: `app/SET_FONT_SIZE`, id } as const),
   setIsModalOpenStatus: (modalStatus: boolean) => ({ type: `app/SET_IS_MODAL_OPEN_STATUS`, modalStatus } as const),
   getCurrentDate: (date: string) => ({ type: `app/SET_CURRENT_DATE`, date } as const)
 }

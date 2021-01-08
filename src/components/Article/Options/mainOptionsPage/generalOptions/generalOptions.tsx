@@ -1,21 +1,17 @@
 import React from 'react'
-import classes from './generalOptions.module.css'
-import ChangeFontSize from './ChangeFontSize/changeFontSize'
-import GeneralOptionsTitle from './GeneralOptionsTitle/generalOptionsTitle'
-import { fontSizeObjectType } from '../../../../../types/AppTypes/appTypes'
 
-interface GeneralOptionsPropsType {
-    fontSizeValues: Array<fontSizeObjectType>
-    setFontSize: (id: number) => void
+interface IGeneralOptions {
+
 }
 
-const GeneralOptions:React.FC<GeneralOptionsPropsType> = (props) => {
+const GeneralOptions:React.FC<IGeneralOptions> = (props) => {
+    const temporaryStyle = { height: '100vh' }
     return (
-        <div className={classes.generalOptions}>
-            <GeneralOptionsTitle />
-            <ChangeFontSize setFontSize={props.setFontSize} fontSizeValues={props.fontSizeValues}/>
+        <div style={temporaryStyle}>
+            In developing...
         </div>
     )
 }
+
 
 export default GeneralOptions
