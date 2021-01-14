@@ -4,6 +4,7 @@ import { setUserPhotoThunk, saveProfile, actions, saveAboutMe } from '../../../.
 import { getMessageError } from '../../../../../BLL/selectors/selectors'
 import { getUsersSmallPhoto, getUsersName, getContacts, getGender, getBiography } from '../../../../../BLL/selectors/profile-selectors'
 import { RootState } from '../../../../../BLL/redux'
+import { actions as actions2 } from '../../../../../BLL/reducer-notifications'
 
 const mapStateToProps = (state: RootState) => ({
     photo: getUsersSmallPhoto(state),
@@ -15,7 +16,8 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const { changeUserName, changeContacts, changeGender } = actions
+const { addNotification } = actions2 
 
-const AccountOptionsContainer = connect(mapStateToProps, { setUserPhotoThunk, changeUserName, changeContacts, saveProfile, changeGender, saveAboutMe })(AccountOptions)
+const AccountOptionsContainer = connect(mapStateToProps, { addNotification, setUserPhotoThunk, changeUserName, changeContacts, saveProfile, changeGender, saveAboutMe })(AccountOptions)
 
 export default AccountOptionsContainer

@@ -7,9 +7,9 @@ export type notificationType = {
   id: number
   isChecked: boolean
   type: 'Profile' | 'Messages' | 'Friends' | 'News'
+  author?: string | null
+  avatar?: string | null
   title: string | null
-  author: string | null
-  avatar: string | File | null
   pageUrl: string | null
 }
 
@@ -19,17 +19,7 @@ type notificationsType = {
 }
 
 const notificationsPage = {
-  notifications: [
-    {
-      id: 1,
-      isChecked: false,
-      type: 'Profile',
-      title: 'Notication',
-      author: null,
-      avatar: null,
-      pageUrl: '/Profile'
-    }
-  ],
+  notifications: [],
   isMainCheckboxAcvtive: false
 } as notificationsType
 
@@ -37,6 +27,18 @@ type ActionTypes = InferActionTypes<typeof actions>
 
 const reducerNotifications = (state = notificationsPage, action: ActionTypes): notificationsType => {
   switch (action.type) {
+    case `/sn/notificationsPage/ADD-NoTIFICATION`:
+      const newNotification = {
+        id: state.notifications.length + 1,
+        isChecked: false,
+        type: action.itemType,
+        title: action.title,
+        pageUrl: action.pageUrl ? action.pageUrl : null
+      }
+      return {
+        ...state,
+        notifications: [...state.notifications, newNotification]
+      }
     case `/sn/notificationsPage/SET-NOTIFICATIONS-CHOSEN-STATUS`:
       return {
         ...state,
@@ -66,7 +68,7 @@ const reducerNotifications = (state = notificationsPage, action: ActionTypes): n
         ...state,
         notifications: [],
         isMainCheckboxAcvtive: false
-      }  
+      }
     default:
       return state
   }
@@ -78,7 +80,8 @@ export const actions = {
   setNotificationsChosenStatus: (status: boolean) => ({ type: `/sn/notificationsPage/SET-NOTIFICATIONS-CHOSEN-STATUS`, status } as const),
   setNotificationStatus: (itemId: number) => ({ type: `/sn/notificationsPage/SET-NOTIFICATIONS-STATUS`, itemId } as const),
   deleteNotifications: (itemId: number) => ({ type: `/sn/notificationsPage/DELETE-NOTIFICATIONS`, itemId } as const),
-  deleteAllNotifications: () => ({ type: `/sn/notificationsPage/DELETE-ALL-NOTIFICATIONS` } as const)
+  deleteAllNotifications: () => ({ type: `/sn/notificationsPage/DELETE-ALL-NOTIFICATIONS` } as const),
+  addNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => ({ type: `/sn/notificationsPage/ADD-NoTIFICATION`, title, pageUrl, itemType } as const)
 }
 
 export default reducerNotifications

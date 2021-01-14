@@ -12,6 +12,7 @@ interface IContactsOptions {
     contacts: contactsType
     error: string 
     saveProfile: (profile: saveProfileType) => void
+    addNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'News' | 'Friends') => void
 }
 
 export interface ICurrentContact {
@@ -53,7 +54,7 @@ const ContactsOptions: React.FC<IContactsOptions & RouteComponentProps> = (props
         return (
             <div key={item.id} onClick={() => handleClick(item.id)} onMouseEnter={() => handleHover(item.id, true)} onMouseLeave={() => handleHover(item.id, false)} className="options_itemWrapper">
                 <div className="options_item">
-                    {item.isEdit ? <ChangeContact error={props.error} currentPageUrl={props.location.pathname} key={item.id} id={item.id} 
+                    {item.isEdit ? <ChangeContact addNotification={props.addNotification} error={props.error} currentPageUrl={props.location.pathname} key={item.id} id={item.id} 
                     property={item.property} userName={props.userName} currentContacts={currentContacts} setCurrentContacts={setCurrentContacts} value={item.value} saveProfile={props.saveProfile}/> : <div className="options_item_content">
                         <h5 className="options_item_content_property">{item.property}</h5>
                         <p className="options_item_content_value">{item.value ? item.value : 'Not provided'}</p>

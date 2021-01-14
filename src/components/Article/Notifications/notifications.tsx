@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import classes from './notifications.module.scss'
 import { makeStyles, createStyles, Theme, Container, Checkbox, Button } from '@material-ui/core'
 import { notificationType } from '../../../BLL/reducer-notifications'
-import noNotifications from './images/no-notifications.png'
 import NotificationsOffIcon from '@material-ui/icons/NotificationsOff'
 
 interface INotifications {
@@ -70,7 +69,7 @@ const Notifications: React.FC<INotifications> = (props) => {
                     {notificationsItems.length !== 0 ? <div className={classes.notificationsList}>
                         {notificationsItems}
                     </div> : <div className={classes.noNotifications}>
-                        <NotificationsOffIcon className={s.notificationsIcon}/>
+                        <NotificationsOffIcon className={s.notificationsIcon} />
                         <h4 className={classes.noNotifications__title}>No notifications yet!</h4>
                     </div>}
                 </div>

@@ -18,6 +18,7 @@ export interface IChangeOptions {
     saveProfile: (profile: saveProfileType) => void
     changeUserName: (userName: string) => void
     changeGender: (gender: string) => void
+    addNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'Friends' | 'News') => void
     setChangesToAccountOptionsMenu: (accountOptions: Array<IAccountOption>) => void
     saveAboutMe: (aboutMe: string | null) => void
 }
@@ -33,6 +34,7 @@ interface IAccountOptions {
     changeUserName: (userName: string) => void
     changeGender: (gender: string) => void
     saveProfile: (profile: saveProfileType) => void
+    addNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'Friends' | 'News') => void
     saveAboutMe: (aboutMe: string | null) => void
 }
 
@@ -102,7 +104,7 @@ const AccountOptions: React.FC<IAccountOptions> = (props) => {
         return (
             <div onClick={() => handleClick(item.id)} onMouseEnter={() => handleHover(item.id, true)} onMouseLeave={() => handleHover(item.id, false)} key={item.id} className="options_itemWrapper">
                 <div className="options_item">
-                    {item.isEdit ? <item.editContent saveAboutMe={props.saveAboutMe} aboutMe={props.aboutMe} changeGender={props.changeGender} gender={props.gender} userName={props.userName} contacts={props.contacts} property={item.property} 
+                    {item.isEdit ? <item.editContent addNotification={props.addNotification} saveAboutMe={props.saveAboutMe} aboutMe={props.aboutMe} changeGender={props.changeGender} gender={props.gender} userName={props.userName} contacts={props.contacts} property={item.property} 
                     setChangesToAccountOptionsMenu={setChangesToAccountOptionsMenu} accountOptionsMenu={accountOptionsMenu} 
                     saveProfile={props.saveProfile} changeUserName={props.changeUserName}/> :
                         <div className="options_item_content">
