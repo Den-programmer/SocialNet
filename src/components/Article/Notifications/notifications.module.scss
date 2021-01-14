@@ -1,0 +1,97 @@
+@import '../../../index.scss';
+
+$height: 50px;
+$border: 1px solid #E3E3E3;
+
+.title {
+    text-transform: uppercase;
+    font-family: $Poppins;
+}
+
+.titleOption {
+    margin-left: 25px;
+    font-size: 16px;
+    width: 800px;
+    font-family: $Lato;
+}
+.typeOption {
+    font-size: 16px;
+    font-family: $Lato;
+    width: 200px;
+}
+
+.notificationsContent {
+    margin-top: 30px;
+    .notificationsControlWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: $border;
+        border-right: none;
+        border-left: none;
+        background-color: #8794AA;
+        height: $height;
+        .notificationsControl {
+            display: flex;
+            align-items: center;
+            @extend .container;
+            .checkboxWrapper {
+                position: relative;
+                .background {
+                    height: 14px;
+                    width: 14px;
+                    border-radius: 200px;
+                    background-color: #fff;
+                    position: absolute;
+                    top: 12px;
+                    left: 12px;
+                }
+            }
+            .notificationsControl__title {
+                color: #FFF;
+                @extend .titleOption;
+            }
+            .notificationsControl__type {
+                color: #FFF;
+                @extend .typeOption;
+            }
+        }
+    }
+    .notificationsListWrapper {
+        width: 100%;
+        border: $border;
+        border-top: none;
+        .notificationsList {
+            @extend .container;
+            .notificationItem {
+                display: flex;
+                align-items: center;
+                height: $height;
+                .notificationItem_title {
+                    @extend .titleOption;
+                    color: #222;   
+                    font-weight: normal;                 
+                }
+                .notificationItem_type {
+                    @extend .typeOption;
+                    color: #222; 
+                    font-weight: normal;                   
+                }
+            }
+        }
+        .noNotifications {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            .noNotifications__photo {
+                width: 250px;
+            }
+            .noNotifications__title {
+                color: #5a5a5a;
+            }
+        }
+    }
+}
+

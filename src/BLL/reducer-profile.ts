@@ -3,7 +3,6 @@ import { ProfileAPI } from '../DAL/profileApi'
 import { OptionsAPI } from "../DAL/optionsApi"
 import { resultCode } from '../DAL/api'
 import { setTextError, setTextErrorActionType } from './reducer-app'
-import { stopSubmit } from 'redux-form'
 import { RootState, InferActionTypes } from './redux'
 import { ThunkAction } from 'redux-thunk'
 import beautifulLight from '../components/Article/Profile/User/images/profileBackground.jpg'

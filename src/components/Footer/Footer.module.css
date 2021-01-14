@@ -1,10 +1,9 @@
 .footer {
-    height: 200px;
-    width: 100%;
     background-color:#20232A;
+    border-top: 1px solid #E3E3E3;
 }
 .container {
-    width: 1470px;
+    width: 1200px;
     margin: 0 auto;
     display: flex;
     justify-content:space-around;
@@ -13,7 +12,7 @@
     color:#FFF;
 }   
 .signature h4 {
-    color:orangered;
+    color: #61DAFB;
     text-decoration:underline;
     font-size: 15px;
     font-weight:300;

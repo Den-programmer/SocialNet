@@ -23,6 +23,7 @@ import ProfileMainContentContainer from './Profile/ProfileMainContent/profileMai
 import Wall from './Profile/Wall/wall'
 import SecurityOptions from './Options/mainOptionsPage/securityOptions/securityOptionsContainer'
 import ContactsOptions from './Options/mainOptionsPage/ContactsOptions/contactsOptionsContainer'
+import Notifications from './Notifications/notificationsContainer'
 
 interface ArticlePropType {
     userDialogId: number
@@ -105,7 +106,10 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
                 </Container>)} />
                 <Route path='/Options' render={() => (<div className={classes.displayContainer}><OptionsContainer /></div>)} />
                 {/* Notifications! */}
-                <Route path='/Notifications' render={() => (<div className={classes.container}>Here is Notifications in developing!</div>)} />
+                <Route path='/Notifications' render={() => (<div className={classes.container}>
+                    <ProfileMainContentContainer />
+                    <Notifications />
+                </div>)} />
                 {/* Friends! */}
                 <Route path='/Friends/DataFriends' render={() => (<div className={classes.DataFriendsContainer}>
                     <ProfileMainContentContainer />

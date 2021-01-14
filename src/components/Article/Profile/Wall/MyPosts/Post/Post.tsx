@@ -37,7 +37,7 @@ const Post: React.FC<IPost> = (props) => {
                             <h6>{props.userName}</h6>
                         </div>
                         <div className={classes.date}>
-                            <p>29-12-2020</p>
+                            <p>{props.currentDate}</p>
                         </div>
                     </div>
                 </div>

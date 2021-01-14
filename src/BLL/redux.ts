@@ -10,6 +10,7 @@ import thunkMiddleWare from 'redux-thunk'
 import {reducer as formReducer} from 'redux-form'
 import reducerApp from "./reducer-app"
 import reducerSidebar from "./reducer-sidebar"
+import reducerNotifications from "./reducer-notifications"
 
 const rootReducer = combineReducers ({
     auth: reducerAuth,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers ({
     messagesPage: reducerMessages,
     newsPage: reducerNews,
     musicPage: reducerMusic,
+    notifications: reducerNotifications,
     Friends: reducerFriends,
     Sidebar: reducerSidebar,
     Footer: reducerFooter, 

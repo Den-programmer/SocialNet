@@ -89,6 +89,10 @@ export const initialize = (): ThunkType => async (dispatch, getState) => {
   })
 }
 
+// Get State!
+
+export const _getDate = () => AppState.date
+
 
 
 export default reducerApp
