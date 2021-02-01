@@ -5,6 +5,7 @@ import { userType } from '../../../types/FriendsType/friendsType'
 import ProfileNav from './ProfileNav/profileNavContainer'
 import Biography from './User/biography/biography'
 import Contacts from './User/Contacts/contacts'
+import EditPhoto from './User/editPhoto/editPhotoContainer'
 
 export interface IProfile {
     followed: boolean
@@ -22,6 +23,7 @@ export interface IProfile {
 const Profile: React.FC<IProfile> = (props) => {
     return(
         <div style={{ width: '100%' }}>
+            <EditPhoto />
             <User followed={props.followed} 
             posts={props.posts} 
             friends={props.friends} 

@@ -42,3 +42,11 @@ export const getBiography = (state: RootState) => {
 export const getGender = (state: RootState) => {
     return state.profilePage.gender
 }
+
+export const getChangePhotosMenu = (state: RootState) => {
+    return state.profilePage.changePhotosMenu
+}
+
+export const getChangePhotosMenuItemId = (state: RootState) => {
+    return state.profilePage.changePhotosMenuItemId
+}

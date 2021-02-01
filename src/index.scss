@@ -19,11 +19,20 @@ $OpenSans: 'Open Sans', sans-serif;
 $Montserrat: 'Montserrat', sans-serif;
 $Poppins: 'Poppins', sans-serif;
 
+$chosen_color: #4dcadd;
 
 .container {
   width: 1200px;
   margin: 0 auto;
 }
 
+.hidden_textfield {
+  overflow: hidden;
+  width: 0.1px;
+  height: 0.1px;
+  opacity:0;
+  position: absolute;
+  z-index:-1;
+}
 
 

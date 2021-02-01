@@ -1,0 +1,55 @@
+@import '../../../../../index.scss';
+
+.menuItemTemplate {
+    font-size: 12px;
+    font-family: $Lato;
+    font-weight: bold;
+    cursor: pointer;
+}
+.menuItemActiveTemplate {
+    transition: all .3s ease;
+    color: $chosen_color;
+    border-bottom: 1px solid $chosen_color;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.editPhotoWrapper {
+    position: absolute; 
+    margin: 20px;
+}
+
+.editPhoto {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    font-size: 12px;
+    transition: all .3s ease-in-out;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    animation: all 2s infinite linear;
+}
+
+.editPhotoContent__text {
+    padding: 0px 10px;
+    font-family: $Lato;
+}
+
+.menu {
+    width: 400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    .menuItem {
+        @extend .menuItemTemplate;
+        color: #222222;
+        &:hover { @extend .menuItemActiveTemplate; }
+    }
+    .menuItemActive {
+        @extend .menuItemTemplate;
+        @extend .menuItemActiveTemplate;
+    }
+}

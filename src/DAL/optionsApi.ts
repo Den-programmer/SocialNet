@@ -5,16 +5,18 @@ type photosType = {
     large: string
 }
 type setUserPhotoType = {
-    photos: photosType
+    data: {
+        photos: photosType
+    }
     messages: Array<string>
     resultCode: number
 }
 
 export const OptionsAPI = {
-    setUserPhoto: (photo: any) => {
+    setUserPhoto: (photo: File) => {
         const formData = new FormData()
         formData.append("image", photo)
-
+        debugger
         return instance.put<setUserPhotoType>(`profile/photo`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'

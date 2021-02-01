@@ -3,6 +3,7 @@ import User from '../User/user'
 import ProfileNav from '../ProfileNav/profileNavContainer'
 import { postType, profileType } from '../../../../BLL/reducer-profile'
 import { userType } from '../../../../types/FriendsType/friendsType'
+import EditAvatar from '../User/editPhoto/editPhotoContainer'
 
 interface IProfileMainContent {
     followed: boolean
@@ -20,6 +21,7 @@ interface IProfileMainContent {
 const ProfileMainContent:React.FC<IProfileMainContent> = (props) => {
     return (
         <div>
+            <EditAvatar />
             <User followed={props.followed} 
             posts={props.posts} 
             friends={props.friends} 

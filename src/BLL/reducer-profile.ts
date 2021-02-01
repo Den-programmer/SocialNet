@@ -58,13 +58,21 @@ export type profileNavItem = {
   path: string
 }
 
+export type ChangePhotosMenuItemType = {
+  id: number
+  title: string
+  isActive: boolean
+}
+
 export type profilePageType = {
   posts: Array<postType>
   postNotification: Array<postNotificationType>
   profile: profileType
   profileNavigationMenu: Array<profileNavItem>
+  changePhotosMenu: Array<ChangePhotosMenuItemType>
+  changePhotosMenuItemId: number
   followed: boolean
-  background: string
+  background: string 
   isAddPostModalOpen: boolean
   isPostModalOpen: boolean
   gender: string
@@ -140,6 +148,24 @@ const profilePage = {
       path: '/'
     },
   ],
+  changePhotosMenu: [
+    {
+      id: 1,
+      title: 'Change profile photo',
+      isActive: true
+    },
+    {
+      id: 2,
+      title: 'Delete profile photo',
+      isActive: false
+    },
+    {
+      id: 3,
+      title: 'Change background photo',
+      isActive: false
+    }
+  ],
+  changePhotosMenuItemId: 1,
   followed: false,
   background: beautifulLight,
   gender: 'Not Chosen',
@@ -223,19 +249,26 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
           return { ...item, isChosen: false }
         })
       }
-    case `/sn/profilePage/SET_STANDART_PROFILE_NAV_OPTIONS`:
-      return {
-        ...state,
-        profileNavigationMenu: state.profileNavigationMenu.map((item: profileNavItem) => {
-          if (item.id === 2) return { ...item, isChosen: true }
-          return { ...item, isChosen: false }
-        })
-      }
     case `/sn/profilePage/CHANGE_GENDER`:
       return {
         ...state,
         gender: action.gender
       }
+    case `/sn/profilePage/CHANGE_PHOTOS_MENU_ITEM`:
+      return {
+        ...state,
+        changePhotosMenu: state.changePhotosMenu.map((item: ChangePhotosMenuItemType) => {
+          if(action.itemId === item.id) return { ...item, isActive: true }
+          return { ...item, isActive: false }
+        }),
+        changePhotosMenuItemId: action.itemId
+      }  
+    case `/sn/profilePage/SET_PROFILE_BACKGROUND`:
+      const background = URL.createObjectURL(action.photo)
+      return {
+        ...state,
+        background
+      }  
     default:
       return state
   }
@@ -259,8 +292,9 @@ export const actions = {
   setIsAddPostWindowOpen: (modalStatus: boolean) => ({ type: `/sn/profilePage/SET_IS_ADD_POST_WINDOW_OPEN`, modalStatus } as const),
   setIsPostModalOpen: (modalStatus: boolean) => ({ type: `/sn/profilePage/SET_IS__POST_MODAL_OPEN`, modalStatus } as const),
   changeProfileNavItemChosenStatus: (itemId: number) => ({ type: `/sn/profilePage/CHANGE_PROFILE_NAVITEM_CHOSEN_STATUS`, itemId } as const),
-  setStandartProfileNavOptions: () => ({ type: `/sn/profilePage/SET_STANDART_PROFILE_NAV_OPTIONS` } as const),
-  changeGender: (gender: string) => ({ type: `/sn/profilePage/CHANGE_GENDER`, gender } as const)
+  changeGender: (gender: string) => ({ type: `/sn/profilePage/CHANGE_GENDER`, gender } as const),
+  choosePhotosMenuItem: (itemId: number) => ({ type: `/sn/profilePage/CHANGE_PHOTOS_MENU_ITEM`, itemId } as const),
+  setProfileBackground: (photo: File) => ({ type: `/sn/profilePage/SET_PROFILE_BACKGROUND`, photo } as const)
 }
 
 /* Thunks! */
@@ -269,11 +303,11 @@ type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionType
 
 export const setUserPhotoThunk = (photo: File): ThunkType => async (dispatch) => {
   try {
-    const data = await OptionsAPI.setUserPhoto(photo)
-    if (data.resultCode === resultCode.Success) {
-      dispatch(actions.setUserPhoto(data.photos.large))
+    const res = await OptionsAPI.setUserPhoto(photo)
+    if (res.resultCode === resultCode.Success) {
+      dispatch(actions.setUserPhoto(res.data.photos.large))
     } else {
-      const message = data.messages[0]
+      const message = res.messages[0]
       dispatch(setTextError(message))
     }
   } catch (error) {
@@ -300,7 +334,7 @@ export const saveProfile = (profile: saveProfileType): ThunkType => async (dispa
     if (userId) {
       const trueProfile = {
         status: profileStatus,
-        aboutMe: aboutMe, 
+        aboutMe: aboutMe,
         userId: userId,
         lookingForAJob: true,
         lookingForAJobDescription: 'I\'m developer that has some skills: JavaScript, React.Js, TypeScript, Redux, C#, HTML, CSS, BootsTrap, SCSS and many others!',

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { IAccountOption, IChangeOptions } from '../accountOptions'
 import { createReviewChangesBtn } from '../../../../../../utils/helpers/functions/function-helpers'
-import { Snackbar, IconButton } from '@material-ui/core'
+import { Snackbar, IconButton, Portal } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import CloseIcon from '@material-ui/icons/Close'
 

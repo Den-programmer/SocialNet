@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import EditPhoto from './editPhoto/editPhoto'
 import ChangeUserName from './ChangeUserName/changeUserName'
 import { contactsType, saveProfileType } from '../../../../../BLL/reducer-profile'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
@@ -122,7 +121,6 @@ const AccountOptions: React.FC<IAccountOptions> = (props) => {
             <div>
                 {menuItems}
             </div>
-            {/* <EditPhoto error={props.messageError} setUserPhoto={props.setUserPhotoThunk} photo={props.photo}/> */}
         </div>
     )
 }

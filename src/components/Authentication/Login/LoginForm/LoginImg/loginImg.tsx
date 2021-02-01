@@ -1,6 +1,7 @@
 import React, { MouseEvent, useState } from 'react'
 import classes from './loginImg.module.css'
 import loginEnterImage from '../../../../../images/loginImages/loginEnterImage.png'
+import Tilt from 'react-parallax-tilt'
 
 interface ILoginImg {
 
@@ -25,9 +26,11 @@ const LoginImg: React.FC<ILoginImg> = (props) => {
     }
     const stopPeeking = () => setImageStyle(commonImageStyle)
     return (
-        <div className={classes.loginEnterImage}>
-            <img onMouseLeave={stopPeeking} style={imageStyle} onMouseMove={peekingImg} src={loginEnterImage} alt="IMG" />
-        </div>
+        <Tilt reset={true}>
+            <div className={classes.loginEnterImage}>
+                <img data-tilt onMouseLeave={stopPeeking} style={imageStyle} onMouseMove={peekingImg} src={loginEnterImage} alt="IMG" />
+            </div>
+        </Tilt>
     )
 }
 
