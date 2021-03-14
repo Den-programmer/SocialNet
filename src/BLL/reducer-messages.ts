@@ -122,9 +122,10 @@ export const getDialogMessages = (userId: number): ThunkType => async (dispatch)
 
 export const sendMessage = (userId: number, message: string): ThunkType => async (dispatch) => {
     try {
+        debugger
         const data = await MessagesAPI.sendDialogMessages(userId, message)
         debugger
-        // dispatch(actions.addMessage(message))
+        dispatch(actions.addMessage(message))
     } catch (e) {
         alert(`Something's gone wrong, error status: 500`)
     }

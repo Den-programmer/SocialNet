@@ -6,7 +6,7 @@ interface ConversationPropType {
     messageText: string | null
 }
 
-const Conversation:React.FC<ConversationPropType> = ({ messageText }) => {
+const Conversation:React.FC<ConversationPropType> = React.memo(({ messageText }) => {
     return (
         <div className={classes.currentColumn}>
             <span className={classes.conversation}>
@@ -16,6 +16,6 @@ const Conversation:React.FC<ConversationPropType> = ({ messageText }) => {
             </span>
         </div>
     )
-}
+})
 
 export default Conversation

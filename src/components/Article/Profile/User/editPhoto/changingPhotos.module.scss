@@ -1,28 +1,39 @@
 @import '../../../../../index.scss';
 
-.container {
-    border: 4px dashed rgb(190, 190, 190);
+.containerTemplate {
     height: 100%;
     margin: 40px auto;
     width: 95%;
     display: flex;
     align-items: center;
     justify-content: center;
-    .mainContent {
-        text-align: center;
-        .title {
-            color: rgb(196, 196, 196);
-            font-size: 18px;
-        }
-        .mainContent_text {
-            font-size: 14px;
-            color: #222;
-        }
-        .hidden_textfield {
-            @extend .hidden_textfield;
-        }
+}
+
+.container {
+    @extend .containerTemplate;
+    border: 4px dashed rgb(190, 190, 190);
+}
+.containerActive {
+    @extend .containerTemplate;
+    border: 4px dashed rgb(200, 200, 200);
+    opacity: 0.9;
+}
+
+.mainContent {
+    text-align: center;
+    .title {
+        color: rgb(196, 196, 196);
+        font-size: 18px;
+    }
+    .mainContent_text {
+        font-size: 14px;
+        color: #222;
+    }
+    .hidden_textfield {
+        @extend .hidden_textfield;
     }
 }
+
 
 .deleteAvatar {
     margin: 40px auto;

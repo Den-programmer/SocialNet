@@ -11,11 +11,12 @@ interface DialogPropsType {
     isUserProfileMenuOpen: boolean
     messages: Array<message>
     dialogsData: Array<userDialogType>
-    addMessage: (message: string) => void
+    sendMessage: (userId: number, message: string) => void
     setUserProfileMenuStatus: (status: boolean) => void
+    userDialogId: number
 }
 
-const Dialog: React.FC<DialogPropsType> = ({ messages, addMessage, dialogsData, setUserProfileMenuStatus, isUserProfileMenuOpen }) => {
+const Dialog: React.FC<DialogPropsType> = ({ messages, sendMessage, dialogsData, setUserProfileMenuStatus, isUserProfileMenuOpen, userDialogId }) => {
     const Messages = messages.map((ms: message) => {
         return <Conversation key={ms.id} id={ms.id} messageText={ms.messageText} />
     })
@@ -46,7 +47,7 @@ const Dialog: React.FC<DialogPropsType> = ({ messages, addMessage, dialogsData, 
                 {Messages.length !== 0 ? <div className={classes.messages}>{Messages}</div>
                     : <h3 className={classes.titleNoMessages}>You have not corresponded with this user yet...</h3>}
             </div>
-            <DialogForm addMessage={addMessage} />
+            <DialogForm sendMessage={sendMessage} userDialogId={userDialogId}/>
         </div>
     )
 }

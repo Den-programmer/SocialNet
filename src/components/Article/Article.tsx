@@ -24,6 +24,7 @@ import Wall from './Profile/Wall/wall'
 import SecurityOptions from './Options/mainOptionsPage/securityOptions/securityOptionsContainer'
 import ContactsOptions from './Options/mainOptionsPage/ContactsOptions/contactsOptionsContainer'
 import Notifications from './Notifications/notificationsContainer'
+import SingleNewsPageContent from './News/SingleNewsPageContent/singleNewsPageContent'
 
 interface ArticlePropType {
     userDialogId: number
@@ -31,9 +32,10 @@ interface ArticlePropType {
     drawerWidth: number
     isAuth: boolean
     lastUrl: string
+    newsPageId: number | null
 }
 
-const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawerWidth, isAuth, lastUrl }) => {
+const Article: React.FC<ArticlePropType> = React.memo(({ userDialogId, isSidebarOpen, drawerWidth, isAuth, lastUrl, newsPageId }) => {
     const useStyles = makeStyles((theme: Theme) => createStyles({
         content: {
             flexGrow: 1,
@@ -80,7 +82,9 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
                     <ProfileMainContentContainer /><div className="flex-container"><MessagesContainer /></div>
                 </div>)} />
                 {/* News! */}
-                <Route path='/News' render={() => (<div className={classes.container}><News /></div>)} />
+
+                <Route path={`/News/${newsPageId && newsPageId}`} render={() => (<div style={ { background: '#F7F9FC' } } className={classes.container}><SingleNewsPageContent /></div>)} />
+                <Route path={`/News`} render={() => (<div style={ { background: '#F7F9FC' } } className={classes.container}><News /></div>)} />
                 {/* Music! */}
                 <Route path='/Music/likedTracks' render={() => (<div className={classes.container}><LikedTracksContainer /></div>)} />
                 <Route path='/Music/PlayLists' render={() => (<div className={classes.container}><PlaylistsContainer /></div>)} />
@@ -135,6 +139,6 @@ const Article: React.FC<ArticlePropType> = ({ userDialogId, isSidebarOpen, drawe
             </Switch>
         </article>
     )
-}
+})
 
 export default Article

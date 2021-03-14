@@ -8,7 +8,7 @@ interface IContacts {
     contacts: contactsType
 }
 
-const Contacts: React.FC<IContacts> = (props) => {
+const Contacts: React.FC<IContacts> = React.memo((props) => {
     const contacts = Object.keys(props.contacts).map(key => {
         // @ts-ignore
         return <Contact key={key} contactTitle={key} contactValue={props.contacts[key as keyof contactsType]} />
@@ -27,6 +27,6 @@ const Contacts: React.FC<IContacts> = (props) => {
             </div>
         </Container>
     )
-}
+})
 
 export default Contacts

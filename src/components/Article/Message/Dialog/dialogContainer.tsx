@@ -1,17 +1,18 @@
 import Dialog from './dialog'
-import { actions } from '../../../../BLL/reducer-messages'
+import { actions, sendMessage } from '../../../../BLL/reducer-messages'
 import { connect } from 'react-redux'
-import { getMessages, getDialogsData, getIsUserProfileMenuOpenStatus } from '../../../../BLL/selectors/messages-selectors'
+import { getMessages, getDialogsData, getIsUserProfileMenuOpenStatus, getUserDialogId } from '../../../../BLL/selectors/messages-selectors'
 import { RootState } from '../../../../BLL/redux'
 
-const { setUserProfileMenuStatus, addMessage } = actions
+const { setUserProfileMenuStatus } = actions
 
 const mapStateToProps = (state: RootState) => ({
     messages:getMessages(state),
     dialogsData: getDialogsData(state),
-    isUserProfileMenuOpen: getIsUserProfileMenuOpenStatus(state) 
+    isUserProfileMenuOpen: getIsUserProfileMenuOpenStatus(state),
+    userDialogId: getUserDialogId(state)
 })
 
-const DialogContainer = connect(mapStateToProps, { addMessage, setUserProfileMenuStatus })(Dialog)
+const DialogContainer = connect(mapStateToProps, { setUserProfileMenuStatus, sendMessage })(Dialog)
 
 export default DialogContainer

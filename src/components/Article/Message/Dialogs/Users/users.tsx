@@ -13,7 +13,7 @@ interface UsersPropType {
     setUserActiveStatus: (userId: number) => void
 }
 
-const Users: React.FC<UsersPropType> = ({ dialogsData, setUserDialogId, getDialogMessages, userDialogId, setUserActiveStatus }) => {
+const Users: React.FC<UsersPropType> = React.memo(({ dialogsData, setUserDialogId, getDialogMessages, userDialogId, setUserActiveStatus }) => {
     const dialogs = dialogsData.map((d: userDialogType) => {
         return <User userDialogId={userDialogId} key={d.id} photo={d.photos.large ? d.photos.large : d.photos.small ? d.photos.small : defaultUser} id={d.id}
             hasNewMessages={d.hasNewMessages}
@@ -35,6 +35,6 @@ const Users: React.FC<UsersPropType> = ({ dialogsData, setUserDialogId, getDialo
             </div> : dialogs}
         </div>
     )
-}
+})
 
 export default Users

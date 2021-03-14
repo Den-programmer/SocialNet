@@ -24,7 +24,8 @@ export const MessagesAPI = {
         return instance.get<dialogMessagesResType>(`dialogs/${userId}/messages`).then(res => res.data)
     },
     sendDialogMessages: (userId: number, message: string) => {
-        return instance.post<ServerResType<{}>>(`dialogs/${userId}/messages`, message).then(res => res.data)
+        debugger
+        return instance.post<ServerResType<{}>>(`dialogs/${userId}/messages`, { message }).then(res => res.data)
     },
     isMessageViewed: (messageId: number) => {
         return instance.get<ServerResType<isMessageViewedtype>>(`dialogs/messages/${messageId}/viewed`).then(res => res.data)

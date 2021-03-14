@@ -6,10 +6,11 @@ import { IconButton } from '@material-ui/core'
 import SendIcon from '@material-ui/icons/Send'
 
 interface PropsType {
-    addMessage: (newMessage: string) => void
+    sendMessage: (userId: number, newMessage: string) => void
+    userDialogId: number
 }
 
-const DialogForm: React.FC<PropsType> = ({ addMessage }) => {
+const DialogForm: React.FC<PropsType> = ({ sendMessage, userDialogId }) => {
     const [messageVal, setMessageVal] = useState<string>('')
     const field = React.createRef<HTMLInputElement>()
     const fieldHandleChange = () => {
@@ -19,11 +20,11 @@ const DialogForm: React.FC<PropsType> = ({ addMessage }) => {
         if (e.currentTarget.files) {
             const file = e.currentTarget.files[0]
             const photoMessage = URL.createObjectURL(file)
-            addMessage(photoMessage)
+            sendMessage(userDialogId, photoMessage)
         }
     }
-    const sendMessage = () => {
-        addMessage(messageVal)
+    const sendMessageHandler = () => {
+        sendMessage(userDialogId, messageVal)
         setMessageVal('')
     }
     return (
@@ -53,7 +54,7 @@ const DialogForm: React.FC<PropsType> = ({ addMessage }) => {
                                     onChange={onInputFileChange}
                                     className={classes.fileInput}
                                     type="file" />
-                        </div> : <IconButton onClick={sendMessage}>
+                        </div> : <IconButton onClick={sendMessageHandler}>
                             <SendIcon className={classes.icon} />
                         </IconButton>}
                 </div>
