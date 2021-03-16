@@ -4,29 +4,23 @@ import { userDialogType, message } from '../types/MessagesTypes/messagesTypes'
 import { MessagesAPI } from "../DAL/messagesApi"
 import { resultCode } from "../DAL/api"
 
-type messagesPageType = {
-    dialogsData: Array<userDialogType>
-    messages: Array<message>
-    userDialogId: number
-    isUserProfileMenuOpen: boolean
+const messagesPage = {
+    dialogsData: [] as Array<userDialogType>,
+    messages: [] as Array<message>,
+    userDialogId: 0,
+    trim: '',
+    isUserProfileMenuOpen: false
 }
 
-// Photo may be as a string of message, so can do this logic more simply!
+type MessagesPageType = typeof messagesPage;
 
-const messagesPage = {
-    dialogsData: [],
-    messages: [],
-    userDialogId: 0,
-    isUserProfileMenuOpen: false
-} as messagesPageType
-
-const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPageType => {
+const reducerMessages = (state = messagesPage, action: ActionTypes): MessagesPageType => {
     switch (action.type) {
         case `sn/messagesPage/ADD-MESSAGE`:
             const newMessage = {
                 id: state.messages.length + 1,
                 messageText: action.messageText
-            }
+            } as message
             return {
                 ...state,
                 messages: [...state.messages, newMessage]
@@ -67,6 +61,11 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): messagesPag
                 ...state,
                 isUserProfileMenuOpen: action.status
             }
+        case `sn/messagesPage/SET_MESSAGES_TRIM`:
+            return {
+                ...state,
+                trim: action.trim
+            }    
         default:
             return state
     }
@@ -82,7 +81,8 @@ export const actions = {
     setDialogs: (dialogs: Array<userDialogType>) => ({ type: `sn/messagesPage/SET-DIALOGS`, dialogs } as const),
     setUserDialogId: (userId: number) => ({ type: `sn/messagesPage/SET-USER-DIALOG-ID`, userId } as const),
     setUserActiveStatus: (userId: number) => ({ type: `sn/messagesPage/SET-USER-ACTIVE-STATUS`, userId } as const),
-    setUserProfileMenuStatus: (status: boolean) => ({ type: `sn/messagesPage/SET_USER_PROFILE_MENU_STATUS`, status } as const)
+    setUserProfileMenuStatus: (status: boolean) => ({ type: `sn/messagesPage/SET_USER_PROFILE_MENU_STATUS`, status } as const),
+    setMessagesTrim: (trim: string) => ({ type: `sn/messagesPage/SET_MESSAGES_TRIM`, trim } as const)
 }
 
 /* Thunk Creators! */
