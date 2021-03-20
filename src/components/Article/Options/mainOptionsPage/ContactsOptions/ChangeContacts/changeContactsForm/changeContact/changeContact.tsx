@@ -5,6 +5,7 @@ import { saveProfileType } from '../../../../../../../../types/ProfileTypes/prof
 import { ICurrentContact } from '../../../contactsOptions'
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 import { useEditIconStyles } from '../../../../accountOptions/accountOptions'
+import { TextField } from '@material-ui/core'
 
 interface IChangeContact {
     id: number
@@ -27,7 +28,7 @@ const ChangeContact: React.FC<IChangeContact> = (props) => {
         const contacts: any = {}
         for (let i = 0; i < props.currentContacts.length; i++) {
             let key: string = props.currentContacts[i].property
-            if(props.id === i+1) {
+            if (props.id === i + 1) {
                 contacts[key] = currentContact
             } else {
                 contacts[key] = props.currentContacts[i].value
@@ -51,10 +52,15 @@ const ChangeContact: React.FC<IChangeContact> = (props) => {
             <div className="editContentItem_main">
                 <h5 className="editContentItem_property">{props.property}</h5>
                 <div className="editContentItem_editInput">
-                    <input className={props.error ? "options_errorInput" : ""} type="text" onChange={onContactChange} value={currentContact} />
+                    <TextField className={props.error ? "options_errorInput" : ""}
+                     value={currentContact} 
+                     label={currentContact} 
+                     onChange={onContactChange}
+                     type="text" 
+                     />
                 </div>
             </div>
-            {createReviewChangesBtn(saveChanges, '/Profile', props.error, props.currentPageUrl)}
+            {createReviewChangesBtn(saveChanges, '/Options/contacts', props.error, props.currentPageUrl)}
             {/* {props.error !== '' && <div className="options_error">
                 <ErrorOutlineIcon className={classes.errorIcon}/>
             </div>} */}
