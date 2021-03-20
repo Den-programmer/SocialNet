@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import ChangeUserName from './ChangeUserName/changeUserName'
-import { contactsType, saveProfileType } from '../../../../../BLL/reducer-profile'
+import { contactsType, saveProfileType } from '../../../../../types/ProfileTypes/profileTypes'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import OptionsTitle from './OptionsTitle/optionsTitle'
 import EditIcon from '@material-ui/icons/Edit'
 import ChangeGender from './ChangeGender/changeGender'
 import ChangeBiography from './ChangeBiography/changeBiography'
+import ChangeMembersColumnStatus from './ChangeMembersColumnStatus/changeMembersColumnStatus'
 
 export interface IChangeOptions {
     property: string
@@ -13,6 +14,7 @@ export interface IChangeOptions {
     contacts: contactsType
     gender: string
     aboutMe: string | null
+    isMembersColumnOpen: boolean
     accountOptionsMenu: Array<IAccountOption>
     saveProfile: (profile: saveProfileType) => void
     changeUserName: (userName: string) => void
@@ -20,6 +22,7 @@ export interface IChangeOptions {
     addNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'Friends' | 'News') => void
     setChangesToAccountOptionsMenu: (accountOptions: Array<IAccountOption>) => void
     saveAboutMe: (aboutMe: string | null) => void
+    changeMembersColumnOpenedStatus: (status: boolean) => void
 }
 
 interface IAccountOptions {
@@ -29,12 +32,14 @@ interface IAccountOptions {
     gender: string
     aboutMe: string | null
     contacts: contactsType
+    isMembersColumnOpen: boolean
     setUserPhotoThunk: (photo: File) => void
     changeUserName: (userName: string) => void
     changeGender: (gender: string) => void
     saveProfile: (profile: saveProfileType) => void
     addNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'Friends' | 'News') => void
     saveAboutMe: (aboutMe: string | null) => void
+    changeMembersColumnOpenedStatus: (status: boolean) => void
 }
 
 export interface IAccountOption {
@@ -83,6 +88,14 @@ const AccountOptions: React.FC<IAccountOptions> = (props) => {
             isEditIconActive: false,
             isEdit: false,
             editContent: ChangeBiography
+        },
+        {
+            id: 4,
+            property: 'Members column',
+            value: props.isMembersColumnOpen ? 'opened' : 'closed',
+            isEditIconActive: false,
+            isEdit: false,
+            editContent: ChangeMembersColumnStatus
         }
     ])
     const menuItems = accountOptionsMenu.map((item: IAccountOption) => {
@@ -103,7 +116,7 @@ const AccountOptions: React.FC<IAccountOptions> = (props) => {
         return (
             <div onClick={() => handleClick(item.id)} onMouseEnter={() => handleHover(item.id, true)} onMouseLeave={() => handleHover(item.id, false)} key={item.id} className="options_itemWrapper">
                 <div className="options_item">
-                    {item.isEdit ? <item.editContent addNotification={props.addNotification} saveAboutMe={props.saveAboutMe} aboutMe={props.aboutMe} changeGender={props.changeGender} gender={props.gender} userName={props.userName} contacts={props.contacts} property={item.property} 
+                    {item.isEdit ? <item.editContent changeMembersColumnOpenedStatus={props.changeMembersColumnOpenedStatus} isMembersColumnOpen={props.isMembersColumnOpen} addNotification={props.addNotification} saveAboutMe={props.saveAboutMe} aboutMe={props.aboutMe} changeGender={props.changeGender} gender={props.gender} userName={props.userName} contacts={props.contacts} property={item.property} 
                     setChangesToAccountOptionsMenu={setChangesToAccountOptionsMenu} accountOptionsMenu={accountOptionsMenu} 
                     saveProfile={props.saveProfile} changeUserName={props.changeUserName}/> :
                         <div className="options_item_content">

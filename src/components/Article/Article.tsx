@@ -25,6 +25,7 @@ import SecurityOptions from './Options/mainOptionsPage/securityOptions/securityO
 import ContactsOptions from './Options/mainOptionsPage/ContactsOptions/contactsOptionsContainer'
 import Notifications from './Notifications/notificationsContainer'
 import SingleNewsPageContent from './News/SingleNewsPageContent/singleNewsPageContent'
+import BlacklistContainer from './Friends/FriendsComponents/Blacklist/blacklistContainer'
 
 interface ArticlePropType {
     userDialogId: number
@@ -33,9 +34,10 @@ interface ArticlePropType {
     isAuth: boolean
     lastUrl: string
     newsPageId: number | null
+    isMembersColumnOpen: boolean
 }
 
-const Article: React.FC<ArticlePropType> = React.memo(({ userDialogId, isSidebarOpen, drawerWidth, isAuth, lastUrl, newsPageId }) => {
+const Article: React.FC<ArticlePropType> = React.memo(({ userDialogId, isSidebarOpen, drawerWidth, isAuth, lastUrl, newsPageId, isMembersColumnOpen }) => {
     const useStyles = makeStyles((theme: Theme) => createStyles({
         content: {
             flexGrow: 1,
@@ -72,7 +74,7 @@ const Article: React.FC<ArticlePropType> = React.memo(({ userDialogId, isSidebar
         <article className={!isSidebarOpen ? classes.contentShift : classes.content}>
             <Switch>
                 {/* Profile! */}
-                <Route exact path='/Profile/:userId?' render={() => (<div className={classes.displayContainer}><ProfileContainer /><MembersContainer /></div>)} />
+                <Route exact path='/Profile/:userId?' render={() => (<div className={classes.displayContainer}><ProfileContainer />{isMembersColumnOpen && <MembersContainer />}</div>)} />
                 <Route exact path='/Wall' render={() => (<div className={classes.container}><ProfileMainContentContainer /><Wall /></div>)}/>
                 {/* Messages! */}
                 <Route path={'/Messages/dialog/' + userDialogId} render={() => (<div className={classes.container}>
@@ -126,6 +128,12 @@ const Article: React.FC<ArticlePropType> = React.memo(({ userDialogId, isSidebar
                     <FindFriendsContainer />
                 </div>)} />
                 <Route path='/Friends' render={() => (<FriendsNavContainer />)} />
+
+                <Route path='/Blacklist' render={() => (<div className={classes.DataFriendsContainer}>
+                    <ProfileMainContentContainer />
+                    <FriendsNavContainer />
+                    <BlacklistContainer />
+                </div>)}/> 
 
                 {/* Another! */}
 

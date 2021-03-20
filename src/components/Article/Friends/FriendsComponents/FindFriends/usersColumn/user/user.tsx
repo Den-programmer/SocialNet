@@ -10,11 +10,12 @@ interface IUser {
     nickname: string
     name: string
     id: number
-    photo: any
+    photo: string
     followThunk: (id: number) => void
     unfollowThunk: (id: number) => void
     startDialog: (userId: number) => void
     addNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
+    addToBlacklist: (itemId: number) => void
 }
 
 type MenuStyleType = {
@@ -57,12 +58,15 @@ const User: React.FC<IUser> = (props) => {
                 {props.photo ? <img className={classes.avatar} src={props.photo} alt="" /> : <img className={classes.avatar} src={defaultUserPhoto} alt="" />}
                 <h3 className={classes.userName}>{props.name ? props.name : props.nickname}</h3>
             </NavLink>
-            {isMenuOpen && <div style={styleMenu} className="contextMenu">
+            {isMenuOpen && <div className={classes.menuWrapper}>
+                <div style={styleMenu} className="contextMenu">
                 <ul className="contextMenu__list">
                     <li onClick={startChatting} className="contextMenu__list-item">Write the message</li>
                     <li className="contextMenu__list-item">Follow</li>
                     <li className="contextMenu__list-item">Unfollow</li>
+                    <li className="contextMenu__list-item" onClick={() => props.addToBlacklist(props.id)}>To black list</li>
                 </ul>
+            </div>    
             </div>}
             {props.followed ? <Button className={classes.followBtn} variant="contained" color="default" disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Add this user to list of friends!">Following</Button> 
             : 

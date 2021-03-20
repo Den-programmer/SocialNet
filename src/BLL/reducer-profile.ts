@@ -6,80 +6,12 @@ import { setTextError, setTextErrorActionType } from './reducer-app'
 import { RootState, InferActionTypes } from './redux'
 import { ThunkAction } from 'redux-thunk'
 import beautifulLight from '../components/Article/Profile/User/images/profileBackground.jpg'
+import { postType, postNotificationType, profileNavItem, ChangePhotosMenuItemType, profileType, saveProfileType } from '../types/ProfileTypes/profileTypes'
 
 const entity = 'sn/profilePage/'
 
-export type profilePhotosType = {
-  large: string
-  small: string
-}
-export type contactsType = {
-  facebook: string | null
-  website: string | null
-  vk: string | null
-  twitter: string | null
-  instagram: string | null
-  youtube: string | null
-  github: string | null
-  mainLink: string | null
-}
-
-export type saveProfileType = {
-  fullName: string
-  contacts: contactsType
-}
-
-export type profileType = {
-  status: string
-  aboutMe: null | string
-  contacts: contactsType
-  fullName: string
-  photos: profilePhotosType
-  userId: number
-}
-
-export type postType = {
-  id: number
-  postTitle: string
-  postInf: string
-  postImg: string
-  likesCount: number
-}
-
-type postNotificationType = {
-  id: number
-  name: string
-}
-
-export type profileNavItem = {
-  id: number
-  title: string
-  isChosen: boolean
-  path: string
-}
-
-export type ChangePhotosMenuItemType = {
-  id: number
-  title: string
-  isActive: boolean
-}
-
-export type profilePageType = {
-  posts: Array<postType>
-  postNotification: Array<postNotificationType>
-  profile: profileType
-  profileNavigationMenu: Array<profileNavItem>
-  changePhotosMenu: Array<ChangePhotosMenuItemType>
-  changePhotosMenuItemId: number
-  followed: boolean
-  background: string 
-  isAddPostModalOpen: boolean
-  isPostModalOpen: boolean
-  gender: string
-}
-
 const profilePage = {
-  posts: [],
+  posts: [] as Array<postType>,
   postNotification: [
     {
       id: 1,
@@ -89,7 +21,7 @@ const profilePage = {
       id: 2,
       name: 'Edit Post'
     }
-  ],
+  ] as Array<postNotificationType>,
   profile: {
     status: "Hello my friends! I'm GOD!!!",
     aboutMe: 'What can I say new?! I\'m GOD!!!',
@@ -109,7 +41,7 @@ const profilePage = {
       small: defaultUser
     },
     userId: 0
-  },
+  } as profileType,
   profileNavigationMenu: [
     {
       id: 7012,
@@ -147,7 +79,7 @@ const profilePage = {
       isChosen: false,
       path: '/'
     },
-  ],
+  ] as Array<profileNavItem>,
   changePhotosMenu: [
     {
       id: 1,
@@ -164,16 +96,17 @@ const profilePage = {
       title: 'Change background photo',
       isActive: false
     }
-  ],
+  ] as Array<ChangePhotosMenuItemType>,
   changePhotosMenuItemId: 1,
   followed: false,
   background: beautifulLight,
   gender: 'Not Chosen',
   isAddPostModalOpen: false,
-  isPostModalOpen: false
-} as profilePageType
+  isPostModalOpen: false,
+  isMembersColumnOpen: true
+} 
 
-const reducerProfile = (state = profilePage, action: ActionTypes): profilePageType => {
+const reducerProfile = (state = profilePage, action: ActionTypes): typeof profilePage => {
   switch (action.type) {
     case `/sn/profilePage/ADD-POST`:
       const newPost = {
@@ -269,6 +202,11 @@ const reducerProfile = (state = profilePage, action: ActionTypes): profilePageTy
         ...state,
         background
       }  
+    case `/sn/profilePage/CHANGE_MEMBERS_COLUMN_OPENED_STATUS`:
+      return {
+        ...state,
+        isMembersColumnOpen: action.status
+      }
     default:
       return state
   }
@@ -294,7 +232,8 @@ export const actions = {
   changeProfileNavItemChosenStatus: (itemId: number) => ({ type: `/sn/profilePage/CHANGE_PROFILE_NAVITEM_CHOSEN_STATUS`, itemId } as const),
   changeGender: (gender: string) => ({ type: `/sn/profilePage/CHANGE_GENDER`, gender } as const),
   choosePhotosMenuItem: (itemId: number) => ({ type: `/sn/profilePage/CHANGE_PHOTOS_MENU_ITEM`, itemId } as const),
-  setProfileBackground: (photo: File) => ({ type: `/sn/profilePage/SET_PROFILE_BACKGROUND`, photo } as const)
+  setProfileBackground: (photo: File) => ({ type: `/sn/profilePage/SET_PROFILE_BACKGROUND`, photo } as const),
+  changeMembersColumnOpenedStatus: (status: boolean) => ({ type: `/sn/profilePage/CHANGE_MEMBERS_COLUMN_OPENED_STATUS`, status } as const)
 }
 
 /* Thunks! */

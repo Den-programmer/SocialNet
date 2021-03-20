@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import classes from './followingInformation.module.scss'
-import { postType } from '../../../../../BLL/reducer-profile'
+import { postType } from '../../../../../types/ProfileTypes/profileTypes'
 import { userType } from '../../../../../types/FriendsType/friendsType'
 
 interface IFollowingInformation {

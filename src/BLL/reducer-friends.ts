@@ -4,41 +4,26 @@ import { RootState, InferActionTypes } from './redux'
 import { ThunkAction } from 'redux-thunk'
 import { resultCode } from '../DAL/api'
 
-export type FriendsFilter = {
-    term: string
-}
-
-type FriendsType = {
-    friends: Array<userType>
-    friendsInf: null | object
-    users: Array<userType>
-    usersInf: {
-        isFetching: boolean
-        totalCount: number
-        pageSize: number
-        currentPage: number
-    }
-    followingInProcess: Array<number>
-    filter: FriendsFilter
-}
-
 const Friends = {
-    friends: [],
+    friends: [] as Array<userType>,
     friendsInf: {},
-    users: [],
+    users: [] as Array<userType>,
     usersInf: {
         isFetching: true,
         totalCount: 0,
         pageSize: 12,
         currentPage: 1
     },
-    followingInProcess: [],
+    followingInProcess: [] as Array<number>,
     filter: {
         term: ''
-    }
-} as FriendsType
+    },
+    blacklist: [
 
-const reducerFriends = (state = Friends, action: ActionTypes): FriendsType => {
+    ] as Array<userType>
+}
+
+const reducerFriends = (state = Friends, action: ActionTypes): typeof Friends => {
     switch (action.type) {
         case `sn/Friends/SET-USERS`:
             return {
@@ -104,13 +89,36 @@ const reducerFriends = (state = Friends, action: ActionTypes): FriendsType => {
                 ...state,
                 usersInf: { ...state.usersInf, isFetching: action.isFetching }
             }
+
+        case `sn/Friends/ADD_TO_BLACKLIST`:
+            const currentBlacked = state.users.filter(item => item.id === action.itemId && true).find(item => item && item)
+            const currentBlackedUser = {
+                id: action.itemId,
+                name: currentBlacked?.name !== undefined ? currentBlacked?.name : '',
+                status: null,
+                nickname: currentBlacked?.nickname !== undefined ? currentBlacked?.nickname : '',
+                photos: {
+                    large: currentBlacked?.photos.large !== undefined ? currentBlacked?.photos.large : '',
+                    small: currentBlacked?.photos.small !== undefined ? currentBlacked?.photos.small : ''
+                },
+                followed: false
+            }
+            return {
+                ...state,
+                blacklist: [...state.blacklist, currentBlackedUser]
+            }
+        case `sn/Friends/DELETE_FROM_BLACKLIST`:
+            return {
+                ...state,
+                blacklist: state.blacklist.filter(item => item.id !== action.itemId && true) 
+            }    
         default:
             return state
         case `sn/Friends/SET_USERS_TERM`:
             return {
                 ...state,
                 filter: { ...state.filter, term: action.term }
-            }    
+            }
     }
 }
 
@@ -131,7 +139,9 @@ export const actions = {
     isFetching: (isFetching: boolean) => ({ type: `sn/Friends/IS_FETCHING`, isFetching } as const),
     toggleFollowingInProcess: (isFetching: boolean, userId: number) => ({ type: `sn/Friends/TOGGLE_IS_FOLLOWING_PROCESS`, isFetching, userId } as const),
     setFriends: (users: Array<userType>) => ({ type: `sn/Friends/SET_FRIENDS`, users } as const),
-    setUsersTerm: (term: string) => ({ type: `sn/Friends/SET_USERS_TERM` , term } as const)
+    setUsersTerm: (term: string) => ({ type: `sn/Friends/SET_USERS_TERM`, term } as const),
+    addToBlacklist: (itemId: number) => ({ type: `sn/Friends/ADD_TO_BLACKLIST`, itemId } as const),
+    deleteFromBlacklist: (itemId: number) => ({ type: `sn/Friends/DELETE_FROM_BLACKLIST`, itemId } as const)
 }
 
 // Thunk Creators!

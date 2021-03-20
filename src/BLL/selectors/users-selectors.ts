@@ -19,3 +19,7 @@ export const getFollowingInProcess = (state: RootState) => {
 export const getUsersFilter = (state: RootState) => {
     return state.Friends.filter
 }
+
+export const getBlacklist = (state: RootState) => {
+    return state.Friends.blacklist
+}

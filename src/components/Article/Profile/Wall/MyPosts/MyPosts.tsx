@@ -3,7 +3,7 @@ import classes from './MyPosts.module.scss'
 import Post from './Post/Post'
 import AddPost from './AddPost/addPost'
 import defaultUser from '../../images/withoutAvatar/defaultUserPhoto.jpg'
-import { postType, profileType } from '../../../../../BLL/reducer-profile'
+import { postType, profileType } from '../../../../../types/ProfileTypes/profileTypes'
 import { Container, TextField, Theme, createStyles, makeStyles } from '@material-ui/core'
 
 interface IMyPosts {

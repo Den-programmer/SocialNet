@@ -3,7 +3,7 @@ import Avatar from './Avatar/avatar'
 import defaultAvatar from '../../Profile/images/withoutAvatar/defaultUserPhoto.jpg'
 import FollowingInformation from './followingInformation/followingInformation'
 import { IProfile } from '../profile'
-import { contactsType } from '../../../../BLL/reducer-profile'
+import { contactsType } from '../../../../types/ProfileTypes/profileTypes'
 
 interface IUser extends IProfile {
     contacts: contactsType

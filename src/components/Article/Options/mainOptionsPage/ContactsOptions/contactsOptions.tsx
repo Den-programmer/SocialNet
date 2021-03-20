@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import '../../options.scss'
 import OptionsTitle from '../accountOptions/OptionsTitle/optionsTitle'
-import { contactsType, saveProfileType } from '../../../../../BLL/reducer-profile'
+import { contactsType, saveProfileType } from '../../../../../types/ProfileTypes/profileTypes'
 import { useEditIconStyles } from '../accountOptions/accountOptions'
 import EditIcon from '@material-ui/icons/Edit'
 import ChangeContact from './ChangeContacts/changeContactsForm/changeContact/changeContact'

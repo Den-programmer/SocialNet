@@ -3,7 +3,7 @@ import classes from './avatar.module.scss'
 import facebook from '../images/facebook.png'
 import twitter from '../images/twitter.png'
 import youtube from '../images/youtube.png'
-import { contactsType } from '../../../../../BLL/reducer-profile'
+import { contactsType } from '../../../../../types/ProfileTypes/profileTypes'
 
 interface IUserAvatar {
     name: string

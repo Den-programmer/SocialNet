@@ -1,5 +1,5 @@
 import { instance, ServerResType } from './api'
-import { profileType } from '../BLL/reducer-profile'
+import { profileType } from '../types/ProfileTypes/profileTypes'
 
 export const ProfileAPI = {
     getUsersProfile: (userId:number | null) => {

@@ -10,18 +10,18 @@ interface UsersColumnPropsType {
     unfollowThunk: (id: number) => void
     startDialog: (userId: number) => void
     addNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
+    addToBlacklist: (itemId: number) => void
 }
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        padding: '40px'
-    }
-}))
-
 const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
+    const useStyles = makeStyles((theme: Theme) => createStyles({
+        container: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-around',
+            padding: '40px'
+        }
+    }))
     const classes = useStyles()
     const users = props.users.map((user: userType) => {
         return <User id={user.id}
@@ -33,7 +33,7 @@ const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
             followed={user.followed}
             nickname={user.nickname}
             name={user.name}
-            photo={user.photos.large} startDialog={props.startDialog} />
+            photo={user.photos.large} startDialog={props.startDialog} addToBlacklist={props.addToBlacklist} />
     })
     return (
         <Container className={classes.container}>

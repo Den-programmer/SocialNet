@@ -1,7 +1,7 @@
 import React from 'react'
 import User from '../User/user'
 import ProfileNav from '../ProfileNav/profileNavContainer'
-import { postType, profileType } from '../../../../BLL/reducer-profile'
+import { postType, profileType } from '../../../../types/ProfileTypes/profileTypes'
 import { userType } from '../../../../types/FriendsType/friendsType'
 import EditAvatar from '../User/editPhoto/editPhotoContainer'
 

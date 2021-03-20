@@ -1,5 +1,12 @@
 @import '../../../../../../../index.scss';
 
+.menuWrapper {
+    z-index: 1;
+    position: relative;
+    bottom: 435px;
+    left: -200px;
+}
+
 .user {
     flex: 2 600px;
     text-align: center;

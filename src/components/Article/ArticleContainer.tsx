@@ -4,12 +4,14 @@ import { RootState } from '../../BLL/redux'
 import { getUserDialogId } from '../../BLL/selectors/messages-selectors'
 import { getLastUrl, getIsAuthStatus } from '../../BLL/selectors/auth-selectors'
 import { getNewsPageId } from '../../BLL/selectors/news-selectors'
+import { getIsMembersColumnOpenedStatus } from '../../BLL/selectors/profile-selectors'
 
 const mapStateToProps = (state: RootState) => ({
     userDialogId: getUserDialogId(state),
     lastUrl: getLastUrl(state),
     isAuth: getIsAuthStatus(state),
-    newsPageId: getNewsPageId(state)
+    newsPageId: getNewsPageId(state),
+    isMembersColumnOpen: getIsMembersColumnOpenedStatus(state)
 })
 
 const ArticleContainer = connect(mapStateToProps, {})(Article)

@@ -1,3 +1,5 @@
+
+
 export type userType = {
     id: number
     name: string
@@ -8,4 +10,10 @@ export type userType = {
     }
     status: null | string
     followed: boolean
+}
+
+
+
+export type FriendsFilter = {
+    term: string
 }

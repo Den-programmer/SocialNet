@@ -1,3 +1,5 @@
+@import '../../../../../../index.scss';
+
 .user {
     display: flex;
     align-items: center;
@@ -13,4 +15,10 @@
             padding: 0px 15px;
         }
     }
+}
+
+.noUsersTitle {
+    font-size: 18px;
+    text-align: center;
+    font-family: $OpenSans;
 }

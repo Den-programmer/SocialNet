@@ -1,7 +1,7 @@
 import React from 'react'
 import classes from './contacts.module.scss'
 import Contact from './Contact/contact'
-import { contactsType } from '../../../../../BLL/reducer-profile'
+import { contactsType } from '../../../../../types/ProfileTypes/profileTypes'
 import { Container } from '@material-ui/core'
 
 interface IContacts {

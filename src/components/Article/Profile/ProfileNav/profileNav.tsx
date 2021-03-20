@@ -1,7 +1,7 @@
 import React from 'react'
 import { Toolbar, makeStyles, createStyles, Theme, List } from '@material-ui/core'
 import { RouteComponentProps } from 'react-router-dom'
-import { profileNavItem } from '../../../../BLL/reducer-profile'
+import { profileNavItem } from '../../../../types/ProfileTypes/profileTypes'
 import ProfileNavItem from './profileNavItem/profileNavItem'
 
 interface IProfileNav {

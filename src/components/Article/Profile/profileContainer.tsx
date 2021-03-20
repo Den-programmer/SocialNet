@@ -1,7 +1,7 @@
 import React from 'react'
 import Profile from './profile'
 import { connect } from 'react-redux'
-import { setUserProfileThunk, setStatusThunk, updateStatusThunk, profileType, getIsUserFollowed } from '../../../BLL/reducer-profile'
+import { setUserProfileThunk, setStatusThunk, updateStatusThunk, getIsUserFollowed } from '../../../BLL/reducer-profile'
 import { followThunk, unfollowThunk } from '../../../BLL/reducer-friends'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { compose } from 'redux'
@@ -10,7 +10,7 @@ import { getAuthorizedUserId } from '../../../BLL/selectors/auth-selectors'
 import { getUsersProfile, getPosts, getIsUserFollowedStatus, getUserBackground, getGender } from '../../../BLL/selectors/profile-selectors'
 import { RootState } from '../../../BLL/redux'
 import { userType } from '../../../types/FriendsType/friendsType'
-import { postType } from '../../../BLL/reducer-profile'
+import { postType, profileType } from '../../../types/ProfileTypes/profileTypes'
 
 interface IProfileContainer {
     authorizedUserId: number

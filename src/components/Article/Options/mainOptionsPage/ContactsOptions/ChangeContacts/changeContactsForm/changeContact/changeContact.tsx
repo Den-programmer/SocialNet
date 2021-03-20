@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from 'react'
 import '../../../../../options.scss'
 import { createReviewChangesBtn } from '../../../../../../../../utils/helpers/functions/function-helpers'
-import { saveProfileType } from '../../../../../../../../BLL/reducer-profile'
+import { saveProfileType } from '../../../../../../../../types/ProfileTypes/profileTypes'
 import { ICurrentContact } from '../../../contactsOptions'
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 import { useEditIconStyles } from '../../../../accountOptions/accountOptions'

@@ -1,6 +1,6 @@
 import React from 'react'
 import User from './User/user'
-import { profileType, postType } from '../../../BLL/reducer-profile'
+import { profileType, postType } from '../../../types/ProfileTypes/profileTypes'
 import { userType } from '../../../types/FriendsType/friendsType'
 import ProfileNav from './ProfileNav/profileNavContainer'
 import Biography from './User/biography/biography'

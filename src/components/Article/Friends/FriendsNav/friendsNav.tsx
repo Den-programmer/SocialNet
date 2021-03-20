@@ -7,7 +7,9 @@ interface IFriendsNav { }
 const useStyles = makeStyles((theme: Theme) => createStyles({
     container: {
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        margin: '40px auto'
     }
 }))
 
@@ -15,8 +17,13 @@ const FriendsNav: React.FC<IFriendsNav> = (props) => {
     const classes = useStyles()
     return (
         <Container className={classes.container}>
-            {createFriendsNavBtn("Here's your friends!", "/Friends/DataFriends", "Friends")}
-            {createFriendsNavBtn("You can find new friend here!", "/Friends/FindUsers", "Find Friends")}
+            <div>
+                {createFriendsNavBtn("Here's your friends!", "/Friends/DataFriends", "Friends")}
+                {createFriendsNavBtn("You can find new friend here!", "/Friends/FindUsers", "Find Friends")}
+            </div>
+            <div>
+                {createFriendsNavBtn("Untermensches", "/Blacklist", "Blacklist")}
+            </div>
         </Container>
     )
 }
