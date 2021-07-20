@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import classes from './audio.module.scss'
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
@@ -10,23 +10,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faRandom, faUser, faUserCheck } from '@fortawesome/free-solid-svg-icons'
 import VolumeUpIcon from '@material-ui/icons/VolumeUp'
 import VolumeOffIcon from '@material-ui/icons/VolumeOff'
+import { trackType } from '../../../types/MusicTypes/musicTypes'
 
 interface IAudio {
-    songTitle: string
-    singerName: string
-    singerPhoto: string | null
-    isMusicPlaying: boolean
+    currentTrack: trackType
+    lastTrackId: number
+    likeTrack: (trackId: number) => void
+    chooseTrack: (trackId: number) => void
+    unsetIsMusicPlaying: () => void
 }
 
-const Audio: React.FC<IAudio> = (props) => {
-    // There're must be function of audio that change redux-state!
+const Audio: React.FC<IAudio> = ({ currentTrack, lastTrackId, likeTrack, chooseTrack, unsetIsMusicPlaying }) => {
+    const { id, isMusicPlaying, singer, singerPhoto, song, src, duration, time, liked } = currentTrack
     return (
         <div className={classes.tagAudio}>
             <div className={classes.audio}>
                 <div className={classes.mainControl}>
                     <SkipPreviousIcon className={classes.icon} />
-                    {props.isMusicPlaying ? <PauseIcon className={classes.icon} /> :
-                        <PlayArrowIcon className={classes.icon} />}
+                    {isMusicPlaying ? <PauseIcon onClick={unsetIsMusicPlaying} className={classes.icon} /> :
+                        <PlayArrowIcon onClick={() => chooseTrack(id)} className={classes.icon} />}
                     <SkipNextIcon className={classes.icon} />
                     <FontAwesomeIcon className={classes.icon} icon={faRandom} />
                     <RepeatIcon className={classes.icon} />
@@ -48,17 +50,18 @@ const Audio: React.FC<IAudio> = (props) => {
                 <div className={classes.trackPanel}>
                     <div className={classes.track}>
                         <div className={classes.singerPhoto}>
-                            <img src={props.singerPhoto ? props.singerPhoto : playlist_default} alt="singer" />
+                            <img src={singerPhoto ? singerPhoto : playlist_default} alt="singer" />
                         </div>
                         <div className={classes.trackInf}>
-                            <p className={classes.trackName}>{props.songTitle}</p>
-                            <p className={classes.singerName}>{props.singerName}</p>
+                            <p className={classes.trackName}>{song}</p>
+                            <p className={classes.singerName}>{singer}</p>
                         </div>
                     </div>
                     <div className={classes.panel}>
-                        <FontAwesomeIcon className={classes.icon} icon={faHeart}/>
+                        {liked ? <FontAwesomeIcon onClick={() => likeTrack(id)} className={classes.iconActive} icon={faHeart}/>
+                        : <FontAwesomeIcon onClick={() => likeTrack(id)} className={classes.icon} icon={faHeart}/>}
                         <FontAwesomeIcon className={classes.icon} icon={faUser}/>
-                        {/* <FontAwesomeIcon className={classes.icon} icon={faUserCheck}/> */}
+                        {/* <FontAwesomeIcon className={classes.iconActive} icon={faUserCheck}/> */}
                     </div>
                 </div>
             </div>

@@ -9,9 +9,8 @@ const mapStateToProps = (state: RootState) => ({
     lastTrackId: getTracks(state).length,
 })
 
-const {  likeTrack, setTrackCurrentTime, chooseTrack, unsetIsMusicPlaying } = actions
+const {  likeTrack, chooseTrack, unsetIsMusicPlaying } = actions
 
-const AudioContain = connect(mapStateToProps, 
-    { likeTrack, setTrackCurrentTime, chooseTrack, unsetIsMusicPlaying })(Audio)
+const AudioContain = connect(mapStateToProps, { likeTrack, chooseTrack, unsetIsMusicPlaying })(Audio)
 
 export default AudioContain

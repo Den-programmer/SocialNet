@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import classes from './mainMusicPage.module.css'
-import { trackType } from '../../../../BLL/reducer-music'
+import { trackType } from '../../../../types/MusicTypes/musicTypes'
 import Track from './track/trackContainer'
-import Audio from '../../../common/audio/audio'
+import Audio from '../../../common/audio/audioContain'
 import TracksSearching from './tracksSearching/tracksSearching'
 
 export interface IMainMusicPageProps {
@@ -76,10 +76,7 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
             </ul>
             {props.currentTrack.isMusicPlaying && <audio src="" ref={audio} />}
             {<div className={classes.currentMusic}>
-                <Audio songTitle={props.currentTrack.song}
-                    singerName={props.currentTrack.singer}
-                    singerPhoto={props.currentTrack.singerPhoto}
-                    isMusicPlaying={props.currentTrack.isMusicPlaying}/>
+                <Audio />
             </div>}
         </div>
     )

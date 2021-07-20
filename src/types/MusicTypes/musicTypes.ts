@@ -4,8 +4,8 @@ export type trackType = {
     singerPhoto: string
     song: string
     src: string
-    duration: string
-    time: string
+    duration: number
+    time: number
     liked: boolean
     isMusicPlaying: boolean
 }

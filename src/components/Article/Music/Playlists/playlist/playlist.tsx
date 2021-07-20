@@ -1,6 +1,6 @@
 import React, { useState, createRef } from 'react'
 import classes from './playlist.module.css'
-import { trackType } from '../../../../../BLL/reducer-music'
+import { trackType } from '../../../../../types/MusicTypes/musicTypes'
 import playlistWithoutUserImg from './img/playlist_default.jpg'
 import PlaylistContextMenu from './playlistContextMenu/playlistContextMenu'
 

@@ -11,18 +11,7 @@ import suicideBoys from '../components/Article/Music/Following/singer/images/sui
 import { InferActionTypes, RootState } from './redux'
 import { ThunkAction } from 'redux-thunk'
 import { MusicAPI } from '../DAL/musicApi'
-
-export type trackType = {
-    id: number
-    singer: string
-    singerPhoto: string
-    song: string
-    src: string
-    duration: number
-    time: number
-    liked: boolean
-    isMusicPlaying: boolean
-}
+import { trackType } from '../types/MusicTypes/musicTypes'
 
 export type singerType = {
     id: number
@@ -48,16 +37,6 @@ export type navLinkType = {
     id: number
     title: string
     path: string
-}
-type musicPageType = {
-    navLinks: Array<navLinkType>
-    trackNotifications: Array<trackNotificationType>
-    tracks: Array<trackType>
-    likedTracks: Array<trackType>
-    playlists: Array<playlistType>
-    albums: Array<{}>
-    following: Array<singerType>
-    currentTrack: trackType
 }
 
 const musicPage = {
@@ -156,7 +135,7 @@ const musicPage = {
             isMusicPlaying: false
         }
     ],
-    likedTracks: [],
+    likedTracks: [] as Array<trackType>,
     playlists: [
         {
             id: 1,
@@ -261,10 +240,11 @@ const musicPage = {
         time: 0,
         liked: true,
         isMusicPlaying: false
-    }
-} as musicPageType
+    },
+    volume: 1
+}
 
-const reducerMusic = (state = musicPage, action: ActionTypes): musicPageType => {
+const reducerMusic = (state = musicPage, action: ActionTypes): typeof musicPage => {
     switch (action.type) {
         case `sn/musicPage/SET_TRACKS`:
             return {
@@ -281,7 +261,8 @@ const reducerMusic = (state = musicPage, action: ActionTypes): musicPageType => 
                     } else {
                         return track
                     }
-                })
+                }),
+                currentTrack: { ...state.currentTrack, liked: !state.currentTrack.liked }
             }
         case `sn/musicPage/SET_LIKED_TRACKS`:
             return {
@@ -299,7 +280,8 @@ const reducerMusic = (state = musicPage, action: ActionTypes): musicPageType => 
                     } else {
                         return { ...track, isMusicPlaying: false }
                     }
-                })
+                }),
+                currentTrack: { ...state.currentTrack, isMusicPlaying: !state.currentTrack.isMusicPlaying }
             }
         case `sn/musicPage/SET_CURRENT_TRACK`:
             return {
@@ -362,7 +344,7 @@ const reducerMusic = (state = musicPage, action: ActionTypes): musicPageType => 
                 playlists: state.playlists.map((p: playlistType) => {
                     if (p.id === action.playlistId) return {
                         ...p, music: state.playlists[action.playlistId - 1].music.map((track: trackType) => {
-                            if(track.id !== action.trackId) {
+                            if (track.id !== action.trackId) {
                                 // @ts-ignore
                                 state.playlists[action.playlistId - 1].music.push(newTrack)
                             }
@@ -375,6 +357,11 @@ const reducerMusic = (state = musicPage, action: ActionTypes): musicPageType => 
                     }
                     return p
                 })
+            }
+        case `sn/musicPage/SET_VOLUME`:
+            return {
+                ...state,
+                volume: action.volume
             }
         // case `sn/musicPage/IGNORE-TRACK`: 
         //     return {
@@ -418,14 +405,15 @@ export const actions = {
     deletePlaylist: (playlistId: number) => ({ type: `sn/musicPage/DELETE_PLAYLIST`, playlistId } as const),
     changePlaylistTitle: (newTitle: string, playlistId: number) => ({ type: `sn/musicPage/EDIT_PLAYLIST`, newTitle, playlistId } as const),
     addTrackToPlaylist: (trackId: number, playlistId: number) => ({ type: `sn/musicPage/ADD_TRACK_TO_PLAYLIST`, trackId, playlistId } as const),
-    ignoreTrack: (trackId: number) => ({ type: `sn/musicPage/IGNORE-TRACK`, trackId } as const)
+    ignoreTrack: (trackId: number) => ({ type: `sn/musicPage/IGNORE-TRACK`, trackId } as const),
+    setVolume: (volume: number) => ({ type: `sn/musicPage/SET_VOLUME`, volume } as const)
 }
 
 // Thunk Creators!
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
-export const requireTracks = ():ThunkType => async (dispatch) => {
+export const requireTracks = (): ThunkType => async (dispatch) => {
     const data = await MusicAPI.getTracks()
     console.log(data)
 }
