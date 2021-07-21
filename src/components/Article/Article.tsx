@@ -27,6 +27,7 @@ import Notifications from './Notifications/notificationsContainer'
 import SingleNewsPageContent from './News/SingleNewsPageContent/singleNewsPageContent'
 import BlacklistContainer from './Friends/FriendsComponents/Blacklist/blacklistContainer'
 import MusicPageNav from './Music/MusicPageNavigation/musicPageNavContainer'
+import Audio from '../common/audio/audioContain'
 
 interface ArticlePropType {
     userDialogId: number
@@ -146,6 +147,7 @@ const Article: React.FC<ArticlePropType> = React.memo(({ userDialogId, isSidebar
 
                 <Route path="*" render={() => (<div className={classes.container}><ErrorPage /></div>)} />
             </Switch>
+            <Audio />
         </article>
     )
 })
