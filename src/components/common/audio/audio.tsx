@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import classes from './audio.module.scss'
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
@@ -15,12 +15,15 @@ import { trackType } from '../../../types/MusicTypes/musicTypes'
 interface IAudio {
     currentTrack: trackType
     lastTrackId: number
+    volume: number
     likeTrack: (trackId: number) => void
     chooseTrack: (trackId: number) => void
     unsetIsMusicPlaying: () => void
+    setVolume: (volume: number) => void
 }
 
-const Audio: React.FC<IAudio> = ({ currentTrack, lastTrackId, likeTrack, chooseTrack, unsetIsMusicPlaying }) => {
+const Audio: React.FC<IAudio> = ({ currentTrack, lastTrackId, volume, setVolume, likeTrack, chooseTrack, unsetIsMusicPlaying }) => {
+    const [isVolumeHovered, setIsVolumeHoveredStatus] = useState<boolean>(false)
     const { id, isMusicPlaying, singer, singerPhoto, song, src, duration, time, liked } = currentTrack
     return (
         <div className={classes.tagAudio}>
@@ -43,8 +46,14 @@ const Audio: React.FC<IAudio> = ({ currentTrack, lastTrackId, likeTrack, chooseT
                             3:41
                         </div>
                     </div>
-                    <div className={classes.volumeContainer}>
-                        <VolumeUpIcon className={classes.icon}/>
+                    <div onMouseEnter={() => setIsVolumeHoveredStatus(true)} 
+                    onMouseLeave={() => setIsVolumeHoveredStatus(false)} 
+                    className={classes.volumeContainer}>
+                        {volume === 0 ? <VolumeOffIcon onClick={() => setVolume(1)} className={classes.volumeIcon}/> 
+                        :<VolumeUpIcon onClick={() => setVolume(0)} className={classes.volumeIcon}/>}
+                        {isVolumeHovered && <div className={classes.volume}>
+                            <input onChange={(e) => setVolume(Number(e.currentTarget.value))} value={volume} type="range" min="0" max="1" step="0.1" className={classes.volumeRange} />
+                        </div>}
                     </div>
                 </div>
                 <div className={classes.trackPanel}>

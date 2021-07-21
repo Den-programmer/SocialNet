@@ -21,3 +21,7 @@ export const getPlaylists = (state: RootState) => {
 export const getCurrentTrack = (state: RootState) => {
     return state.musicPage.currentTrack
 }
+
+export const getVolume = (state: RootState) => {
+    return state.musicPage.volume
+}

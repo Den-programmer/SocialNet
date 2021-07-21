@@ -8,6 +8,7 @@ import TracksSearching from './tracksSearching/tracksSearching'
 export interface IMainMusicPageProps {
     tracks: Array<trackType>
     currentTrack: trackType
+    volume: number
     setTrackCurrentTime: (trackId: number, time: number) => void
     unsetIsMusicPlaying: () => void
 }
@@ -15,6 +16,10 @@ export interface IMainMusicPageProps {
 const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
     const audio = React.createRef<HTMLAudioElement>()
     useEffect(() => {
+        let node = audio.current
+        if(node) {
+            node.volume = props.volume
+        }
         setTimeout(() => {
             let node = audio.current
             if (props.currentTrack.isMusicPlaying && node) {
@@ -75,9 +80,7 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
                 {tracks.length !== 0 ? tracks : <h2 className={classes.titleWhenNoTracks}>There're no tracks yet!</h2>}
             </ul>
             {props.currentTrack.isMusicPlaying && <audio src="" ref={audio} />}
-            {<div className={classes.currentMusic}>
-                <Audio />
-            </div>}
+            <Audio />
         </div>
     )
 }

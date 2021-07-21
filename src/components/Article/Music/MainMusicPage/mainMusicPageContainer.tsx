@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import MainMusicPage from './mainMusicPage'
 import { RootState } from '../../../../BLL/redux'
-import { getTracks } from '../../../../BLL/selectors/music-selectors'
+import { getTracks, getVolume } from '../../../../BLL/selectors/music-selectors'
 import { actions, requireTracks } from '../../../../BLL/reducer-music'
 import { trackType } from '../../../../types/MusicTypes/musicTypes'
 import { getCurrentTrack } from '../../../../BLL/selectors/music-selectors'
@@ -12,6 +12,7 @@ import { withAuthRedirect } from '../../../../HOC/withAuthRedirect'
 interface IMainMusicPageContainer {
     tracks: Array<trackType>
     currentTrack: trackType
+    volume: number
     setTrackCurrentTime: (trackId: number, time: number) => void
     unsetIsMusicPlaying: () => void
     requireTracks: () => void
@@ -22,7 +23,7 @@ class MainMusicPageContainer extends React.Component<IMainMusicPageContainer> {
     //     this.props.requireTracks()
     // }
     render() {
-        return <MainMusicPage tracks={this.props.tracks} 
+        return <MainMusicPage volume={this.props.volume} tracks={this.props.tracks} 
         currentTrack={this.props.currentTrack} 
         setTrackCurrentTime={this.props.setTrackCurrentTime} 
         unsetIsMusicPlaying={this.props.unsetIsMusicPlaying}/>
@@ -31,7 +32,8 @@ class MainMusicPageContainer extends React.Component<IMainMusicPageContainer> {
 
 const mapStateToProps = (state: RootState) => ({
     tracks: getTracks(state),
-    currentTrack: getCurrentTrack(state)
+    currentTrack: getCurrentTrack(state),
+    volume: getVolume(state)
 })
 
 const { setTrackCurrentTime, unsetIsMusicPlaying } = actions

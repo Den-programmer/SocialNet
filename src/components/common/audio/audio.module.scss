@@ -1,5 +1,14 @@
 @import '../../../index.scss';
 
+.iconStyles {
+    margin: 0px 7px;
+    cursor: pointer;
+    &:hover {
+        transition: all .3s linear;
+        color: #FF5500;
+    }
+}
+
 .tagAudio {
     height: 50px;
     width: 100%;
@@ -17,18 +26,18 @@
 }
 
 .icon {
-    margin: 0px 7px;
-    cursor: pointer;
-    &:hover {
-        transition: all .3s linear;
-        color: #FF5500;
-    }
+    @extend .iconStyles;
 }
 
 .iconActive {
     margin: 0px 7px;
     cursor: pointer;
     color: #FF5500;
+}
+
+.volumeIcon {
+    @extend .iconStyles;
+    padding: 10px 0px;
 }
 
 .mainControl {
@@ -90,20 +99,20 @@
     z-index: 999;
 }
 
-// .volume {
-//     box-sizing: content-box;
-//     background-color: #82CCD7;
-//     border: 1px solid #DAAA94;
-//     transform: rotate(270deg);
-//     position: absolute;
-//     -webkit-top: -90px;
-//     -webkit-right: 40px;
-//     -moz-top: -90px;
-//     -moz-right: -64px;
-//     top: -75px;
-//     right: -50px;
-//     .volumeRange {
-//         display: inline-block;
-//         vertical-align: middle;
-//     }
-// }
+.volumeContainer {
+    position: relative;
+}
+
+.volume {
+    box-sizing: content-box;
+    background-color: #82CCD7;
+    border: 1px solid #DAAA94;
+    transform: rotate(270deg);
+    position: absolute;
+    bottom: 95px;
+    right: -50.5px;
+    .volumeRange {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
