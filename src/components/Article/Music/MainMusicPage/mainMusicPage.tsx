@@ -4,6 +4,7 @@ import { trackType } from '../../../../types/MusicTypes/musicTypes'
 import Track from './track/trackContainer'
 import Audio from '../../../common/audio/audioContain'
 import TracksSearching from './tracksSearching/tracksSearching'
+import { Portal } from '../../../common/Portal/portal'
 
 export interface IMainMusicPageProps {
     tracks: Array<trackType>
@@ -80,7 +81,6 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
                 {tracks.length !== 0 ? tracks : <h2 className={classes.titleWhenNoTracks}>There're no tracks yet!</h2>}
             </ul>
             {props.currentTrack.isMusicPlaying && <audio src="" ref={audio} />}
-            <Audio />
         </div>
     )
 }

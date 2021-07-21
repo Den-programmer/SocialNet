@@ -14,6 +14,7 @@ import { getIsAuthStatus } from './BLL/selectors/auth-selectors'
 import SideBar from './components/SideBar/SideBarContainer'
 import { actions } from './BLL/reducer-app'
 import { getSidebarWidth, getIsSidebarOpenStatus } from './BLL/selectors/sidebar-selectors'
+import Audio from './components/common/audio/audioContain'
 
 interface IApp {
   Initialized: boolean
@@ -44,6 +45,7 @@ const App: React.FC<IApp> = (props) => {
         <div>
           <Header />
           <Article isSidebarOpen={props.isSidebarOpen} drawerWidth={props.drawerWidth}/>
+          <Audio />
           <Footer />
         </div>
       </div>

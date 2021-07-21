@@ -1,5 +1,5 @@
 import React from 'react'
-import classes from './musicPageNav.module.css'
+import classes from './musicPageNav.module.scss'
 import { navLinkType } from '../../../../BLL/reducer-music'
 import MusicPageNavLink from './musicPageNavLink/musicPageNavLink'
 
@@ -17,7 +17,7 @@ const MusicPageNav:React.FC<MusicNavigationPropsType> = (props) => {
                {navLinks}
             </ul>
         </nav>
-    );
+    )
 }
 
-export default MusicPageNav;
+export default MusicPageNav

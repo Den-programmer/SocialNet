@@ -26,6 +26,7 @@ import ContactsOptions from './Options/mainOptionsPage/ContactsOptions/contactsO
 import Notifications from './Notifications/notificationsContainer'
 import SingleNewsPageContent from './News/SingleNewsPageContent/singleNewsPageContent'
 import BlacklistContainer from './Friends/FriendsComponents/Blacklist/blacklistContainer'
+import MusicPageNav from './Music/MusicPageNavigation/musicPageNavContainer'
 
 interface ArticlePropType {
     userDialogId: number
@@ -88,11 +89,11 @@ const Article: React.FC<ArticlePropType> = React.memo(({ userDialogId, isSidebar
                 <Route path={`/News/${newsPageId && newsPageId}`} render={() => (<div style={ { background: '#F7F9FC' } } className={classes.container}><SingleNewsPageContent /></div>)} />
                 <Route path={`/News`} render={() => (<div style={ { background: '#F7F9FC' } } className={classes.container}><News /></div>)} />
                 {/* Music! */}
-                <Route path='/Music/likedTracks' render={() => (<div className={classes.container}><LikedTracksContainer /></div>)} />
-                <Route path='/Music/PlayLists' render={() => (<div className={classes.container}><PlaylistsContainer /></div>)} />
-                <Route path='/Music/Albums' render={() => (<div className={classes.container}><AlbumsContainer /></div>)} />
-                <Route path='/Music/following' render={() => (<div className={classes.container}><FollowingContainer /></div>)} />
-                <Route exact path='/Music' render={() => (<div className={classes.container}><Music /></div>)} />
+                <Route path='/Music/likedTracks' render={() => (<div className={classes.container}><MusicPageNav /><LikedTracksContainer /></div>)} />
+                <Route path='/Music/PlayLists' render={() => (<div className={classes.container}><MusicPageNav /><PlaylistsContainer /></div>)} />
+                <Route path='/Music/Albums' render={() => (<div className={classes.container}><MusicPageNav /><AlbumsContainer /></div>)} />
+                <Route path='/Music/following' render={() => (<div className={classes.container}><MusicPageNav /><FollowingContainer /></div>)} />
+                <Route exact path='/Music' render={() => (<div className={classes.container}><MusicPageNav /><Music /></div>)} />
                 {/* Options! */}
                 <Route path="/Options/account" render={() => (<Container className={classes.displayContainer}>
                     <OptionsNav />
