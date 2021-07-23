@@ -203,7 +203,8 @@ const musicPage = {
             name: 'NF',
             location: 'United States',
             subscribers: 5000000,
-            music: []
+            music: [],
+            followed: false
         },
         {
             id: 2,
@@ -211,7 +212,8 @@ const musicPage = {
             name: 'Lil Peep',
             location: 'United States',
             subscribers: 4900000,
-            musicTracks: []
+            musicTracks: [],
+            followed: false
         },
         {
             id: 3,
@@ -219,7 +221,8 @@ const musicPage = {
             name: 'Starset',
             location: null,
             subscribers: 5900000,
-            music: []
+            music: [],
+            followed: false
         },
         {
             id: 4,
@@ -227,7 +230,8 @@ const musicPage = {
             name: '$uicide boy$',
             location: 'United States',
             subscribers: 2900000,
-            music: []
+            music: [],
+            followed: false
         }
     ],
     currentTrack: {
@@ -272,16 +276,18 @@ const reducerMusic = (state = musicPage, action: ActionTypes): typeof musicPage 
                 })
             }
         case `sn/musicPage/CHOOSE_TRACK`:
+            let trackObj = state.currentTrack
             return {
                 ...state,
                 tracks: state.tracks.map((track: trackType) => {
                     if (track.id === action.trackId) {
+                        trackObj = { ...track, isMusicPlaying: !track.isMusicPlaying }
                         return { ...track, isMusicPlaying: !track.isMusicPlaying }
                     } else {
                         return { ...track, isMusicPlaying: false }
                     }
                 }),
-                currentTrack: { ...state.currentTrack, isMusicPlaying: !state.currentTrack.isMusicPlaying }
+                currentTrack: trackObj
             }
         case `sn/musicPage/SET_CURRENT_TRACK`:
             return {

@@ -16,6 +16,10 @@ p {
     font-family: 'Open Sans', sans-serif;
 }
 
+img {
+    user-select: none;
+}
+
 a {
     text-decoration: none;
 }

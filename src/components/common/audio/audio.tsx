@@ -25,14 +25,16 @@ interface IAudio {
 const Audio: React.FC<IAudio> = ({ currentTrack, lastTrackId, volume, setVolume, likeTrack, chooseTrack, unsetIsMusicPlaying }) => {
     const [isVolumeHovered, setIsVolumeHoveredStatus] = useState<boolean>(false)
     const { id, isMusicPlaying, singer, singerPhoto, song, src, duration, time, liked } = currentTrack
+    const prevId = id-1 === 0 ? lastTrackId : id-1 
+    const nextId = id+1 > lastTrackId ? 1 : id+1
     return (
         <div className={classes.tagAudio}>
             <div className={classes.audio}>
                 <div className={classes.mainControl}>
-                    <SkipPreviousIcon className={classes.icon} />
+                    <SkipPreviousIcon onClick={() => chooseTrack(prevId)} className={classes.icon} />
                     {isMusicPlaying ? <PauseIcon onClick={unsetIsMusicPlaying} className={classes.icon} /> :
                         <PlayArrowIcon onClick={() => chooseTrack(id)} className={classes.icon} />}
-                    <SkipNextIcon className={classes.icon} />
+                    <SkipNextIcon onClick={() => chooseTrack(nextId)} className={classes.icon} />
                     <FontAwesomeIcon className={classes.icon} icon={faRandom} />
                     <RepeatIcon className={classes.icon} />
                 </div>
