@@ -11,22 +11,34 @@ import { faHeart, faRandom, faUser, faUserCheck } from '@fortawesome/free-solid-
 import VolumeUpIcon from '@material-ui/icons/VolumeUp'
 import VolumeOffIcon from '@material-ui/icons/VolumeOff'
 import { trackType } from '../../../types/MusicTypes/musicTypes'
+import { singerType } from '../../../BLL/reducer-music'
+import { useEffect } from 'react'
 
 interface IAudio {
     currentTrack: trackType
     lastTrackId: number
     volume: number
+    following: Array<singerType>
     likeTrack: (trackId: number) => void
     chooseTrack: (trackId: number) => void
     unsetIsMusicPlaying: () => void
     setVolume: (volume: number) => void
+    setSingerFollewedStatus: (singerName: string) => void
 }
 
-const Audio: React.FC<IAudio> = ({ currentTrack, lastTrackId, volume, setVolume, likeTrack, chooseTrack, unsetIsMusicPlaying }) => {
+const Audio: React.FC<IAudio> = ({ currentTrack, lastTrackId, volume, following, setSingerFollewedStatus, setVolume, likeTrack, chooseTrack, unsetIsMusicPlaying }) => {
     const [isVolumeHovered, setIsVolumeHoveredStatus] = useState<boolean>(false)
     const { id, isMusicPlaying, singer, singerPhoto, song, src, duration, time, liked } = currentTrack
     const prevId = id-1 === 0 ? lastTrackId : id-1 
     const nextId = id+1 > lastTrackId ? 1 : id+1
+    const [isUserFollowed, setIsUserFollowedStatus] = useState<boolean>(false)
+    useEffect(() => {
+        following.forEach(item => {
+            if(item.name === singer) {
+                setIsUserFollowedStatus(item.followed)
+            }
+        })
+    })
     return (
         <div className={classes.tagAudio}>
             <div className={classes.audio}>
@@ -71,8 +83,8 @@ const Audio: React.FC<IAudio> = ({ currentTrack, lastTrackId, volume, setVolume,
                     <div className={classes.panel}>
                         {liked ? <FontAwesomeIcon onClick={() => likeTrack(id)} className={classes.iconActive} icon={faHeart}/>
                         : <FontAwesomeIcon onClick={() => likeTrack(id)} className={classes.icon} icon={faHeart}/>}
-                        <FontAwesomeIcon className={classes.icon} icon={faUser}/>
-                        {/* <FontAwesomeIcon className={classes.iconActive} icon={faUserCheck}/> */}
+                        {isUserFollowed ? <FontAwesomeIcon onClick={() => setSingerFollewedStatus(singer)} className={classes.iconActive} icon={faUserCheck}/> 
+                        : <FontAwesomeIcon onClick={() => setSingerFollewedStatus(singer)} className={classes.icon} icon={faUser}/>}
                     </div>
                 </div>
             </div>

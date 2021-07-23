@@ -20,6 +20,7 @@ export type singerType = {
     location: string | null
     subscribers: number
     music: Array<trackType>
+    followed: boolean
 }
 
 export type playlistType = {
@@ -203,7 +204,7 @@ const musicPage = {
             name: 'NF',
             location: 'United States',
             subscribers: 5000000,
-            music: [],
+            music: [] as Array<trackType>,
             followed: false
         },
         {
@@ -212,7 +213,7 @@ const musicPage = {
             name: 'Lil Peep',
             location: 'United States',
             subscribers: 4900000,
-            musicTracks: [],
+            music: [] as Array<trackType>,
             followed: false
         },
         {
@@ -221,7 +222,7 @@ const musicPage = {
             name: 'Starset',
             location: null,
             subscribers: 5900000,
-            music: [],
+            music: [] as Array<trackType>,
             followed: false
         },
         {
@@ -230,10 +231,10 @@ const musicPage = {
             name: '$uicide boy$',
             location: 'United States',
             subscribers: 2900000,
-            music: [],
+            music: [] as Array<trackType>,
             followed: false
         }
-    ],
+    ] as Array<singerType>,
     currentTrack: {
         id: 1,
         singer: 'Lil Peep',
@@ -369,6 +370,14 @@ const reducerMusic = (state = musicPage, action: ActionTypes): typeof musicPage 
                 ...state,
                 volume: action.volume
             }
+        case `sn/musicPage/SET_SINGER_FOLLOWED_STATUS`:
+            return {
+                ...state,
+                following: state.following.map((item: singerType) => {
+                    if(item.name === action.singerName) return { ...item, followed: !item.followed }
+                    return item
+                })
+            }    
         // case `sn/musicPage/IGNORE-TRACK`: 
         //     return {
         //         ...state,
@@ -412,7 +421,8 @@ export const actions = {
     changePlaylistTitle: (newTitle: string, playlistId: number) => ({ type: `sn/musicPage/EDIT_PLAYLIST`, newTitle, playlistId } as const),
     addTrackToPlaylist: (trackId: number, playlistId: number) => ({ type: `sn/musicPage/ADD_TRACK_TO_PLAYLIST`, trackId, playlistId } as const),
     ignoreTrack: (trackId: number) => ({ type: `sn/musicPage/IGNORE-TRACK`, trackId } as const),
-    setVolume: (volume: number) => ({ type: `sn/musicPage/SET_VOLUME`, volume } as const)
+    setVolume: (volume: number) => ({ type: `sn/musicPage/SET_VOLUME`, volume } as const),
+    setSingerFollewedStatus: (singerName: string) => ({ type: `sn/musicPage/SET_SINGER_FOLLOWED_STATUS`, singerName } as const)
 }
 
 // Thunk Creators!

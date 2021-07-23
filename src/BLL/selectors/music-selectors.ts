@@ -25,3 +25,7 @@ export const getCurrentTrack = (state: RootState) => {
 export const getVolume = (state: RootState) => {
     return state.musicPage.volume
 }
+
+export const getSingers = (state: RootState) => {
+    return state.musicPage.following
+}
