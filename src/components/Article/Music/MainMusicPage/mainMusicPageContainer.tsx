@@ -16,6 +16,7 @@ interface IMainMusicPageContainer {
     setTrackCurrentTime: (trackId: number, time: number) => void
     unsetIsMusicPlaying: () => void
     requireTracks: () => void
+    chooseTrack: (trackId: number) => void
 }
 
 class MainMusicPageContainer extends React.Component<IMainMusicPageContainer> {
@@ -23,7 +24,7 @@ class MainMusicPageContainer extends React.Component<IMainMusicPageContainer> {
     //     this.props.requireTracks()
     // }
     render() {
-        return <MainMusicPage volume={this.props.volume} tracks={this.props.tracks} 
+        return <MainMusicPage chooseTrack={this.props.chooseTrack} volume={this.props.volume} tracks={this.props.tracks} 
         currentTrack={this.props.currentTrack} 
         setTrackCurrentTime={this.props.setTrackCurrentTime} 
         unsetIsMusicPlaying={this.props.unsetIsMusicPlaying}/>
@@ -36,9 +37,9 @@ const mapStateToProps = (state: RootState) => ({
     volume: getVolume(state)
 })
 
-const { setTrackCurrentTime, unsetIsMusicPlaying } = actions
+const { setTrackCurrentTime, unsetIsMusicPlaying, chooseTrack } = actions
 
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, { setTrackCurrentTime, unsetIsMusicPlaying, requireTracks }),
+    connect(mapStateToProps, { setTrackCurrentTime, unsetIsMusicPlaying, requireTracks, chooseTrack }),
     withAuthRedirect
 )(MainMusicPageContainer)

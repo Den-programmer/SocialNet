@@ -17,7 +17,7 @@ class LikedTracksClass extends React.Component<IProps> {
         this.props.setLikedTracks()
     }
     render() {
-        return <MainMusicPage volume={this.props.volume} currentTrack={this.props.currentTrack} unsetIsMusicPlaying={this.props.unsetIsMusicPlaying} 
+        return <MainMusicPage chooseTrack={this.props.chooseTrack} volume={this.props.volume} currentTrack={this.props.currentTrack} unsetIsMusicPlaying={this.props.unsetIsMusicPlaying} 
         tracks={this.props.tracks} setTrackCurrentTime={this.props.setTrackCurrentTime}/>
     }
 }
@@ -28,12 +28,13 @@ const mapStateToProps = (state:RootState) => ({
     volume: getVolume(state)
 })
 
-const { setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying } = actions
+const { setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying, chooseTrack } = actions
 
 export default compose<React.ComponentType>(
     connect(mapStateToProps, {
         setTrackCurrentTime, 
         setLikedTracks, 
-        unsetIsMusicPlaying}),
+        unsetIsMusicPlaying, 
+        chooseTrack}),
     withAuthRedirect
 )(LikedTracksClass)

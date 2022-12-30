@@ -37,6 +37,7 @@ const Track: React.FC<TrackPropsType> = (props) => {
         props.likeTrack(props.id)
         event.stopPropagation()
     }
+    console.log(props.isMusicPlaying)
     return (
         <li onClick={chooseTrack} className={classes.track}>
             <div className={classes.trackInf}>

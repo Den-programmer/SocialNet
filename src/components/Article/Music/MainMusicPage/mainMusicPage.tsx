@@ -12,6 +12,7 @@ export interface IMainMusicPageProps {
     volume: number
     setTrackCurrentTime: (trackId: number, time: number) => void
     unsetIsMusicPlaying: () => void
+    chooseTrack: (trackId: number) => void
 }
 
 const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
@@ -22,7 +23,6 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
             node.volume = props.volume
         }
         setTimeout(() => {
-            let node = audio.current
             if (props.currentTrack.isMusicPlaying && node) {
                 node.src = props.currentTrack.src
                 node.currentTime = props.currentTrack.time
@@ -49,6 +49,7 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
             node.src = props.currentTrack.src
             node.currentTime = props.currentTrack.time
             node.play()
+            props.chooseTrack(props.currentTrack.id)
         }
     }
     const onPause = () => {
