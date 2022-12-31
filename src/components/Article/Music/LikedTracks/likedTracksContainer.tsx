@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { RootState } from '../../../../BLL/redux'
-import { getLikedTracks, getCurrentTrack, getVolume } from '../../../../BLL/selectors/music-selectors'
+import { getLikedTracks, getCurrentTrack, getVolume, getFilterTerm } from '../../../../BLL/selectors/music-selectors'
 import MainMusicPage from '../MainMusicPage/mainMusicPage'
 import { actions } from '../../../../BLL/reducer-music'
 import { IMainMusicPageProps } from '../MainMusicPage/mainMusicPage'
@@ -17,7 +17,7 @@ class LikedTracksClass extends React.Component<IProps> {
         this.props.setLikedTracks()
     }
     render() {
-        return <MainMusicPage chooseTrack={this.props.chooseTrack} volume={this.props.volume} currentTrack={this.props.currentTrack} unsetIsMusicPlaying={this.props.unsetIsMusicPlaying} 
+        return <MainMusicPage term={this.props.term} chooseTrack={this.props.chooseTrack} volume={this.props.volume} currentTrack={this.props.currentTrack} unsetIsMusicPlaying={this.props.unsetIsMusicPlaying} 
         tracks={this.props.tracks} setTrackCurrentTime={this.props.setTrackCurrentTime}/>
     }
 }
@@ -25,7 +25,8 @@ class LikedTracksClass extends React.Component<IProps> {
 const mapStateToProps = (state:RootState) => ({
     tracks: getLikedTracks(state),
     currentTrack: getCurrentTrack(state),
-    volume: getVolume(state)
+    volume: getVolume(state),
+    term: getFilterTerm(state)
 })
 
 const { setTrackCurrentTime, setLikedTracks, unsetIsMusicPlaying, chooseTrack } = actions

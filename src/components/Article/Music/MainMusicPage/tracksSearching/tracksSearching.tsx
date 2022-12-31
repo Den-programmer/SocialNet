@@ -1,26 +1,26 @@
-import React from 'react'
+import React, { ChangeEvent, useRef } from 'react'
 import classes from './tracksSearching.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { createStyles, makeStyles, TextField } from '@material-ui/core'
 
-interface ITracksSearching { }
+interface ITracksSearching {
+    setFilterTerm: (term: string) => void
+}
 
-const TracksSearching: React.FC<ITracksSearching> = (props) => {
-    const search = React.createRef<HTMLInputElement>()
-    const onSearchIconClick = () => {
-        const node = search.current
-        if (node) node.focus()
+const TracksSearching: React.FC<ITracksSearching> = ({ setFilterTerm }) => {
+    const search = useRef<any>()
+    const useStyles = makeStyles(() => createStyles({
+        input: {
+            width: '60%'
+        }
+    }))
+    const s = useStyles()
+    const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setFilterTerm(e.currentTarget.value)
     }
     return (
-        <React.Fragment>
-            <div className={classes.musicTitle}>
-                <h1>Tracks for you!</h1>
-            </div>
-            <div className={classes.searchInput}>
-                <FontAwesomeIcon title="Click to search!" onClick={onSearchIconClick} className={classes.searchIcon} icon={faSearch} />
-                <input ref={search} type="text" />
-            </div>
-        </React.Fragment>
+        <div className={classes.searchInput}>
+            <TextField ref={search} onChange={onChangeInputHandler} className={s.input} variant="outlined" />
+        </div> 
     )
 }
 

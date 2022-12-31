@@ -1,3 +1,7 @@
+.mainMusicPage {
+    min-height: 100vh; 
+}
+
 .tracks {
     padding-inline-start: 0;
 }

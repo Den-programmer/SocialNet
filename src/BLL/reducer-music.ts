@@ -246,7 +246,10 @@ const musicPage = {
         liked: true,
         isMusicPlaying: false
     },
-    volume: 1
+    volume: 1,
+    filter: {
+        term: ''
+    }
 }
 
 const reducerMusic = (state = musicPage, action: ActionTypes): typeof musicPage => {
@@ -377,7 +380,12 @@ const reducerMusic = (state = musicPage, action: ActionTypes): typeof musicPage 
                     if(item.name === action.singerName) return { ...item, followed: !item.followed }
                     return item
                 })
-            }    
+            } 
+        case `sn/musicPage/SET_FILTER_TERM`:
+            return {
+                ...state, 
+                filter: { ...state.filter, term: action.term }
+            }       
         // case `sn/musicPage/IGNORE-TRACK`: 
         //     return {
         //         ...state,
@@ -422,7 +430,8 @@ export const actions = {
     addTrackToPlaylist: (trackId: number, playlistId: number) => ({ type: `sn/musicPage/ADD_TRACK_TO_PLAYLIST`, trackId, playlistId } as const),
     ignoreTrack: (trackId: number) => ({ type: `sn/musicPage/IGNORE-TRACK`, trackId } as const),
     setVolume: (volume: number) => ({ type: `sn/musicPage/SET_VOLUME`, volume } as const),
-    setSingerFollewedStatus: (singerName: string) => ({ type: `sn/musicPage/SET_SINGER_FOLLOWED_STATUS`, singerName } as const)
+    setSingerFollewedStatus: (singerName: string) => ({ type: `sn/musicPage/SET_SINGER_FOLLOWED_STATUS`, singerName } as const),
+    setFilterTerm: (term: string) => ({ type: `sn/musicPage/SET_FILTER_TERM`, term } as const)
 }
 
 // Thunk Creators!

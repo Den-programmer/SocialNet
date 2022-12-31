@@ -3,10 +3,11 @@ import classes from './mainMusicPage.module.css'
 import { trackType } from '../../../../types/MusicTypes/musicTypes'
 import Track from './track/trackContainer'
 import Audio from '../../../common/audio/audioContain'
-import TracksSearching from './tracksSearching/tracksSearching'
+import TracksSearching from './tracksSearching/tracksSearchingContainer'
 import { Portal } from '../../../common/Portal/portal'
 
 export interface IMainMusicPageProps {
+    term: string
     tracks: Array<trackType>
     currentTrack: trackType
     volume: number
@@ -62,7 +63,16 @@ const MainMusicPage: React.FC<IMainMusicPageProps> = (props) => {
         }
     }
 
-    const tracks = props.tracks.map((track: trackType) => {
+    const searchedTracks = props.tracks.filter((track: trackType) => {
+        if(props.term !== '') {
+            if(track.singer.toLowerCase().indexOf(props.term.toLowerCase()) > -1 || 
+            track.song.toLowerCase().indexOf(props.term.toLowerCase()) > -1) return true
+        } else {
+            return true
+        }
+    })
+
+    const tracks = searchedTracks.map((track: trackType) => {
         return <Track key={track.id}
             id={track.id}
             singer={track.singer}

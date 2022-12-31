@@ -29,3 +29,7 @@ export const getVolume = (state: RootState) => {
 export const getSingers = (state: RootState) => {
     return state.musicPage.following
 }
+
+export const getFilterTerm = (state: RootState) => {
+    return state.musicPage.filter.term
+}
