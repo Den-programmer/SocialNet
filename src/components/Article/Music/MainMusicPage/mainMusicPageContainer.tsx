@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import MainMusicPage from './mainMusicPage'
 import { RootState } from '../../../../BLL/redux'
 import { getFilterTerm, getTracks, getVolume } from '../../../../BLL/selectors/music-selectors'
-import { actions, requireTracks } from '../../../../BLL/reducer-music'
+import { actions } from '../../../../BLL/reducer-music'
 import { trackType } from '../../../../types/MusicTypes/musicTypes'
 import { getCurrentTrack } from '../../../../BLL/selectors/music-selectors'
 import { compose } from 'redux'
@@ -16,7 +16,6 @@ interface IMainMusicPageContainer {
     volume: number
     setTrackCurrentTime: (trackId: number, time: number) => void
     unsetIsMusicPlaying: () => void
-    requireTracks: () => void
     chooseTrack: (trackId: number) => void
 }
 
@@ -42,6 +41,6 @@ const mapStateToProps = (state: RootState) => ({
 const { setTrackCurrentTime, unsetIsMusicPlaying, chooseTrack } = actions
 
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, { setTrackCurrentTime, unsetIsMusicPlaying, requireTracks, chooseTrack }),
+    connect(mapStateToProps, { setTrackCurrentTime, unsetIsMusicPlaying, chooseTrack }),
     withAuthRedirect
 )(MainMusicPageContainer)

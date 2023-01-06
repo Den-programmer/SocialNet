@@ -10,7 +10,6 @@ import nf from '../components/Article/Music/Following/singer/images/nf.jpg'
 import suicideBoys from '../components/Article/Music/Following/singer/images/suicideBoys.jpg'
 import { InferActionTypes, RootState } from './redux'
 import { ThunkAction } from 'redux-thunk'
-import { MusicAPI } from '../DAL/musicApi'
 import { trackType } from '../types/MusicTypes/musicTypes'
 
 export type singerType = {
@@ -437,10 +436,5 @@ export const actions = {
 // Thunk Creators!
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
-
-export const requireTracks = (): ThunkType => async (dispatch) => {
-    const data = await MusicAPI.getTracks()
-    console.log(data)
-}
 
 export default reducerMusic
