@@ -60,6 +60,12 @@
             border-left: 1px solid #E3E3E3;
             .postContent {
                 text-align: center;
+                .postTitleContainer {
+                    margin: 10px 0px;
+                }
+                .postInfContainer {
+                    margin: 10px 0px;
+                }
                 .postTitle {
                     font-size: 18px;
                 }

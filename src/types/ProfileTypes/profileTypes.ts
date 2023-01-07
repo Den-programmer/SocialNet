@@ -33,6 +33,8 @@ export type postType = {
     postInf: string
     postImg: string
     likesCount: number
+    isEditTitle: boolean
+    isEditPostInf: boolean
 }
 
 export type postNotificationType = {

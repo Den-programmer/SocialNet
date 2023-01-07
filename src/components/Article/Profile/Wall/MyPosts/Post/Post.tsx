@@ -1,21 +1,27 @@
-import React from 'react'
+import React, { ChangeEvent, createRef } from 'react'
 import classes from './Post.module.scss'
 import noPostImg from '../../../../../../images/noPhoto/nophoto.png'
-import { Container, Avatar, makeStyles, createStyles, Theme } from '@material-ui/core'
+import { Container, Avatar, makeStyles, createStyles, Theme, TextField } from '@material-ui/core'
 
 interface IPost {
     userName: string
     postTitle: string
     postInf: string
     postImg: string
+    isEditPostTitle: boolean
+    isEditPostInf: boolean
     id: number
     likesCount: number
     avatar: string
     isModalOpen: boolean
     currentDate: string
     setIsPostModalOpen: (modalStatus: boolean) => void
-    editPost: (postId: number, newPostTitle: string, newPostInf: string) => void
     deletePost: (postId: number) => void
+    setIsPostTitleEdited: (postId: number, status: boolean) => void
+    setIsPostInfEdited: (postId: number, status: boolean) => void
+    onPostTitleChange: (postId: number, postContent: string) => void
+    onPostInfChange: (postId: number, postContent: string) => void
+    finishEditing: () => void
 }
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -25,8 +31,23 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     }
 }))
 
+// Edit post - false when I click on something that is not post input!
+
 const Post: React.FC<IPost> = (props) => {
     const s = useStyles()
+    const postContent = createRef<HTMLDivElement>()
+
+    const onPostTitleChange = (e: ChangeEvent<HTMLInputElement>) => props.onPostTitleChange(props.id, e.currentTarget.value)
+    const onPostInfChange = (e: ChangeEvent<HTMLInputElement>) => props.onPostInfChange(props.id, e.currentTarget.value)
+
+    document.addEventListener('click', (e: any) => {
+        let node = postContent.current
+        if(node) {
+            if(node && !node.contains(e.target)) {
+                props.finishEditing()
+            }
+        }
+    })
     return (
         <Container>
             <div className={classes.post}>
@@ -46,10 +67,16 @@ const Post: React.FC<IPost> = (props) => {
                         <img src={props.postImg ? props.postImg : noPostImg} alt="avatar" />
                     </div>
                     <div className={classes.postContentWrapper}>
-                        <div className={classes.postContent}>
-                            <h3 className={classes.postTitle}>{props.postTitle}</h3>
+                        <div ref={postContent} className={classes.postContent}>
+                            <div onClick={() => props.setIsPostTitleEdited(props.id, true)} className={classes.postTitleContainer}>
+                                {props.isEditPostTitle ? <TextField onChange={onPostTitleChange} label={props.postTitle} variant="outlined" /> :
+                                    <h3 className={classes.postTitle}>{props.postTitle}</h3>}
+                            </div>
                             <div className={classes.horizontal_line}></div>
-                            <p className={classes.postInf}>{props.postInf}</p>
+                            <div onClick={() => props.setIsPostInfEdited(props.id, true)} className={classes.postInfContainer}>
+                                {props.isEditPostInf ? <TextField onChange={onPostInfChange} variant="outlined" /> :
+                                    <p className={classes.postInf}>{props.postInf}</p>}
+                            </div>
                         </div>
                     </div>
                 </div>

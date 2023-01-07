@@ -104,7 +104,7 @@ const profilePage = {
   isAddPostModalOpen: false,
   isPostModalOpen: false,
   isMembersColumnOpen: true
-} 
+}
 
 const reducerProfile = (state = profilePage, action: ActionTypes): typeof profilePage => {
   switch (action.type) {
@@ -114,7 +114,9 @@ const reducerProfile = (state = profilePage, action: ActionTypes): typeof profil
         postTitle: action.newPostTitle,
         postInf: action.newPostInformat,
         postImg: action.postPhoto,
-        likesCount: 200000
+        likesCount: 200000,
+        isEditTitle: false,
+        isEditPostInf: false
       }
 
       return {
@@ -191,21 +193,58 @@ const reducerProfile = (state = profilePage, action: ActionTypes): typeof profil
       return {
         ...state,
         changePhotosMenu: state.changePhotosMenu.map((item: ChangePhotosMenuItemType) => {
-          if(action.itemId === item.id) return { ...item, isActive: true }
+          if (action.itemId === item.id) return { ...item, isActive: true }
           return { ...item, isActive: false }
         }),
         changePhotosMenuItemId: action.itemId
-      }  
+      }
     case `/sn/profilePage/SET_PROFILE_BACKGROUND`:
       const background = URL.createObjectURL(action.photo)
       return {
         ...state,
         background
-      }  
+      }
     case `/sn/profilePage/CHANGE_MEMBERS_COLUMN_OPENED_STATUS`:
       return {
         ...state,
         isMembersColumnOpen: action.status
+      }
+    case `/sn/profilePage/SET_IS_POST_TITLE_EDITED`:
+      return {
+        ...state,
+        posts: state.posts.map((post: postType) => {
+          if (post.id === action.postId) return { ...post, isEditTitle: action.status }
+          return { ...post, isEditTitle: false }
+        })
+      }
+    case `/sn/profilePage/SET_IS_POST_INF_EDITED`:
+      return {
+        ...state,
+        posts: state.posts.map((post: postType) => {
+          if (post.id === action.postId) return { ...post, isEditPostInf: action.status }
+          return { ...post, isEditPostInf: false }
+        })
+      }
+    case `/sn/profilePage/FINISH_EDITING`:
+      return {
+        ...state,
+        posts: state.posts.map((post: postType) => ({ ...post, isEditTitle: false, isEditPostInf: false }))
+      }
+    case `/sn/profilePage/POST_TITLE_CHANGE`:
+      return {
+        ...state,
+        posts: state.posts.map((post: postType) => {
+          if (post.id === action.postId) return ({ ...post, postTitle: action.postTitle })
+          return post
+        })
+      }
+    case `/sn/profilePage/POST_TITLE_INF`:
+      return {
+        ...state,
+        posts: state.posts.map((post: postType) => {
+          if (post.id === action.postId) return ({ ...post, postInf: action.postInf })
+          return post
+        })
       }
     default:
       return state
@@ -233,7 +272,12 @@ export const actions = {
   changeGender: (gender: string) => ({ type: `/sn/profilePage/CHANGE_GENDER`, gender } as const),
   choosePhotosMenuItem: (itemId: number) => ({ type: `/sn/profilePage/CHANGE_PHOTOS_MENU_ITEM`, itemId } as const),
   setProfileBackground: (photo: File) => ({ type: `/sn/profilePage/SET_PROFILE_BACKGROUND`, photo } as const),
-  changeMembersColumnOpenedStatus: (status: boolean) => ({ type: `/sn/profilePage/CHANGE_MEMBERS_COLUMN_OPENED_STATUS`, status } as const)
+  changeMembersColumnOpenedStatus: (status: boolean) => ({ type: `/sn/profilePage/CHANGE_MEMBERS_COLUMN_OPENED_STATUS`, status } as const),
+  setIsPostTitleEdited: (postId: number, status: boolean) => ({ type: `/sn/profilePage/SET_IS_POST_TITLE_EDITED`, postId, status } as const),
+  setIsPostInfEdited: (postId: number, status: boolean) => ({ type: `/sn/profilePage/SET_IS_POST_INF_EDITED`, postId, status } as const),
+  finishEditing: () => ({ type: `/sn/profilePage/FINISH_EDITING` } as const),
+  onPostTitleChange: (postId: number, postTitle: string) => ({ type: `/sn/profilePage/POST_TITLE_CHANGE`, postId, postTitle } as const),
+  onPostInfChange: (postId: number, postInf: string) => ({ type: `/sn/profilePage/POST_TITLE_INF`, postId, postInf } as const)
 }
 
 /* Thunks! */

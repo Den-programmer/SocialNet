@@ -20,6 +20,11 @@ interface IMyPosts {
     setIsAddPostWindowOpen: (status: boolean) => void
     setIsPostModalOpen: (modalStatus: boolean) => void
     setTextError: (text: string) => void
+    setIsPostTitleEdited: (postId: number, status: boolean) => void
+    setIsPostInfEdited: (postId: number, status: boolean) => void
+    finishEditing: () => void
+    onPostTitleChange: (postId: number, postContent: string) => void
+    onPostInfChange: (postId: number, postContent: string) => void
 }
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -36,9 +41,18 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
             postTitle={post.postTitle}
             postInf={post.postInf}
             postImg={post.postImg}
+            isEditPostTitle={post.isEditTitle}
+            isEditPostInf={post.isEditPostInf}
             likesCount={post.likesCount} avatar={props.profile.photos.large ? props.profile.photos.large : defaultUser}
             currentDate={props.currentDate}
-            deletePost={props.deletePost} editPost={props.editPost} isModalOpen={props.isPostModalOpen} setIsPostModalOpen={props.setIsPostModalOpen} />
+            deletePost={props.deletePost} 
+            setIsPostInfEdited={props.setIsPostInfEdited} 
+            setIsPostTitleEdited={props.setIsPostTitleEdited} 
+            finishEditing={props.finishEditing}
+            onPostTitleChange={props.onPostTitleChange}
+            onPostInfChange={props.onPostInfChange}
+            isModalOpen={props.isPostModalOpen} 
+            setIsPostModalOpen={props.setIsPostModalOpen} />
     })
     const onAddPost = () => props.setIsAddPostWindowOpen(true)
     return (
