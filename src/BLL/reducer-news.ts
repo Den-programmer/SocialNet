@@ -1,5 +1,7 @@
-import { InferActionTypes } from './redux'
+import { InferActionTypes, RootState } from './redux'
 import newsPhoto from '../images/News/news_img2.png'
+import { ThunkAction } from 'redux-thunk'
+// import { NewsAPI } from '../DAL/newsAPi'
 
 const NewsState = {
     news: [
@@ -76,5 +78,18 @@ export const actions = {
     chooseNewsPageId: (itemId: number | null) => ({ type: `CHOOSE_NEWS_PAGE_ID`, itemId } as const)
 }
 
+/* Thunks! */
+
+type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionsType>
+
+// export const requestNews = (): ThunkType => async (dispatch) => {
+//     try {
+//         const data = await NewsAPI.getAllNews()
+//         debugger
+//         console.log(data)
+//     } catch (e) {
+//         alert(`Something's gone wrong, error status: 500`)
+//     }
+// } 
 
 export default reducerNews

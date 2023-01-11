@@ -1,17 +1,21 @@
 import axios from 'axios'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 export const instance = axios.create({
     withCredentials: true,
     baseURL: "https://social-network.samuraijs.com/api/1.0/",
     headers: {
-        "API-KEY": "84df6f8d-3114-43eb-bbd6-9f107dc49f3e"
+        "API-KEY": process.env.API_KEY_SAMURAI
     }
 })
-// export const myInstance = axios.create({
+
+// export const newsInstance = axios.create({
 //     withCredentials: true,
-//     baseURL: "address gh-pages",
+//     baseURL: "https://newsapi.org/v2/",
 //     headers: {
-//         "API-KEY": "get from somewhere api key"
+//         "API-KEY": process.env.API_KEY_NEWS
 //     }
 // })
 // export const musicInstance = axios.create({

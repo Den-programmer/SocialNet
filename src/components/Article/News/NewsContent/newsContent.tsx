@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import classes from './newsContent.module.scss'
 import { newsType } from '../../../../types/NewsTypes/newsTypes'
 import NewsItem from './NewsItem/newsItem'
@@ -6,9 +6,13 @@ import NewsItem from './NewsItem/newsItem'
 interface INewsContent {
     news: Array<newsType>
     chooseNewsPageId: (itemId: number | null) => void
+    requestNews: () => void
 }
 
-const NewsContent:React.FC<INewsContent> = ({ news, chooseNewsPageId }) => {
+const NewsContent:React.FC<INewsContent> = ({ news, chooseNewsPageId, requestNews }) => {
+    useEffect(() => {
+        requestNews()
+    }, [])
     const NewsData = news.map((item: newsType) => {
         return <NewsItem key={item.id} chooseNewsPageId={chooseNewsPageId} id={item.id} title={item.title} text={item.text} photo={item.photo} date={item.date}/>
     })
