@@ -101,3 +101,13 @@
 .btn_login button:hover {
     background: #333333;
 }
+
+.isCurrentFormContainer {
+    margin: 10px 0px;
+}
+
+.isCurrentForm {
+    color: red;
+    font-weight: 300;
+    cursor: pointer;
+}

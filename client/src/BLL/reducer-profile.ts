@@ -153,14 +153,6 @@ const reducerProfile = (state = profilePage, action: ActionTypes): typeof profil
         ...state,
         profile: { ...state.profile, fullName: action.userName }
       }
-    case `/sn/profilePage/EDIT-POST`:
-      return {
-        ...state,
-        posts: state.posts.map(post => {
-          if (post.id === action.postId) return { ...post, postTitle: action.newPostTitle, postInf: action.newPostInformat }
-          return post
-        })
-      }
     case `/sn/profilePage/IS_USER_FOLLOWED`:
       return {
         ...state,
@@ -258,7 +250,6 @@ type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
 export const actions = {
   addPost: (newPostTitle: string, newPostInformat: string, postPhoto: string) => ({ type: `/sn/profilePage/ADD-POST`, newPostTitle, newPostInformat, postPhoto } as const),
   deletePost: (postId: number) => ({ type: `/sn/profilePage/DELETE_POST`, postId } as const),
-  editPost: (postId: number, newPostTitle: string, newPostInformat: string) => ({ type: `/sn/profilePage/EDIT-POST`, postId, newPostTitle, newPostInformat } as const),
   setUserProfile: (profile: profileType) => ({ type: `/sn/profilePage/SET_USER_PROFILE`, profile } as const),
   setStatus: (status: string) => ({ type: `/sn/profilePage/SET_STATUS`, status } as const),
   updateStatus: (status: string) => ({ type: `/sn/profilePage/UPDATE_STATUS`, status } as const),
@@ -329,8 +320,7 @@ export const saveProfile = (profile: saveProfileType): ThunkType => async (dispa
       if (data.resultCode === resultCode.Success) {
         dispatch(setUserProfileThunk(userId))
       } else {
-        const error = data.messages[0]
-        dispatch(setTextError(error))
+        dispatch(setTextError(data.message))
       }
     }
   } catch (error) {
@@ -361,8 +351,7 @@ export const saveAboutMe = (aboutMe: string | null): ThunkType => async (dispatc
       if (data.resultCode === resultCode.Success) {
         dispatch(setUserProfileThunk(userId))
       } else {
-        const error = data.messages[0]
-        dispatch(setTextError(error))
+        dispatch(setTextError(data.message))
       }
     }
   } catch (error) {

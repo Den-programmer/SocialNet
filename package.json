@@ -1,0 +1,40 @@
+{
+  "name": "socialnet",
+  "version": "1.0.0",
+  "description": "The server for social network",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Den-programmer/SocialNet.git"
+  },
+  "keywords": [
+    "Mern",
+    "React",
+    "SocialNetwork"
+  ],
+  "author": "Denis Grigorov <denisgrigorov094@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Den-programmer/SocialNet/issues"
+  },
+  "homepage": "https://github.com/Den-programmer/SocialNet#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validator": "^6.14.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^6.8.3"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20"
+  }
+}

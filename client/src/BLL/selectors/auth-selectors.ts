@@ -13,3 +13,7 @@ export const getIsAuthStatus = (state: RootState) => {
 export const getLastUrl = (state: RootState) => {
     return state.auth.lastUrl
 }
+
+export const getIsRegisterStatus = (state: RootState) => {
+    return state.auth.isRegister
+}

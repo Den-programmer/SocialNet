@@ -4,6 +4,7 @@ import { stopSubmit } from 'redux-form'
 import { ThunkAction } from 'redux-thunk'
 import { RootState, InferActionTypes } from './redux'
 import { resultCode, captchaCode } from '../DAL/api'
+import { actions as actionsProfile } from './reducer-profile'
 
 
 
@@ -14,8 +15,10 @@ type authType = {
   password: string | null
   rememberMe: boolean
   isAuth: boolean
+  token: string | null
   captchaUrl: string | null
-  lastUrl: string
+  lastUrl: string,
+  isRegister: boolean
 }
 
 const auth = {
@@ -25,14 +28,16 @@ const auth = {
   password: null,
   rememberMe: false,
   isAuth: false,
+  token: null,
   captchaUrl: null,
-  lastUrl: ''
+  lastUrl: '',
+  isRegister: false
 } as authType
 
 const reducerAuth = (state = auth, action: ActionTypes): authType => {
   switch (action.type) {
     case `sn/auth/SET_AUTH_USER_DATA`:
-      const { userId, email, login, password, rememberMe, isAuth } = action.data
+      const { userId, email, login, password, rememberMe, isAuth, token } = action.data
       return {
         ...state,
         userId,
@@ -40,7 +45,8 @@ const reducerAuth = (state = auth, action: ActionTypes): authType => {
         login,
         password,
         rememberMe,
-        isAuth
+        isAuth, 
+        token
       }
     case `sn/auth/SET_CAPTCHA_URL`:
       return {
@@ -52,6 +58,11 @@ const reducerAuth = (state = auth, action: ActionTypes): authType => {
         ...state,
         lastUrl: action.url
       }  
+    case `sn/auth/SET_IS_REGISTER_STATUS`:
+      return {
+        ...state,
+        isRegister: action.status
+      }
     default:
       return state
   }
@@ -62,44 +73,79 @@ const reducerAuth = (state = auth, action: ActionTypes): authType => {
 type ActionTypes = InferActionTypes<typeof actions>
 
 export const actions = {
-  setAuthUserData: (userId: number, email: string | null, login: string | null, password: string | null, isAuth: boolean, rememberMe: boolean) => ({ type: `sn/auth/SET_AUTH_USER_DATA`, data: { userId, email, login, password, isAuth, rememberMe } } as const),
+  setAuthUserData: (userId: number, email: string | null, login: string | null, password: string | null, isAuth: boolean, rememberMe: boolean, token: string | null) => ({ type: `sn/auth/SET_AUTH_USER_DATA`, data: { userId, email, login, password, isAuth, rememberMe, token } } as const),
   setCaptchaUrl: (captcha: string) => ({ type: `sn/auth/SET_CAPTCHA_URL`, captcha } as const),
-  setLastUrl: (url: string) => ({ type: `sn/auth/SET_LAST_URL`, url } as const)
+  setLastUrl: (url: string) => ({ type: `sn/auth/SET_LAST_URL`, url } as const),
+  setIsRegisterStatus: (status: boolean) => ({ type: `sn/auth/SET_IS_REGISTER_STATUS`, status } as const)
 }
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
 // Thunk Creators!
 
-export const authentication = ():ThunkType => (dispatch) => {
-  return AuthAPI.auth().then((data) => {
-    if (data.resultCode === resultCode.Success) dispatch(actions.setAuthUserData(data.data.id, data.data.email, data.data.login, null, true, true))
-  })
+// export const authentication = ():ThunkType => (dispatch) => {
+//   return AuthAPI.auth().then((data) => {
+//     if (data.resultCode === resultCode.Success) dispatch(actions.setAuthUserData(data.data.id, data.data.email, data.data.login, null, true, true))
+//   })
+// }
+export const register = (email: string | null, 
+  username: string | null, 
+  password: string | null, 
+  rememberMe = false as boolean, 
+  captcha: string | null):ThunkType => async (dispatch) => {
+    try {
+      debugger
+      const response = await AuthAPI.register(email, username, password, rememberMe, captcha)
+      debugger
+      if(response.resultCode === resultCode.Success) {
+        dispatch(actions.setAuthUserData(response.data.userId, email, email, password, true, rememberMe, null))
+        // @ts-ignore
+        dispatch(actionsProfile.changeUserName(username))
+      } else {
+        if(response.resultCode === captchaCode.captchaIsRequired) {
+          dispatch(getCaptchaUrl())
+        }
+        const messageError = response.message
+        debugger
+        const action: any = stopSubmit("login", { _error: messageError })
+        dispatch(action)
+      }
+    } catch(e) {
+
+    }
 }
 export const login = (email: string | null, password: string | null, rememberMe = false as boolean, captcha: string | null):ThunkType => async (dispatch) => {
   try {
     const response = await AuthAPI.login(email, password, rememberMe, captcha)
-    const data = await AuthAPI.auth()
     if (response.resultCode === resultCode.Success) {
-      dispatch(actions.setAuthUserData(data.data.id, email, email, password, true, rememberMe))
+      dispatch(actions.setAuthUserData(response.data.userId, email, email, password, true, rememberMe, response.data.token))
+      localStorage.setItem('userData', JSON.stringify({
+        userId: response.data.userId,
+        email, 
+        password,
+        rememberMe,
+        captcha, 
+        token: response.data.token
+      }))
     } else {
       if (response.resultCode === captchaCode.captchaIsRequired) {
         dispatch(getCaptchaUrl())
       }
-      const messageError = response.messages[0]
+      const messageError = response.message
       const action: any = stopSubmit("login", { _error: messageError })
       dispatch(action)
     }
   } catch (error) {
-    alert(`Something's gone wrong, error status: ${error.status}`)
+    // alert(`Something's gone wrong, error status: 500`)
   }
 }
 export const logout = ():ThunkType => async (dispatch) => {
   try {
     await AuthAPI.logout()
-    dispatch(actions.setAuthUserData(0, null, null, null, false, false))
+    dispatch(actions.setAuthUserData(0, null, null, null, false, false, null))
+    localStorage.removeItem('userData')
   } catch (error) {
-    alert(`Something's gone wrong, error status: ${error.status}`)
+    alert(`Something's gone wrong, error status: 500`)
   }
 }
 export const getCaptchaUrl = ():ThunkType => async (dispatch) => {
@@ -108,7 +154,7 @@ export const getCaptchaUrl = ():ThunkType => async (dispatch) => {
     const captchaUrl = data.url
     dispatch(actions.setCaptchaUrl(captchaUrl))
   } catch(error) {
-    alert(`Something's gone wrong, error status: ${error.status}`)
+    alert(`Something's gone wrong, error status: 500`)
   }
 }
 

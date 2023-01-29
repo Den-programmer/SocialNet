@@ -36,7 +36,7 @@ export const instance = axios.create({
 
 export type ServerResType<T> = {
     resultCode: number
-    messages: Array<string>
+    message: string
     data: T
 }
 

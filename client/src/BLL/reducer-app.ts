@@ -1,4 +1,4 @@
-import { authentication } from "./reducer-auth"
+import { login } from "./reducer-auth"
 import { ThunkAction } from "redux-thunk"
 import { RootState, InferActionTypes } from "./redux"
 import { setUserProfileThunk } from "./reducer-profile"
@@ -69,24 +69,31 @@ export const setTextError = (text: string): setTextErrorActionType => ({ type: S
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
 export const initialize = (): ThunkType => async (dispatch, getState) => {
-  let promise = dispatch(authentication())
-  let initialPromise = promise.then(() => {
-    let userId = getState().auth.userId
-    let currentPage = getState().Friends.usersInf.currentPage
-    let pageSize = getState().Friends.usersInf.pageSize
-    let term = getState().Friends.filter.term
-    dispatch(setUserProfileThunk(userId))
-    dispatch(getALLDialogs())
-    dispatch(requestUsers(pageSize, currentPage, term))
-  }).then(() => {
-    setTimeout(() => {
-      let dialogId: number = getState().messagesPage.userDialogId
-      dispatch(getDialogMessages(dialogId))
-    }, 1000)
-  })
-  initialPromise.then(() => {
-    dispatch(actions.initializedSuccessful())
-  })
+  // @ts-ignore
+  const data = JSON.parse(localStorage.getItem('userData'))
+  if(data && data.token) {
+    const { email, password, rememberMe, captcha } = data
+    let promise = dispatch(login( email, password, rememberMe, captcha))
+    
+    promise.then(() => {
+      dispatch(actions.initializedSuccessful())
+    })
+  }
+  dispatch(actions.initializedSuccessful())
+  // let initialPromise = promise.then(() => {
+  //   let userId = getState().auth.userId
+  //   let currentPage = getState().Friends.usersInf.currentPage
+  //   let pageSize = getState().Friends.usersInf.pageSize
+  //   let term = getState().Friends.filter.term
+  //   dispatch(setUserProfileThunk(userId))
+  //   dispatch(getALLDialogs())
+  //   dispatch(requestUsers(pageSize, currentPage, term))
+  // }).then(() => {
+  //   setTimeout(() => {
+  //     let dialogId: number = getState().messagesPage.userDialogId
+  //     dispatch(getDialogMessages(dialogId))
+  //   }, 1000)
+  // })
 }
 
 // Get State!
