@@ -31,6 +31,7 @@ export const AuthAPI = {
         }).then(res => res.data)
     },
     login: (email: string | null, password: string | null, rememberMe: boolean, captcha = null as string | null) => {
+        debugger
         return axios.post<ServerResType<loginType>>(`api/auth/login`, {
             email,
             password,

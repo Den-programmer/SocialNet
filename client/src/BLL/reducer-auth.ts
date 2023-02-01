@@ -94,9 +94,7 @@ export const register = (email: string | null,
   rememberMe = false as boolean, 
   captcha: string | null):ThunkType => async (dispatch) => {
     try {
-      debugger
       const response = await AuthAPI.register(email, username, password, rememberMe, captcha)
-      debugger
       if(response.resultCode === resultCode.Success) {
         dispatch(actions.setAuthUserData(response.data.userId, email, email, password, true, rememberMe, null))
         // @ts-ignore
@@ -106,7 +104,6 @@ export const register = (email: string | null,
           dispatch(getCaptchaUrl())
         }
         const messageError = response.message
-        debugger
         const action: any = stopSubmit("login", { _error: messageError })
         dispatch(action)
       }
@@ -116,9 +113,13 @@ export const register = (email: string | null,
 }
 export const login = (email: string | null, password: string | null, rememberMe = false as boolean, captcha: string | null):ThunkType => async (dispatch) => {
   try {
+    debugger
     const response = await AuthAPI.login(email, password, rememberMe, captcha)
+    debugger
     if (response.resultCode === resultCode.Success) {
+      debugger
       dispatch(actions.setAuthUserData(response.data.userId, email, email, password, true, rememberMe, response.data.token))
+      debugger
       localStorage.setItem('userData', JSON.stringify({
         userId: response.data.userId,
         email, 
@@ -128,6 +129,7 @@ export const login = (email: string | null, password: string | null, rememberMe 
         token: response.data.token
       }))
     } else {
+      debugger
       if (response.resultCode === captchaCode.captchaIsRequired) {
         dispatch(getCaptchaUrl())
       }
@@ -136,7 +138,7 @@ export const login = (email: string | null, password: string | null, rememberMe 
       dispatch(action)
     }
   } catch (error) {
-    // alert(`Something's gone wrong, error status: 500`)
+    alert(`Something's gone wrong, error status: 500`)
   }
 }
 export const logout = ():ThunkType => async (dispatch) => {

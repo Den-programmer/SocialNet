@@ -45,7 +45,6 @@ router.post('/register',
             }
 
             const { email, password, username, rememberMe } = req.body
-            console.log(email, password, username)
             const candidate = await User.findOne({ email })
 
             if (candidate) {
@@ -96,7 +95,7 @@ router.post('/login',
                 process.env.JWT_SECRET,
                 { expiresIn: '1h' }
             )
-            res.json({ token, userId: user.id })
+            res.json(new StandartRes(0, 'Successful authorizing', { token, userId: user.id }))
         } catch (e) {
             res.status(500).json(catchRes)
         }
