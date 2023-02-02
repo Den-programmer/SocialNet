@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/SocialNet/static/css/main.dff5df74.chunk.css",
-    "main.js": "/SocialNet/static/js/main.1403688d.chunk.js",
-    "main.js.map": "/SocialNet/static/js/main.1403688d.chunk.js.map",
-    "runtime-main.js": "/SocialNet/static/js/runtime-main.289a8370.js",
-    "runtime-main.js.map": "/SocialNet/static/js/runtime-main.289a8370.js.map",
-    "static/js/2.f41063b4.chunk.js": "/SocialNet/static/js/2.f41063b4.chunk.js",
-    "static/js/2.f41063b4.chunk.js.map": "/SocialNet/static/js/2.f41063b4.chunk.js.map",
+    "main.css": "/SocialNet/static/css/main.be23485d.chunk.css",
+    "main.js": "/SocialNet/static/js/main.07ae5dbc.chunk.js",
+    "main.js.map": "/SocialNet/static/js/main.07ae5dbc.chunk.js.map",
+    "runtime-main.js": "/SocialNet/static/js/runtime-main.ba461f1b.js",
+    "runtime-main.js.map": "/SocialNet/static/js/runtime-main.ba461f1b.js.map",
+    "static/js/2.5c7881a8.chunk.js": "/SocialNet/static/js/2.5c7881a8.chunk.js",
+    "static/js/2.5c7881a8.chunk.js.map": "/SocialNet/static/js/2.5c7881a8.chunk.js.map",
     "index.html": "/SocialNet/index.html",
-    "precache-manifest.7582519c579b5ced2f135cc7c9ecc676.js": "/SocialNet/precache-manifest.7582519c579b5ced2f135cc7c9ecc676.js",
+    "precache-manifest.4d00c6cccc737bd3d57f9fa70aef64d1.js": "/SocialNet/precache-manifest.4d00c6cccc737bd3d57f9fa70aef64d1.js",
     "service-worker.js": "/SocialNet/service-worker.js",
-    "static/css/main.dff5df74.chunk.css.map": "/SocialNet/static/css/main.dff5df74.chunk.css.map",
-    "static/js/2.f41063b4.chunk.js.LICENSE.txt": "/SocialNet/static/js/2.f41063b4.chunk.js.LICENSE.txt",
+    "static/css/main.be23485d.chunk.css.map": "/SocialNet/static/css/main.be23485d.chunk.css.map",
+    "static/js/2.5c7881a8.chunk.js.LICENSE.txt": "/SocialNet/static/js/2.5c7881a8.chunk.js.LICENSE.txt",
     "static/media/DeathPunch.mp3": "/SocialNet/static/media/DeathPunch.0e35b1e5.mp3",
     "static/media/MyDemons.mp3": "/SocialNet/static/media/MyDemons.4d5c8a82.mp3",
     "static/media/SaveThatShit.mp3": "/SocialNet/static/media/SaveThatShit.b6932776.mp3",
@@ -26,9 +26,9 @@
     "static/media/suicideBoys.jpg": "/SocialNet/static/media/suicideBoys.85ecea0e.jpg"
   },
   "entrypoints": [
-    "static/js/runtime-main.289a8370.js",
-    "static/js/2.f41063b4.chunk.js",
-    "static/css/main.dff5df74.chunk.css",
-    "static/js/main.1403688d.chunk.js"
+    "static/js/runtime-main.ba461f1b.js",
+    "static/js/2.5c7881a8.chunk.js",
+    "static/css/main.be23485d.chunk.css",
+    "static/js/main.07ae5dbc.chunk.js"
   ]
 }
