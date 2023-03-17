@@ -8,7 +8,7 @@ import { IChangeOptions } from '../accountOptions'
 const ChangeGender: React.FC<IChangeOptions> = (props) => {
     const [isSuccessfulSnackbarOpen, setIsSuccessfulSnackbarOpenStatus] = useState<boolean>(false)
     const changeGender = (gender: string) => {
-        props.changeGender(gender)
+        props.setGender(gender, props.userId)
         props.addNotification('You have changed your gender! Now you\'re ' + gender, '/Profile', 'Profile')
     }
     return (

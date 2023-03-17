@@ -14,15 +14,13 @@ export type contactsType = {
 }
 
 export type saveProfileType = {
-    fullName: string
     contacts: contactsType
 }
 
 export type profileType = {
     status: string
-    aboutMe: null | string
+    aboutMe: string
     contacts: contactsType
-    fullName: string
     photos: profilePhotosType
     userId: number
 }

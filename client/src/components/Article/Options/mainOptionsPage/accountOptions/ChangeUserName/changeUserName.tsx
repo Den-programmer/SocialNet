@@ -10,12 +10,7 @@ const ChangeUserName: React.FC<IChangeOptions> = (props) => {
     const [isSuccessfulSnackbarOpen, setIsSuccessfulSnackbarOpenStatus] = useState(false)
     const [userName, setUserName] = useState<string>(props.userName)
     const changeUserName = () => {
-        let profile = {
-            fullName: userName,
-            contacts: props.contacts
-        }
-        props.saveProfile(profile)
-        props.changeUserName(userName)
+        props.changeUserName(props.userId, userName)
 
         let array = props.accountOptionsMenu.map((item: IAccountOption) => {
             return { ...item, isEdit: false }

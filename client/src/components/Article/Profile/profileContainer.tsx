@@ -1,13 +1,13 @@
 import React from 'react'
 import Profile from './profile'
 import { connect } from 'react-redux'
-import { setUserProfileThunk, setStatusThunk, updateStatusThunk, getIsUserFollowed } from '../../../BLL/reducer-profile'
+import { setUserProfileThunk, setStatusThunk, updateStatusThunk, getIsUserFollowed, requestGender, requestUsername } from '../../../BLL/reducer-profile'
 import { followThunk, unfollowThunk } from '../../../BLL/reducer-friends'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { compose } from 'redux'
 import { getFriends } from '../../../BLL/selectors/users-selectors'
 import { getAuthorizedUserId } from '../../../BLL/selectors/auth-selectors'
-import { getUsersProfile, getPosts, getIsUserFollowedStatus, getUserBackground, getGender } from '../../../BLL/selectors/profile-selectors'
+import { getUsersProfile, getPosts, getIsUserFollowedStatus, getUserBackground, getGender, getUsersName } from '../../../BLL/selectors/profile-selectors'
 import { RootState } from '../../../BLL/redux'
 import { userType } from '../../../types/FriendsType/friendsType'
 import { postType, profileType } from '../../../types/ProfileTypes/profileTypes'
@@ -15,12 +15,15 @@ import { postType, profileType } from '../../../types/ProfileTypes/profileTypes'
 interface IProfileContainer {
     authorizedUserId: number
     followed: boolean
+    username: string
+    requestUsername: (userId: number) => void
     setStatusThunk: (userId: number) => void
     setUserProfileThunk: (userId: number) => void
     updateStatusThunk: (status: string) => void
     getIsUserFollowed: (userId: number) => void
     followThunk: (userId: number) => void
     unfollowThunk: (userId: number) => void
+    requestGender: (userId: number) => void
     friends: Array<userType>
     profile: profileType
     posts: Array<postType>
@@ -29,7 +32,7 @@ interface IProfileContainer {
 }
 
 interface IRouteParams {
-    userId: string 
+    userId: string
 }
 
 class ProfileContainer extends React.Component<IProfileContainer & RouteComponentProps<IRouteParams>> {
@@ -46,21 +49,29 @@ class ProfileContainer extends React.Component<IProfileContainer & RouteComponen
     }
     componentDidMount() {
         this.refreshProfile()
+        setTimeout(() => {
+            this.props.requestGender(this.props.profile.userId)
+            this.props.requestUsername(this.props.profile.userId)
+        }, 1000)
     }
     componentDidUpdate(prevProps: IProfileContainer & RouteComponentProps<IRouteParams>) {
         if (this.props.match.params.userId !== prevProps.match.params.userId) {
             this.refreshProfile()
+            this.props.requestGender(this.props.profile.userId)
+            this.props.requestUsername(this.props.profile.userId)
         }
     }
     render() {
         return <Profile follow={this.props.followThunk}
-        unfollow={this.props.unfollowThunk} 
-        followed={this.props.followed} 
-        getIsUserFollowed={this.props.getIsUserFollowed} 
-        profile={this.props.profile} 
-        gender={this.props.gender}
-        posts={this.props.posts} friends={this.props.friends} updateStatus={this.props.updateStatusThunk} 
-        background={this.props.background}/>
+            unfollow={this.props.unfollowThunk}
+            followed={this.props.followed}
+            getIsUserFollowed={this.props.getIsUserFollowed}
+            profile={this.props.profile}
+            authorizedUserId={this.props.authorizedUserId}
+            gender={this.props.gender}
+            username={this.props.username}
+            posts={this.props.posts} friends={this.props.friends} updateStatus={this.props.updateStatusThunk}
+            background={this.props.background} />
     }
 }
 
@@ -71,10 +82,11 @@ const mapStateToProps = (state: RootState) => ({
     authorizedUserId: getAuthorizedUserId(state),
     followed: getIsUserFollowedStatus(state),
     background: getUserBackground(state),
-    gender: getGender(state)
+    gender: getGender(state),
+    username: getUsersName(state)
 })
 
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, { setUserProfileThunk, setStatusThunk, updateStatusThunk, getIsUserFollowed, followThunk, unfollowThunk }),
+    connect(mapStateToProps, { setUserProfileThunk, requestUsername, setStatusThunk, updateStatusThunk, getIsUserFollowed, followThunk, unfollowThunk, requestGender }),
     withRouter
 )(ProfileContainer)

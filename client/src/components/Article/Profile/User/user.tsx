@@ -22,8 +22,8 @@ const User: React.FC<IUser> = (props) => {
     }
     return (
         <div style={background}>
-            <Avatar contacts={props.contacts} avatar={props.profile.photos.large ? props.profile.photos.large : defaultAvatar} name={props.profile.fullName} />
-            <FollowingInformation getIsUserFollowed={props.getIsUserFollowed} follow={props.follow} unfollow={props.unfollow} followed={props.followed} userId={props.profile.userId} posts={props.posts} friends={props.friends} />
+            <Avatar contacts={props.contacts} avatar={props.profile.photos.large !== '' ? props.profile.photos.large : defaultAvatar} name={props.username} />
+            <FollowingInformation getIsUserFollowed={props.getIsUserFollowed} follow={props.follow} unfollow={props.unfollow} followed={props.followed} userId={props.profile.userId} authorizedUserId={props.authorizedUserId} posts={props.posts} friends={props.friends} />
         </div>
     )
 }

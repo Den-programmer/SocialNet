@@ -10,6 +10,8 @@ import EditPhoto from './User/editPhoto/editPhotoContainer'
 export interface IProfile {
     followed: boolean
     profile: profileType
+    username: string
+    authorizedUserId: number
     posts: Array<postType>
     friends: Array<userType>
     background: string
@@ -27,6 +29,7 @@ const Profile: React.FC<IProfile> = (props) => {
             <User followed={props.followed} 
             posts={props.posts} 
             friends={props.friends} 
+            username={props.username}
             background={props.background} 
             gender={props.gender}
             updateStatus={props.updateStatus}
@@ -34,9 +37,10 @@ const Profile: React.FC<IProfile> = (props) => {
             unfollow={props.unfollow}
             getIsUserFollowed={props.getIsUserFollowed} 
             contacts={props.profile.contacts} 
-            profile={props.profile}/>
+            profile={props.profile}
+            authorizedUserId={props.authorizedUserId}/>
             <ProfileNav />
-            <Biography gender={props.gender} userName={props.profile.fullName} AboutMe={props.profile.aboutMe}/>
+            <Biography gender={props.gender} userName={props.username} AboutMe={props.profile.aboutMe}/>
             <Contacts contacts={props.profile.contacts}/>
         </div>
     )

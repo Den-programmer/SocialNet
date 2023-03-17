@@ -11,7 +11,7 @@ export const getUsersSmallPhoto = (state: RootState) => {
 }
 
 export const getUsersName = (state: RootState) => {
-    return state.profilePage.profile.fullName
+    return state.profilePage.username
 }
 
 export const getContacts = (state: RootState) => {

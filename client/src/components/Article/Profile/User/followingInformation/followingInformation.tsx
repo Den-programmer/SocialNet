@@ -6,6 +6,7 @@ import { userType } from '../../../../../types/FriendsType/friendsType'
 interface IFollowingInformation {
     posts: Array<postType>
     userId: number
+    authorizedUserId: number
     followed: boolean
     friends: Array<userType>
     getIsUserFollowed: (userId: number) => void
@@ -43,13 +44,13 @@ const FollowingInformation: React.FC<IFollowingInformation> = (props) => {
                         <p>{props.friends.length}</p>
                     </div>
                 </div>
-                {/* <div className={classes.btn_following}>
-                    {props.userId !== 7149 ? 
+                <div className={classes.btn_following}>
+                    {props.userId !== props.authorizedUserId ? 
                     props.followed ? 
                     <button onClick={following} className={classes.followingButton}>Following</button> : 
                     <button onClick={following} className={classes.unfollowingButton}>Unfollow</button> : 
                     <div className={classes.horizontal_line}></div>}
-                </div> */}
+                </div>
             </div>
         </div>
     )

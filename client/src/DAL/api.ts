@@ -3,12 +3,17 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+// export const instance = axios.create({
+//     withCredentials: true,
+//     baseURL: "https://social-network.samuraijs.com/api/1.0/",
+//     headers: {
+//         "API-KEY": process.env.API_KEY_SAMURAI
+//     }
+// })
+
 export const instance = axios.create({
     withCredentials: true,
-    baseURL: "https://social-network.samuraijs.com/api/1.0/",
-    headers: {
-        "API-KEY": process.env.API_KEY_SAMURAI
-    }
+    baseURL: "http://localhost:3000/"
 })
 
 // export const newsInstance = axios.create({

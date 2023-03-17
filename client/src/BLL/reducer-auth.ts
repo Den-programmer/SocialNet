@@ -83,11 +83,6 @@ type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 
 // Thunk Creators!
 
-// export const authentication = ():ThunkType => (dispatch) => {
-//   return AuthAPI.auth().then((data) => {
-//     if (data.resultCode === resultCode.Success) dispatch(actions.setAuthUserData(data.data.id, data.data.email, data.data.login, null, true, true))
-//   })
-// }
 export const register = (email: string | null, 
   username: string | null, 
   password: string | null, 
@@ -108,18 +103,16 @@ export const register = (email: string | null,
         dispatch(action)
       }
     } catch(e) {
-
+      alert(`Something's gone wrong, error status: 500`)
     }
 }
 export const login = (email: string | null, password: string | null, rememberMe = false as boolean, captcha: string | null):ThunkType => async (dispatch) => {
   try {
-    debugger
     const response = await AuthAPI.login(email, password, rememberMe, captcha)
-    debugger
     if (response.resultCode === resultCode.Success) {
-      debugger
       dispatch(actions.setAuthUserData(response.data.userId, email, email, password, true, rememberMe, response.data.token))
-      debugger
+      // @ts-ignore
+      dispatch(actionsProfile.setProfileUserId(response.data.userId))
       localStorage.setItem('userData', JSON.stringify({
         userId: response.data.userId,
         email, 
@@ -129,7 +122,6 @@ export const login = (email: string | null, password: string | null, rememberMe 
         token: response.data.token
       }))
     } else {
-      debugger
       if (response.resultCode === captchaCode.captchaIsRequired) {
         dispatch(getCaptchaUrl())
       }
@@ -143,7 +135,6 @@ export const login = (email: string | null, password: string | null, rememberMe 
 }
 export const logout = ():ThunkType => async (dispatch) => {
   try {
-    await AuthAPI.logout()
     dispatch(actions.setAuthUserData(0, null, null, null, false, false, null))
     localStorage.removeItem('userData')
   } catch (error) {

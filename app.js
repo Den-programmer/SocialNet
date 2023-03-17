@@ -10,6 +10,9 @@ const app = express()
 app.use(express.json({ extended: true }))
 
 app.use('/api/auth', require('./routes/auth.routes.js'))
+app.use('/api', require('./routes/gender.routes.js'))
+app.use('/api', require('./routes/profile.routes.js'))
+app.use('/api', require('./routes/username.routes.js'))
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())

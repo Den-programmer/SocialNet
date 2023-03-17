@@ -7,7 +7,7 @@ type FooterType = {
 }
 
 const Footer = {
-    year: 2021,
+    year: 2023,
     footInf: 'This is footer\'s information!',
     footLinks: [
         {
