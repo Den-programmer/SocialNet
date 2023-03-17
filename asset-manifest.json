@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/SocialNet/static/css/main.be23485d.chunk.css",
-    "main.js": "/SocialNet/static/js/main.07ae5dbc.chunk.js",
-    "main.js.map": "/SocialNet/static/js/main.07ae5dbc.chunk.js.map",
+    "main.js": "/SocialNet/static/js/main.8cf394b3.chunk.js",
+    "main.js.map": "/SocialNet/static/js/main.8cf394b3.chunk.js.map",
     "runtime-main.js": "/SocialNet/static/js/runtime-main.ba461f1b.js",
     "runtime-main.js.map": "/SocialNet/static/js/runtime-main.ba461f1b.js.map",
-    "static/js/2.5c7881a8.chunk.js": "/SocialNet/static/js/2.5c7881a8.chunk.js",
-    "static/js/2.5c7881a8.chunk.js.map": "/SocialNet/static/js/2.5c7881a8.chunk.js.map",
+    "static/js/2.2f1904ee.chunk.js": "/SocialNet/static/js/2.2f1904ee.chunk.js",
+    "static/js/2.2f1904ee.chunk.js.map": "/SocialNet/static/js/2.2f1904ee.chunk.js.map",
     "index.html": "/SocialNet/index.html",
-    "precache-manifest.4d00c6cccc737bd3d57f9fa70aef64d1.js": "/SocialNet/precache-manifest.4d00c6cccc737bd3d57f9fa70aef64d1.js",
+    "precache-manifest.0dada30a2515b8fd69e7f39a0b3bdf8b.js": "/SocialNet/precache-manifest.0dada30a2515b8fd69e7f39a0b3bdf8b.js",
     "service-worker.js": "/SocialNet/service-worker.js",
     "static/css/main.be23485d.chunk.css.map": "/SocialNet/static/css/main.be23485d.chunk.css.map",
-    "static/js/2.5c7881a8.chunk.js.LICENSE.txt": "/SocialNet/static/js/2.5c7881a8.chunk.js.LICENSE.txt",
+    "static/js/2.2f1904ee.chunk.js.LICENSE.txt": "/SocialNet/static/js/2.2f1904ee.chunk.js.LICENSE.txt",
     "static/media/DeathPunch.mp3": "/SocialNet/static/media/DeathPunch.0e35b1e5.mp3",
     "static/media/MyDemons.mp3": "/SocialNet/static/media/MyDemons.4d5c8a82.mp3",
     "static/media/SaveThatShit.mp3": "/SocialNet/static/media/SaveThatShit.b6932776.mp3",
@@ -27,8 +27,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.ba461f1b.js",
-    "static/js/2.5c7881a8.chunk.js",
+    "static/js/2.2f1904ee.chunk.js",
     "static/css/main.be23485d.chunk.css",
-    "static/js/main.07ae5dbc.chunk.js"
+    "static/js/main.8cf394b3.chunk.js"
   ]
 }
