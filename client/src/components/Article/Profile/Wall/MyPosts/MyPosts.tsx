@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import classes from './MyPosts.module.scss'
 import Post from './Post/Post'
 import AddPost from './AddPost/addPost'
@@ -8,6 +8,7 @@ import { Container, TextField, Theme, createStyles, makeStyles } from '@material
 
 interface IMyPosts {
     userName: string
+    userId: any
     posts: Array<postType>
     profile: profileType
     isAddPostModalOpen: boolean
@@ -16,7 +17,7 @@ interface IMyPosts {
     messageError: string
     deletePost: (postId: number) => void
     editPost: (postId: number, newPostTitle: string, newPostInf: string) => void
-    addPost: (postName: string, postInf: string, postPhoto: string) => void
+    createPost: (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: string) => void
     setIsAddPostWindowOpen: (status: boolean) => void
     setIsPostModalOpen: (modalStatus: boolean) => void
     setTextError: (text: string) => void
@@ -25,6 +26,7 @@ interface IMyPosts {
     finishEditing: () => void
     onPostTitleChange: (postId: number, postContent: string) => void
     onPostInfChange: (postId: number, postContent: string) => void
+    requireUsersPosts: (userId: string) => void
 }
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -54,6 +56,9 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
             isModalOpen={props.isPostModalOpen} 
             setIsPostModalOpen={props.setIsPostModalOpen} />
     })
+    useEffect(() => {
+        props.requireUsersPosts(props.userId)
+    }, props.posts)
     const onAddPost = () => props.setIsAddPostWindowOpen(true)
     return (
         <div className={classes.postPage}>
@@ -63,7 +68,7 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
                         <TextField onClick={onAddPost} className={s.textfield} label="What is on your mind?" InputProps={{ readOnly: true }} variant="filled" />
                     </div>
                 </Container>
-                {props.isAddPostModalOpen && <AddPost addPost={props.addPost}
+                {props.isAddPostModalOpen && <AddPost userId={props.userId} addPost={props.createPost}
                     setIsAddPostWindowOpen={props.setIsAddPostWindowOpen}
                     messageError={props.messageError}
                     setTextError={props.setTextError} />}

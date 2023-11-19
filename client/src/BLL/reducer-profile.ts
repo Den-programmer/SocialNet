@@ -108,20 +108,15 @@ const profilePage = {
 
 const reducerProfile = (state = profilePage, action: ActionTypes): typeof profilePage => {
   switch (action.type) {
-    case `/sn/profilePage/ADD-POST`:
-      const newPost = {
-        id: state.posts.length + 1,
-        postTitle: action.newPostTitle,
-        postInf: action.newPostInformat,
-        postImg: action.postPhoto,
-        likesCount: 200000,
-        isEditTitle: false,
-        isEditPostInf: false
-      }
-
+    case `/sn/profilePage/SET_POSTS`:
       return {
         ...state,
-        posts: [...state.posts as Array<postType>, newPost as postType]
+        posts: action.posts
+      }
+    case `/sn/profilePage/ADD-POST`:
+      return {
+        ...state,
+        posts: [...state.posts as Array<postType>, action.newPost as postType]
       }
     case `/sn/profilePage/DELETE_POST`:
       return {
@@ -253,7 +248,8 @@ const reducerProfile = (state = profilePage, action: ActionTypes): typeof profil
 type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
 
 export const actions = {
-  addPost: (newPostTitle: string, newPostInformat: string, postPhoto: string) => ({ type: `/sn/profilePage/ADD-POST`, newPostTitle, newPostInformat, postPhoto } as const),
+  setPosts: (posts: Array<postType>) => ({ type: `/sn/profilePage/SET_POSTS`, posts } as const) ,
+  addPost: (newPost: postType) => ({ type: `/sn/profilePage/ADD-POST`, newPost } as const),
   deletePost: (postId: number) => ({ type: `/sn/profilePage/DELETE_POST`, postId } as const),
   setProfileUserId: (userId: number) => ({ type: `/sn/profilePage/SET_PROFILE_USER_ID`, userId } as const),
   setUserProfile: (profile: profileType) => ({ type: `/sn/profilePage/SET_USER_PROFILE`, profile } as const),
@@ -321,7 +317,6 @@ export const saveProfile = (profile: saveProfileType): ThunkType => async (dispa
         photos: userProfilePhoto
       }
       const res = await ProfileAPI.saveProfile(trueProfile)
-      debugger
       if (res.resultCode === resultCode.Success) {
         dispatch(setUserProfileThunk(userId))
       } else {
@@ -422,7 +417,32 @@ export const setUsername = (userId: number, username: string): ThunkType => asyn
   try {
     const resUsername = await ProfileAPI.updateUsername(userId, username)
     dispatch(actions.changeUserName(resUsername))
-    console.log(resUsername)
+  } catch(e) {
+    alert(`Something's gone wrong, error status: 500`)
+  }
+}
+
+export const requireUsersPosts = (userId: string): ThunkType => async (dispatch) => {
+  try {
+    const res = await ProfileAPI.getUsersPosts(userId)
+    if(res.resultCode === resultCode.Success) {
+      dispatch(actions.setPosts(res.data.posts))
+    } else  {
+      alert(`Something's gone wrong, error status: 500`)
+    }
+  } catch(e) {
+    alert(`Something's gone wrong, error status: 500`)
+  }
+} 
+
+export const createPost = (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: string):ThunkType => async (dispatch) => {
+  try {
+    const res = await ProfileAPI.createPost(userId, newPostTitle, newPostInformat, postPhoto)
+    if(res.resultCode === resultCode.Success) {
+      dispatch(actions.addPost(res.data.newPost))
+    } else {
+      alert(`Something's gone wrong, error status: 500`)
+    }
   } catch(e) {
     alert(`Something's gone wrong, error status: 500`)
   }

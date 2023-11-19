@@ -31,7 +31,7 @@ const App: React.FC<IApp> = (props) => {
     const year = date.getFullYear()
     const month = date.getMonth() + 1
     const monthNumber = date.getDate()
-    const stringDate = `0${monthNumber}.0${month}.${year}`
+    const stringDate = `${monthNumber}.${month}.${year}`
     props.getCurrentDate(stringDate)
   }, [])
   if (!props.Initialized) {

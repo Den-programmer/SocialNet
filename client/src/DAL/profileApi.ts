@@ -1,20 +1,31 @@
 import axios from 'axios'
-import { profileType } from '../types/ProfileTypes/profileTypes'
+import { postType, profileType } from '../types/ProfileTypes/profileTypes'
 import { instance } from './api'
 
 export const ProfileAPI = {
-    getUsersProfile: (userId:number | null) => {
-        return instance.get(`api/profile/${userId}`).then(res => {
+    getUsersProfile: (userId: number | null) => {
+        return instance.get(`api/profile/getProfile/${userId}`).then(res => {
             return res.data
         })
     },
     getUsername: (userId: number) => {
-        return instance.get(`api/username/${userId}`).then(res => {
+        return instance.get(`api/username/getUsername/${userId}`).then(res => {
             return res.data
         })
     },
     updateUsername: (userId: number, username: string) => {
-        return instance.put(`api/username`, { userId, username }).then(rs => {
+        return instance.put(`api/username/saveUsername`, { userId, username }).then(rs => {
+            return rs.data
+        })
+    },
+    getUsersPosts: (userId: string) => {
+        return instance.get(`api/posts/getPosts/${userId}`).then(res => {
+            return res.data
+        })
+    },
+    createPost: (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: string) => {
+        return instance.post(`api/posts/createPost`, { userId, newPostTitle, newPostInformat, postPhoto }).then(rs => {
+            // post must be created on server and action creator must set it to the store!
             return rs.data
         })
     },
@@ -29,8 +40,7 @@ export const ProfileAPI = {
     //     })
     // },
     saveProfile: (profile: profileType) => {
-        debugger
-        return instance.put(`api/profile`, { profile }).then(res => {
+        return instance.put(`api/profile/saveProfile`, { profile }).then(res => {
             return res.data
         })
     },
@@ -38,12 +48,12 @@ export const ProfileAPI = {
     //     return instance.get(`follow/${userId}`)
     // },
     getGender: (userId: number) => {
-        return instance.get(`api/gender/${userId}`).then(res => {
+        return instance.get(`api/gender/getGender/${userId}`).then(res => {
             return res.data
         })
     },
     updateGender: (gender: string, userId: number) => {
-        return instance.put(`api/gender`, { gender, userId }).then(res => {
+        return instance.put(`api/gender/updateGender`, { gender, userId }).then(res => {
             return res.data
         })
     }

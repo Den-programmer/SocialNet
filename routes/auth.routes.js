@@ -1,7 +1,7 @@
 const { Router } = require('express')
-const dotenv = require('dotenv')
 const { check } = require('express-validator')
 const router = Router()
+const dotenv = require('dotenv')
 const AuthController = require('../controllers/AuthController.js')
 
 dotenv.config()

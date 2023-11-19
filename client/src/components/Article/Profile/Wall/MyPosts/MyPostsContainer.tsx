@@ -1,5 +1,5 @@
 import MyPosts from './MyPosts'
-import { actions } from '../../../../../BLL/reducer-profile'
+import { actions, createPost, requireUsersPosts } from '../../../../../BLL/reducer-profile'
 import { setTextError } from '../../../../../BLL/reducer-app'
 import { connect } from 'react-redux'
 import { getUsersProfile, getPosts, getUsersName, getIsAddPostModalOpenStatus, getIsPostModalOpenStatus } from '../../../../../BLL/selectors/profile-selectors'
@@ -13,15 +13,15 @@ const mapStateToProps = (state: RootState) => ({
     isPostModalOpen: getIsPostModalOpenStatus(state),
     isAddPostModalOpen: getIsAddPostModalOpenStatus(state),
     currentDate: getDate(state),
-    messageError: getMessageError(state)
+    messageError: getMessageError(state),
+    userId: getUsersProfile(state).userId
 })
 
-const { addPost, deletePost, editPost, setIsAddPostWindowOpen, finishEditing, onPostTitleChange, onPostInfChange, setIsPostModalOpen, setIsPostTitleEdited, setIsPostInfEdited } = actions
+const { deletePost, setIsAddPostWindowOpen, finishEditing, onPostTitleChange, onPostInfChange, setIsPostModalOpen, setIsPostTitleEdited, setIsPostInfEdited } = actions
 
 const MyPostsContainer = connect(mapStateToProps, 
-    { addPost, 
-      deletePost, 
-      editPost, 
+    { createPost, 
+      deletePost,
       setIsAddPostWindowOpen, 
       setIsPostModalOpen, 
       setTextError,
@@ -29,7 +29,8 @@ const MyPostsContainer = connect(mapStateToProps,
       setIsPostInfEdited,
       finishEditing,
       onPostTitleChange,
-      onPostInfChange
+      onPostInfChange,
+      requireUsersPosts
     })(MyPosts)
 
 export default MyPostsContainer

@@ -12,6 +12,8 @@ interface IProfileMainContent {
     background: string
     profile: profileType
     gender: string
+    username: string
+    authorizedUserId: number
     followThunk: (userId: number) => void
     unfollowThunk: (userId: number) => void
     getIsUserFollowed: (userId: number) => void
@@ -25,6 +27,8 @@ const ProfileMainContent:React.FC<IProfileMainContent> = (props) => {
             <User followed={props.followed} 
             posts={props.posts} 
             friends={props.friends} 
+            username={props.username}
+            authorizedUserId={props.authorizedUserId}
             background={props.background} 
             updateStatus={props.updateStatusThunk}
             follow={props.followThunk}

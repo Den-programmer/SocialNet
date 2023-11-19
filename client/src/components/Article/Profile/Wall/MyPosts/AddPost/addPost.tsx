@@ -4,7 +4,8 @@ import AddPostReduxForm from './AddPostForm/addPostForm'
 import { Portal } from '../../../../../common/Portal/portal'
 
 interface IAddPost {
-    addPost: (postName: string, postInf: string, postPhoto: string) => void
+    userId: any
+    addPost: (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: string) => void
     setIsAddPostWindowOpen: (status: boolean) => void
     messageError: string
     setTextError: (text: string) => void
@@ -15,13 +16,13 @@ export interface AddPostFD {
     postInf: string
 }
 
-const AddPost: React.FC<IAddPost> = ({ addPost, setIsAddPostWindowOpen, messageError, setTextError }) => {
+const AddPost: React.FC<IAddPost> = ({ userId, addPost, setIsAddPostWindowOpen, messageError, setTextError }) => {
     const [postPhoto, setPostPhoto] = useState<string>('')
     const getPostImg = (photo: string) => setPostPhoto(photo)
     const onSubmit = (FormData: AddPostFD) => {
         const { postName, postInf } = FormData
         if(postPhoto !== '') {
-            addPost(postName, postInf, postPhoto)
+            addPost(userId, postName, postInf, postPhoto)
             setIsAddPostWindowOpen(false)
         } else {
             setTextError('You must choose the post image!')
