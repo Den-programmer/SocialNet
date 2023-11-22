@@ -71,13 +71,16 @@ type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
 export const initialize = (): ThunkType => async (dispatch, getState) => {
   // @ts-ignore
   const data = JSON.parse(localStorage.getItem('userData'))
-  if(data && data.token) {
+  if (data && data.token) {
     const { email, password, rememberMe, captcha } = data
-    let promise = dispatch(login( email, password, rememberMe, captcha))
-    
-    promise.then(() => {
+    try {
+      await dispatch(login(email, password, rememberMe, captcha))
+      const userId = getState().auth.userId
+      await dispatch(setUserProfileThunk(userId))
       dispatch(actions.initializedSuccessful())
-    })
+    } catch (error) {
+      console.error("New Error from reducer app!", error)
+    }
   }
   dispatch(actions.initializedSuccessful())
   // let initialPromise = promise.then(() => {

@@ -16,7 +16,7 @@ interface IMyPosts {
     currentDate: string
     messageError: string
     deletePost: (postId: number) => void
-    editPost: (postId: number, newPostTitle: string, newPostInf: string) => void
+    // editPost: (postId: number, newPostTitle: string, newPostInf: string) => void
     createPost: (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: string) => void
     setIsAddPostWindowOpen: (status: boolean) => void
     setIsPostModalOpen: (modalStatus: boolean) => void
@@ -58,7 +58,7 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
     })
     useEffect(() => {
         props.requireUsersPosts(props.userId)
-    }, props.posts)
+    }, [])
     const onAddPost = () => props.setIsAddPostWindowOpen(true)
     return (
         <div className={classes.postPage}>

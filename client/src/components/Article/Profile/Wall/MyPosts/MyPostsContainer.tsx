@@ -20,17 +20,17 @@ const mapStateToProps = (state: RootState) => ({
 const { deletePost, setIsAddPostWindowOpen, finishEditing, onPostTitleChange, onPostInfChange, setIsPostModalOpen, setIsPostTitleEdited, setIsPostInfEdited } = actions
 
 const MyPostsContainer = connect(mapStateToProps, 
-    { createPost, 
-      deletePost,
-      setIsAddPostWindowOpen, 
-      setIsPostModalOpen, 
-      setTextError,
-      setIsPostTitleEdited, 
-      setIsPostInfEdited,
-      finishEditing,
-      onPostTitleChange,
-      onPostInfChange,
-      requireUsersPosts
-    })(MyPosts)
+  { createPost, 
+    deletePost,
+    setIsAddPostWindowOpen, 
+    setIsPostModalOpen, 
+    setTextError,
+    setIsPostTitleEdited, 
+    setIsPostInfEdited,
+    finishEditing,
+    onPostTitleChange,
+    onPostInfChange,
+    requireUsersPosts
+  })(MyPosts)
 
 export default MyPostsContainer

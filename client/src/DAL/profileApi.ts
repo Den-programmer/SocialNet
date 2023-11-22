@@ -25,7 +25,6 @@ export const ProfileAPI = {
     },
     createPost: (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: string) => {
         return instance.post(`api/posts/createPost`, { userId, newPostTitle, newPostInformat, postPhoto }).then(rs => {
-            // post must be created on server and action creator must set it to the store!
             return rs.data
         })
     },

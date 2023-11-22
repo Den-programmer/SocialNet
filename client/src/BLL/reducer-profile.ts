@@ -426,6 +426,7 @@ export const requireUsersPosts = (userId: string): ThunkType => async (dispatch)
   try {
     const res = await ProfileAPI.getUsersPosts(userId)
     if(res.resultCode === resultCode.Success) {
+      console.log(res.data.posts)
       dispatch(actions.setPosts(res.data.posts))
     } else  {
       alert(`Something's gone wrong, error status: 500`)

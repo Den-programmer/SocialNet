@@ -33,7 +33,7 @@ export type postType = {
     likesCount: number
     isEditTitle: boolean
     isEditPostInf: boolean
-    owner: any
+    owner: string
 }
 
 export type postNotificationType = {
