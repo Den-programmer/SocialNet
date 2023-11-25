@@ -425,22 +425,64 @@ export const setUsername = (userId: number, username: string): ThunkType => asyn
 export const requireUsersPosts = (userId: string): ThunkType => async (dispatch) => {
   try {
     const res = await ProfileAPI.getUsersPosts(userId)
-    if(res.resultCode === resultCode.Success) {
-      console.log(res.data.posts)
-      dispatch(actions.setPosts(res.data.posts))
-    } else  {
-      alert(`Something's gone wrong, error status: 500`)
-    }
-  } catch(e) {
-    alert(`Something's gone wrong, error status: 500`)
-  }
-} 
+    if (res.resultCode === resultCode.Success) {
+      const posts = await Promise.all(res.data.posts.map(async (post: postType) => {
+        try {
+          let imageUrl
 
-export const createPost = (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: string):ThunkType => async (dispatch) => {
+          if (typeof post.postImg === 'string') {
+            imageUrl = post.postImg
+          } else if (post.postImg instanceof File) {
+            imageUrl = URL.createObjectURL(post.postImg)
+          } else if (isBinaryData(post.postImg)) {
+            // @ts-ignore
+            const byteArray = Uint8Array.from(post.postImg.data)
+            // @ts-ignore
+            const blob = new Blob([byteArray], { type: post.postImg.contentType })
+            imageUrl = URL.createObjectURL(blob)
+          } else {
+            console.error("Unsupported postImg type:", post.postImg)
+            return post
+          }
+
+          return { ...post, postImg: imageUrl }
+        } catch (error) {
+          console.error("Error creating object URL:", error)
+          return post
+        }
+      }))
+
+      console.log(posts)
+      dispatch(actions.setPosts(posts))
+
+      posts.forEach(post => {
+        if (typeof post.postImg !== 'string' && post.postImg instanceof Blob) {
+          URL.revokeObjectURL(post.postImg);
+        }
+      });
+    } else {
+      alert(`Something's gone wrong, error status: 500`);
+    }
+  } catch (e) {
+    alert(`Something's gone wrong, error status: 500`);
+  }
+}
+
+function isBinaryData(obj: any) {
+  return (
+    obj &&
+    typeof obj === 'object' &&
+    obj.hasOwnProperty('data') &&
+    Array.isArray(obj.data) &&
+    obj.hasOwnProperty('contentType')
+  )
+}
+
+export const createPost = (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: File):ThunkType => async (dispatch) => {
   try {
     const res = await ProfileAPI.createPost(userId, newPostTitle, newPostInformat, postPhoto)
     if(res.resultCode === resultCode.Success) {
-      dispatch(actions.addPost(res.data.newPost))
+      dispatch(actions.addPost({...res.data.newPost, postImg: URL.createObjectURL(res.data.newPost.postImg)}))
     } else {
       alert(`Something's gone wrong, error status: 500`)
     }

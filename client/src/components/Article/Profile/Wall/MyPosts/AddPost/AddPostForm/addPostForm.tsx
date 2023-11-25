@@ -8,7 +8,7 @@ import noPostPhoto from '../../../../../../../images/noPhoto/nophoto.png'
 
 interface IAddPostForm {
     setIsAddPostWindowOpen: (status: boolean) => void
-    getPostImg: (photo: string) => void
+    getPostImg: (photo: File) => void
     postPhoto: string
     postPhotoError: string
 }
@@ -21,12 +21,11 @@ const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPos
     const onInputFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.files) {
             const file = e.currentTarget.files[0]
-            const postImg = URL.createObjectURL(file)
-            props.getPostImg(postImg)
+            props.getPostImg(file)
         }
     }
     return (
-        <form className={classes.postForm} onSubmit={props.handleSubmit}>
+        <form className={classes.postForm} onSubmit={props.handleSubmit} encType='multipart/form-data'>
             <div className={classes.btn_closeTheWindow}>
                 <p onClick={closeModalWindow}>&times;</p>
             </div>

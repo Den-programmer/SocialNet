@@ -22,21 +22,30 @@ class PostsController {
     }
     async createPost(req, res) {
         try {
-            const { userId, newPostTitle, newPostInformat, postPhoto } = req.body
-            if (!userId || !newPostTitle || !newPostInformat || !postPhoto) {
-                res.status(400).json(new StandartRes(1, 'Post is undefined.'))
+            const { userId, newPostTitle, newPostInformat } = req.body
+            const { buffer, mimetype } = req.file 
+    
+            if (!userId || !newPostTitle || !newPostInformat || !buffer || !mimetype) {
+                res.status(400).json(new StandartRes(1, 'Incomplete data for creating post.'))
+                return
             }
+    
             const newPost = await Post.create({
                 id: generateUniqueId(),
                 postTitle: newPostTitle,
                 postInf: newPostInformat,
-                postImg: postPhoto,
+                postImg: {
+                    data: buffer,
+                    contentType: mimetype
+                },
                 likesCount: 0,
                 isEditTitle: false,
                 isEditPostInf: false,
                 owner: userId
             })
+    
             await User.findByIdAndUpdate(userId, { $push: { posts: newPost._id } })
+    
             return res.json(new StandartRes(0, '', { newPost }))
         } catch (e) {
             console.error(e)
@@ -89,7 +98,7 @@ class PostsController {
     
             return res.json(new StandartRes(0, '', { updatedPost }))
         } catch (e) {
-            console.error(e);
+            console.error(e)
             res.status(500).json(catchRes)
         }
     }

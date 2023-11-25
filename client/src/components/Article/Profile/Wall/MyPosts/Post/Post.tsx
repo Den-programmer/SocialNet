@@ -7,7 +7,7 @@ interface IPost {
     userName: string
     postTitle: string
     postInf: string
-    postImg: string
+    postImg: string | File
     isEditPostTitle: boolean
     isEditPostInf: boolean
     id: number
@@ -42,12 +42,21 @@ const Post: React.FC<IPost> = (props) => {
 
     document.addEventListener('click', (e: any) => {
         let node = postContent.current
-        if(node) {
-            if(node && !node.contains(e.target)) {
+        if (node) {
+            if (node && !node.contains(e.target)) {
                 props.finishEditing()
             }
         }
     })
+    const imageUrl = typeof props.postImg === 'string'
+        ? props.postImg
+        : props.postImg instanceof File
+            ? URL.createObjectURL(props.postImg)
+            // @ts-ignore
+            : props.postImg.data && props.postImg.contentType
+            // @ts-ignore
+                ? `data:${props.postImg.contentType};base64,${Buffer.from(props.postImg.data).toString('base64')}`
+                : noPostImg
     return (
         <Container>
             <div className={classes.post}>
@@ -64,7 +73,7 @@ const Post: React.FC<IPost> = (props) => {
                 </div>
                 <div className={classes.postBody}>
                     <div className={classes.picture}>
-                        <img src={props.postImg ? props.postImg : noPostImg} alt="avatar" />
+                        <img src={imageUrl} alt="avatar" />
                     </div>
                     <div className={classes.postContentWrapper}>
                         <div ref={postContent} className={classes.postContent}>

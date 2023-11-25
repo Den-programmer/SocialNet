@@ -4,7 +4,10 @@ const Post = new Schema({
     id: { type: String, required: true },
     postTitle: { type: String, required: true },
     postInf: { type: String, required: true },
-    postImg: { type: String, required: true },
+    postImg: {
+        data: { type: Buffer, required: true },
+        contentType: { type: String, required: true }
+    },
     likesCount: { type: Number, required: true },
     isEditTitle: { type: Boolean, required: true },
     isEditPostInf: { type: Boolean, required: true },

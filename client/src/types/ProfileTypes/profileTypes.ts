@@ -29,7 +29,7 @@ export type postType = {
     id: number
     postTitle: string
     postInf: string
-    postImg: string
+    postImg: File | string
     likesCount: number
     isEditTitle: boolean
     isEditPostInf: boolean

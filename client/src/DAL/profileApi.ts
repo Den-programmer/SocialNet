@@ -23,8 +23,17 @@ export const ProfileAPI = {
             return res.data
         })
     },
-    createPost: (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: string) => {
-        return instance.post(`api/posts/createPost`, { userId, newPostTitle, newPostInformat, postPhoto }).then(rs => {
+    createPost: (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: File) => {
+        const formData = new FormData()
+        formData.append('userId', userId)
+        formData.append('newPostTitle', newPostTitle)
+        formData.append('newPostInformat', newPostInformat)
+        formData.append('postPhoto', postPhoto)
+        return instance.post(`api/posts/createPost`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(rs => {
             return rs.data
         })
     },
