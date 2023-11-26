@@ -11,7 +11,8 @@ const Post = new Schema({
     likesCount: { type: Number, required: true },
     isEditTitle: { type: Boolean, required: true },
     isEditPostInf: { type: Boolean, required: true },
-    owner: { type: Schema.Types.ObjectId, ref: 'User'  }
+    owner: { type: Schema.Types.ObjectId, ref: 'User'  },
+    createdAt: { type: Date, required: true, default: Date.now }
 })
 
 module.exports = model('Post', Post)

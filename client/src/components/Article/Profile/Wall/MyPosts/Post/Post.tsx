@@ -11,6 +11,7 @@ interface IPost {
     isEditPostTitle: boolean
     isEditPostInf: boolean
     id: number
+    date: string
     likesCount: number
     avatar: string
     isModalOpen: boolean
@@ -56,7 +57,7 @@ const Post: React.FC<IPost> = (props) => {
             : props.postImg.data && props.postImg.contentType
             // @ts-ignore
                 ? `data:${props.postImg.contentType};base64,${Buffer.from(props.postImg.data).toString('base64')}`
-                : noPostImg
+                : noPostImg           
     return (
         <Container>
             <div className={classes.post}>
@@ -67,7 +68,7 @@ const Post: React.FC<IPost> = (props) => {
                             <h6>{props.userName}</h6>
                         </div>
                         <div className={classes.date}>
-                            <p>{props.currentDate}</p>
+                            <p>{props.date}</p>
                         </div>
                     </div>
                 </div>

@@ -126,7 +126,7 @@ const reducerProfile = (state = profilePage, action: ActionTypes): typeof profil
     case `/sn/profilePage/SET_PROFILE_USER_ID`:
       return {
         ...state,
-        profile: { ...state.profile, userId:action.userId }
+        profile: { ...state.profile, userId: action.userId }
       }
     case `/sn/profilePage/SET_USER_PROFILE`:
       return {
@@ -248,7 +248,7 @@ const reducerProfile = (state = profilePage, action: ActionTypes): typeof profil
 type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
 
 export const actions = {
-  setPosts: (posts: Array<postType>) => ({ type: `/sn/profilePage/SET_POSTS`, posts } as const) ,
+  setPosts: (posts: Array<postType>) => ({ type: `/sn/profilePage/SET_POSTS`, posts } as const),
   addPost: (newPost: postType) => ({ type: `/sn/profilePage/ADD-POST`, newPost } as const),
   deletePost: (postId: number) => ({ type: `/sn/profilePage/DELETE_POST`, postId } as const),
   setProfileUserId: (userId: number) => ({ type: `/sn/profilePage/SET_PROFILE_USER_ID`, userId } as const),
@@ -394,21 +394,21 @@ export const setGender = (gender: string, userId: number): ThunkType => async (d
   try {
     const resGender = await ProfileAPI.updateGender(gender, userId)
     dispatch(actions.changeGender(resGender))
-  } catch(e) {
+  } catch (e) {
     alert(`Something's gone wrong, error status: 500`)
   }
-} 
+}
 
 export const requestUsername = (userId: number): ThunkType => async (dispatch) => {
   try {
     const res = await ProfileAPI.getUsername(userId)
-    if(res.resultCode === resultCode.Success) {
+    if (res.resultCode === resultCode.Success) {
       dispatch(actions.changeUserName(res.data.username))
     } else {
       // проверить надо!
       dispatch(setTextError(res.message))
     }
-  } catch(e) {
+  } catch (e) {
     alert(`Something's gone wrong, error status: 500`)
   }
 }
@@ -417,7 +417,7 @@ export const setUsername = (userId: number, username: string): ThunkType => asyn
   try {
     const resUsername = await ProfileAPI.updateUsername(userId, username)
     dispatch(actions.changeUserName(resUsername))
-  } catch(e) {
+  } catch (e) {
     alert(`Something's gone wrong, error status: 500`)
   }
 }
@@ -478,15 +478,22 @@ function isBinaryData(obj: any) {
   )
 }
 
-export const createPost = (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: File):ThunkType => async (dispatch) => {
+export const createPost = (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: File): ThunkType => async (dispatch) => {
   try {
     const res = await ProfileAPI.createPost(userId, newPostTitle, newPostInformat, postPhoto)
-    if(res.resultCode === resultCode.Success) {
-      dispatch(actions.addPost({...res.data.newPost, postImg: URL.createObjectURL(res.data.newPost.postImg)}))
+    console.log(res.data.newPost)
+    if (res.resultCode === resultCode.Success) {
+      const imageData = res.data.newPost.postImg.data.data
+      const uint8Array = new Uint8Array(imageData)
+      const blob = new Blob([uint8Array], { type: res.data.newPost.postImg.contentType })
+      const imageUrl = URL.createObjectURL(blob)
+      dispatch(actions.addPost({ ...res.data.newPost, postImg: imageUrl }))
     } else {
+      console.error("ResultCode is ", res.resultCode)
       alert(`Something's gone wrong, error status: 500`)
     }
-  } catch(e) {
+  } catch (e) {
+    console.error(e)
     alert(`Something's gone wrong, error status: 500`)
   }
 }

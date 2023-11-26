@@ -34,6 +34,7 @@ export type postType = {
     isEditTitle: boolean
     isEditPostInf: boolean
     owner: string
+    date: string
 }
 
 export type postNotificationType = {

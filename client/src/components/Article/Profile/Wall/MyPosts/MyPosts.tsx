@@ -38,11 +38,14 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 const MyPosts: React.FC<IMyPosts> = React.memo(props => {
     const s = useStyles()
+    let postImg
     const posts = props.posts.map((post: postType) => {
+        postImg = post.postImg
         return <Post userName={props.userName} id={post.id} key={post.id}
             postTitle={post.postTitle}
             postInf={post.postInf}
             postImg={post.postImg}
+            date={post.date}
             isEditPostTitle={post.isEditTitle}
             isEditPostInf={post.isEditPostInf}
             likesCount={post.likesCount} avatar={props.profile.photos.large ? props.profile.photos.large : defaultUser}
