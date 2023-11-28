@@ -27,7 +27,7 @@
     "formik": "^2.2.6",
     "gh-pages": "^2.2.0",
     "google-translate": "^3.0.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^8.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-fontawesome": "^1.7.1",
