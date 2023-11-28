@@ -22,7 +22,7 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/redux-form": "^8.3.0",
     "@types/vanilla-tilt": "^1.6.2",
-    "axios": "^0.21.4",
+    "axios": "^1.6.0",
     "dotenv": "^16.0.3",
     "formik": "^2.2.6",
     "gh-pages": "^2.2.0",
