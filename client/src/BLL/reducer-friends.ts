@@ -110,15 +110,15 @@ const reducerFriends = (state = Friends, action: ActionTypes): typeof Friends =>
         case `sn/Friends/DELETE_FROM_BLACKLIST`:
             return {
                 ...state,
-                blacklist: state.blacklist.filter(item => item.id !== action.itemId && true) 
-            }    
-        default:
-            return state
+                blacklist: state.blacklist.filter(item => item.id !== action.itemId && true)
+            }
         case `sn/Friends/SET_USERS_TERM`:
             return {
                 ...state,
                 filter: { ...state.filter, term: action.term }
             }
+        default:
+            return state
     }
 }
 
@@ -158,7 +158,7 @@ export const requestUsers = (pageSize: number, currentPage: number, term: string
         dispatch(actions.setFriends(data.items))
         dispatch(actions.setUsersTerm(term))
         return data
-    } catch (error) {
+    } catch (error: any) {
         alert(`Something's gone wrong, error status: ${error.status}`)
     }
 }
@@ -170,7 +170,7 @@ export const followThunk = (userId: number): ThunkType => async (dispatch) => {
             dispatch(actions.follow(userId))
         }
         dispatch(actions.toggleFollowingInProcess(false, userId))
-    } catch (error) {
+    } catch (error: any) {
         alert(`Something's gone wrong, error status: ${error.status}`)
     }
 }
@@ -182,7 +182,7 @@ export const unfollowThunk = (userId: number): ThunkType => async (dispatch) => 
             dispatch(actions.unfollow(userId))
         }
         dispatch(actions.toggleFollowingInProcess(false, userId))
-    } catch (error) {
+    } catch (error: any) {
         alert(`Something's gone wrong, error status: ${error.status}`)
     }
 }
