@@ -423,15 +423,6 @@ export const setUsername = (userId: number, username: string): ThunkType => asyn
   }
 }
 
-const createPostDate = (createdAt: string) => {
-  const createdAtDate = new Date(createdAt)
-  const day = String(createdAtDate.getDate()).padStart(2, '0')
-  const month = String(createdAtDate.getMonth() + 1).padStart(2, '0')
-  const year = createdAtDate.getFullYear()
-  const createdAtString = `${day}/${month}/${year}`
-  return createdAtString
-}
-
 export const requireUsersPosts = (userId: string): ThunkType => async (dispatch) => {
   try {
     const res = await ProfileAPI.getUsersPosts(userId)
@@ -492,7 +483,6 @@ function isBinaryData(obj: any) {
 export const createPost = (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: File): ThunkType => async (dispatch) => {
   try {
     const res = await ProfileAPI.createPost(userId, newPostTitle, newPostInformat, postPhoto)
-    console.log(res.data.newPost)
     if (res.resultCode === resultCode.Success) {
       const imageData = res.data.newPost.postImg.data.data
       const uint8Array = new Uint8Array(imageData)

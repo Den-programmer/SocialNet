@@ -1,7 +1,7 @@
 import { login } from "./reducer-auth"
 import { ThunkAction } from "redux-thunk"
 import { RootState, InferActionTypes } from "./redux"
-import { setUserProfileThunk } from "./reducer-profile"
+import { requestUsername, setUserProfileThunk } from "./reducer-profile"
 import { requestUsers } from "./reducer-friends"
 import { getALLDialogs, getDialogMessages } from "./reducer-messages"
 
@@ -76,6 +76,7 @@ export const initialize = (): ThunkType => async (dispatch, getState) => {
     try {
       await dispatch(login(email, password, rememberMe, captcha))
       const userId = getState().auth.userId
+      await dispatch(requestUsername(userId))
       await dispatch(setUserProfileThunk(userId))
       dispatch(actions.initializedSuccessful())
     } catch (error) {
