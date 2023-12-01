@@ -7,6 +7,7 @@ import { RootState, InferActionTypes } from './redux'
 import { ThunkAction } from 'redux-thunk'
 import beautifulLight from '../components/Article/Profile/User/images/profileBackground.jpg'
 import { postType, postNotificationType, profileNavItem, ChangePhotosMenuItemType, profileType, saveProfileType } from '../types/ProfileTypes/profileTypes'
+import { formatDate } from '../utils/helpers/functions/function-helpers'
 
 const entity = 'sn/profilePage/'
 
@@ -422,6 +423,15 @@ export const setUsername = (userId: number, username: string): ThunkType => asyn
   }
 }
 
+const createPostDate = (createdAt: string) => {
+  const createdAtDate = new Date(createdAt)
+  const day = String(createdAtDate.getDate()).padStart(2, '0')
+  const month = String(createdAtDate.getMonth() + 1).padStart(2, '0')
+  const year = createdAtDate.getFullYear()
+  const createdAtString = `${day}/${month}/${year}`
+  return createdAtString
+}
+
 export const requireUsersPosts = (userId: string): ThunkType => async (dispatch) => {
   try {
     const res = await ProfileAPI.getUsersPosts(userId)
@@ -445,21 +455,22 @@ export const requireUsersPosts = (userId: string): ThunkType => async (dispatch)
             return post
           }
 
-          return { ...post, postImg: imageUrl }
+          const createdAtString = formatDate(post.createdAt)
+
+          return { ...post, postImg: imageUrl, createdAt: createdAtString }
         } catch (error) {
           console.error("Error creating object URL:", error)
           return post
         }
       }))
 
-      console.log(posts)
       dispatch(actions.setPosts(posts))
 
       posts.forEach(post => {
         if (typeof post.postImg !== 'string' && post.postImg instanceof Blob) {
           URL.revokeObjectURL(post.postImg);
         }
-      });
+      })
     } else {
       alert(`Something's gone wrong, error status: 500`);
     }
@@ -487,7 +498,10 @@ export const createPost = (userId: string, newPostTitle: string, newPostInformat
       const uint8Array = new Uint8Array(imageData)
       const blob = new Blob([uint8Array], { type: res.data.newPost.postImg.contentType })
       const imageUrl = URL.createObjectURL(blob)
-      dispatch(actions.addPost({ ...res.data.newPost, postImg: imageUrl }))
+
+      const createdAtString = formatDate(res.data.newPost.createdAt)
+
+      dispatch(actions.addPost({ ...res.data.newPost, postImg: imageUrl, createdAt: createdAtString }))
     } else {
       console.error("ResultCode is ", res.resultCode)
       alert(`Something's gone wrong, error status: 500`)

@@ -13,7 +13,6 @@ interface IMyPosts {
     profile: profileType
     isAddPostModalOpen: boolean
     isPostModalOpen: boolean
-    currentDate: string
     messageError: string
     deletePost: (postId: number) => void
     // editPost: (postId: number, newPostTitle: string, newPostInf: string) => void
@@ -45,11 +44,10 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
             postTitle={post.postTitle}
             postInf={post.postInf}
             postImg={post.postImg}
-            date={post.date}
+            createdAt={post.createdAt}
             isEditPostTitle={post.isEditTitle}
             isEditPostInf={post.isEditPostInf}
             likesCount={post.likesCount} avatar={props.profile.photos.large ? props.profile.photos.large : defaultUser}
-            currentDate={props.currentDate}
             deletePost={props.deletePost} 
             setIsPostInfEdited={props.setIsPostInfEdited} 
             setIsPostTitleEdited={props.setIsPostTitleEdited} 

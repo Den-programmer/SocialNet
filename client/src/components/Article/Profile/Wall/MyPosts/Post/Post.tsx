@@ -11,11 +11,10 @@ interface IPost {
     isEditPostTitle: boolean
     isEditPostInf: boolean
     id: number
-    date: string
+    createdAt: string
     likesCount: number
     avatar: string
     isModalOpen: boolean
-    currentDate: string
     setIsPostModalOpen: (modalStatus: boolean) => void
     deletePost: (postId: number) => void
     setIsPostTitleEdited: (postId: number, status: boolean) => void
@@ -68,7 +67,7 @@ const Post: React.FC<IPost> = (props) => {
                             <h6>{props.userName}</h6>
                         </div>
                         <div className={classes.date}>
-                            <p>{props.date}</p>
+                            <p>{props.createdAt}</p>
                         </div>
                     </div>
                 </div>

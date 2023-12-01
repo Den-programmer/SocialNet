@@ -8,18 +8,26 @@ class PostsController {
         try {
             const { userId } = req.params
             if (!userId) {
-                res.status(400).json(new StandartRes(1, 'User\'s id is undefined.'))
+                res.status(400).json(new StandartRes(1, "User's id is undefined."))
+                return
             }
+    
             const user = await User.findById(userId).populate({
                 path: 'posts',
                 model: 'Post'
-            });
-            const { posts } = user
-            return res.json(new StandartRes(0, '', { posts }))
+            })
+    
+            const formattedPosts = user.posts.map(post => ({
+                ...post._doc,
+                createdAt: post.createdAt.toLocaleDateString('en-GB')
+            }))
+    
+            return res.json(new StandartRes(0, '', { posts: formattedPosts }))
         } catch (e) {
             res.status(500).json(catchRes)
         }
     }
+    
     async createPost(req, res) {
         try {
             const { userId, newPostTitle, newPostInformat } = req.body

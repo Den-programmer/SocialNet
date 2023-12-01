@@ -4,7 +4,7 @@ import { setTextError } from '../../../../../BLL/reducer-app'
 import { connect } from 'react-redux'
 import { getUsersProfile, getPosts, getUsersName, getIsAddPostModalOpenStatus, getIsPostModalOpenStatus } from '../../../../../BLL/selectors/profile-selectors'
 import { RootState } from '../../../../../BLL/redux'
-import { getDate, getMessageError } from '../../../../../BLL/selectors/selectors'
+import { getMessageError } from '../../../../../BLL/selectors/selectors'
 
 const mapStateToProps = (state: RootState) => ({
     userName: getUsersName(state),
@@ -12,7 +12,6 @@ const mapStateToProps = (state: RootState) => ({
     profile: getUsersProfile(state),
     isPostModalOpen: getIsPostModalOpenStatus(state),
     isAddPostModalOpen: getIsAddPostModalOpenStatus(state),
-    currentDate: getDate(state),
     messageError: getMessageError(state),
     userId: getUsersProfile(state).userId
 })
