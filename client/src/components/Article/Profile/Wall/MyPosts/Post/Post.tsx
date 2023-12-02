@@ -2,6 +2,7 @@ import React, { ChangeEvent, createRef } from 'react'
 import classes from './Post.module.scss'
 import noPostImg from '../../../../../../images/noPhoto/nophoto.png'
 import { Container, Avatar, makeStyles, createStyles, Theme, TextField } from '@material-ui/core'
+import defaultUserPhoto from '../../../../Profile/images/withoutAvatar/defaultUserPhoto.jpg'
 
 interface IPost {
     userName: string
@@ -13,7 +14,7 @@ interface IPost {
     id: number
     createdAt: string
     likesCount: number
-    avatar: string
+    avatar: string | File
     isModalOpen: boolean
     setIsPostModalOpen: (modalStatus: boolean) => void
     deletePost: (postId: number) => void
@@ -54,16 +55,25 @@ const Post: React.FC<IPost> = (props) => {
             ? URL.createObjectURL(props.postImg)
             // @ts-ignore
             : props.postImg.data && props.postImg.contentType
-            // @ts-ignore
+                // @ts-ignore
                 ? `data:${props.postImg.contentType};base64,${Buffer.from(props.postImg.data).toString('base64')}`
-                : noPostImg           
+                : noPostImg
+    const imageAvatarUrl = typeof props.avatar === 'string'
+        ? props.avatar
+        : props.avatar instanceof File
+            ? URL.createObjectURL(props.avatar)
+            // @ts-ignore
+            : props.avatar.data && props.avatar.contentType
+                // @ts-ignore
+                ? `data:${props.avatar.contentType};base64,${Buffer.from(props.avatar.data).toString('base64')}`
+                : defaultUserPhoto
     return (
         <Container>
             <div className={classes.post}>
                 <div className={classes.postHeaderWrapper}>
                     <div className={classes.postHeader}>
                         <div className={classes.avatar}>
-                            <Avatar className={s.avatar} src={props.avatar} alt="avatar" />
+                            <Avatar className={s.avatar} src={imageAvatarUrl} alt="avatar" />
                             <h6>{props.userName}</h6>
                         </div>
                         <div className={classes.date}>

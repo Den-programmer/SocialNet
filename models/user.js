@@ -21,8 +21,14 @@ const User = new Schema({
             mainLink: { type: String, default: '' }
         },
         photos: {
-            large: { type: String, default: '' },
-            small: { type: String, default: '' }
+            large: {
+                data: { type: Buffer },
+                contentType: { type: String }
+            },
+            small: {
+                data: { type: Buffer },
+                contentType: { type: String }
+            }
         },
         userId: Schema.Types.ObjectId
     },

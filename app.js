@@ -18,6 +18,7 @@ app.use(express.json({ extended: true }))
 
 app.use('/api/auth', require('./routes/auth.routes.js'))
 app.use('/api/gender', require('./routes/gender.routes.js'))
+app.use('/api/avatar', require('./routes/avatar.routes.js'))
 app.use('/api/profile', require('./routes/profile.routes.js'))
 app.use('/api/username', require('./routes/username.routes.js'))
 app.use('/api/posts', require('./routes/posts.routes.js'))

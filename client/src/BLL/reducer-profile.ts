@@ -278,9 +278,10 @@ export const actions = {
 
 type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionTypes>
 
-export const setUserPhotoThunk = (photo: File): ThunkType => async (dispatch) => {
+export const setUserPhotoThunk = (photo: File): ThunkType => async (dispatch, getState) => {
   try {
-    const res = await OptionsAPI.setUserPhoto(photo)
+    const userId = getState().profilePage.profile.userId || getState().auth.userId
+    const res = await OptionsAPI.setUserPhoto(photo, userId)
     if (res.resultCode === resultCode.Success) {
       dispatch(actions.setUserPhoto(res.data.photos.large))
     } else {

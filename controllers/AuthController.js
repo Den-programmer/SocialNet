@@ -27,6 +27,7 @@ class AuthController {
 
             res.status(201).json(new StandartRes(0, 'User is created.', { userId: user.id }))
         } catch (e) {
+            console.error(e)
             res.status(500).json(catchRes)
         }
     }
@@ -60,6 +61,7 @@ class AuthController {
             )
             res.json(new StandartRes(0, 'Successful authorizing', { token, userId: user.id }))
         } catch (e) {
+            console.error(e)
             res.status(500).json(catchRes)
         }
     }

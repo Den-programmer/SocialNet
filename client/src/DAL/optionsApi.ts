@@ -13,11 +13,11 @@ type setUserPhotoType = {
 }
 
 export const OptionsAPI = {
-    setUserPhoto: (photo: File) => {
+    setUserPhoto: (photo: File, userId: any) => {
         const formData = new FormData()
         formData.append("image", photo)
-        debugger
-        return instance.put<setUserPhotoType>(`profile/photo`, formData, {
+        formData.append("userId", userId)
+        return instance.put<setUserPhotoType>(`api/avatar/updateAvatar`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

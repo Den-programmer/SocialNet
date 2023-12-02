@@ -4,10 +4,11 @@ import facebook from '../images/facebook.png'
 import twitter from '../images/twitter.png'
 import youtube from '../images/youtube.png'
 import { contactsType } from '../../../../../types/ProfileTypes/profileTypes'
+import defaultUserPhoto from '../../../Profile/images/withoutAvatar/defaultUserPhoto.jpg'
 
 interface IUserAvatar {
     name: string
-    avatar: string
+    avatar: string | File
     contacts: contactsType
 }
 
@@ -41,10 +42,19 @@ const Avatar: React.FC<IUserAvatar> = (props) => {
             )
         }
     })
+    const imageUrl = typeof props.avatar === 'string'
+        ? props.avatar
+        : props.avatar instanceof File
+            ? URL.createObjectURL(props.avatar)
+            // @ts-ignore
+            : props.avatar.data && props.avatar.contentType
+            // @ts-ignore
+                ? `data:${props.avatar.contentType};base64,${Buffer.from(props.avatar.data).toString('base64')}`
+                : defaultUserPhoto
     return (
         <div className={classes.avatarWrapper}>
             <div className={classes.avatar}>
-                <img className={classes.userImg} src={props.avatar} alt="avatar" />
+                <img className={classes.userImg} src={imageUrl} alt="avatar" />
                 <div className={classes.userInf}>
                     <div className={classes.name}>
                         <h2>
