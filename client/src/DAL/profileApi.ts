@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { postType, profileType } from '../types/ProfileTypes/profileTypes'
+import { contactsType, postType, profileType } from '../types/ProfileTypes/profileTypes'
 import { instance } from './api'
 
 export const ProfileAPI = {
@@ -47,8 +47,16 @@ export const ProfileAPI = {
     //         return response.data
     //     })
     // },
-    saveProfile: (profile: profileType) => {
-        return instance.put(`api/profile/saveProfile`, { profile }).then(res => {
+    updateContacts: (contacts: contactsType, userId: any) => {
+        return instance.put(`api/profile/contacts/updateContacts`, { contacts, userId }).then(res => {
+            return res.data
+        }).catch(error => {
+            console.error("Error updating contacts:", error)
+            throw error 
+        })
+    },
+    updateAboutMe: (aboutMe: string, userId: any) => {
+        return instance.put(`api/profile/aboutMe/updateAboutMe`, { aboutMe, userId }).then(res => {
             return res.data
         })
     },

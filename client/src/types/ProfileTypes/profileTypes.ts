@@ -13,10 +13,6 @@ export type contactsType = {
     mainLink: string | null
 }
 
-export type saveProfileType = {
-    contacts: contactsType
-}
-
 export type profileType = {
     status: string
     aboutMe: string

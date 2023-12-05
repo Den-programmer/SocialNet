@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import '../../options.scss'
 import OptionsTitle from '../accountOptions/OptionsTitle/optionsTitle'
-import { contactsType, saveProfileType } from '../../../../../types/ProfileTypes/profileTypes'
+import { contactsType } from '../../../../../types/ProfileTypes/profileTypes'
 import { useEditIconStyles } from '../accountOptions/accountOptions'
 import EditIcon from '@material-ui/icons/Edit'
 import ChangeContact from './ChangeContacts/changeContactsForm/changeContact/changeContact'
@@ -11,7 +11,7 @@ interface IContactsOptions {
     userName: string
     contacts: contactsType
     error: string 
-    saveProfile: (profile: saveProfileType) => void
+    updateContacts: (contacts: contactsType) => void
     addNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'News' | 'Friends') => void
 }
 
@@ -55,7 +55,7 @@ const ContactsOptions: React.FC<IContactsOptions & RouteComponentProps> = (props
             <div key={item.id} onClick={() => handleClick(item.id)} onMouseEnter={() => handleHover(item.id, true)} onMouseLeave={() => handleHover(item.id, false)} className="options_itemWrapper">
                 <div className="options_item">
                     {item.isEdit ? <ChangeContact addNotification={props.addNotification} error={props.error} currentPageUrl={props.location.pathname} key={item.id} id={item.id} 
-                    property={item.property} userName={props.userName} currentContacts={currentContacts} setCurrentContacts={setCurrentContacts} value={item.value} saveProfile={props.saveProfile}/> : <div className="options_item_content">
+                    property={item.property} userName={props.userName} currentContacts={currentContacts} setCurrentContacts={setCurrentContacts} value={item.value} updateContacts={props.updateContacts}/> : <div className="options_item_content">
                         <h5 className="options_item_content_property">{item.property}</h5>
                         <p className="options_item_content_value">{item.value ? item.value : 'Not provided'}</p>
                     </div>}

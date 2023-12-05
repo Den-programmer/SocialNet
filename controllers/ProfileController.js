@@ -15,21 +15,45 @@ class ProfileController {
             res.status(500).json(catchRes)
         }
     }
-    async saveProfile(req, res) {
+
+    async updateAboutMe(req, res) {
         try {
-            const { profile } = req.body
-            const userId = profile.userId
+            const { aboutMe, userId } = req.body
             if(!userId) {
                 res.status(400).json(new StandartRes(1, 'User\'s id is undefined.'))
             }
-            if(!profile) {
-                res.status(400).json(new StandartRes(1, 'Profile is undefined.'))
+            if(!aboutMe) {
+                res.status(400).json(new StandartRes(1, 'About me information is undefined.'))
             }
+            const user = await User.findById(userId)
+            const profile = user.profile
+            const updatedProfile = { ...profile, aboutMe }
+            const updatedUser = await User.findByIdAndUpdate(userId, { profile: updatedProfile }, { new: true })
+            const updatedAboutMe = updatedUser.profile.aboutMe
+            return res.json(new StandartRes(0, '', { aboutMe: updatedAboutMe }))
+        } catch (e) {
+            console.error(e)
+            res.status(500).json(catchRes)
+        }
+    }
 
-            const updatedUser = await User.findByIdAndUpdate(userId, {profile}, { new: true })
-            const profileU = updatedUser.profile
-            return res.json(new StandartRes(0, '', { profile: profileU }))
+    async updateContacts(req, res) {
+        try {
+            const { contacts, userId } = req.body
+            if(!userId) {
+                res.status(400).json(new StandartRes(1, 'User\'s id is undefined.'))
+            }
+            if(!contacts) {
+                res.status(400).json(new StandartRes(1, 'Contacts is undefined.'))
+            }
+            const user = await User.findById(userId)
+            const profile = user.profile
+            const updatedProfile = { ...profile, contacts }
+            const updatedUser = await User.findByIdAndUpdate(userId, { profile: updatedProfile }, { new: true })
+            const updatedContacts = updatedUser.profile.contacts
+            return res.json(new StandartRes(0, '', { contacts: updatedContacts }))
         } catch(e) {
+            console.error(e)
             res.status(500).json(catchRes)
         }
     }

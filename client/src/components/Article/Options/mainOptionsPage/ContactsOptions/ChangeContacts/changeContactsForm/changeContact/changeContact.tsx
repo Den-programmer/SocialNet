@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from 'react'
 import '../../../../../options.scss'
 import { createReviewChangesBtn } from '../../../../../../../../utils/helpers/functions/function-helpers'
-import { saveProfileType } from '../../../../../../../../types/ProfileTypes/profileTypes'
+import { contactsType } from '../../../../../../../../types/ProfileTypes/profileTypes'
 import { ICurrentContact } from '../../../contactsOptions'
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 import { useEditIconStyles } from '../../../../accountOptions/accountOptions'
@@ -15,17 +15,17 @@ interface IChangeContact {
     error: string
     currentPageUrl: string
     currentContacts: Array<ICurrentContact>
-    saveProfile: (profile: saveProfileType) => void
+    updateContacts: (contacts: contactsType) => void
     setCurrentContacts: (array: Array<ICurrentContact>) => void
     addNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'News' | 'Friends') => void
 }
 
 const ChangeContact: React.FC<IChangeContact> = (props) => {
     const classes = useEditIconStyles()
-    let contactVal = props.value ? props.value : 'Not provided'
+    let contactVal = props.value || 'Not provided'
     const [currentContact, setCurrentContact] = useState<string>(contactVal)
     const saveChanges = () => {
-        const contacts: any = {}
+        let contacts: any = {}
         for (let i = 0; i < props.currentContacts.length; i++) {
             let key: string = props.currentContacts[i].property
             if (props.id === i + 1) {
@@ -34,16 +34,12 @@ const ChangeContact: React.FC<IChangeContact> = (props) => {
                 contacts[key] = props.currentContacts[i].value
             }
         }
-        let profile = {
-            fullName: props.userName,
-            contacts: contacts
-        }
         let array = props.currentContacts.map((item: ICurrentContact) => {
             if (item.id === props.id) return { ...item, value: currentContact }
             return { ...item, isEdit: false }
         })
         props.setCurrentContacts(array)
-        props.saveProfile(profile)
+        props.updateContacts(contacts)
         props.addNotification('Your contacts have been changed successfully!', '/Profile', 'Profile')
     }
     const onContactChange = (e: ChangeEvent<HTMLInputElement>) => setCurrentContact(e.currentTarget.value)

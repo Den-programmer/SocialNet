@@ -6,7 +6,7 @@ import { setTextError, setTextErrorActionType } from './reducer-app'
 import { RootState, InferActionTypes } from './redux'
 import { ThunkAction } from 'redux-thunk'
 import beautifulLight from '../components/Article/Profile/User/images/profileBackground.jpg'
-import { postType, postNotificationType, profileNavItem, ChangePhotosMenuItemType, profileType, saveProfileType } from '../types/ProfileTypes/profileTypes'
+import { postType, postNotificationType, profileNavItem, ChangePhotosMenuItemType, profileType, contactsType } from '../types/ProfileTypes/profileTypes'
 import { formatDate } from '../utils/helpers/functions/function-helpers'
 
 const entity = 'sn/profilePage/'
@@ -28,14 +28,14 @@ const profilePage = {
     status: "",
     aboutMe: "",
     contacts: {
-      facebook: null,
-      website: null,
-      vk: null,
-      twitter: null,
-      instagram: null,
-      youtube: null,
-      github: null,
-      mainLink: null
+      facebook: '',
+      website: '',
+      vk: '',
+      twitter: '',
+      instagram: '',
+      youtube: '',
+      github: '',
+      mainLink: ''
     },
     photos: {
       large: defaultUser,
@@ -239,6 +239,16 @@ const reducerProfile = (state = profilePage, action: ActionTypes): typeof profil
           return post
         })
       }
+    case `/sn/profilePage/SET_ABOUT_ME_INF`:
+      return {
+        ...state,
+        profile: { ...state.profile, aboutMe: action.aboutMe }
+      }
+    case `/sn/profilePage/SET_ALL_CONTACTS`:
+      return {
+        ...state,
+        profile: { ...state.profile, contacts: action.contacts }
+      }
     default:
       return state
   }
@@ -271,7 +281,9 @@ export const actions = {
   setIsPostInfEdited: (postId: number, status: boolean) => ({ type: `/sn/profilePage/SET_IS_POST_INF_EDITED`, postId, status } as const),
   finishEditing: () => ({ type: `/sn/profilePage/FINISH_EDITING` } as const),
   onPostTitleChange: (postId: number, postTitle: string) => ({ type: `/sn/profilePage/POST_TITLE_CHANGE`, postId, postTitle } as const),
-  onPostInfChange: (postId: number, postInf: string) => ({ type: `/sn/profilePage/POST_TITLE_INF`, postId, postInf } as const)
+  onPostInfChange: (postId: number, postInf: string) => ({ type: `/sn/profilePage/POST_TITLE_INF`, postId, postInf } as const),
+  setAboutMe: (aboutMe: string) => ({ type: `/sn/profilePage/SET_ABOUT_ME_INF`, aboutMe } as const),
+  changeAllContacts: (contacts: contactsType) => ({ type: `/sn/profilePage/SET_ALL_CONTACTS`, contacts } as const)
 }
 
 /* Thunks! */
@@ -303,56 +315,32 @@ export const setUserProfileThunk = (userId: number): ThunkType => async (dispatc
     alert(`Something's gone wrong, error status: 500`)
   }
 }
-export const saveProfile = (profile: saveProfileType): ThunkType => async (dispatch, getState) => {
+
+export const saveAboutMe = (aboutMe: string): ThunkType => async (dispatch, getState) => {
   try {
-    const profileState = getState().profilePage.profile
-    const userId = getState().auth.userId
-    const profileStatus = profileState.status
-    const aboutMe = profileState.aboutMe
-    const userProfilePhoto = profileState.photos
-    if (userId) {
-      const trueProfile = {
-        status: profileStatus,
-        aboutMe: aboutMe,
-        userId: userId,
-        contacts: profile.contacts,
-        photos: userProfilePhoto
-      }
-      const res = await ProfileAPI.saveProfile(trueProfile)
-      if (res.resultCode === resultCode.Success) {
-        dispatch(setUserProfileThunk(userId))
-      } else {
-        dispatch(setTextError(res.message))
-      }
+    const userId = getState().profilePage.profile.userId || getState().auth.userId
+    const res = await ProfileAPI.updateAboutMe(aboutMe, userId)
+    if (res.resultCode === resultCode.Success) {
+      dispatch(actions.setAboutMe(res.data.aboutMe))
+    } else {
+      dispatch(setTextError(res.message))
     }
   } catch (error) {
     alert(`Something's gone wrong, error status: 500`)
   }
 }
 
-export const saveAboutMe = (aboutMe: string): ThunkType => async (dispatch, getState) => {
+export const updateContacts = (contacts: contactsType): ThunkType => async (dispatch, getState) => {
   try {
-    const profileState = getState().profilePage.profile
-    const userId = getState().auth.userId
-    const profileStatus = profileState.status
-    const userProfilePhoto = profileState.photos
-    const contacts = profileState.contacts
-    if (userId) {
-      const trueProfile = {
-        status: profileStatus,
-        aboutMe: aboutMe,
-        userId: userId,
-        contacts: contacts,
-        photos: userProfilePhoto
-      }
-      const data = await ProfileAPI.saveProfile(trueProfile)
-      if (data.resultCode === resultCode.Success) {
-        dispatch(setUserProfileThunk(userId))
-      } else {
-        dispatch(setTextError(data.message))
-      }
+    const userId = getState().profilePage.profile.userId || getState().auth.userId
+    const res = await ProfileAPI.updateContacts(contacts, userId)
+    if (res.resultCode === resultCode.Success) {
+      dispatch(actions.changeAllContacts(res.data.contacts))
+    } else {
+      dispatch(setTextError(res.message))
     }
-  } catch (error) {
+  } catch (err) {
+    console.error(err)
     alert(`Something's gone wrong, error status: 500`)
   }
 }

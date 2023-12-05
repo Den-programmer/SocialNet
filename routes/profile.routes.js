@@ -3,6 +3,8 @@ const ProfileController = require('../controllers/ProfileController')
 const router = Router()
 
 router.get('/getProfile/:userId', ProfileController.getProfile)
-router.put('/saveProfile', ProfileController.saveProfile)
+
+router.put('/aboutMe/updateAboutMe', ProfileController.updateAboutMe)
+router.put('/contacts/updateContacts', ProfileController.updateContacts)
 
 module.exports = router
