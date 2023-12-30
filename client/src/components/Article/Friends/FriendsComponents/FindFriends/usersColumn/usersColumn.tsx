@@ -5,6 +5,7 @@ import { Container, makeStyles, Theme, createStyles } from '@material-ui/core'
 
 interface UsersColumnPropsType {
     users: Array<userType>
+    userId: any
     followingInProcess: Array<number>
     followThunk: (id: number) => void
     unfollowThunk: (id: number) => void
@@ -23,17 +24,19 @@ const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
         }
     }))
     const classes = useStyles()
+    debugger
     const users = props.users.map((user: userType) => {
-        return <User id={user.id}
-            followThunk={props.followThunk}
-            unfollowThunk={props.unfollowThunk}
-            key={user.id}
-            addNotification={props.addNotification}
-            followingInProcess={props.followingInProcess}
-            followed={user.followed}
-            nickname={user.nickname}
-            name={user.name}
-            photo={user.photos.large} startDialog={props.startDialog} addToBlacklist={props.addToBlacklist} />
+        if (user.id !== props.userId) {
+            return <User id={user.id}
+                followThunk={props.followThunk}
+                unfollowThunk={props.unfollowThunk}
+                key={user.id}
+                addNotification={props.addNotification}
+                followingInProcess={props.followingInProcess}
+                followed={user.followed}
+                username={user.username}
+                photo={user.profile.photos.large} startDialog={props.startDialog} addToBlacklist={props.addToBlacklist} />
+        }
     })
     return (
         <Container className={classes.container}>

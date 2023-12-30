@@ -17,7 +17,7 @@ const Friends:React.FC<FriendsPropsType> = (props) => {
     }
 
     const friends = friendsArray.map(f => {
-        return <Friend id={f.id} key={f.id} name={f.name} nickname={f.nickname} avatar={f.photos.large ? f.photos.large : f.photos.small}/>
+        return <Friend id={f.id} key={f.id} username={f.username}  avatar={f.profile.photos.large ? f.profile.photos.large : f.profile.photos.small}/>
     })
     return (
         <div className={classes.friends}>

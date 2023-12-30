@@ -23,11 +23,21 @@ const useStyles = makeStyles(() => createStyles({
 const Blacklist: React.FC<IBlacklist> = ({ blacklist, deleteFromBlacklist }) => {
     const s = useStyles()
     const blackedUsers = blacklist.map((item: userType) => {
+        const large = item.profile.photos.large
+        const imageUrl = typeof large === 'string'
+        ? large
+        : large instanceof File
+            ? URL.createObjectURL(large)
+            // @ts-ignore
+            : large.data && large.contentType
+            // @ts-ignore
+                ? `data:${large.contentType};base64,${Buffer.from(large.data).toString('base64')}`
+                : defaultUserPhoto
         return (
             <div className={classes.user}>
                 <NavLink className={classes.navLink} to={"/Profile/" + item.id}>
-                    <Avatar className={s.avatar} src={item.photos.large ? item.photos.large : defaultUserPhoto} alt="avatar" />
-                    <h5 className={classes.userName}>{item.nickname ? item.nickname : item.name}</h5>
+                    <Avatar className={s.avatar} src={imageUrl ? imageUrl : defaultUserPhoto} alt="avatar" />
+                    <h5 className={classes.userName}>{item.username}</h5>
                 </NavLink>
                 <Button onClick={() => deleteFromBlacklist(item.id)} variant="contained" color="secondary">Blacked</Button>
             </div>

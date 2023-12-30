@@ -8,6 +8,7 @@ import { RootState } from '../../../../../../BLL/redux'
 import { userType, FriendsFilter } from '../../../../../../types/FriendsType/friendsType'
 import { startDialog } from '../../../../../../BLL/reducer-messages'
 import { actions as actions2 } from '../../../../../../BLL/reducer-notifications'
+import { getAuthorizedUserId } from '../../../../../../BLL/selectors/auth-selectors'
 
 interface IUserColumnAPI {
     usersInf: {
@@ -16,6 +17,7 @@ interface IUserColumnAPI {
         pageSize: number
         currentPage: number
     }
+    userId: any
     followingInProcess: Array<number>
     users: Array<userType>
     filter: FriendsFilter
@@ -40,7 +42,7 @@ class UsersColumnAPI extends React.Component<IUserColumnAPI> {
     render() {
         return (
             <>
-                {this.props.usersInf.isFetching ? <Preloader /> : <UsersColumn addToBlacklist={this.props.addToBlacklist} addNotification={this.props.addNotification} startDialog={this.props.startDialog} followThunk={this.props.followThunk} unfollowThunk={this.props.unfollowThunk}
+                {this.props.usersInf.isFetching ? <Preloader /> : <UsersColumn userId={this.props.userId} addToBlacklist={this.props.addToBlacklist} addNotification={this.props.addNotification} startDialog={this.props.startDialog} followThunk={this.props.followThunk} unfollowThunk={this.props.unfollowThunk}
                 followingInProcess={this.props.followingInProcess} users={this.props.users} />}
             </>
         )
@@ -51,7 +53,8 @@ const mapStateToProps = (state: RootState) => ({
     users: getUsers(state),
     usersInf: getUsersInf(state),
     followingInProcess: getFollowingInProcess(state),
-    filter: getUsersFilter(state)
+    filter: getUsersFilter(state),
+    userId: getAuthorizedUserId(state)
 })
 
 const { follow, unfollow, addToBlacklist } = actions

@@ -2,14 +2,17 @@ import { instance, ServerResType } from './api'
 import { userType } from '../types/FriendsType/friendsType'
 
 type requestUsersDataType = {
-    items: Array<userType>
-    totalCount: number
-    error: string
+    data: {
+        items: Array<userType>
+        totalCount: number
+    }
+    resultCode: number
+    message: string
 }
 
 export const UsersAPI = {
     requestUsers: (pageSize: number, currentPage: number, term: string = '') => {
-        return instance.get<requestUsersDataType>(`users?count=${pageSize}&page=${currentPage}&term=${term}`).then(response => {
+        return instance.get<requestUsersDataType>(`api/users/getUsers/${pageSize}/${currentPage}/${term}`).then(response => {
             return response.data
         })
     },

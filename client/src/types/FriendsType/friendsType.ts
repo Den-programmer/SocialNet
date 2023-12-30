@@ -1,14 +1,15 @@
 
 
 export type userType = {
-    id: number
-    name: string
-    nickname: string
-    photos: {
-        large: string
-        small: string
+    id: any
+    username: string
+    profile: {
+        photos: {
+            large: string | File
+            small: string | File
+        }, 
+        status: string
     }
-    status: null | string
     followed: boolean
 }
 

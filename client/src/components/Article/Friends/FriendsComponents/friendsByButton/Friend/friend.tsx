@@ -6,9 +6,8 @@ import { Avatar, Container, makeStyles, Theme, createStyles, Button } from '@mat
 
 interface IFriend {
     id: number
-    avatar: string
-    nickname: string
-    name: string
+    avatar: string | File
+    username: string
     followed: boolean
     follow: (id: number) => void
     unfollow: (id: number) => void
@@ -31,12 +30,21 @@ const Friend: React.FC<IFriend> = (props) => {
         if (props.followed === false) props.follow(props.id)
         props.unfollow(props.id)
     }
+    const imageUrl = typeof props.avatar === 'string'
+        ? props.avatar
+        : props.avatar instanceof File
+            ? URL.createObjectURL(props.avatar)
+            // @ts-ignore
+            : props.avatar.data && props.avatar.contentType
+            // @ts-ignore
+                ? `data:${props.avatar.contentType};base64,${Buffer.from(props.avatar.data).toString('base64')}`
+                : defaultUserPhoto
     return (
         <Container className={classes.container}>
             <div className={classes.user}>
                 <NavLink className={classes.navLink} to={"/Profile/" + props.id}>
-                    <Avatar className={s.avatar} src={props.avatar ? props.avatar : defaultUserPhoto} alt="avatar" />
-                    <h5 className={classes.userName}>{props.nickname ? props.nickname : props.name}</h5>
+                    <Avatar className={s.avatar} src={imageUrl ? imageUrl : defaultUserPhoto} alt="avatar" />
+                    <h5 className={classes.userName}>{props.username}</h5>
                 </NavLink>
                 <Button variant="contained" color="primary" 
                 className={classes.btn_following} 

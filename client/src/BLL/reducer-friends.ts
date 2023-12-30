@@ -42,12 +42,13 @@ const reducerFriends = (state = Friends, action: ActionTypes): typeof Friends =>
             let currentUser: any = currentUserArray.find(item => item)
             let newFriend = {
                 id: action.userId,
-                name: currentUser.name,
-                status: null,
-                nickname: currentUser.nickname,
-                photos: {
-                    large: currentUser.avatar,
-                    small: currentUser.avatar
+                username: currentUser.username,
+                profile: {
+                    status: '',
+                    photos: {
+                        large: currentUser.avatar,
+                        small: currentUser.avatar
+                    }
                 },
                 followed: true
             }
@@ -82,7 +83,7 @@ const reducerFriends = (state = Friends, action: ActionTypes): typeof Friends =>
         case `sn/Friends/SET-USERSINF`:
             return {
                 ...state,
-                usersInf: { ...state.usersInf, totalCount: action.data.totalCount }
+                usersInf: { ...state.usersInf, totalCount: action.totalCount }
             }
         case `sn/Friends/IS_FETCHING`:
             return {
@@ -94,12 +95,13 @@ const reducerFriends = (state = Friends, action: ActionTypes): typeof Friends =>
             const currentBlacked = state.users.filter(item => item.id === action.itemId && true).find(item => item && item)
             const currentBlackedUser = {
                 id: action.itemId,
-                name: currentBlacked?.name !== undefined ? currentBlacked?.name : '',
-                status: null,
-                nickname: currentBlacked?.nickname !== undefined ? currentBlacked?.nickname : '',
-                photos: {
-                    large: currentBlacked?.photos.large !== undefined ? currentBlacked?.photos.large : '',
-                    small: currentBlacked?.photos.small !== undefined ? currentBlacked?.photos.small : ''
+                username: currentBlacked?.username !== undefined ? currentBlacked?.username : '',
+                profile: {
+                    status: '',
+                    photos: {
+                        large: currentBlacked?.profile.photos.large !== undefined ? currentBlacked?.profile.photos.large : '',
+                        small: currentBlacked?.profile.photos.small !== undefined ? currentBlacked?.profile.photos.small : ''
+                    },
                 },
                 followed: false
             }
@@ -126,16 +128,12 @@ const reducerFriends = (state = Friends, action: ActionTypes): typeof Friends =>
 
 type ActionTypes = InferActionTypes<typeof actions>
 
-type setUsersInfData = {
-    totalCount: number
-}
-
 export const actions = {
     follow: (userId: number) => ({ type: `sn/Friends/FOLLOW`, userId } as const),
     unfollow: (userId: number) => ({ type: `sn/Friends/UNFOLLOW`, userId } as const),
     setUsers: (users: Array<userType>) => ({ type: `sn/Friends/SET-USERS`, users } as const),
     changePage: (currentPage: number) => ({ type: `sn/Friends/CHANGE-PAGE`, currentPage } as const),
-    setUsersInf: (data: setUsersInfData) => ({ type: `sn/Friends/SET-USERSINF`, data } as const),
+    setUsersInf: (totalCount: number) => ({ type: `sn/Friends/SET-USERSINF`, totalCount } as const),
     isFetching: (isFetching: boolean) => ({ type: `sn/Friends/IS_FETCHING`, isFetching } as const),
     toggleFollowingInProcess: (isFetching: boolean, userId: number) => ({ type: `sn/Friends/TOGGLE_IS_FOLLOWING_PROCESS`, isFetching, userId } as const),
     setFriends: (users: Array<userType>) => ({ type: `sn/Friends/SET_FRIENDS`, users } as const),
@@ -150,16 +148,20 @@ type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionType
 
 export const requestUsers = (pageSize: number, currentPage: number, term: string): ThunkType => async (dispatch) => {
     try {
+        debugger
         dispatch(actions.isFetching(true))
         let data = await UsersAPI.requestUsers(pageSize, currentPage, term)
+        debugger
         dispatch(actions.isFetching(false))
-        dispatch(actions.setUsers(data.items))
-        dispatch(actions.setUsersInf(data))
-        dispatch(actions.setFriends(data.items))
+        dispatch(actions.setUsers(data.data.items))
+        debugger
+        dispatch(actions.setUsersInf(data.data.totalCount))
+        dispatch(actions.setFriends(data.data.items))
         dispatch(actions.setUsersTerm(term))
         return data
     } catch (error: any) {
-        alert(`Something's gone wrong, error status: ${error.status}`)
+        console.error(error)
+        alert(`Something's gone wrong, error status: 500`)
     }
 }
 export const followThunk = (userId: number): ThunkType => async (dispatch) => {

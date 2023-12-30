@@ -21,9 +21,8 @@ const FriendsByButton: React.FC<IFriendsByButton> = (props) => {
     const friends = props.friends.map((f: userType) => {
         return <Friend id={f.id}
             key={f.id}
-            nickname={f.nickname}
-            name={f.name}
-            avatar={f.photos.large}
+            username={f.username}
+            avatar={f.profile.photos.large}
             followed={f.followed}
             follow={props.followThunk}
             unfollow={props.unfollowThunk} />

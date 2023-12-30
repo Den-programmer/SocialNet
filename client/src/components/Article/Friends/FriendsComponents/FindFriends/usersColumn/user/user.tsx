@@ -7,10 +7,9 @@ import { Button } from '@material-ui/core'
 interface IUser {
     followed: boolean
     followingInProcess: Array<number>
-    nickname: string
-    name: string
-    id: number
-    photo: string
+    username: string
+    id: any
+    photo: string | File
     followThunk: (id: number) => void
     unfollowThunk: (id: number) => void
     startDialog: (userId: number) => void
@@ -52,11 +51,20 @@ const User: React.FC<IUser> = (props) => {
             setIsMenuOpenStatus(false)
         }
     })
+    const imageUrl = typeof props.photo === 'string'
+        ? props.photo
+        : props.photo instanceof File
+            ? URL.createObjectURL(props.photo)
+            // @ts-ignore
+            : props.photo.data && props.photo.contentType
+            // @ts-ignore
+                ? `data:${props.photo.contentType};base64,${Buffer.from(props.photo.data).toString('base64')}`
+                : defaultUserPhoto
     return (
         <div className={classes.user} onContextMenu={callContextMenu}>
             <NavLink to={"/Profile/" + props.id}>
-                {props.photo ? <img className={classes.avatar} src={props.photo} alt="" /> : <img className={classes.avatar} src={defaultUserPhoto} alt="" />}
-                <h3 className={classes.userName}>{props.name ? props.name : props.nickname}</h3>
+                {props.photo ? <img className={classes.avatar} src={imageUrl} alt="" /> : <img className={classes.avatar} src={defaultUserPhoto} alt="" />}
+                <h3 className={classes.userName}>{props.username}</h3>
             </NavLink>
             {isMenuOpen && <div className={classes.menuWrapper}>
                 <div style={styleMenu} className="contextMenu">
