@@ -24,7 +24,6 @@ const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
         }
     }))
     const classes = useStyles()
-    debugger
     const users = props.users.map((user: userType) => {
         if (user.id !== props.userId) {
             return <User id={user.id}

@@ -4,21 +4,30 @@ const { catchRes, StandartRes } = require('../routes/responses/responses.js')
 class UsersController {
     async getUsers(req, res) {
         try {
-            const { pageSize, currentPage, term } = req.params
+            const { pageSize, currentPage } = req.params;
+            const { term } = req.query;
 
-            const searchCriteria = []
-            const searchableProperties = ['name', 'email']
+            console.log('Term from the start is:', term);
 
-            searchableProperties.forEach(property => {
-                const criterion = {}
-                criterion[property] = { $regex: new RegExp(term, 'i') }
-                searchCriteria.push(criterion)
-            })
+            const searchCriteria = [];
+            const searchableProperties = ['username'];
 
-            const query = { $or: searchCriteria }
+            if (term) {
+                searchableProperties.forEach(property => {
+                    const criterion = {};
+                    criterion[property] = { $regex: term, $options: 'i' };
+                    console.log('Criterion is:', JSON.stringify(criterion));
+                    searchCriteria.push(criterion);
+                });
+            }
+
+            const query = searchCriteria.length > 0 ? { $or: searchCriteria } : {};
+
+            console.log('Constructed query:', JSON.stringify(query));
+
             const users = await User.find(query)
                 .limit(parseInt(pageSize))
-                .skip(parseInt(pageSize) * (parseInt(currentPage) - 1))
+                .skip(parseInt(pageSize) * (parseInt(currentPage) - 1));
 
             const usersWithoutPass = users.map(({ id, username, profile = {} }) => ({
                 id,
@@ -28,13 +37,15 @@ class UsersController {
                     status: profile.status
                 },
                 followed: false
-            }))
-            res.json(new StandartRes(0, '', { items: usersWithoutPass, totalCount: users.length }))
+            }));
+
+            res.json(new StandartRes(0, '', { items: usersWithoutPass, totalCount: users.length }));
         } catch (e) {
-            console.error('Error:', e)
-            res.status(500).json(catchRes)
+            console.error('Error:', e);
+            res.status(500).json(catchRes);
         }
     }
 }
+
 
 module.exports = new UsersController()

@@ -148,13 +148,10 @@ type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionType
 
 export const requestUsers = (pageSize: number, currentPage: number, term: string): ThunkType => async (dispatch) => {
     try {
-        debugger
         dispatch(actions.isFetching(true))
         let data = await UsersAPI.requestUsers(pageSize, currentPage, term)
-        debugger
         dispatch(actions.isFetching(false))
         dispatch(actions.setUsers(data.data.items))
-        debugger
         dispatch(actions.setUsersInf(data.data.totalCount))
         dispatch(actions.setFriends(data.data.items))
         dispatch(actions.setUsersTerm(term))

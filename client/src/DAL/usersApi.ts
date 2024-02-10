@@ -11,8 +11,9 @@ type requestUsersDataType = {
 }
 
 export const UsersAPI = {
-    requestUsers: (pageSize: number, currentPage: number, term: string = '') => {
-        return instance.get<requestUsersDataType>(`api/users/getUsers/${pageSize}/${currentPage}/${term}`).then(response => {
+    requestUsers: (pageSize: number, currentPage: number = 1, term: string = '') => {
+        debugger
+        return instance.get<requestUsersDataType>(`api/users/getUsers/?pageSize=${pageSize}&currentPage=${currentPage}&term=${term}`).then(response => {
             return response.data
         })
     },
