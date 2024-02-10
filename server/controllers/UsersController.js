@@ -4,8 +4,7 @@ const { catchRes, StandartRes } = require('../routes/responses/responses.js')
 class UsersController {
     async getUsers(req, res) {
         try {
-            const { pageSize, currentPage } = req.params;
-            const { term } = req.query;
+            const { pageSize, currentPage, term } = req.query
 
             console.log('Term from the start is:', term);
 
