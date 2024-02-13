@@ -4,11 +4,6 @@
     background: #fff;
     z-index: 10;
     cursor: pointer;
-    .newsItem__photo {
-        width: 800px;
-        height: 400px;
-        user-select: none;
-    }
     .newsItem__body {
         box-sizing: border-box;
         padding: 20px;
@@ -31,6 +26,16 @@
             letter-spacing: .2px;
             font-size: 15px;
             opacity: .6;
+            margin: 0;
+            color: #222222;
+        }
+        .newsItem__link {
+            margin: 30px 0px;
+        }
+        .newsItem__copyright {
+            letter-spacing: .2px;
+            font-size: 15px;
+            opacity: .8;
             margin: 0;
             color: #222222;
         }
