@@ -23,6 +23,18 @@ class NewsController {
             res.status(500).json(catchRes)
         }
     }
+    async getPopularNews(req, res) {
+        try {
+            const response = await newsInstance.get(`topstories/v2/world.json?api-key=${process.env.NEWS_API_KEY}`).then(res => res.data)
+            
+            const copyright = response.copyright
+            const articlesTitles = response.results.map((item, index) => ({ title: item.title, id: index++, text: item.abstract, link: item.url, date: item.published_date, copyright  }))
+            
+            res.json(new StandartRes(0, '', { articlesTitles }))
+        } catch(e) {
+            res.status(500).json(catchRes)
+        }
+    }
 }
 
 module.exports = new NewsController()

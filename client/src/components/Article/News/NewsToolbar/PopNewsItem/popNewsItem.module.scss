@@ -4,6 +4,9 @@
     border-bottom: 1px solid #EFEFEF;        
     padding: 10px 20px;
     cursor: pointer;
+    .newsItem_link {
+        color: #0000EE;
+    }
     .newsItem__text {
        font-family: $OpenSans;
     }

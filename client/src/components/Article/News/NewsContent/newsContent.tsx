@@ -7,11 +7,13 @@ interface INewsContent {
     news: Array<newsType>
     chooseNewsPageId: (itemId: number | null) => void
     requestNews: () => void
+    requestPopularNews: () => void
 }
 
-const NewsContent:React.FC<INewsContent> = ({ news, chooseNewsPageId, requestNews }) => {
+const NewsContent:React.FC<INewsContent> = ({ news, chooseNewsPageId, requestNews, requestPopularNews }) => {
     useEffect(() => {
-        requestNews()
+        requestNews()   
+        requestPopularNews()
     }, [])
     const NewsData = news.map((item: newsType) => {
         return <NewsItem key={item.id} chooseNewsPageId={chooseNewsPageId} link={item.link} text={item.text} id={item.id} title={item.title} copyright={item.copyright} date={item.date}/>

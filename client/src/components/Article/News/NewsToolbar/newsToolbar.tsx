@@ -9,7 +9,11 @@ interface INewsToolbar {
 
 const NewsToolbar:React.FC<INewsToolbar> = ({ popularNews }) => {
     const popNewsData = popularNews.map((item: newsType) => {
-        return <PopNewsItem key={item.id} id={item.id}/>
+        return <PopNewsItem key={item.id} id={item.id} 
+        text={item.text} title={item.title} 
+        link={item.link} date={item.date} 
+        copyright={item.copyright}
+        />
     })
     return (
         <div className={classes.newsToolbar}>

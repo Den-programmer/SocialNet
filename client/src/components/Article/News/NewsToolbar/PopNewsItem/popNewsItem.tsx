@@ -5,15 +5,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 interface IPopNewsItem {
     id: number
+    text: string
+    title: string
+    link: string
+    copyright: string
+    date: string
 }
 
-const PopNewsItem: React.FC<IPopNewsItem> = ({  }) => {
+const PopNewsItem: React.FC<IPopNewsItem> = ({ title, copyright, link }) => {
     return (
         <div className={classes.newsItem}>
-            <span className={classes.newsItem__text}>
-                {/* {text} */}
-            </span>
-            {/* <p className={classes.views}><FontAwesomeIcon icon={faEye} /> {views}</p> */}
+            <a className={classes.newsItem_link} href={link}>
+                <span className={classes.newsItem__text}>
+                    {title}
+                </span>
+                {/* <p className={classes.views}><FontAwesomeIcon icon={faEye} /> {views}</p> */}
+                <p className={classes.views}>{copyright}</p>
+            </a>
         </div>
     )
 }

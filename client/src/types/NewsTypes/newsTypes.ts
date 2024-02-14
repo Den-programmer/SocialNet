@@ -5,4 +5,5 @@ export type newsType = {
     text: string
     link: string
     copyright: string
+    views?: number
 }
