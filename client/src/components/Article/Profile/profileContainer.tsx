@@ -32,7 +32,7 @@ interface IProfileContainer {
 }
 
 interface IRouteParams {
-    userId: string 
+    userId: string
 }
 
 class ProfileContainer extends React.Component<IProfileContainer & RouteComponentProps<IRouteParams>> {
@@ -58,8 +58,10 @@ class ProfileContainer extends React.Component<IProfileContainer & RouteComponen
     componentDidUpdate(prevProps: IProfileContainer & RouteComponentProps<IRouteParams>) {
         if (this.props.match.params.userId !== prevProps.match.params.userId) {
             this.refreshProfile()
-            this.props.requestGender(this.props.profile.userId)
-            this.props.requestUsername(this.props.profile.userId)
+            setTimeout(() => {
+                this.props.requestGender(this.props.profile.userId)
+                this.props.requestUsername(this.props.profile.userId)
+            }, 1000)
         }
     }
     render() {
