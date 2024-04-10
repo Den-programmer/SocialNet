@@ -8,7 +8,8 @@ import { setTextError } from './reducer-app'
 const NewsState = {
     news: [] as newsType[],
     popularNews: [] as newsType[],
-    newsPageId: null as number | null
+    newsPageId: null as number | null,
+    isLoading: false
 } 
 
 type INewsState = typeof NewsState
@@ -30,6 +31,11 @@ const reducerNews = (state = NewsState, action: ActionsType):INewsState => {
                 ...state,
                 popularNews: action.news
             } 
+        case `SET_IS_LOADING_STATUS`:
+            return {
+                ...state,
+                isLoading: action.status
+            }
         default: 
             return state
     }
@@ -42,7 +48,8 @@ type ActionsType = InferActionTypes<typeof actions>
 export const actions = {
     chooseNewsPageId: (itemId: number | null) => ({ type: `CHOOSE_NEWS_PAGE_ID`, itemId } as const),
     setNews: (news: newsType[]) => ({ type: `SET_NEWS`, news } as const),
-    setPopularNews: (news: newsType[]) => ({ type: `SET_POPULAR_NEWS`, news } as const)
+    setPopularNews: (news: newsType[]) => ({ type: `SET_POPULAR_NEWS`, news } as const),
+    setIsLoadingStatus: (status: boolean) => ({ type: `SET_IS_LOADING_STATUS`, status } as const)
 }
 
 /* Thunks! */
@@ -53,12 +60,16 @@ export const requestNews = (): ThunkType => async (dispatch) => {
     try {
         const res = await NewsAPI.getAllNews()
         if(res.resultCode === resultCode.Success) {
+            dispatch(actions.setIsLoadingStatus(true))
             dispatch(actions.setNews(res.data.articlesTitles))
+            dispatch(actions.setIsLoadingStatus(false))
         } else {
             debugger
+            dispatch(actions.setIsLoadingStatus(false))
             // dispatch(setTextError(data.message))
         }
     } catch (e) {
+        dispatch(actions.setIsLoadingStatus(false))
         alert(`Something's gone wrong, error status: 500`)
     }
 } 
@@ -66,12 +77,16 @@ export const requestPopularNews = (): ThunkType => async (dispatch) => {
     try {
         const res = await NewsAPI.getPopularNews()
         if(res.resultCode === resultCode.Success) {
+            dispatch(actions.setIsLoadingStatus(true))
             dispatch(actions.setPopularNews(res.data.articlesTitles))
+            dispatch(actions.setIsLoadingStatus(false))
         } else {
             debugger
+            dispatch(actions.setIsLoadingStatus(false))
             // dispatch(setTextError(data.message))
         }
     } catch(e) {
+        dispatch(actions.setIsLoadingStatus(false))
         alert(`Something's gone wrong, error status: 500`)
     }
 } 

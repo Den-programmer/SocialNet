@@ -11,3 +11,7 @@ export const getPopularNews = (state: RootState) => {
 export const getNewsPageId = (state: RootState) => {
     return state.newsPage.newsPageId
 }
+
+export const getIsNewsLoadingStatus = (state: RootState) => {
+    return state.newsPage.isLoading
+}

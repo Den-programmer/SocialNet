@@ -39,7 +39,7 @@ const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
     })
     return (
         <Container className={classes.container}>
-            {users}
+            {users.length === 0 ? <h3 style={{ color: '#222222' }}>There's no such users!</h3> : users}
         </Container>
     )
 }

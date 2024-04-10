@@ -1,10 +1,11 @@
 import { connect } from 'react-redux'
 import { RootState } from '../../../../BLL/redux'
-import { getPopularNews } from '../../../../BLL/selectors/news-selectors'
+import { getIsNewsLoadingStatus, getPopularNews } from '../../../../BLL/selectors/news-selectors'
 import NewsToolbar from './newsToolbar'
 
 const mapStateToProps = (state: RootState) => ({
-    popularNews: getPopularNews(state)
+    popularNews: getPopularNews(state),
+    isLoading: getIsNewsLoadingStatus(state)
 })
 
 const NewsToolbarContainer = connect(mapStateToProps, {})(NewsToolbar)
