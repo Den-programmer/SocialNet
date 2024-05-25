@@ -1,8 +1,8 @@
 const { Router } = require('express')
 const { check } = require('express-validator')
 const router = Router()
-const dotenv = require('dotenv')
 const AuthController = require('../controllers/AuthController.js')
+const dotenv = require('dotenv')
 
 dotenv.config()
 
@@ -23,5 +23,5 @@ router.post('/login',
         check('password', 'Enter password').exists()
     ],
     AuthController.login)
-
+    
 module.exports = router

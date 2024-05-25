@@ -76,7 +76,7 @@ const User: React.FC<IUser> = (props) => {
                 </ul>
             </div>    
             </div>}
-            {props.followed ? <Button className={classes.followBtn} variant="contained" color="default" disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Add this user to list of friends!">Following</Button> 
+            {!props.followed ? <Button className={classes.followBtn} variant="contained" color="default" disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Add this user to list of friends!">Following</Button> 
             : 
             <Button className={classes.followBtn} variant="contained" color="primary" disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Delete this user from your list of friends!">Unfollow</Button>}
         </div>

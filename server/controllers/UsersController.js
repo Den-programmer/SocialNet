@@ -1,10 +1,10 @@
-const User = require('../models/user.js')
-const { catchRes, StandartRes } = require('../routes/responses/responses.js')
+const User = require('../models/user.js');
+const { catchRes, StandartRes } = require('../routes/responses/responses.js');
 
 class UsersController {
     async getUsers(req, res) {
         try {
-            const { pageSize, currentPage, term } = req.query
+            const { pageSize, currentPage, term } = req.query;
 
             console.log('Term from the start is:', term);
 
@@ -44,7 +44,65 @@ class UsersController {
             res.status(500).json(catchRes);
         }
     }
-}
 
+    async followUser(req, res) {
+        try {
+            const { userId } = req.params;
+            const currentUserId = req.user;
+            console.log('Current user ID:', currentUserId);
+            console.log('User ID to follow:', userId);
+
+            const userToFollow = await User.findById(userId);
+
+            if (!userToFollow) {
+                console.log('User to follow not found');
+                return res.status(404).json(new StandartRes(1, 'User not found'));
+            }
+
+            // Check if already followed
+            if (userToFollow.followers.includes(currentUserId)) {
+                console.log('User already followed');
+                return res.status(400).json(new StandartRes(2, 'User already followed'));
+            }
+
+            userToFollow.followers.push(currentUserId);
+            await userToFollow.save();
+
+            res.json(new StandartRes(0, 'Followed successfully', {}));
+        } catch (e) {
+            console.error('Error:', e);
+            res.status(500).json(new StandartRes(3, 'Internal server error'));
+        }
+    }
+
+    async unfollowUser(req, res) {
+        try {
+            const { userId } = req.params;
+            const currentUserId = req.user;
+            console.log('Current user ID:', currentUserId);
+            console.log('User ID to unfollow:', userId);
+
+            const userToUnfollow = await User.findById(userId);
+
+            if (!userToUnfollow) {
+                console.log('User to unfollow not found');
+                return res.status(404).json(new StandartRes(1, 'User not found'));
+            }
+
+            const index = userToUnfollow.followers.indexOf(currentUserId);
+            if (index !== -1) {
+                userToUnfollow.followers.splice(index, 1);
+                await userToUnfollow.save();
+            } else {
+                return res.status(400).json(new StandartRes(2, 'You are not following this user'));
+            }
+
+            res.json(new StandartRes(0, 'Unfollowed successfully', {}));
+        } catch (e) {
+            console.error('Error:', e);
+            res.status(500).json(new StandartRes(3, 'Internal server error'));
+        }
+    }
+}
 
 module.exports = new UsersController()

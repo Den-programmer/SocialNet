@@ -12,7 +12,6 @@ type authType = {
   userId: number
   email: string | null
   login: string | null
-  password: string | null
   rememberMe: boolean
   isAuth: boolean
   token: string | null
@@ -25,7 +24,6 @@ const auth = {
   userId: 0,
   email: null,
   login: null,
-  password: null,
   rememberMe: false,
   isAuth: false,
   token: null,
@@ -37,13 +35,12 @@ const auth = {
 const reducerAuth = (state = auth, action: ActionTypes): authType => {
   switch (action.type) {
     case `sn/auth/SET_AUTH_USER_DATA`:
-      const { userId, email, login, password, rememberMe, isAuth, token } = action.data
+      const { userId, email, login, rememberMe, isAuth, token } = action.data
       return {
         ...state,
         userId,
         email,
         login,
-        password,
         rememberMe,
         isAuth, 
         token
@@ -73,7 +70,7 @@ const reducerAuth = (state = auth, action: ActionTypes): authType => {
 type ActionTypes = InferActionTypes<typeof actions>
 
 export const actions = {
-  setAuthUserData: (userId: number, email: string | null, login: string | null, password: string | null, isAuth: boolean, rememberMe: boolean, token: string | null) => ({ type: `sn/auth/SET_AUTH_USER_DATA`, data: { userId, email, login, password, isAuth, rememberMe, token } } as const),
+  setAuthUserData: (userId: number, email: string | null, login: string | null, isAuth: boolean, rememberMe: boolean, token: string | null) => ({ type: `sn/auth/SET_AUTH_USER_DATA`, data: { userId, email, login, isAuth, rememberMe, token } } as const),
   setCaptchaUrl: (captcha: string) => ({ type: `sn/auth/SET_CAPTCHA_URL`, captcha } as const),
   setLastUrl: (url: string) => ({ type: `sn/auth/SET_LAST_URL`, url } as const),
   setIsRegisterStatus: (status: boolean) => ({ type: `sn/auth/SET_IS_REGISTER_STATUS`, status } as const)
@@ -91,7 +88,7 @@ export const register = (email: string | null,
     try {
       const response = await AuthAPI.register(email, username, password, rememberMe, captcha)
       if(response.resultCode === resultCode.Success) {
-        dispatch(actions.setAuthUserData(response.data.userId, email, email, password, true, rememberMe, null))
+        dispatch(actions.setAuthUserData(response.data.userId, email, email, true, rememberMe, null))
         // @ts-ignore
         dispatch(actionsProfile.changeUserName(username))
       } else {
@@ -106,21 +103,20 @@ export const register = (email: string | null,
       alert(`Something's gone wrong, error status: 500`)
     }
 }
-export const login = (email: string | null, password: string | null, rememberMe = false as boolean, captcha: string | null):ThunkType => async (dispatch) => {
+export const login = (email: string | null, password: string | null, rememberMe = false as boolean, captcha: string | null): ThunkType => async (dispatch) => {
   try {
     const response = await AuthAPI.login(email, password, rememberMe, captcha)
     if (response.resultCode === resultCode.Success) {
-      dispatch(actions.setAuthUserData(response.data.userId, email, email, password, true, rememberMe, response.data.token))
+      dispatch(actions.setAuthUserData(response.data.userId, email, email, true, rememberMe, response.data.token))
       // @ts-ignore
       dispatch(actionsProfile.setProfileUserId(response.data.userId))
       localStorage.setItem('userData', JSON.stringify({
         userId: response.data.userId,
-        email, 
-        password,
+        email,
         rememberMe,
-        captcha, 
-        token: response.data.token
+        captcha
       }))
+      localStorage.setItem('token', response.data.token ? response.data.token : '')
     } else {
       if (response.resultCode === captchaCode.captchaIsRequired) {
         dispatch(getCaptchaUrl())
@@ -135,7 +131,7 @@ export const login = (email: string | null, password: string | null, rememberMe 
 }
 export const logout = ():ThunkType => async (dispatch) => {
   try {
-    dispatch(actions.setAuthUserData(0, null, null, null, false, false, null))
+    dispatch(actions.setAuthUserData(0, null, null, false, false, null))
     localStorage.removeItem('userData')
   } catch (error) {
     alert(`Something's gone wrong, error status: 500`)

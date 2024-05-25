@@ -12,7 +12,7 @@ export const AuthAPI = {
          password: string | null, 
          rememberMe: boolean, 
          captcha = null as string | null) => {
-        return axios.post<ServerResType<loginType>>(`api/auth/register`, {
+        return instance.post<ServerResType<loginType>>(`api/auth/register`, {
             email,
             username,
             password,
@@ -21,7 +21,7 @@ export const AuthAPI = {
         }).then(res => res.data)
     },
     login: (email: string | null, password: string | null, rememberMe: boolean, captcha = null as string | null) => {
-        return axios.post<ServerResType<loginType>>(`api/auth/login`, {
+        return instance.post<ServerResType<loginType>>(`api/auth/login`, {
             email,
             password,
             rememberMe,

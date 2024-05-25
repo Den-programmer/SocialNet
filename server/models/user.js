@@ -32,7 +32,9 @@ const User = new Schema({
         },
         userId: Schema.Types.ObjectId
     },
-    posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }]
+    posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
+    followers: [{ type: Schema.Types.ObjectId, ref: 'User' }], 
+    following: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 })
 
 module.exports = model('User', User)
