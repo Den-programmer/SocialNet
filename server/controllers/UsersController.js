@@ -62,7 +62,7 @@ class UsersController {
             // Check if already followed
             if (userToFollow.followers.includes(currentUserId)) {
                 console.log('User already followed');
-                return res.status(400).json(new StandartRes(2, 'User already followed'));
+                return res.status(400).json(new StandartRes(1, 'User already followed'));
             }
 
             userToFollow.followers.push(currentUserId);
@@ -71,7 +71,7 @@ class UsersController {
             res.json(new StandartRes(0, 'Followed successfully', {}));
         } catch (e) {
             console.error('Error:', e);
-            res.status(500).json(new StandartRes(3, 'Internal server error'));
+            res.status(500).json(new StandartRes(1, 'Internal server error'));
         }
     }
 
@@ -94,13 +94,26 @@ class UsersController {
                 userToUnfollow.followers.splice(index, 1);
                 await userToUnfollow.save();
             } else {
-                return res.status(400).json(new StandartRes(2, 'You are not following this user'));
+                return res.status(400).json(new StandartRes(1, 'You are not following this user'));
             }
 
             res.json(new StandartRes(0, 'Unfollowed successfully', {}));
         } catch (e) {
             console.error('Error:', e);
-            res.status(500).json(new StandartRes(3, 'Internal server error'));
+            res.status(500).json(new StandartRes(1, 'Internal server error'));
+        }
+    }
+    async getFriends (req, res) {
+        try {
+            const currentUserId = req.user
+            const currentUser = User.findById(currentUserId)
+
+            console.log("Mine following: ", currentUser.following)
+
+            res.json(new StandartRes(0, '', { following: currentUser.following, totalCount: currentUser.following.length }));
+        } catch(e) {
+            console.error('Error:', e);
+            res.status(500).json(catchRes)
         }
     }
 }

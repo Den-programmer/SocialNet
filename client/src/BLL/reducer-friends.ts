@@ -153,7 +153,6 @@ export const requestUsers = (pageSize: number, currentPage: number, term: string
         dispatch(actions.isFetching(false))
         dispatch(actions.setUsers(data.data.items))
         dispatch(actions.setUsersInf(data.data.totalCount))
-        dispatch(actions.setFriends(data.data.items))
         dispatch(actions.setUsersTerm(term))
         return data
     } catch (error: any) {
@@ -161,6 +160,30 @@ export const requestUsers = (pageSize: number, currentPage: number, term: string
         alert(`Something's gone wrong, error status: 500`)
     }
 }
+
+export const requestFollowing = (pageSize: number, currentPage: number, term: string): ThunkType => async (dispatch) => {
+    try {
+        let data = await dispatch(requestUsers(pageSize, currentPage, term))
+        const data2 = await UsersAPI.requestFriends()
+        dispatch(actions.setUsersInf(data2.data.totalCount))
+        const friends = data.users.filter((user: userType) => {
+            data2.data.following.forEach(friendId => {
+                if(user.id === friendId) {
+                    return true     
+                } else {
+                    return false
+                }
+            })
+        })
+        dispatch(actions.setFriends(friends))
+        debugger
+        return friends
+    } catch (error: any) {
+        console.error(error)
+        alert(`Something's gone wrong, error status: 500`)
+    }
+} 
+
 export const followThunk = (userId: number): ThunkType => async (dispatch) => {
     try {
         dispatch(actions.toggleFollowingInProcess(true, userId))

@@ -18,3 +18,10 @@ export type userType = {
 export type FriendsFilter = {
     term: string
 }
+
+export type UsersInfType = {
+    isFetching: boolean
+    totalCount: number
+    pageSize: number
+    currentPage: number
+}

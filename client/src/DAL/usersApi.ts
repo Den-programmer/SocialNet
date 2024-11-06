@@ -10,6 +10,15 @@ type requestUsersDataType = {
     message: string
 }
 
+type requestFollowedUsersData = {
+    data: {
+        following: Array<string>
+        totalCount: number
+    }
+    resultCode: number
+    message: string
+}
+
 export const UsersAPI = {
     requestUsers: (pageSize: number, currentPage: number = 1, term: string = '') => {
         return instance.get<requestUsersDataType>(`api/users/getUsers/?pageSize=${pageSize}&currentPage=${currentPage}&term=${term}`).then(response => {
@@ -26,8 +35,8 @@ export const UsersAPI = {
             return response.data
         })
     },
-    requestFriends: (pageSize: number, currentPage: number = 1, term: string = '') => {
-        return instance.get<requestUsersDataType>(`api/users/getFriends/?pageSize=${pageSize}&currentPage=${currentPage}&term=${term}`).then(response => {
+    requestFriends: () => {
+        return instance.get<requestFollowedUsersData>(`api/users/getFriends`).then(response => {
             return response.data
         })
     }

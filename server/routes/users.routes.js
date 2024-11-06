@@ -6,5 +6,6 @@ const router = Router()
 router.get('/getUsers/:pageSize?/:currentPage?/:term?', UsersController.getUsers)
 router.post('/followUser/:userId', verifyToken, UsersController.followUser)
 router.delete('/unfollowUser/:userId', verifyToken, UsersController.unfollowUser)
+router.get('/getFriends', verifyToken, UsersController.getFriends)
 
 module.exports = router

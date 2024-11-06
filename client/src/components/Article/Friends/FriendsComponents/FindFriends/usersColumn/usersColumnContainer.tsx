@@ -5,18 +5,13 @@ import { connect } from "react-redux"
 import { requestUsers, followThunk, unfollowThunk, actions } from "../../../../../../BLL/reducer-friends"
 import { getUsersInf, getUsers, getFollowingInProcess, getUsersFilter } from '../../../../../../BLL/selectors/users-selectors'
 import { RootState } from '../../../../../../BLL/redux'
-import { userType, FriendsFilter } from '../../../../../../types/FriendsType/friendsType'
+import { userType, FriendsFilter, UsersInfType } from '../../../../../../types/FriendsType/friendsType'
 import { startDialog } from '../../../../../../BLL/reducer-messages'
 import { actions as actions2 } from '../../../../../../BLL/reducer-notifications'
 import { getAuthorizedUserId } from '../../../../../../BLL/selectors/auth-selectors'
 
 interface IUserColumnAPI {
-    usersInf: {
-        isFetching: boolean
-        totalCount: number
-        pageSize: number
-        currentPage: number
-    }
+    usersInf: UsersInfType
     userId: any
     followingInProcess: Array<number>
     users: Array<userType>

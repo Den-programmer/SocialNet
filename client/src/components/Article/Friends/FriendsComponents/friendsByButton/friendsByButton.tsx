@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Friend from './Friend/friend'
 import NoFriendsComponent from './NOfriendsComponent/NOfriendsComponent'
-import { userType } from '../../../../../types/FriendsType/friendsType'
+import { FriendsFilter, UsersInfType, userType } from '../../../../../types/FriendsType/friendsType'
 import { Container, makeStyles, Theme, createStyles } from '@material-ui/core'
 
 interface IFriendsByButton {
     friends: Array<userType>
+    usersInf: UsersInfType
+    filter: FriendsFilter
     followThunk: (id: number) => void
     unfollowThunk: (id: number) => void
+    requestFollowing: (pageSize: number, currentPage: number, term: string) => void
 }
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -18,6 +21,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 const FriendsByButton: React.FC<IFriendsByButton> = (props) => {
     const classes = useStyles()
+    useEffect(() => {
+        props.requestFollowing(props.usersInf.pageSize, props.usersInf.currentPage, props.filter.term)
+    }, [props.usersInf.currentPage])
     const friends = props.friends.map((f: userType) => {
         return <Friend id={f.id}
             key={f.id}
