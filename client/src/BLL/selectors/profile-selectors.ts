@@ -54,3 +54,7 @@ export const getChangePhotosMenuItemId = (state: RootState) => {
 export const getIsMembersColumnOpenedStatus = (state: RootState) => {
     return state.profilePage.isMembersColumnOpen
 }
+
+export const getIsLoadingSmthStatus = (state: RootState) => {
+    return state.app.isSmthLoading
+}

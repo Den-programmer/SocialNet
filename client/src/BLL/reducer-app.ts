@@ -2,8 +2,8 @@ import { login } from "./reducer-auth"
 import { ThunkAction } from "redux-thunk"
 import { RootState, InferActionTypes } from "./redux"
 import { requestUsername, setUserProfileThunk } from "./reducer-profile"
-import { requestUsers } from "./reducer-friends"
-import { getALLDialogs, getDialogMessages } from "./reducer-messages"
+// import { requestUsers } from "./reducer-friends"
+// import { getALLDialogs, getDialogMessages } from "./reducer-messages"
 
 const SET_TEXT_ERROR = 'app/SET_TEXT_ERROR'
 
@@ -13,13 +13,15 @@ type appStateType = {
   messageError: string
   isModalOpen: boolean
   date: string
+  isSmthLoading: boolean
 }
 
 const AppState = {
   isInitialized: false,
   messageError: '',
   isModalOpen: false,
-  date: ''
+  date: '',
+  isSmthLoading: false
 } as appStateType
 
 const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
@@ -44,6 +46,11 @@ const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
         ...state,
         date: action.date
       }
+    case `app/SET_LOADING`:
+      return {
+        ...state,
+        isSmthLoading: action.status
+      }
     default:
       return state
   }
@@ -56,7 +63,8 @@ type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
 export const actions = {
   initializedSuccessful: () => ({ type: `app/SET_INITIALIZED` } as const),
   setIsModalOpenStatus: (modalStatus: boolean) => ({ type: `app/SET_IS_MODAL_OPEN_STATUS`, modalStatus } as const),
-  getCurrentDate: (date: string) => ({ type: `app/SET_CURRENT_DATE`, date } as const)
+  getCurrentDate: (date: string) => ({ type: `app/SET_CURRENT_DATE`, date } as const),
+  setIsSmthLoadingStatus: (status: boolean) => ({ type: `app/SET_LOADING`, status } as const),
 }
 
 // Common Action Creators!
@@ -74,11 +82,13 @@ export const initialize = (): ThunkType => async (dispatch, getState) => {
   if (data && data.token) {
     const { email, password, rememberMe, captcha } = data
     try {
+      dispatch(actions.setIsSmthLoadingStatus(true))
       await dispatch(login(email, password, rememberMe, captcha))
       const userId = getState().auth.userId
       await dispatch(requestUsername(userId))
       await dispatch(setUserProfileThunk(userId))
       dispatch(actions.initializedSuccessful())
+      dispatch(actions.setIsSmthLoadingStatus(false))
     } catch (error) {
       console.error("New Error from reducer app!", error)
     }

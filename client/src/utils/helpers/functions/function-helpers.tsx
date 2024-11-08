@@ -26,3 +26,10 @@ export const formatDate = (dateString: string): string => {
     const date = parseISO(dateString)
     return format(date, 'dd/MM/yyyy')
 }
+
+export const scrollToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}

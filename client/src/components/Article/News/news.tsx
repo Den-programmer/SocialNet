@@ -4,6 +4,9 @@ import NewsContentContainer from './NewsContent/newsContentContainer'
 import { getIsSidebarOpenStatus } from '../../../BLL/selectors/sidebar-selectors'
 import { useSelector } from 'react-redux'
 import NewsToolbar from './NewsToolbar/newsToolbarContainer'
+import { getIsLoadingSmthStatus } from '../../../BLL/selectors/profile-selectors'
+import Preloader from '../../common/preloader/preloader'
+import { getIsNewsLoadingStatus } from '../../../BLL/selectors/news-selectors'
 
 interface NewsPropType {}
 

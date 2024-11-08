@@ -5,6 +5,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import SidebarItem from './SidebarItem/sidebarItem'
 import { RouteComponentProps } from 'react-router-dom'
+import { scrollToTop } from '../../utils/helpers/functions/function-helpers'
 
 interface SideBarPropsType {
   navLinks: Array<navLinkType>
@@ -17,7 +18,11 @@ interface SideBarPropsType {
 
 const SideBar: React.FC<SideBarPropsType & RouteComponentProps> = (props) => {
   const drawerWidth = props.sidebarWidth
-
+  const handleList = () => {
+    setTimeout(() => {
+      scrollToTop()
+    }, 250)
+  }
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       drawer: {
@@ -60,7 +65,7 @@ const SideBar: React.FC<SideBarPropsType & RouteComponentProps> = (props) => {
         </IconButton>
       </div>
       <Divider />
-      <List className={classes.nav}>
+      <List onClick={handleList} className={classes.nav}>
         {navItems}
       </List>
     </Drawer>

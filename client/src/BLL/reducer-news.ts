@@ -58,13 +58,12 @@ type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionsTyp
 
 export const requestNews = (): ThunkType => async (dispatch) => {
     try {
+        dispatch(actions.setIsLoadingStatus(true))
         const res = await NewsAPI.getAllNews()
         if(res.resultCode === resultCode.Success) {
-            dispatch(actions.setIsLoadingStatus(true))
             dispatch(actions.setNews(res.data.articlesTitles))
             dispatch(actions.setIsLoadingStatus(false))
         } else {
-            debugger
             dispatch(actions.setIsLoadingStatus(false))
             // dispatch(setTextError(data.message))
         }
@@ -75,13 +74,12 @@ export const requestNews = (): ThunkType => async (dispatch) => {
 } 
 export const requestPopularNews = (): ThunkType => async (dispatch) => {
     try {
+        dispatch(actions.setIsLoadingStatus(true))
         const res = await NewsAPI.getPopularNews()
         if(res.resultCode === resultCode.Success) {
-            dispatch(actions.setIsLoadingStatus(true))
             dispatch(actions.setPopularNews(res.data.articlesTitles))
             dispatch(actions.setIsLoadingStatus(false))
         } else {
-            debugger
             dispatch(actions.setIsLoadingStatus(false))
             // dispatch(setTextError(data.message))
         }

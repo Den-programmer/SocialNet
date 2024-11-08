@@ -52,13 +52,13 @@ const Sidebar = {
             icon: NewReleasesIcon,
             isChosen: false
         },
-        {
-            id: 7004,
-            name: 'Music',
-            path: '/Music',
-            icon: MusicNoteIcon,
-            isChosen: false
-        },
+        // {
+        //     id: 7004,
+        //     name: 'Music',
+        //     path: '/Music',
+        //     icon: MusicNoteIcon,
+        //     isChosen: false
+        // },
         {
             id: 7015,
             name: 'Options',

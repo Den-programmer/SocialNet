@@ -14,12 +14,14 @@ import { getIsAuthStatus } from './BLL/selectors/auth-selectors'
 import SideBar from './components/SideBar/SideBarContainer'
 import { actions } from './BLL/reducer-app'
 import { getSidebarWidth, getIsSidebarOpenStatus } from './BLL/selectors/sidebar-selectors'
+import { getIsLoadingSmthStatus } from './BLL/selectors/profile-selectors'
 
 interface IApp {
   Initialized: boolean
   isAuth: boolean
   drawerWidth: number
   isSidebarOpen: boolean
+  isSmthLoading: boolean
   initialize: () => void
   getCurrentDate: (date: string) => void
 }
@@ -43,7 +45,7 @@ const App: React.FC<IApp> = (props) => {
         <SideBar />
         <div>
           <Header />
-          <Article isSidebarOpen={props.isSidebarOpen} drawerWidth={props.drawerWidth}/>
+          {props.isSmthLoading ? <Preloader /> : <Article isSidebarOpen={props.isSidebarOpen} drawerWidth={props.drawerWidth}/>}
           <Footer />
         </div>
       </div>
@@ -57,7 +59,8 @@ const mapStateToProps = (state: RootState) => ({
   Initialized: getAppInitializationStatus(state),
   isAuth: getIsAuthStatus(state),
   drawerWidth: getSidebarWidth(state),
-  isSidebarOpen: getIsSidebarOpenStatus(state)
+  isSidebarOpen: getIsSidebarOpenStatus(state),
+  isSmthLoading: getIsLoadingSmthStatus(state)
 })
 
 const { getCurrentDate } = actions
