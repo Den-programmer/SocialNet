@@ -49,6 +49,24 @@
     overflow: visible;
 }
 
+.inputIcon {
+    top: 0;
+    right: 100px;
+    font-size: 15px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    border-radius: 25px;
+    color: #666666;
+    transition: all 0.4s;
+    z-index: 999;
+}
+
+.formItem .envelope, .lock {
+    position: relative;
+    top: 20px;
+}
+
 .rememberMe {
     display:flex;
     justify-content: center;
@@ -63,9 +81,11 @@
     font-weight: bold;
     margin:0 7px;
 }    
-.error p {
+.error {
     color:red;
     font-weight: 700;
+    text-align: center;
+    display: block;
 }
 .captcha {
     margin: 10px 0;

@@ -1,12 +1,9 @@
 import { AuthAPI } from '../DAL/authApi'
 import { SecurityAPI } from '../DAL/securityApi'
-import { stopSubmit } from 'redux-form'
 import { ThunkAction } from 'redux-thunk'
 import { RootState, InferActionTypes } from './redux'
 import { resultCode, captchaCode } from '../DAL/api'
 import { actions as actionsProfile } from './reducer-profile'
-
-
 
 type authType = {
   userId: number
@@ -76,7 +73,7 @@ export const actions = {
   setIsRegisterStatus: (status: boolean) => ({ type: `sn/auth/SET_IS_REGISTER_STATUS`, status } as const)
 }
 
-type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
+type ThunkType<R = void> = ThunkAction<Promise<R>, RootState, unknown, ActionTypes>
 
 // Thunk Creators!
 
@@ -84,26 +81,27 @@ export const register = (email: string | null,
   username: string | null, 
   password: string | null, 
   rememberMe = false as boolean, 
-  captcha: string | null):ThunkType => async (dispatch) => {
+  captcha: string | null):ThunkType<{ success: boolean; messageError?: string }> => async (dispatch) => {
     try {
       const response = await AuthAPI.register(email, username, password, rememberMe, captcha)
       if(response.resultCode === resultCode.Success) {
         dispatch(actions.setAuthUserData(response.data.userId, email, email, true, rememberMe, null))
         // @ts-ignore
         dispatch(actionsProfile.changeUserName(username))
+        return { success: true }
       } else {
         if(response.resultCode === captchaCode.captchaIsRequired) {
           dispatch(getCaptchaUrl())
         }
         const messageError = response.message
-        const action: any = stopSubmit("login", { _error: messageError })
-        dispatch(action)
+        return { success: false, messageError }
       }
     } catch(e) {
       alert(`Something's gone wrong, error status: 500`)
+      return { success: false }
     }
 }
-export const login = (email: string | null, password: string | null, rememberMe = false as boolean, captcha: string | null): ThunkType => async (dispatch) => {
+export const login = (email: string | null, password: string | null, rememberMe = false as boolean, captcha: string | null): ThunkType<{ success: boolean; messageError?: string }> => async (dispatch) => {
   try {
     const response = await AuthAPI.login(email, password, rememberMe, captcha)
     if (response.resultCode === resultCode.Success) {
@@ -117,16 +115,17 @@ export const login = (email: string | null, password: string | null, rememberMe 
         captcha
       }))
       localStorage.setItem('token', response.data.token ? response.data.token : '')
+      return { success: true }
     } else {
       if (response.resultCode === captchaCode.captchaIsRequired) {
         dispatch(getCaptchaUrl())
       }
       const messageError = response.message
-      const action: any = stopSubmit("login", { _error: messageError })
-      dispatch(action)
+      return { success: false, messageError }
     }
   } catch (error) {
     alert(`Something's gone wrong, error status: 500`)
+    return { success: false }
   }
 }
 export const logout = ():ThunkType => async (dispatch) => {

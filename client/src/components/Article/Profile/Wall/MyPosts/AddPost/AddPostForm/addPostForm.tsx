@@ -1,31 +1,31 @@
-import React, { ChangeEvent } from 'react'
-import classes from './addPostForm.module.css'
-import { reduxForm, InjectedFormProps } from 'redux-form'
-import { maxLengthCreator, enteredNothingError } from '../../../../../../../utils/validators/validators'
-import { Input, createField, Textarea } from '../../../../../../common/Forms/forms'
-import { AddPostFD } from '../addPost'
-import noPostPhoto from '../../../../../../../images/noPhoto/nophoto.png'
+import React, { ChangeEvent } from 'react';
+import { useForm } from 'react-hook-form';
+import classes from './addPostForm.module.css';
+import { AddPostFD } from '../addPost';
+import noPostPhoto from '../../../../../../../images/noPhoto/nophoto.png';
 
 interface IAddPostForm {
-    setIsAddPostWindowOpen: (status: boolean) => void
-    getPostImg: (photo: File) => void
-    postPhoto: string
-    postPhotoError: string
+    setIsAddPostWindowOpen: (status: boolean) => void;
+    getPostImg: (photo: File) => void;
+    postPhoto: string;
+    postPhotoError: string;
+    onSubmit: (data: AddPostFD) => void;
 }
 
-const maxLengthPostTitle = maxLengthCreator(20)
-const maxLengthPostText = maxLengthCreator(300)
+const AddPostForm: React.FC<IAddPostForm> = ({ setIsAddPostWindowOpen, getPostImg, postPhoto, postPhotoError, onSubmit }) => {
+    const { register, handleSubmit, formState: { errors } } = useForm<AddPostFD>();
 
-const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPostForm> = (props) => {
-    const closeModalWindow = () => props.setIsAddPostWindowOpen(false)
+    const closeModalWindow = () => setIsAddPostWindowOpen(false);
+
     const onInputFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.files) {
-            const file = e.currentTarget.files[0]
-            props.getPostImg(file)
+            const file = e.currentTarget.files[0];
+            getPostImg(file);
         }
-    }
+    };
+
     return (
-        <form className={classes.postForm} onSubmit={props.handleSubmit} encType='multipart/form-data'>
+        <form className={classes.postForm} onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
             <div className={classes.btn_closeTheWindow}>
                 <p onClick={closeModalWindow}>&times;</p>
             </div>
@@ -33,20 +33,29 @@ const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPos
                 <h4>Adding a new post!</h4>
             </div>
             <div className={classes.photo}>
-                <img src={props.postPhoto ? props.postPhoto : noPostPhoto} alt="" />
+                <img src={postPhoto ? postPhoto : noPostPhoto} alt="" />
             </div>
             <div className={classes.btn_selectPhoto}>
                 <label htmlFor="fileInputAddPostPhoto">Select photo</label>
-                <input onChange={onInputFileChange} type="file" accept="/image*" id="fileInputAddPostPhoto" name="postPhoto" />
+                <input onChange={onInputFileChange} type="file" accept="/image*" id="fileInputAddPostPhoto" />
             </div>
-            {props.postPhotoError && <div className={classes.error}>
-                <span>{props.postPhotoError}</span>
+            {postPhotoError && <div className={classes.error}>
+                <span>{postPhotoError}</span>
             </div>}
             <div className={classes.postTitle}>
-                {createField("text", "Post Name", "postName", Input, [maxLengthPostTitle, enteredNothingError])}
+                <input
+                    placeholder="Enter post name"
+                    type="text"
+                    {...register('postName', { required: 'Post name is required', maxLength: 20 })}
+                />
+                {errors.postName && <p>{errors.postName.message}</p>}
             </div>
             <div className={classes.postInf}>
-                {createField("text", "Post Text", "postInf", Textarea, [maxLengthPostText, enteredNothingError])}
+                <textarea
+                    placeholder="Enter post description"
+                    {...register('postInf', { required: 'Post text is required', maxLength: 300 })}
+                />
+                {errors.postInf && <p>{errors.postInf.message}</p>}
             </div>
             <div className={classes.dFlex}>
                 <div className={classes.Block_btn_addPost}>
@@ -54,10 +63,7 @@ const AddPostForm: React.FC<InjectedFormProps<AddPostFD, IAddPostForm> & IAddPos
                 </div>
             </div>
         </form>
-    )
-}
-const AddPostReduxForm = reduxForm<AddPostFD, IAddPostForm>({
-    form: 'addPost'
-})(AddPostForm)
+    );
+};
 
-export default AddPostReduxForm
+export default AddPostForm

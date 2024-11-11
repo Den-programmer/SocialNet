@@ -7,7 +7,6 @@ import reducerMusic from "./reducer-music"
 import reducerFriends from "./reducer-friends"
 import reducerFooter from "./reducer-footer"
 import thunkMiddleWare from 'redux-thunk'
-import {reducer as formReducer} from 'redux-form'
 import reducerApp from "./reducer-app"
 import reducerSidebar from "./reducer-sidebar"
 import reducerNotifications from "./reducer-notifications"
@@ -22,7 +21,6 @@ const rootReducer = combineReducers ({
     Friends: reducerFriends,
     Sidebar: reducerSidebar,
     Footer: reducerFooter, 
-    form: formReducer,
     app: reducerApp
 })
 // @ts-ignore

@@ -65,11 +65,13 @@
 }
 
 .postForm input {
+    text-align: center;
     margin: 10px;
     height: 20px;
     width: 290px;
 }
 .postForm textarea {
+    text-align: center;
     margin: 10px;
     height: 90px;
     width: 290px;

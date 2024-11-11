@@ -61,6 +61,7 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
         props.requireUsersPosts(props.userId)
     }, [])
     const onAddPost = () => props.setIsAddPostWindowOpen(true)
+
     return (
         <div className={classes.postPage}>
             <div className={classes.addPost}>
