@@ -20,6 +20,7 @@
     transition: 0.35s ease-in-out;
     height: 200px;
     width: 400px;
+    z-index: 999;
 }
 .modalHeader {
     text-align: center;

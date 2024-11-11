@@ -48,14 +48,14 @@ const AddPostForm: React.FC<IAddPostForm> = ({ setIsAddPostWindowOpen, getPostIm
                     type="text"
                     {...register('postName', { required: 'Post name is required', maxLength: 20 })}
                 />
-                {errors.postName && <p>{errors.postName.message}</p>}
+                {errors.postName && <span className={classes.messageError}>{errors.postName.message}</span>}
             </div>
             <div className={classes.postInf}>
                 <textarea
                     placeholder="Enter post description"
                     {...register('postInf', { required: 'Post text is required', maxLength: 300 })}
                 />
-                {errors.postInf && <p>{errors.postInf.message}</p>}
+                {errors.postInf && <span className={classes.messageError}>{errors.postInf.message}</span>}
             </div>
             <div className={classes.dFlex}>
                 <div className={classes.Block_btn_addPost}>

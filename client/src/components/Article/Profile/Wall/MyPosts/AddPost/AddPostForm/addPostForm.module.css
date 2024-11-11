@@ -82,6 +82,8 @@
 .postTitle, .postInf {
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 .postTitle input, .postInf textarea {
     outline: none;
@@ -119,12 +121,8 @@
 
 /* Error! */
 
-.error {
-    display: flex;
-    justify-content:center;
-    margin: 5px;
-}
-
-.error span {
+.messageError {
+    display: block;
     color: red;
+    font-weight: bold;
 }
