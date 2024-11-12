@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Theme, makeStyles, createStyles, Button } from '@material-ui/core'
 import { useForm } from 'react-hook-form'
+import { scrollToTop } from '../../../../../../utils/helpers/functions/function-helpers'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -51,6 +52,10 @@ const SearchNewFriends: React.FC<ISearchNewFriends> = (props) => {
         props.requestUsers(props.pageSize, props.currentPage, values.term)
     }
 
+    const searchAnimmation = () => {
+        setTimeout(() => scrollToTop(400), 250)
+    }
+
     return (
         <Container className={classes.container}>
             <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
@@ -62,7 +67,7 @@ const SearchNewFriends: React.FC<ISearchNewFriends> = (props) => {
                         placeholder="Search for friends"
                     />
                 </div>
-                <Button color="default" variant="contained" type="submit" disabled={isSubmitting}>
+                <Button onClick={searchAnimmation} color="default" variant="contained" type="submit" disabled={isSubmitting}>
                     Search
                 </Button>
             </form>

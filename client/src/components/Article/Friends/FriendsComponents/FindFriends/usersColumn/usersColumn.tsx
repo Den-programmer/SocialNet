@@ -1,5 +1,6 @@
 import React from 'react'
 import User from './user/user'
+import './usersColumn.scss'
 import { userType } from '../../../../../../types/FriendsType/friendsType'
 import { Container, makeStyles, Theme, createStyles } from '@material-ui/core'
 
@@ -39,7 +40,9 @@ const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
     })
     return (
         <Container className={classes.container}>
-            {users.length === 0 ? <h3 style={{ color: '#222222' }}>There's no such users!</h3> : users}
+            <div className='user-grid'>
+                {users.length === 0 ? <h3 style={{ color: '#222222' }}>There's no such users!</h3> : users}
+            </div>
         </Container>
     )
 }

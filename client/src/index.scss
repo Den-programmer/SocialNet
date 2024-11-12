@@ -40,4 +40,11 @@ $chosen_color: #4dcadd;
   z-index:-1;
 }
 
+.d-flex {
+  display: flex;
+}
 
+.justify-center {
+  justify-content: center;
+  align-items: center;
+}

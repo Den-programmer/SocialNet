@@ -27,9 +27,9 @@ export const formatDate = (dateString: string): string => {
     return format(date, 'dd/MM/yyyy')
 }
 
-export const scrollToTop = () => {
+export const scrollToTop = (topNumber: number = 0) => {
     window.scrollTo({
-        top: 0,
+        top: topNumber,
         behavior: 'smooth'
     });
 }
