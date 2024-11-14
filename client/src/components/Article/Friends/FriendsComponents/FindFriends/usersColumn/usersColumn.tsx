@@ -40,9 +40,7 @@ const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
     })
     return (
         <Container className={classes.container}>
-            <div className='user-grid'>
-                {users.length === 0 ? <h3 style={{ color: '#222222' }}>There's no such users!</h3> : users}
-            </div>
+            {users.length === 0 ? <h3 style={{ color: '#222222' }}>There's no such users!</h3> : <div className='user-grid'>{users}</div>}
         </Container>
     )
 }
