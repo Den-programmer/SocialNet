@@ -1,8 +1,7 @@
 import React from 'react'
-import classes from './Footer.module.css'
+import classes from './Footer.module.scss'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { footLinkType } from '../../types/FooterTypes/footerTypes'
-import FootLinks from './FootLinks/FootLinks'
 
 interface FooterProps {
     footLinks: Array<footLinkType>
