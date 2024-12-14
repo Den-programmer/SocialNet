@@ -1,96 +1,79 @@
 @import '../../../index.scss';
 
-$height: 50px;
 $border: 1px solid #E3E3E3;
-
-.title {
-    text-transform: uppercase;
-    font-family: $Poppins;
-}
-
-.titleOption {
-    margin-left: 25px;
-    font-size: 16px;
-    width: 800px;
-    font-family: $Lato;
-}
-.typeOption {
-    font-size: 16px;
-    font-family: $Lato;
-    width: 200px;
-}
+$row-height: 50px;
 
 .notificationsContent {
     margin-top: 30px;
-    .notificationsControlWrapper {
-        display: flex;
+
+    .notificationsHeader {
+        display: grid;
+        grid-template-columns: 50px 2fr 1fr;
         align-items: center;
-        justify-content: center;
+        background-color: #8794aa;
+        color: #fff;
+        height: $row-height;
+        padding: 0 10px;
         border: $border;
         border-right: none;
         border-left: none;
-        background-color: #8794AA;
-        height: $height;
-        .notificationsControl {
-            display: flex;
+
+        .headerColumn {
+            text-transform: uppercase;
+            font-family: $Poppins;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    }
+
+    .notificationsList {
+        border: $border;
+        border-top: none;
+
+        .notificationRow {
+            display: grid;
+            grid-template-columns: 50px 3.5fr 2fr 1fr;
             align-items: center;
-            @extend .container;
-            .checkboxWrapper {
-                position: relative;
-                .background {
-                    height: 14px;
-                    width: 14px;
-                    border-radius: 200px;
-                    background-color: #fff;
-                    position: absolute;
-                    top: 12px;
-                    left: 12px;
-                }
+            color: #fff;
+            height: $row-height;
+            padding: 0 10px;
+            border: $border;
+            border-right: none;
+            border-left: none;
+
+            &:last-child {
+                border-bottom: none;
             }
-            .notificationsControl__title {
-                color: #FFF;
-                @extend .titleOption;
+
+            .notificationContent {
+                font-size: 16px;
+                font-family: $Poppins;
+                color: #222;
             }
-            .notificationsControl__type {
-                color: #FFF;
-                @extend .typeOption;
+
+            .notificationType {
+                font-size: 14px;
+                font-family: $Lato;
+                color: #555;
+                text-align: center;
+            }
+
+            .deleteButton {
+                justify-self: end;
+                font-size: 12px;
             }
         }
     }
-    .notificationsListWrapper {
-        border: $border;
-        border-top: none;
-        .notificationsList {
-            @extend .container;
-            .notificationItem {
-                display: flex;
-                align-items: center;
-                height: $height;
-                .notificationItem_title {
-                    @extend .titleOption;
-                    color: #222;   
-                    font-weight: normal;                 
-                }
-                .notificationItem_type {
-                    @extend .typeOption;
-                    color: #222; 
-                    font-weight: normal;                   
-                }
-            }
-        }
-        .noNotifications {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 50px;
-            .noNotifications__photo {
-                width: 250px;
-            }
-            .noNotifications__title {
-                color: #5a5a5a;
-            }
+
+    .noNotifications {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 50px;
+
+        .noNotifications__title {
+            color: #5a5a5a;
         }
     }
 }
-
