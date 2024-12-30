@@ -17,7 +17,7 @@ const ChangeBiography:React.FC<IChangeOptions> = (props) => {
             return { ...item, isEdit: false }
         })
         props.setChangesToAccountOptionsMenu(array)
-        props.addNotification('Your biography has been changed successfully!', '/Profile', 'Profile')
+        props.createNotification('Your biography has been changed successfully!', '/Profile', 'Profile')
     }
     return (
         <div className={classes.changeBiography}>

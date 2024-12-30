@@ -14,7 +14,7 @@ interface IUser {
     followThunk: (id: number) => void
     unfollowThunk: (id: number) => void
     startDialog: (userId: number) => void
-    addNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
+    createNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
     addToBlacklist: (itemId: number) => void
 }
 
@@ -29,7 +29,7 @@ const User: React.FC<IUser> = (props) => {
     const following = () => {
         if (props.followed === false) {
             props.followThunk(props.id)
-            props.addNotification('You\'ve got a new friend!', '/Friends', 'Friends')
+            props.createNotification('You\'ve got a new friend!', '/Friends', 'Friends')
         } else {
             props.unfollowThunk(props.id)
         }    

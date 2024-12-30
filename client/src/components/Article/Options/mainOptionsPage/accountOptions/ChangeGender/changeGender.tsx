@@ -9,7 +9,7 @@ const ChangeGender: React.FC<IChangeOptions> = (props) => {
     const [isSuccessfulSnackbarOpen, setIsSuccessfulSnackbarOpenStatus] = useState<boolean>(false)
     const changeGender = (gender: string) => {
         props.setGender(gender, props.userId)
-        props.addNotification('You have changed your gender! Now you\'re ' + gender, '/Profile', 'Profile')
+        props.createNotification('You have changed your gender! Now you\'re ' + gender, '/Profile', 'Profile')
     }
     return (
         <div className={classes.changeGender}>

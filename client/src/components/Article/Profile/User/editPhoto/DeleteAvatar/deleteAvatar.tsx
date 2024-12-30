@@ -7,10 +7,10 @@ interface IDeleteAvatar {
     setUserPhoto: (photo: File) => void
     error: string | null
     setIsModalOpenStatus: React.Dispatch<React.SetStateAction<boolean>>
-    addNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
+    createNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
 }
 
-const DeleteAvatar:React.FC<IDeleteAvatar> = ({ setUserPhoto, setIsModalOpenStatus, addNotification, error }) => {
+const DeleteAvatar:React.FC<IDeleteAvatar> = ({ setUserPhoto, setIsModalOpenStatus, createNotification, error }) => {
     const photoFile = new File([defaultPhoto], "defaultUserFile.jpg", {
         type: 'image/jpeg',
         lastModified: 1583871416945
@@ -19,7 +19,7 @@ const DeleteAvatar:React.FC<IDeleteAvatar> = ({ setUserPhoto, setIsModalOpenStat
     const deleteAvatar = () => {
         setUserPhoto(photoFile)
         setIsModalOpenStatus(false)
-        !error && addNotification('Your avatar has been deleted successfully! Now you have the default!', '/Profile', 'Profile')
+        !error && createNotification('Your avatar has been deleted successfully! Now you have the default!', '/Profile', 'Profile')
     }
     return (
         <div className={classes.deleteAvatar}>

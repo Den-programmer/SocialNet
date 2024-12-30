@@ -33,6 +33,7 @@ const User = new Schema({
         userId: Schema.Types.ObjectId
     },
     posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
+    notifications: [{ type: Schema.Types.ObjectId, ref: 'Notification' }],
     followers: [{ type: Schema.Types.ObjectId, ref: 'User' }], 
     following: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 })

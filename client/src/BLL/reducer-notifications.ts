@@ -1,17 +1,19 @@
-import { InferActionTypes } from './redux'
-
+import { resultCode } from '../DAL/api'
+import { NotificationsAPI } from '../DAL/notificationApi'
+import { RootState, InferActionTypes } from './redux'
+import { ThunkAction } from 'redux-thunk'
 
 const entity = 'sn/notificationsPage/'
 
 export type notificationType = {
-  id: number
-  isChecked: boolean
-  type: 'Profile' | 'Messages' | 'Friends' | 'News'
-  author?: string | null
-  avatar?: string | null
-  title: string | null
-  pageUrl: string | null
-}
+  _id: string;
+  isChecked: boolean;
+  type: 'Profile' | 'Messages' | 'Friends' | 'News';
+  author: string | null;
+  avatar: string | null;
+  title: string | null;
+  pageUrl: string | null;
+};
 
 type notificationsType = {
   notifications: Array<notificationType>
@@ -27,17 +29,11 @@ type ActionTypes = InferActionTypes<typeof actions>
 
 const reducerNotifications = (state = notificationsPage, action: ActionTypes): notificationsType => {
   switch (action.type) {
-    case `/sn/notificationsPage/ADD-NoTIFICATION`:
-      const newNotification = {
-        id: state.notifications.length + 1,
-        isChecked: false,
-        type: action.itemType,
-        title: action.title,
-        pageUrl: action.pageUrl ? action.pageUrl : null
-      }
+    case`/sn/notificationsPage/ADD-NOTIFICATION`:
+      
       return {
         ...state,
-        notifications: [...state.notifications, newNotification]
+        notifications: [...state.notifications, action.notification]
       }
     case `/sn/notificationsPage/SET-NOTIFICATIONS-CHOSEN-STATUS`:
       return {
@@ -50,7 +46,7 @@ const reducerNotifications = (state = notificationsPage, action: ActionTypes): n
       }
     case `/sn/notificationsPage/SET-NOTIFICATIONS-STATUS`:
       let newNotifications = state.notifications.map((item: notificationType) => {
-        if (item.id === action.itemId) return { ...item, isChecked: !item.isChecked }
+        if (item._id === action.itemId) return { ...item, isChecked: !item.isChecked }
         return item
       })
       return {
@@ -61,14 +57,19 @@ const reducerNotifications = (state = notificationsPage, action: ActionTypes): n
     case `/sn/notificationsPage/DELETE-NOTIFICATIONS`:
       return {
         ...state,
-        notifications: state.notifications.filter((item: notificationType) => action.itemId !== item.id && true)
+        notifications: state.notifications.filter((item: notificationType) => action.itemId !== item._id && true)
       }
     case `/sn/notificationsPage/DELETE-ALL-NOTIFICATIONS`:
       return {
         ...state,
-        notifications: [],
+        notifications:  state.notifications.filter((notification: notificationType) => !notification.isChecked),
         isMainCheckboxAcvtive: false
       }
+      case `/sn/notificationsPage/SET-NOTIFICATIONS`:
+        return {
+          ...state,
+          notifications: action.notifications
+        }
     default:
       return state
   }
@@ -78,10 +79,65 @@ const reducerNotifications = (state = notificationsPage, action: ActionTypes): n
 
 export const actions = {
   setNotificationsChosenStatus: (status: boolean) => ({ type: `/sn/notificationsPage/SET-NOTIFICATIONS-CHOSEN-STATUS`, status } as const),
-  setNotificationStatus: (itemId: number) => ({ type: `/sn/notificationsPage/SET-NOTIFICATIONS-STATUS`, itemId } as const),
-  deleteNotifications: (itemId: number) => ({ type: `/sn/notificationsPage/DELETE-NOTIFICATIONS`, itemId } as const),
-  deleteAllNotifications: () => ({ type: `/sn/notificationsPage/DELETE-ALL-NOTIFICATIONS` } as const),
-  addNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => ({ type: `/sn/notificationsPage/ADD-NoTIFICATION`, title, pageUrl, itemType } as const)
+  setNotificationStatus: (itemId: string) => ({ type: `/sn/notificationsPage/SET-NOTIFICATIONS-STATUS`, itemId } as const),
+  deleteNotifications: (itemId: string) => ({ type: `/sn/notificationsPage/DELETE-NOTIFICATIONS`, itemId } as const),
+  deleteAllNotifications: (notifications: notificationType[]) => ({ type: `/sn/notificationsPage/DELETE-ALL-NOTIFICATIONS`, notifications } as const),
+  addNotification: (notification: notificationType) => ({ type: `/sn/notificationsPage/ADD-NOTIFICATION`, notification } as const),
+  setNotifications: (notifications: Array<notificationType>) => ({ type: `/sn/notificationsPage/SET-NOTIFICATIONS`, notifications } as const)
 }
 
-export default reducerNotifications
+/* Thunks! */
+
+type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionTypes>
+
+export const fetchNotifications = (): ThunkType => async (dispatch) => {
+  try {
+      const response = await NotificationsAPI.getNotifications();
+      const data = response.data;
+      dispatch(actions.setNotifications(data.notifications));
+  } catch (error) {
+      console.error('Error fetching notifications:', error);
+  }
+};
+
+export const createNotification = (title: string | null, pageUrl: string | null, itemType: notificationType['type']): ThunkType => async (dispatch) => {
+  try {
+      const res = await NotificationsAPI.addNotification(title, pageUrl, itemType);
+      if (res.resultCode === resultCode.Success) {
+          dispatch(actions.addNotification(res.data.newNotification));
+      } else {
+          console.error('Failed to create notification:', res.statusText);
+      }
+  } catch (error) {
+      console.error('Error creating notification:', error);
+  }
+};
+
+export const removeNotification = (itemId: string): ThunkType => async (dispatch) => {
+  try {
+      const res = await NotificationsAPI.deleteNotification(itemId);
+      console.log('API Response:', res); 
+      if (res.resultCode === resultCode.Success) {
+          dispatch(actions.deleteNotifications(itemId));
+      } else {
+          console.error('Failed to delete notification:', res.statusText);
+      }
+  } catch (error) {
+      console.error('Error deleting notification:', error);
+  }
+}
+
+export const clearAllNotifications = (checkedNotifications: notificationType[]): ThunkType => async (dispatch) => {
+  try {
+      const res = await NotificationsAPI.deleteCheckedNotifications();
+      if (res.resultCode === resultCode.Success) {
+          dispatch(actions.deleteAllNotifications(checkedNotifications));
+      } else {
+          console.error('Failed to delete checked notifications:', res.statusText);
+      }
+  } catch (error) {
+      console.error('Error clearing checked notifications:', error);
+  }
+}
+
+export default reducerNotifications;

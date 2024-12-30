@@ -19,7 +19,7 @@ export interface IChangeOptions {
     accountOptionsMenu: Array<IAccountOption>
     changeUserName: (userId: number, username: string) => void
     setGender: (gender: string, userId: number) => void
-    addNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'Friends' | 'News') => void
+    createNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'Friends' | 'News') => void
     setChangesToAccountOptionsMenu: (accountOptions: Array<IAccountOption>) => void
     saveAboutMe: (aboutMe: string) => void
     changeMembersColumnOpenedStatus: (status: boolean) => void
@@ -37,7 +37,7 @@ interface IAccountOptions {
     setUserPhotoThunk: (photo: File) => void
     setUsername: (userId: number, username: string) => void
     setGender: (gender: string, userId: number) => void
-    addNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'Friends' | 'News') => void
+    createNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'Friends' | 'News') => void
     saveAboutMe: (aboutMe: string) => void
     changeMembersColumnOpenedStatus: (status: boolean) => void
 }
@@ -116,7 +116,7 @@ const AccountOptions: React.FC<IAccountOptions> = (props) => {
         return (
             <div onClick={() => handleClick(item.id)} onMouseEnter={() => handleHover(item.id, true)} onMouseLeave={() => handleHover(item.id, false)} key={item.id} className="options_itemWrapper">
                 <div className="options_item">
-                    {item.isEdit ? <item.editContent userId={props.userId} changeMembersColumnOpenedStatus={props.changeMembersColumnOpenedStatus} isMembersColumnOpen={props.isMembersColumnOpen} addNotification={props.addNotification} saveAboutMe={props.saveAboutMe} aboutMe={props.aboutMe} setGender={props.setGender} gender={props.gender} userName={props.userName} contacts={props.contacts} property={item.property} 
+                    {item.isEdit ? <item.editContent userId={props.userId} changeMembersColumnOpenedStatus={props.changeMembersColumnOpenedStatus} isMembersColumnOpen={props.isMembersColumnOpen} createNotification={props.createNotification} saveAboutMe={props.saveAboutMe} aboutMe={props.aboutMe} setGender={props.setGender} gender={props.gender} userName={props.userName} contacts={props.contacts} property={item.property} 
                     setChangesToAccountOptionsMenu={setChangesToAccountOptionsMenu} accountOptionsMenu={accountOptionsMenu} 
                     changeUserName={props.setUsername}/> :
                         <div className="options_item_content">

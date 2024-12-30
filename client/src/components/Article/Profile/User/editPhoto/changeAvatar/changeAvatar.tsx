@@ -4,11 +4,11 @@ import AddNewPhotoComponent from '../../../../../common/AddNewPhotoComponent'
 interface IChangeAvatar {
     error: string | null
     setUserPhoto: (photo: File) => void
-    addNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
+    createNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
     setIsModalOpenStatus: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ChangeAvatar: React.FC<IChangeAvatar> = ({ error, setUserPhoto, setIsModalOpenStatus, addNotification }) => {
+const ChangeAvatar: React.FC<IChangeAvatar> = ({ error, setUserPhoto, setIsModalOpenStatus, createNotification }) => {
     const getUserPhoto = (ref: RefObject<HTMLInputElement>) => {
         const node = ref.current
         if (node?.files) {
@@ -16,7 +16,7 @@ const ChangeAvatar: React.FC<IChangeAvatar> = ({ error, setUserPhoto, setIsModal
             setUserPhoto(file)
         }
         setIsModalOpenStatus(false)
-        !error && addNotification('Your avatar has been changed successfully!', '/Profile', 'Profile')
+        !error && createNotification('Your avatar has been changed successfully!', '/Profile', 'Profile')
     }
     return <AddNewPhotoComponent error={error} onChangeFileInputFunction={getUserPhoto}/>
 }

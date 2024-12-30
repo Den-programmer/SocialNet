@@ -17,7 +17,7 @@ const ChangeUserName: React.FC<IChangeOptions> = (props) => {
         })
         props.setChangesToAccountOptionsMenu(array)
         setIsSuccessfulSnackbarOpenStatus(true)
-        props.addNotification('Your nickname has been changed successfully! Now you\'re are ' + userName, '/Profile', 'Profile')
+        props.createNotification('Your nickname has been changed successfully! Now you\'re are ' + userName, '/Profile', 'Profile')
     }
     const onUserNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserName(e.currentTarget.value)

@@ -5,10 +5,10 @@ interface IChangeBackground {
     error: string | null
     setIsModalOpenStatus: React.Dispatch<React.SetStateAction<boolean>>
     setProfileBackground: (photo: File) => void
-    addNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
+    createNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
 }
 
-const ChangeBackground:React.FC<IChangeBackground> = ({ error, setIsModalOpenStatus, setProfileBackground, addNotification }) => {
+const ChangeBackground:React.FC<IChangeBackground> = ({ error, setIsModalOpenStatus, setProfileBackground, createNotification }) => {
     const getBackgroundFile = (ref: RefObject<HTMLInputElement>) => {
         const node = ref.current
         if (node?.files) {
@@ -16,7 +16,7 @@ const ChangeBackground:React.FC<IChangeBackground> = ({ error, setIsModalOpenSta
             setProfileBackground(file)
         }
         setIsModalOpenStatus(false)
-        !error && addNotification('Background has been changed successfully!', '/Profile', 'Profile')
+        !error && createNotification('Background has been changed successfully!', '/Profile', 'Profile')
     }
     return <AddNewPhotoComponent error={error} onChangeFileInputFunction={getBackgroundFile}/>
 }

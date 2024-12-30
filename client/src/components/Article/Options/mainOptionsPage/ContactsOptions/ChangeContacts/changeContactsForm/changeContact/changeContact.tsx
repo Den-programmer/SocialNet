@@ -17,7 +17,7 @@ interface IChangeContact {
     currentContacts: Array<ICurrentContact>
     updateContacts: (contacts: contactsType) => void
     setCurrentContacts: (array: Array<ICurrentContact>) => void
-    addNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'News' | 'Friends') => void
+    createNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'News' | 'Friends') => void
 }
 
 const ChangeContact: React.FC<IChangeContact> = (props) => {
@@ -40,7 +40,7 @@ const ChangeContact: React.FC<IChangeContact> = (props) => {
         })
         props.setCurrentContacts(array)
         props.updateContacts(contacts)
-        props.addNotification('Your contacts have been changed successfully!', '/Profile', 'Profile')
+        props.createNotification('Your contacts have been changed successfully!', '/Profile', 'Profile')
     }
     const onContactChange = (e: ChangeEvent<HTMLInputElement>) => setCurrentContact(e.currentTarget.value)
     return (

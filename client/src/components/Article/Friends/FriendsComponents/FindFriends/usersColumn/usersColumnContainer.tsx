@@ -7,8 +7,8 @@ import { getUsersInf, getUsers, getFollowingInProcess, getUsersFilter } from '..
 import { RootState } from '../../../../../../BLL/redux'
 import { userType, FriendsFilter, UsersInfType } from '../../../../../../types/FriendsType/friendsType'
 import { startDialog } from '../../../../../../BLL/reducer-messages'
-import { actions as actions2 } from '../../../../../../BLL/reducer-notifications'
 import { getAuthorizedUserId } from '../../../../../../BLL/selectors/auth-selectors'
+import { createNotification } from '../../../../../../BLL/reducer-notifications'
 
 interface IUserColumnAPI {
     usersInf: UsersInfType
@@ -20,7 +20,7 @@ interface IUserColumnAPI {
     unfollowThunk: (id: number) => void
     requestUsers: (pageSize: number, currentPage: number, term: string) => void
     startDialog: (userId: number) => void
-    addNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
+    createNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
     addToBlacklist: (itemId: number) => void
 }
 
@@ -37,7 +37,7 @@ class UsersColumnAPI extends React.Component<IUserColumnAPI> {
     render() {
         return (
             <>
-                {this.props.usersInf.isFetching ? <Preloader /> : <UsersColumn userId={this.props.userId} addToBlacklist={this.props.addToBlacklist} addNotification={this.props.addNotification} startDialog={this.props.startDialog} followThunk={this.props.followThunk} unfollowThunk={this.props.unfollowThunk}
+                {this.props.usersInf.isFetching ? <Preloader /> : <UsersColumn userId={this.props.userId} addToBlacklist={this.props.addToBlacklist} createNotification={this.props.createNotification} startDialog={this.props.startDialog} followThunk={this.props.followThunk} unfollowThunk={this.props.unfollowThunk}
                 followingInProcess={this.props.followingInProcess} users={this.props.users} />}
             </>
         )
@@ -53,7 +53,6 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const { follow, unfollow, addToBlacklist } = actions
-const { addNotification } = actions2
 
 const UsersColumnContainer = connect(mapStateToProps, {
     follow,
@@ -62,7 +61,7 @@ const UsersColumnContainer = connect(mapStateToProps, {
     followThunk,
     unfollowThunk,
     startDialog,
-    addNotification, 
+    createNotification, 
     addToBlacklist
 })(UsersColumnAPI)
 

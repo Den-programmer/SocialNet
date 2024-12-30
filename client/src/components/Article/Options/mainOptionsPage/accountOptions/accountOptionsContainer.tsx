@@ -4,7 +4,7 @@ import { setUserPhotoThunk, actions, saveAboutMe, setGender, setUsername } from 
 import { getMessageError } from '../../../../../BLL/selectors/selectors'
 import { getUsersSmallPhoto, getUsersName, getContacts, getGender, getBiography, getIsMembersColumnOpenedStatus, getUsersProfile } from '../../../../../BLL/selectors/profile-selectors'
 import { RootState } from '../../../../../BLL/redux'
-import { actions as actions2 } from '../../../../../BLL/reducer-notifications'
+import { createNotification } from '../../../../../BLL/reducer-notifications'
 
 const mapStateToProps = (state: RootState) => ({
     photo: getUsersSmallPhoto(state),
@@ -18,10 +18,9 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const { changeContacts, changeMembersColumnOpenedStatus } = actions
-const { addNotification } = actions2 
 
 const AccountOptionsContainer = connect(mapStateToProps, { 
-    addNotification, 
+    createNotification,
     setUserPhotoThunk, 
     changeContacts, 
     setUsername,

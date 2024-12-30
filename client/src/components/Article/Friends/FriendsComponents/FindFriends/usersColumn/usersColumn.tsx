@@ -11,7 +11,7 @@ interface UsersColumnPropsType {
     followThunk: (id: number) => void
     unfollowThunk: (id: number) => void
     startDialog: (userId: number) => void
-    addNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
+    createNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
     addToBlacklist: (itemId: number) => void
 }
 
@@ -31,7 +31,7 @@ const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
                 followThunk={props.followThunk}
                 unfollowThunk={props.unfollowThunk}
                 key={user.id}
-                addNotification={props.addNotification}
+                createNotification={props.createNotification}
                 followingInProcess={props.followingInProcess}
                 followed={user.followed}
                 username={user.username}
