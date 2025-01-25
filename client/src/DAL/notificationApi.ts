@@ -13,7 +13,7 @@ export const NotificationsAPI = {
     deleteNotification: (itemId: string) => {
         return instance.delete(`api/notifications/deleteNotification/${itemId}`).then(res => res.data);
     },
-    deleteCheckedNotifications: () => {
-        return instance.delete(`api/notifications/deleteNotifications`).then(res => res.data);
+    updateIsCheckedStatus: (notificationId: string) => {
+        return instance.put(`api/notifications/checkNotification/${notificationId}`).then(res => res.data);
     }
 }

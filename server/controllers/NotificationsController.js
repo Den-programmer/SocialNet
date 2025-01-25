@@ -49,35 +49,38 @@ class NotificationsController {
 
     async deleteNotifications(req, res) {
         try {
-            const userId = req.user;
-    
+            const userId = req.user
+
             if (!userId) {
-                return res.status(400).json(new StandartRes(1, "User's id is undefined."));
+                return res.status(400).json(new StandartRes(1, "User's ID is undefined."));
             }
-    
-            const result = await Notification.deleteMany({ owner: userId, isChecked: true });
-    
-            res.json(new StandartRes(0, 'Checked notifications deleted successfully.', { deletedCount: result.deletedCount }));
+
+            const result = await Notification.updateOne(
+                { owner: userId },
+                { $pull: { notifications: { isChecked: true } } }
+            )
+
+            if (result.deletedCount > 0) {
+                res.json(new StandartRes(0, 'Checked notifications deleted successfully.', { deletedCount: result.deletedCount }));
+            } else {
+                console.log(result)
+                res.status(404).json(new StandartRes(1, 'No notifications were deleted. Either none exist or criteria did not match.'));
+            }
         } catch (e) {
-            console.error(e);
-            res.status(500).json(catchRes);
+            console.error("Error while deleting notifications:", e);
+            res.status(500).json(new StandartRes(1, 'Internal server error.'));
         }
     }
-
     async deleteNotification(req, res) {
         try {
-            const userId  = req.user;
+            const userId = req.user;
             const { notificationId } = req.params
-
-            console.log('User ID:', userId);
-            console.log('Notification ID:', notificationId);
 
             if (!userId || !notificationId) {
                 return res.status(400).json(new StandartRes(1, "User's id or notification id is undefined."));
             }
 
             const notification = await Notification.findOne({ _id: notificationId, owner: userId });
-            console.log('Notification found:', notification);
 
             if (!notification) {
                 return res.status(404).json(new StandartRes(1, 'Notification not found.'));
@@ -85,6 +88,31 @@ class NotificationsController {
 
             await Notification.findOneAndDelete({ _id: notificationId, owner: userId });
             res.json(new StandartRes(0, 'Notification deleted successfully.', { notification }));
+        } catch (e) {
+            console.error(e);
+            res.status(500).json(catchRes);
+        }
+    }
+
+    async checkNotification(req, res) {
+        try {
+            const { notificationId } = req.params;
+            const userId  = req.user;
+    
+            if (!userId || !notificationId) {
+                return res.status(400).json(new StandartRes(1, "User's id or notification id is undefined."));
+            }
+    
+            const notification = await Notification.findOne({ _id: notificationId, owner: userId });
+    
+            if (!notification) {
+                return res.status(404).json(new StandartRes(1, 'Notification not found.'));
+            }
+    
+            notification.isChecked = !notification.isChecked;
+            await notification.save();
+    
+            res.json(new StandartRes(0, 'Notification status updated successfully.', { notification }));
         } catch (e) {
             console.error(e);
             res.status(500).json(catchRes);

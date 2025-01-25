@@ -8,9 +8,9 @@ interface INotifications {
     notifications: Array<notificationType>;
     isMainCheckboxAcvtive: boolean;
     setNotificationsChosenStatus: (status: boolean) => void;
-    setNotificationStatus: (itemId: string) => void;
+    updateIsCheckedStatus: (itemId: string) => void;
     removeNotification: (itemId: string) => void
-    clearAllNotifications: (notifications: notificationType[]) => void
+    clearAllNotifications: (notifications: string[]) => void
     fetchNotifications: () => void
 }
 
@@ -44,10 +44,11 @@ const Notifications: React.FC<INotifications> = (props) => {
     }, [props.notifications])
 
     const notificationsItems = props.notifications.map((item: notificationType) => {
+        const checkboxHandler = () => props.updateIsCheckedStatus(item._id)
         return <div key={item._id} className={classes.notificationRow}>
             <Checkbox
                 checked={item.isChecked}
-                onClick={() => props.setNotificationStatus(item._id)}
+                onClick={checkboxHandler}
                 className={s.checkbox}
                 color="primary"
                 name="notifications"
@@ -79,10 +80,14 @@ const Notifications: React.FC<INotifications> = (props) => {
 
     const handleDeleteChosenNotifications = () => {
         const checkedNotifications = props.notifications.filter((notification) => notification.isChecked);
-        props.clearAllNotifications(checkedNotifications);
+        const checkedNotificationIds = checkedNotifications.map((notification) => notification._id);
+        props.clearAllNotifications(checkedNotificationIds);
     }
 
     const opacityCondition = isNotificationChecked ? opacity1 : opacity0
+    const checkboxHandler = () => {
+        props.setNotificationsChosenStatus(!props.isMainCheckboxAcvtive)
+    }
     return (
         <Container className={s.notifications}>
             <div>
@@ -92,7 +97,7 @@ const Notifications: React.FC<INotifications> = (props) => {
                 <div className={classes.notificationsHeader}>
                     <Checkbox style={opacityCondition}
                         checked={props.isMainCheckboxAcvtive}
-                        onClick={() => props.setNotificationsChosenStatus(!props.isMainCheckboxAcvtive)}
+                        onClick={checkboxHandler}
                         className={s.checkbox}
                         color="primary"
                         name="notifications"

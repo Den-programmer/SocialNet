@@ -38,30 +38,32 @@ class UsersController {
                 followed: false
             }));
 
-            res.json(new StandartRes(0, '', { items: usersWithoutPass, totalCount: users.length }));
+            res.json(new StandartRes(0, '', { items: usersWithoutPass, totalCount: await User.countDocuments(query) }));
         } catch (e) {
             console.error('Error:', e);
-            res.status(500).json(catchRes);
+            res.status(500).json(new StandartRes(1, 'Internal server error'));
         }
     }
 
     async followUser(req, res) {
         try {
-            const { userId } = req.params;
-            const currentUserId = req.user;
+            const { userId } = req.params
+            const currentUserId = req.user
+            
+            if (!currentUserId) {
+                return res.status(401).json(new StandartRes(1, 'Unauthorized'));
+            }
+
             console.log('Current user ID:', currentUserId);
             console.log('User ID to follow:', userId);
 
             const userToFollow = await User.findById(userId);
 
             if (!userToFollow) {
-                console.log('User to follow not found');
                 return res.status(404).json(new StandartRes(1, 'User not found'));
             }
 
-            // Check if already followed
             if (userToFollow.followers.includes(currentUserId)) {
-                console.log('User already followed');
                 return res.status(400).json(new StandartRes(1, 'User already followed'));
             }
 
@@ -77,15 +79,16 @@ class UsersController {
 
     async unfollowUser(req, res) {
         try {
-            const { userId } = req.params;
-            const currentUserId = req.user;
-            console.log('Current user ID:', currentUserId);
-            console.log('User ID to unfollow:', userId);
+            const { userId } = req.params
+            const currentUserId = req.user
+
+            if (!currentUserId) {
+                return res.status(401).json(new StandartRes(1, 'Unauthorized'));
+            }
 
             const userToUnfollow = await User.findById(userId);
 
             if (!userToUnfollow) {
-                console.log('User to unfollow not found');
                 return res.status(404).json(new StandartRes(1, 'User not found'));
             }
 
@@ -103,17 +106,27 @@ class UsersController {
             res.status(500).json(new StandartRes(1, 'Internal server error'));
         }
     }
-    async getFriends (req, res) {
+
+    async getFriends(req, res) {
         try {
             const currentUserId = req.user
-            const currentUser = User.findById(currentUserId)
 
-            console.log("Mine following: ", currentUser.following)
+            if (!currentUserId) {
+                return res.status(401).json(new StandartRes(1, 'Unauthorized'));
+            }
+
+            const currentUser = await User.findById(currentUserId).populate('following'); // Ensure following is properly populated.
+
+            if (!currentUser) {
+                return res.status(404).json(new StandartRes(1, 'User not found'));
+            }
+
+            console.log('Mine following:', currentUser.following);
 
             res.json(new StandartRes(0, '', { following: currentUser.following, totalCount: currentUser.following.length }));
-        } catch(e) {
+        } catch (e) {
             console.error('Error:', e);
-            res.status(500).json(catchRes)
+            res.status(500).json(new StandartRes(1, 'Internal server error'));
         }
     }
 }

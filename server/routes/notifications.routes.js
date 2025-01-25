@@ -13,4 +13,6 @@ router.post('/addNotification', NotificationsController.addNotification)
 router.delete('/deleteNotification/:notificationId', NotificationsController.deleteNotification)
 router.delete('/deleteNotifications', NotificationsController.deleteNotifications)
 
+router.put('/checkNotification/:notificationId', NotificationsController.checkNotification)
+
 module.exports = router
