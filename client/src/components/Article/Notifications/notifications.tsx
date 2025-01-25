@@ -12,6 +12,7 @@ interface INotifications {
     removeNotification: (itemId: string) => void
     clearAllNotifications: (notifications: string[]) => void
     fetchNotifications: () => void
+    isDeletingLoading: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -64,6 +65,7 @@ const Notifications: React.FC<INotifications> = (props) => {
                     onClick={() => props.removeNotification(item._id)}
                     color="primary"
                     className={classes.deleteButton}
+                    disabled={!isNotificationChecked || props.isDeletingLoading}
                 >
                     Delete
                 </Button>
@@ -109,6 +111,7 @@ const Notifications: React.FC<INotifications> = (props) => {
                         color="primary"
                         variant='contained'
                         className={classes.deleteButton}
+                        disabled={!isNotificationChecked || props.isDeletingLoading}
                     >
                         Delete
                     </Button>

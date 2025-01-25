@@ -7,3 +7,7 @@ export const getNotifications = (state: RootState) => {
 export const getMainCheckboxStatus = (state: RootState) => {
     return state.notifications.isMainCheckboxAcvtive
 }
+
+export const getIsDeletingLoading = (state: RootState) => {
+    return state.notifications.isDeletingLoading
+}

@@ -18,11 +18,13 @@ export type notificationType = {
 type notificationsType = {
   notifications: Array<notificationType>;
   isMainCheckboxAcvtive: boolean;
+  isDeletingLoading: boolean;
 };
 
 const notificationsPage = {
   notifications: [],
-  isMainCheckboxAcvtive: false
+  isMainCheckboxAcvtive: false,
+  isDeletingLoading: false
 } as notificationsType;
 
 type ActionTypes = InferActionTypes<typeof actions>;
@@ -69,6 +71,11 @@ const reducerNotifications = (state = notificationsPage, action: ActionTypes): n
         ...state,
         notifications: action.notifications
       }
+    case `/sn/notificationsPage/SET-IS-DELETING-LOADING`:
+      return {
+        ...state,
+        isDeletingLoading: action.status
+      }
     default:
       return state;
   }
@@ -82,7 +89,8 @@ export const actions = {
   deleteNotifications: (itemId: string) => ({ type: `/sn/notificationsPage/DELETE-NOTIFICATIONS`, itemId } as const),
   deleteAllNotifications: (notifications: notificationType[]) => ({ type: `/sn/notificationsPage/DELETE-ALL-NOTIFICATIONS`, notifications } as const),
   addNotification: (notification: notificationType) => ({ type: `/sn/notificationsPage/ADD-NOTIFICATION`, notification } as const),
-  setNotifications: (notifications: Array<notificationType>) => ({ type: `/sn/notificationsPage/SET-NOTIFICATIONS`, notifications } as const)
+  setNotifications: (notifications: Array<notificationType>) => ({ type: `/sn/notificationsPage/SET-NOTIFICATIONS`, notifications } as const),
+  setIsDeletingLoading: (status: boolean) => ({ type: `/sn/notificationsPage/SET-IS-DELETING-LOADING`, status } as const)
 };
 
 /* Thunks! */
@@ -114,14 +122,18 @@ export const createNotification = (title: string | null, pageUrl: string | null,
 
 export const removeNotification = (itemId: string): ThunkType => async (dispatch) => {
   try {
+    dispatch(actions.setIsDeletingLoading(true));
     const res = await NotificationsAPI.deleteNotification(itemId);
     if (res.resultCode === resultCode.Success) {
       dispatch(actions.deleteNotifications(itemId));
+      dispatch(actions.setIsDeletingLoading(false));
     } else {
       console.error('Failed to delete notification:', res.statusText);
+      dispatch(actions.setIsDeletingLoading(false));
     }
   } catch (error) {
     console.error('Error deleting notification:', error);
+    dispatch(actions.setIsDeletingLoading(false));
   }
 };
 
