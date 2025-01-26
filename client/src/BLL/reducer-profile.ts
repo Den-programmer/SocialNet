@@ -41,7 +41,7 @@ const profilePage = {
       large: defaultUser,
       small: defaultUser
     },
-    userId: 0
+    userId: "0"
   } as profileType,
   profileNavigationMenu: [
     {
@@ -262,7 +262,7 @@ export const actions = {
   setPosts: (posts: Array<postType>) => ({ type: `/sn/profilePage/SET_POSTS`, posts } as const),
   addPost: (newPost: postType) => ({ type: `/sn/profilePage/ADD-POST`, newPost } as const),
   deletePost: (postId: number) => ({ type: `/sn/profilePage/DELETE_POST`, postId } as const),
-  setProfileUserId: (userId: number) => ({ type: `/sn/profilePage/SET_PROFILE_USER_ID`, userId } as const),
+  setProfileUserId: (userId: string) => ({ type: `/sn/profilePage/SET_PROFILE_USER_ID`, userId } as const),
   setUserProfile: (profile: profileType) => ({ type: `/sn/profilePage/SET_USER_PROFILE`, profile } as const),
   setStatus: (status: string) => ({ type: `/sn/profilePage/SET_STATUS`, status } as const),
   updateStatus: (status: string) => ({ type: `/sn/profilePage/UPDATE_STATUS`, status } as const),
@@ -305,7 +305,7 @@ export const setUserPhotoThunk = (photo: File): ThunkType => async (dispatch, ge
   }
 }
 
-export const setUserProfileThunk = (userId: number): ThunkType => async (dispatch) => {
+export const setUserProfileThunk = (userId: string): ThunkType => async (dispatch) => {
   try {
     const res = await ProfileAPI.getUsersProfile(userId)
     const currProfile = { ...res.data.profile, userId }
@@ -345,7 +345,7 @@ export const updateContacts = (contacts: contactsType): ThunkType => async (disp
   }
 }
 
-export const setStatusThunk = (userId: number): ThunkType => async (dispatch) => {
+export const setStatusThunk = (userId: string): ThunkType => async (dispatch) => {
   // try {
   //   const data = await ProfileAPI.getStatus(userId)
   //   dispatch(actions.setStatus(data))
@@ -362,7 +362,7 @@ export const updateStatusThunk = (status: string): ThunkType => async (dispatch)
   //   alert(`Something's gone wrong, error status: 500`)
   // }
 }
-export const getIsUserFollowed = (userId: number): ThunkType => async (dispatch) => {
+export const getIsUserFollowed = (userId: string): ThunkType => async (dispatch) => {
   // try {
   //   const res = await ProfileAPI.getIsUserFollowed(userId)
   //   dispatch(actions.setIsUserFollowed(res.data))
@@ -371,7 +371,7 @@ export const getIsUserFollowed = (userId: number): ThunkType => async (dispatch)
   // }
 }
 
-export const requestGender = (userId: number): ThunkType => async (dispatch) => {
+export const requestGender = (userId: string): ThunkType => async (dispatch) => {
   try {
     const res = await ProfileAPI.getGender(userId)
     dispatch(actions.changeGender(res.data.gender))
@@ -380,7 +380,7 @@ export const requestGender = (userId: number): ThunkType => async (dispatch) => 
   }
 }
 
-export const setGender = (gender: string, userId: number): ThunkType => async (dispatch) => {
+export const setGender = (gender: string, userId: string): ThunkType => async (dispatch) => {
   try {
     const resGender = await ProfileAPI.updateGender(gender, userId)
     dispatch(actions.changeGender(resGender))
@@ -389,7 +389,7 @@ export const setGender = (gender: string, userId: number): ThunkType => async (d
   }
 }
 
-export const requestUsername = (userId: number): ThunkType => async (dispatch) => {
+export const requestUsername = (userId: string): ThunkType => async (dispatch) => {
   try {
     const res = await ProfileAPI.getUsername(userId)
     if (res.resultCode === resultCode.Success) {
@@ -403,7 +403,7 @@ export const requestUsername = (userId: number): ThunkType => async (dispatch) =
   }
 }
 
-export const setUsername = (userId: number, username: string): ThunkType => async (dispatch) => {
+export const setUsername = (userId: string, username: string): ThunkType => async (dispatch) => {
   try {
     const resUsername = await ProfileAPI.updateUsername(userId, username)
     dispatch(actions.changeUserName(resUsername))

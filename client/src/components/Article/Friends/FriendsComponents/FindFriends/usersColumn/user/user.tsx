@@ -7,15 +7,15 @@ import { scrollToTop } from '../../../../../../../utils/helpers/functions/functi
 
 interface IUser {
     followed: boolean
-    followingInProcess: Array<number>
+    followingInProcess: Array<string>
     username: string
-    id: any
+    id: string
     photo: string | File
-    followThunk: (id: number) => void
-    unfollowThunk: (id: number) => void
-    startDialog: (userId: number) => void
+    followThunk: (userId: string) => void
+    unfollowThunk: (userId: string) => void
+    startDialog: (userId: string) => void
     createNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
-    addToBlacklist: (itemId: number) => void
+    addToBlacklist: (itemId: string) => void
 }
 
 // type MenuStyleType = {

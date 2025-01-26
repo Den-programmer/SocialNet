@@ -8,7 +8,7 @@ import { Container, TextField, Theme, createStyles, makeStyles } from '@material
 
 interface IMyPosts {
     userName: string
-    userId: any
+    userId: string
     posts: Array<postType>
     profile: profileType
     isAddPostModalOpen: boolean
@@ -25,7 +25,6 @@ interface IMyPosts {
     finishEditing: () => void
     onPostTitleChange: (postId: number, postContent: string) => void
     onPostInfChange: (postId: number, postContent: string) => void
-    requireUsersPosts: (userId: string) => void
 }
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -57,9 +56,6 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
             isModalOpen={props.isPostModalOpen} 
             setIsPostModalOpen={props.setIsPostModalOpen} />
     })
-    useEffect(() => {
-        props.requireUsersPosts(props.userId)
-    }, [])
     const onAddPost = () => props.setIsAddPostWindowOpen(true)
 
     return (
@@ -76,7 +72,8 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
                     setTextError={props.setTextError} />}
             </div>
             <div className={classes.posts}>
-                {posts.length !== 0 ? posts : <div className={classes.postedNothingBlock}><h2 className={classes.postedNothingTitle}>There's no posts yet!</h2></div>}
+                {posts.length !== 0 ? posts : 
+                <div className={classes.postedNothingBlock}><h2 className={classes.postedNothingTitle}>There's no posts yet!</h2></div>}
             </div>
         </div>
     )

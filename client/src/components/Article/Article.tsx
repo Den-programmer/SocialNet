@@ -30,7 +30,7 @@ import BlacklistContainer from './Friends/FriendsComponents/Blacklist/blacklistC
 // import Audio from '../common/audio/audioContain'
 
 interface ArticlePropType {
-    userDialogId: number
+    userDialogId: string
     isSidebarOpen: boolean
     drawerWidth: number
     isAuth: boolean

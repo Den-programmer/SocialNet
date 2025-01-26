@@ -25,12 +25,12 @@ export const UsersAPI = {
             return response.data
         })
     },
-    follow: (userId: number) => {
+    follow: (userId: string) => {
         return instance.post<ServerResType<{}>>(`api/users/followUser/${userId}`).then(response => {
             return response.data
         })
     },
-    unfollow: (userId: number) => {
+    unfollow: (userId: string) => {
         return instance.delete<ServerResType<{}>>(`api/users/unfollowUser/${userId}`).then(response => {
             return response.data
         })

@@ -18,7 +18,7 @@ export type profileType = {
     aboutMe: string
     contacts: contactsType
     photos: profilePhotosType
-    userId: number
+    userId: string
 }
 
 export type postType = {

@@ -4,7 +4,7 @@ import AddPostForm from './AddPostForm/addPostForm';
 import { Portal } from '../../../../../common/Portal/portal';
 
 interface IAddPost {
-    userId: any;
+    userId: string
     addPost: (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: File) => void;
     setIsAddPostWindowOpen: (status: boolean) => void;
     messageError: string;

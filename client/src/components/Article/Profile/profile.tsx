@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import User from './User/user'
 import { profileType, postType } from '../../../types/ProfileTypes/profileTypes'
 import { userType } from '../../../types/FriendsType/friendsType'
@@ -6,23 +6,31 @@ import ProfileNav from './ProfileNav/profileNavContainer'
 import Biography from './User/biography/biography'
 import Contacts from './User/Contacts/contacts'
 import EditPhoto from './User/editPhoto/editPhotoContainer'
+import { requireUsersPosts } from '../../../BLL/reducer-profile'
 
 export interface IProfile {
     followed: boolean
     profile: profileType
     username: string
-    authorizedUserId: number
+    authorizedUserId: string
     posts: Array<postType>
     friends: Array<userType>
     background: string
     gender: string
     updateStatus: (status: string) => void
-    getIsUserFollowed: (userId: number) => void
-    follow: (userId: number) => void
-    unfollow: (userId: number) => void
+    getIsUserFollowed: (userId: string) => void
+    follow: (userId: string) => void
+    unfollow: (userId: string) => void
 }
 
-const Profile: React.FC<IProfile> = (props) => {
+interface Significance {
+    requireUsersPosts: (userId: string) => void
+}
+
+const Profile: React.FC<IProfile & Significance> = (props) => {
+    useEffect(() => {
+        requireUsersPosts(props.authorizedUserId)
+    }, [])
     return(
         <div style={{ width: '100%' }}>
             <EditPhoto />

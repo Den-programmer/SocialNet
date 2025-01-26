@@ -1,7 +1,7 @@
 
 
 export type userType = {
-    id: any
+    id: string
     username: string
     profile: {
         photos: {

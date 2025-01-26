@@ -3,17 +3,17 @@ import { contactsType, postType, profileType } from '../types/ProfileTypes/profi
 import { instance } from './api'
 
 export const ProfileAPI = {
-    getUsersProfile: (userId: number | null) => {
+    getUsersProfile: (userId: string) => {
         return instance.get(`api/profile/getProfile/${userId}`).then(res => {
             return res.data
         })
     },
-    getUsername: (userId: number) => {
+    getUsername: (userId: string) => {
         return instance.get(`api/username/getUsername/${userId}`).then(res => {
             return res.data
         })
     },
-    updateUsername: (userId: number, username: string) => {
+    updateUsername: (userId: string, username: string) => {
         return instance.put(`api/username/saveUsername`, { userId, username }).then(rs => {
             return rs.data
         })
@@ -37,7 +37,7 @@ export const ProfileAPI = {
             return rs.data
         })
     },
-    // getStatus: (userId:number)  => {
+    // getStatus: (userId:string)  => {
     //     return instance.get<string>(`profile/status/${userId}`).then(response => {
     //         return response.data
     //     })
@@ -47,7 +47,7 @@ export const ProfileAPI = {
     //         return response.data
     //     })
     // },
-    updateContacts: (contacts: contactsType, userId: any) => {
+    updateContacts: (contacts: contactsType, userId: string) => {
         return instance.put(`api/profile/contacts/updateContacts`, { contacts, userId }).then(res => {
             return res.data
         }).catch(error => {
@@ -55,20 +55,20 @@ export const ProfileAPI = {
             throw error 
         })
     },
-    updateAboutMe: (aboutMe: string, userId: any) => {
+    updateAboutMe: (aboutMe: string, userId: string) => {
         return instance.put(`api/profile/aboutMe/updateAboutMe`, { aboutMe, userId }).then(res => {
             return res.data
         })
     },
-    // getIsUserFollowed: (userId: number | null) => {
+    // getIsUserFollowed: (userId: string | null) => {
     //     return instance.get(`follow/${userId}`)
     // },
-    getGender: (userId: number) => {
+    getGender: (userId: string) => {
         return instance.get(`api/gender/getGender/${userId}`).then(res => {
             return res.data
         })
     },
-    updateGender: (gender: string, userId: number) => {
+    updateGender: (gender: string, userId: string) => {
         return instance.put(`api/gender/updateGender`, { gender, userId }).then(res => {
             return res.data
         })

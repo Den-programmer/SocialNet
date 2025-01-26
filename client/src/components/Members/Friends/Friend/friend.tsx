@@ -6,7 +6,7 @@ import defaultUser from '../images/withoutAvatar/defaultUserPhoto.jpg'
 interface FriendPropsType {
     avatar: string | File   
     username: string
-    id: number
+    id: string
 }
 
 const Friend:React.FC<FriendPropsType> = ({avatar, username, id}) => {

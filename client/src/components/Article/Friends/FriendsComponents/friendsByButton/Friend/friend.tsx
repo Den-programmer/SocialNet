@@ -5,12 +5,12 @@ import { NavLink } from 'react-router-dom'
 import { Avatar, Container, makeStyles, Theme, createStyles, Button } from '@material-ui/core'
 
 interface IFriend {
-    id: number
+    id: string
     avatar: string | File
     username: string
     followed: boolean
-    follow: (id: number) => void
-    unfollow: (id: number) => void
+    follow: (userId: string) => void
+    unfollow: (userId: string) => void
 }
 
 const useStyles = makeStyles((theme: Theme) => createStyles({

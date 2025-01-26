@@ -6,13 +6,13 @@ import { Container, makeStyles, Theme, createStyles } from '@material-ui/core'
 
 interface UsersColumnPropsType {
     users: Array<userType>
-    userId: any
-    followingInProcess: Array<number>
-    followThunk: (id: number) => void
-    unfollowThunk: (id: number) => void
-    startDialog: (userId: number) => void
+    userId: string
+    followingInProcess: Array<string>
+    followThunk: (id: string) => void
+    unfollowThunk: (id: string) => void
+    startDialog: (userId: string) => void
     createNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
-    addToBlacklist: (itemId: number) => void
+    addToBlacklist: (itemId: string) => void
 }
 
 const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {

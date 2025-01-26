@@ -2,7 +2,7 @@ import axios from 'axios'
 import { instance, ServerResType } from './api'
 
 type loginType = {
-    userId: number
+    userId: string
     token: string | null
 }
 

@@ -17,13 +17,13 @@ export const MessagesAPI = {
     getALLDialogs: () => {
         return instance.get<dialogsType>(`dialogs`).then(res => res.data)
     },
-    startDialog: (userId: number) => {
+    startDialog: (userId: string) => {
         return instance.put<ServerResType<{}>>(`dialogs/${userId}`).then(res => res.data)
     },
-    getDialogMessages: (userId: number) => {
+    getDialogMessages: (userId: string) => {
         return instance.get<dialogMessagesResType>(`dialogs/${userId}/messages`).then(res => res.data)
     },
-    sendDialogMessages: (userId: number, message: string) => {
+    sendDialogMessages: (userId: string, message: string) => {
         debugger
         return instance.post<ServerResType<{}>>(`dialogs/${userId}/messages`, { message }).then(res => res.data)
     },

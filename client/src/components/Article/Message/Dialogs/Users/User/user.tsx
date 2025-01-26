@@ -4,8 +4,8 @@ import { NavLink } from 'react-router-dom'
 import { Avatar } from '@material-ui/core'
 
 interface UserPropType {
-    id: number
-    userDialogId: number
+    id: string
+    userDialogId: string
     photo: string
     hasNewMessages: boolean
     lastDialogActivity: string
@@ -14,9 +14,9 @@ interface UserPropType {
     userName: string
     isActive: boolean
     lastMessage: string | null | undefined
-    setUserDialogId: (userId: number) => void
-    getDialogMessages: (userId: number) => void
-    setUserActiveStatus: (userId: number) => void
+    setUserDialogId: (userId: string) => void
+    getDialogMessages: (userId: string) => void
+    setUserActiveStatus: (userId: string) => void
 }
 
 const User: React.FC<UserPropType> = (props) => {

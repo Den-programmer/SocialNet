@@ -5,13 +5,13 @@ import { userType } from '../../../../../types/FriendsType/friendsType'
 
 interface IFollowingInformation {
     posts: Array<postType>
-    userId: number
-    authorizedUserId: number
+    userId: string
+    authorizedUserId: string
     followed: boolean
     friends: Array<userType>
-    getIsUserFollowed: (userId: number) => void
-    follow: (userId: number) => void
-    unfollow: (userId: number) => void
+    getIsUserFollowed: (userId: string) => void
+    follow: (userId: string) => void
+    unfollow: (userId: string) => void
 }
 
 const FollowingInformation: React.FC<IFollowingInformation> = (props) => {

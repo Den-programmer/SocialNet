@@ -1,5 +1,5 @@
 import MyPosts from './MyPosts'
-import { actions, createPost, requireUsersPosts } from '../../../../../BLL/reducer-profile'
+import { actions, createPost } from '../../../../../BLL/reducer-profile'
 import { setTextError } from '../../../../../BLL/reducer-app'
 import { connect } from 'react-redux'
 import { getUsersProfile, getPosts, getUsersName, getIsAddPostModalOpenStatus, getIsPostModalOpenStatus } from '../../../../../BLL/selectors/profile-selectors'
@@ -28,8 +28,7 @@ const MyPostsContainer = connect(mapStateToProps,
     setIsPostInfEdited,
     finishEditing,
     onPostTitleChange,
-    onPostInfChange,
-    requireUsersPosts
+    onPostInfChange
   })(MyPosts)
 
 export default MyPostsContainer

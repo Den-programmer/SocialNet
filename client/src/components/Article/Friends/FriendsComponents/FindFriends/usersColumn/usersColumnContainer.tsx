@@ -12,16 +12,16 @@ import { createNotification } from '../../../../../../BLL/reducer-notifications'
 
 interface IUserColumnAPI {
     usersInf: UsersInfType
-    userId: any
-    followingInProcess: Array<number>
+    userId: string
+    followingInProcess: Array<string>
     users: Array<userType>
     filter: FriendsFilter
-    followThunk: (id: number) => void
-    unfollowThunk: (id: number) => void
+    followThunk: (userId: string) => void
+    unfollowThunk: (userId: string) => void
     requestUsers: (pageSize: number, currentPage: number, term: string) => void
-    startDialog: (userId: number) => void
+    startDialog: (userId: string) => void
     createNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
-    addToBlacklist: (itemId: number) => void
+    addToBlacklist: (itemId: string) => void
 }
 
 class UsersColumnAPI extends React.Component<IUserColumnAPI> {

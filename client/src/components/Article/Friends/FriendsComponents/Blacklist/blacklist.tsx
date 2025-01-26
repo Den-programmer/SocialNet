@@ -7,7 +7,7 @@ import defaultUserPhoto from '../../../../Article/Profile/images/withoutAvatar/d
 
 interface IBlacklist {
     blacklist: Array<userType>
-    deleteFromBlacklist: (itemId: number) => void
+    deleteFromBlacklist: (itemId: string) => void
 }
 
 const useStyles = makeStyles(() => createStyles({

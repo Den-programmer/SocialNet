@@ -4,7 +4,7 @@ export type message = {
 }
 export type userDialogType = {
     hasNewMessages: false
-    id: number
+    id: string
     lastDialogActivityDate: string
     lastUserActivityDate: string 
     newMessagesCount: number

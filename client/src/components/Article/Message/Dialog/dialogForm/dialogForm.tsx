@@ -6,8 +6,8 @@ import { IconButton } from '@material-ui/core'
 import SendIcon from '@material-ui/icons/Send'
 
 interface PropsType {
-    sendMessage: (userId: number, newMessage: string) => void
-    userDialogId: number
+    sendMessage: (userId: string, newMessage: string) => void
+    userDialogId: string
 }
 
 const DialogForm: React.FC<PropsType> = ({ sendMessage, userDialogId }) => {

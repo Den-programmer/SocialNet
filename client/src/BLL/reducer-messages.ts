@@ -7,7 +7,7 @@ import { resultCode } from "../DAL/api"
 const messagesPage = {
     dialogsData: [] as Array<userDialogType>,
     messages: [] as Array<message>,
-    userDialogId: 0,
+    userDialogId: "0",
     trim: '',
     isUserProfileMenuOpen: false
 }
@@ -31,7 +31,7 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): MessagesPag
                 return { ...item, isActive: false }
             })
             const currentDialog = dialogsData.filter((item: userDialogType) => item.isActive && true).find((item: userDialogType) => item)
-            let currentDialogId = currentDialog !== undefined ? currentDialog.id : 0
+            let currentDialogId = currentDialog !== undefined ? currentDialog.id : "0"
             return {
                 ...state,
                 userDialogId: currentDialogId,
@@ -79,8 +79,8 @@ export const actions = {
     addMessage: (messageText: string) => ({ type: `sn/messagesPage/ADD-MESSAGE`, messageText } as const),
     setMessages: (messages: Array<message>) => ({ type: `sn/messagesPage/SET-MESSAGES`, messages } as const),
     setDialogs: (dialogs: Array<userDialogType>) => ({ type: `sn/messagesPage/SET-DIALOGS`, dialogs } as const),
-    setUserDialogId: (userId: number) => ({ type: `sn/messagesPage/SET-USER-DIALOG-ID`, userId } as const),
-    setUserActiveStatus: (userId: number) => ({ type: `sn/messagesPage/SET-USER-ACTIVE-STATUS`, userId } as const),
+    setUserDialogId: (userId: string) => ({ type: `sn/messagesPage/SET-USER-DIALOG-ID`, userId } as const),
+    setUserActiveStatus: (userId: string) => ({ type: `sn/messagesPage/SET-USER-ACTIVE-STATUS`, userId } as const),
     setUserProfileMenuStatus: (status: boolean) => ({ type: `sn/messagesPage/SET_USER_PROFILE_MENU_STATUS`, status } as const),
     setMessagesTrim: (trim: string) => ({ type: `sn/messagesPage/SET_MESSAGES_TRIM`, trim } as const)
 }
@@ -98,7 +98,7 @@ export const getALLDialogs = (): ThunkType => async (dispatch) => {
         alert(`Something's gone wrong, error status: 500`)
     }
 }
-export const startDialog = (userId: number): ThunkType => async (dispatch) => {
+export const startDialog = (userId: string): ThunkType => async (dispatch) => {
     try {
         const data = await MessagesAPI.startDialog(userId)
         if (data.resultCode === resultCode.Success) {
@@ -110,7 +110,7 @@ export const startDialog = (userId: number): ThunkType => async (dispatch) => {
         alert(`Something's gone wrong, error status: 500`)
     }
 }
-export const getDialogMessages = (userId: number): ThunkType => async (dispatch) => {
+export const getDialogMessages = (userId: string): ThunkType => async (dispatch) => {
     try {
         const data = await MessagesAPI.getDialogMessages(userId)
         dispatch(actions.setMessages(data.items))
@@ -120,7 +120,7 @@ export const getDialogMessages = (userId: number): ThunkType => async (dispatch)
     }
 }
 
-export const sendMessage = (userId: number, message: string): ThunkType => async (dispatch) => {
+export const sendMessage = (userId: string, message: string): ThunkType => async (dispatch) => {
     try {
         debugger
         const data = await MessagesAPI.sendDialogMessages(userId, message)

@@ -8,15 +8,17 @@ import NoDialogs from './NoDialogs/noDialogs'
 interface UsersPropType {
     trim: string
     dialogsData: Array<userDialogType>
-    userDialogId: number
-    setUserDialogId: (userId: number) => void
-    getDialogMessages: (userId: number) => void
-    setUserActiveStatus: (userId: number) => void
+    userDialogId: string
+    setUserDialogId: (userId: string) => void
+    getDialogMessages: (userId: string) => void
+    setUserActiveStatus: (userId: string) => void
 }
 
 const Users: React.FC<UsersPropType> = React.memo(({ dialogsData, setUserDialogId, getDialogMessages, userDialogId, setUserActiveStatus, trim }) => {
     function createDialogs(d: userDialogType) {
-        return <User userDialogId={userDialogId} key={d.id} photo={d.photos.large ? d.photos.large : d.photos.small ? d.photos.small : defaultUser} id={d.id}
+        return <User userDialogId={userDialogId} 
+        key={d.id} photo={d.photos.large ? d.photos.large : d.photos.small ? d.photos.small : defaultUser} 
+        id={d.id}
         hasNewMessages={d.hasNewMessages}
         lastDialogActivity={d.lastDialogActivityDate}
         lastUserActivityDate={d.lastUserActivityDate}

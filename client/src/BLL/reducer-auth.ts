@@ -6,7 +6,7 @@ import { resultCode, captchaCode } from '../DAL/api'
 import { actions as actionsProfile } from './reducer-profile'
 
 type authType = {
-  userId: number
+  userId: string
   email: string | null
   login: string | null
   rememberMe: boolean
@@ -18,7 +18,7 @@ type authType = {
 }
 
 const auth = {
-  userId: 0,
+  userId: "0",
   email: null,
   login: null,
   rememberMe: false,
@@ -67,7 +67,7 @@ const reducerAuth = (state = auth, action: ActionTypes): authType => {
 type ActionTypes = InferActionTypes<typeof actions>
 
 export const actions = {
-  setAuthUserData: (userId: number, email: string | null, login: string | null, isAuth: boolean, rememberMe: boolean, token: string | null) => ({ type: `sn/auth/SET_AUTH_USER_DATA`, data: { userId, email, login, isAuth, rememberMe, token } } as const),
+  setAuthUserData: (userId: string, email: string | null, login: string | null, isAuth: boolean, rememberMe: boolean, token: string | null) => ({ type: `sn/auth/SET_AUTH_USER_DATA`, data: { userId, email, login, isAuth, rememberMe, token } } as const),
   setCaptchaUrl: (captcha: string) => ({ type: `sn/auth/SET_CAPTCHA_URL`, captcha } as const),
   setLastUrl: (url: string) => ({ type: `sn/auth/SET_LAST_URL`, url } as const),
   setIsRegisterStatus: (status: boolean) => ({ type: `sn/auth/SET_IS_REGISTER_STATUS`, status } as const)
@@ -130,7 +130,7 @@ export const login = (email: string | null, password: string | null, rememberMe 
 }
 export const logout = ():ThunkType => async (dispatch) => {
   try {
-    dispatch(actions.setAuthUserData(0, null, null, false, false, null))
+    dispatch(actions.setAuthUserData("0", null, null, false, false, null))
     localStorage.removeItem('userData')
   } catch (error) {
     alert(`Something's gone wrong, error status: 500`)

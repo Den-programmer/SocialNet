@@ -14,7 +14,7 @@ const Friends = {
         pageSize: 12,
         currentPage: 1
     },
-    followingInProcess: [] as Array<number>,
+    followingInProcess: [] as Array<string>,
     filter: {
         term: ''
     },
@@ -129,17 +129,17 @@ const reducerFriends = (state = Friends, action: ActionTypes): typeof Friends =>
 type ActionTypes = InferActionTypes<typeof actions>
 
 export const actions = {
-    follow: (userId: number) => ({ type: `sn/Friends/FOLLOW`, userId } as const),
-    unfollow: (userId: number) => ({ type: `sn/Friends/UNFOLLOW`, userId } as const),
+    follow: (userId: string) => ({ type: `sn/Friends/FOLLOW`, userId } as const),
+    unfollow: (userId: string) => ({ type: `sn/Friends/UNFOLLOW`, userId } as const),
     setUsers: (users: Array<userType>) => ({ type: `sn/Friends/SET-USERS`, users } as const),
     changePage: (currentPage: number) => ({ type: `sn/Friends/CHANGE-PAGE`, currentPage } as const),
     setUsersInf: (totalCount: number) => ({ type: `sn/Friends/SET-USERSINF`, totalCount } as const),
     isFetching: (isFetching: boolean) => ({ type: `sn/Friends/IS_FETCHING`, isFetching } as const),
-    toggleFollowingInProcess: (isFetching: boolean, userId: number) => ({ type: `sn/Friends/TOGGLE_IS_FOLLOWING_PROCESS`, isFetching, userId } as const),
+    toggleFollowingInProcess: (isFetching: boolean, userId: string) => ({ type: `sn/Friends/TOGGLE_IS_FOLLOWING_PROCESS`, isFetching, userId } as const),
     setFriends: (users: Array<userType>) => ({ type: `sn/Friends/SET_FRIENDS`, users } as const),
     setUsersTerm: (term: string) => ({ type: `sn/Friends/SET_USERS_TERM`, term } as const),
-    addToBlacklist: (itemId: number) => ({ type: `sn/Friends/ADD_TO_BLACKLIST`, itemId } as const),
-    deleteFromBlacklist: (itemId: number) => ({ type: `sn/Friends/DELETE_FROM_BLACKLIST`, itemId } as const)
+    addToBlacklist: (itemId: string) => ({ type: `sn/Friends/ADD_TO_BLACKLIST`, itemId } as const),
+    deleteFromBlacklist: (itemId: string) => ({ type: `sn/Friends/DELETE_FROM_BLACKLIST`, itemId } as const)
 }
 
 // Thunk Creators!
@@ -184,7 +184,7 @@ export const requestFollowing = (pageSize: number, currentPage: number, term: st
     }
 } 
 
-export const followThunk = (userId: number): ThunkType => async (dispatch) => {
+export const followThunk = (userId: string): ThunkType => async (dispatch) => {
     try {
         dispatch(actions.toggleFollowingInProcess(true, userId))
         let data = await UsersAPI.follow(userId)
@@ -196,7 +196,7 @@ export const followThunk = (userId: number): ThunkType => async (dispatch) => {
         alert(`Something's gone wrong, error status: ${error.status}`)
     }
 }
-export const unfollowThunk = (userId: number): ThunkType => async (dispatch) => {
+export const unfollowThunk = (userId: string): ThunkType => async (dispatch) => {
     try {
         dispatch(actions.toggleFollowingInProcess(true, userId))
         let data = await UsersAPI.unfollow(userId)

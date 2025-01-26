@@ -8,8 +8,8 @@ interface IFriendsByButton {
     friends: Array<userType>
     usersInf: UsersInfType
     filter: FriendsFilter
-    followThunk: (id: number) => void
-    unfollowThunk: (id: number) => void
+    followThunk: (userId: string) => void
+    unfollowThunk: (userId: string) => void
     requestFollowing: (pageSize: number, currentPage: number, term: string) => void
 }
 

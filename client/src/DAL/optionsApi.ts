@@ -13,7 +13,7 @@ type setUserPhotoType = {
 }
 
 export const OptionsAPI = {
-    setUserPhoto: (photo: File, userId: any) => {
+    setUserPhoto: (photo: File, userId: string) => {
         const formData = new FormData()
         formData.append("image", photo)
         formData.append("userId", userId)

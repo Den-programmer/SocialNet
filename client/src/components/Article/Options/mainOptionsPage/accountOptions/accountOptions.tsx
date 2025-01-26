@@ -9,7 +9,7 @@ import ChangeBiography from './ChangeBiography/changeBiography'
 import ChangeMembersColumnStatus from './ChangeMembersColumnStatus/changeMembersColumnStatus'
 
 export interface IChangeOptions {
-    userId: number
+    userId: string
     property: string
     userName: string
     contacts: contactsType
@@ -17,8 +17,8 @@ export interface IChangeOptions {
     aboutMe: string
     isMembersColumnOpen: boolean
     accountOptionsMenu: Array<IAccountOption>
-    changeUserName: (userId: number, username: string) => void
-    setGender: (gender: string, userId: number) => void
+    changeUserName: (userId: string, username: string) => void
+    setGender: (gender: string, userId: string) => void
     createNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'Friends' | 'News') => void
     setChangesToAccountOptionsMenu: (accountOptions: Array<IAccountOption>) => void
     saveAboutMe: (aboutMe: string) => void
@@ -26,7 +26,7 @@ export interface IChangeOptions {
 }
 
 interface IAccountOptions {
-    userId: number
+    userId: string
     messageError: string
     photo: any
     userName: string
@@ -35,8 +35,8 @@ interface IAccountOptions {
     contacts: contactsType
     isMembersColumnOpen: boolean
     setUserPhotoThunk: (photo: File) => void
-    setUsername: (userId: number, username: string) => void
-    setGender: (gender: string, userId: number) => void
+    setUsername: (userId: string, username: string) => void
+    setGender: (gender: string, userId: string) => void
     createNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'Friends' | 'News') => void
     saveAboutMe: (aboutMe: string) => void
     changeMembersColumnOpenedStatus: (status: boolean) => void

@@ -13,10 +13,10 @@ interface IProfileMainContent {
     profile: profileType
     gender: string
     username: string
-    authorizedUserId: number
-    followThunk: (userId: number) => void
-    unfollowThunk: (userId: number) => void
-    getIsUserFollowed: (userId: number) => void
+    authorizedUserId: string
+    followThunk: (userId: string) => void
+    unfollowThunk: (userId: string) => void
+    getIsUserFollowed: (userId: string) => void
     updateStatusThunk: (status: string) => void
 }
 

@@ -11,9 +11,9 @@ interface DialogPropsType {
     isUserProfileMenuOpen: boolean
     messages: Array<message>
     dialogsData: Array<userDialogType>
-    sendMessage: (userId: number, message: string) => void
+    sendMessage: (userId: string, message: string) => void
     setUserProfileMenuStatus: (status: boolean) => void
-    userDialogId: number
+    userDialogId: string
 }
 
 const Dialog: React.FC<DialogPropsType> = ({ messages, sendMessage, dialogsData, setUserProfileMenuStatus, isUserProfileMenuOpen, userDialogId }) => {

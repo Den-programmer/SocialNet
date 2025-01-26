@@ -1,7 +1,7 @@
 import React from 'react'
 import Profile from './profile'
 import { connect } from 'react-redux'
-import { setUserProfileThunk, setStatusThunk, updateStatusThunk, getIsUserFollowed, requestGender, requestUsername } from '../../../BLL/reducer-profile'
+import { setUserProfileThunk, setStatusThunk, updateStatusThunk, getIsUserFollowed, requestGender, requestUsername, requireUsersPosts } from '../../../BLL/reducer-profile'
 import { followThunk, unfollowThunk } from '../../../BLL/reducer-friends'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { compose } from 'redux'
@@ -13,17 +13,18 @@ import { userType } from '../../../types/FriendsType/friendsType'
 import { postType, profileType } from '../../../types/ProfileTypes/profileTypes'
 
 interface IProfileContainer {
-    authorizedUserId: number
+    authorizedUserId: string
     followed: boolean
     username: string
-    requestUsername: (userId: number) => void
-    setStatusThunk: (userId: number) => void
-    setUserProfileThunk: (userId: number) => void
+    requireUsersPosts: (userId: string) => void
+    requestUsername: (userId: string) => void
+    setStatusThunk: (userId: string) => void
+    setUserProfileThunk: (userId: string) => void
     updateStatusThunk: (status: string) => void
-    getIsUserFollowed: (userId: number) => void
-    followThunk: (userId: number) => void
-    unfollowThunk: (userId: number) => void
-    requestGender: (userId: number) => void
+    getIsUserFollowed: (userId: string) => void
+    followThunk: (userId: string) => void
+    unfollowThunk: (userId: string) => void
+    requestGender: (userId: string) => void
     friends: Array<userType>
     profile: profileType
     posts: Array<postType>
@@ -37,7 +38,7 @@ interface IRouteParams {
 
 class ProfileContainer extends React.Component<IProfileContainer & RouteComponentProps<IRouteParams>> {
     refreshProfile() {
-        let userId: any = this.props.match.params.userId // - if another user's page!
+        let userId = this.props.match.params.userId// - if another user's page!
         if (!userId) {
             userId = this.props.authorizedUserId // - if current user's page!
             if (!userId) {
@@ -73,7 +74,8 @@ class ProfileContainer extends React.Component<IProfileContainer & RouteComponen
             gender={this.props.gender}
             username={this.props.username}
             posts={this.props.posts} friends={this.props.friends} updateStatus={this.props.updateStatusThunk}
-            background={this.props.background} />
+            background={this.props.background} 
+            requireUsersPosts={this.props.requireUsersPosts}/>
     }
 }
 
@@ -89,6 +91,6 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, { setUserProfileThunk, requestUsername, setStatusThunk, updateStatusThunk, getIsUserFollowed, followThunk, unfollowThunk, requestGender }),
+    connect(mapStateToProps, { requireUsersPosts, setUserProfileThunk, requestUsername, setStatusThunk, updateStatusThunk, getIsUserFollowed, followThunk, unfollowThunk, requestGender }),
     withRouter
 )(ProfileContainer)
