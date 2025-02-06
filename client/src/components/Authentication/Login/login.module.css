@@ -1,8 +1,25 @@
 .login {
-    width: 960px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 960px;
     background: #fff;
     border-radius: 10px;
     overflow: hidden;
-    height: 510px;
+    height: auto;
     margin: auto;
+    padding: 20px;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

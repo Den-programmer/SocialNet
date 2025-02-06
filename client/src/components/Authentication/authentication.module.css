@@ -11,24 +11,3 @@
 .authentication * {
     box-sizing: border-box;
 }
-
-.login {
-    display:flex;
-    flex-direction:column;
-    align-items: center;
-}
-.formItem h4 {
-    cursor: pointer;
-}
-.rememberMe {
-    display:flex;
-    align-items: center;
-}
-.rememberMe input {
-    cursor:pointer;
-}
-.rememberMe p {
-    cursor:pointer;
-    color:#FFF;
-    font-weight: normal;
-}    

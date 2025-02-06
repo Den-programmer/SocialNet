@@ -1,5 +1,5 @@
 import React, { MouseEvent, useState } from 'react'
-import classes from './loginImg.module.css'
+import classes from './loginImg.module.scss'
 import loginEnterImage from '../../../../../images/loginImages/loginEnterImage.png'
 import Tilt from 'react-parallax-tilt'
 

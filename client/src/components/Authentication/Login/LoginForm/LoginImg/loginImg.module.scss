@@ -1,0 +1,10 @@
+.loginEnterImage img {
+    width: 316px;
+    height: 290px;
+    user-select: none;
+
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        height: auto;
+    }
+}

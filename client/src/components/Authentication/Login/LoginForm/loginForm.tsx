@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import classes from './loginForm.module.css';
+import classes from './loginForm.module.scss';
 import { RegisterFormDataType } from '../../Login/login';
 import LoginImg from './LoginImg/loginImg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

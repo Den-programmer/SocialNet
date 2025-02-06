@@ -1,13 +1,12 @@
 .formWrapper {
     width: 100%;
-    height: 100%;
+    height: 65%;
     display: flex;
-    margin: 0 auto; 
-    justify-content: center;
-    align-items: center;
+    margin: 0 auto;
 }
+
 .formWrapper > * {
-    width: 50%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -29,10 +28,12 @@
 
 .formItem {
     position: relative;
-    width: 285px;
+    width: 100%;
+    max-width: 285px;
     z-index: 1;
     margin-bottom: 10px;
 }
+
 .formItem input {
     font-family: 'Poppins', sans-serif;
     font-size: 15px;
@@ -46,12 +47,11 @@
     padding: 0 30px 0 68px;
     outline: none;
     border: none;
-    overflow: visible;
 }
 
 .inputIcon {
     top: 0;
-    right: 100px;
+    right: 15px;
     font-size: 15px;
     position: absolute;
     display: flex;
@@ -65,41 +65,50 @@
 .formItem .envelope, .lock {
     position: relative;
     top: 20px;
+    right: 80px;
 }
 
 .rememberMe {
-    display:flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     margin: 10px;
 }
+
 .rememberMe input {
-    cursor:pointer;
+    cursor: pointer;
 }
+
 .rememberMe p {
     color: #333333;
     font-weight: bold;
-    margin:0 7px;
-}    
+    margin: 0 7px;
+}
+
 .error {
-    color:red;
+    color: red;
     font-weight: 700;
     text-align: center;
     display: block;
 }
+
 .captcha {
     margin: 10px 0;
 }
+
 .captchaInput {
     margin-bottom: 10px;
 }
+
 .btn_login {
-    width: 300px;
+    width: 100%;
+    max-width: 300px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     padding-top: 20px;
 }
+
 .btn_login button {
     font-family: 'Montserrat', sans-serif;
     font-size: 15px;
@@ -118,6 +127,7 @@
     padding: 0 25px;
     transition: all 0.4s;
 }
+
 .btn_login button:hover {
     background: #333333;
 }
@@ -130,4 +140,45 @@
     color: red;
     font-weight: 300;
     cursor: pointer;
+}
+
+.loginEnterImage {
+    display: flex;
+    justify-content: center;
+    animation: slideIn 0.8s ease-in-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.loginEnterImage img {
+    width: 100%;
+    max-width: 316px;
+    height: auto;
+    user-select: none;
+}
+
+@media screen and (max-width: 768px) {
+    .login {
+        width: 95%;
+        height: auto;
+        padding: 20px;
+    }
+    .formWrapper {
+        flex-direction: column;
+    }
+    .formWrapper > * {
+        width: 100%;
+    }
+    .btn_login {
+        max-width: 100%;
+    }
 }
