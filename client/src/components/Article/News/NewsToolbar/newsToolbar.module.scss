@@ -1,19 +1,20 @@
 .horizontal_line {
     background: #01275C;
-    width: 200px;
+    width: 50%;
     height: 1px;
 }
 
 .newsToolbar {
-    width: 200px;
-    margin:10px 20px;
+    width: 35%;
+    margin: 10px 20px;
     background: #FFF;
-    box-sizing: content-box;
     padding: 0px 20px;
-    .title {
 
+    @media screen and (max-width: 1024px) {
+        width: 40%;
     }
-    .newsToolbar__Content {
-        
+
+    @media screen and (max-width: 768px) {
+        display: none;
     }
 }

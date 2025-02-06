@@ -1,5 +1,6 @@
 import React from 'react'
 import classes from './newsItem.module.scss'
+import { Link } from '@material-ui/core'
 
 interface INewsItem {
     id: number
@@ -21,8 +22,15 @@ const NewsItem: React.FC<INewsItem> = ({ title, date, id, text, link, copyright,
                     {text}
                 </p>
                 <div className={classes.newsItem__link}>
-                    <a target="_blank" href={link}>{link}</a>
-                </div>  
+                    <Link
+                        component="button"
+                        target="_blank"
+                        href={link}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {link}
+                    </Link>
+                </div>
                 <p className={classes.newsItem__copyright}>
                     {copyright}
                 </p>
