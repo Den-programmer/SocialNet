@@ -15,6 +15,8 @@ type SidebarType = {
     sidebarWidth: number
 }
 
+const screenWidth = window.screen.width
+
 const Sidebar = {
     navigationLinks: [
         {

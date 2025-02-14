@@ -1,6 +1,6 @@
 import React from 'react'
 import { navLinkType } from '../../types/SidebarTypes/sidebarTypes'
-import { Drawer, List, makeStyles, Theme, createStyles, Divider, IconButton, useTheme } from '@material-ui/core'
+import { Drawer, List, makeStyles, Theme, createStyles, Divider, IconButton, useTheme, useMediaQuery } from '@material-ui/core'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import SidebarItem from './SidebarItem/sidebarItem'
@@ -16,8 +16,11 @@ interface SideBarPropsType {
   choosePage: (isChosen: number) => void
 }
 
+const windowWidth = window.screen.width
+
 const SideBar: React.FC<SideBarPropsType & RouteComponentProps> = (props) => {
-  const drawerWidth = props.sidebarWidth
+  const isMobile = useMediaQuery("(max-width:1000px)")
+  const drawerWidth = isMobile ? windowWidth : props.sidebarWidth
   const handleList = () => {
     setTimeout(() => {
       scrollToTop()
@@ -55,8 +58,16 @@ const SideBar: React.FC<SideBarPropsType & RouteComponentProps> = (props) => {
 
   const handleDrawerClose = () => props.changeSidebarIsOpenStatus(false)
   const navItems = props.navLinks.map(Link => {
-    return <SidebarItem changeProfileNavItemChosenStatus={props.changeProfileNavItemChosenStatus} location={props.location.pathname} key={Link.id} id={Link.id} isChosen={Link.isChosen} name={Link.name} choosePage={props.choosePage} path={Link.path} icon={Link.icon}/>
+    return <SidebarItem changeProfileNavItemChosenStatus={props.changeProfileNavItemChosenStatus} 
+    location={props.location.pathname} 
+    key={Link.id} id={Link.id} 
+    isChosen={Link.isChosen} 
+    name={Link.name} 
+    choosePage={props.choosePage} 
+    path={Link.path} 
+    icon={Link.icon}/>
   })
+
   return (
     <Drawer className={classes.drawer} variant="persistent" open={props.isSidebarOpen} classes={{ paper: classes.drawerPaper }}>
       <div className={classes.drawerHeader}>
