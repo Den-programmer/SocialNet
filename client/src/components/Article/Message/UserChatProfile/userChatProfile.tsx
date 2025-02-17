@@ -3,7 +3,7 @@ import classes from './userChatProfile.module.scss'
 import { Avatar, Accordion, AccordionSummary, AccordionDetails, Typography, Container } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { userDialogType } from '../../../../types/MessagesTypes/messagesTypes'
-import defaultUser from '../../Profile/images/withoutAvatar/defaultUserPhoto.jpg'
+import defaultUser from '../../Profile/images/withoutAvatar/defaultUserPhoto.webp'
 
 interface IUserChatProfile {
     dialogsData: Array<userDialogType>

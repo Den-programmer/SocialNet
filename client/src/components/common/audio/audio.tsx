@@ -5,7 +5,7 @@ import SkipNextIcon from '@material-ui/icons/SkipNext'
 import PauseIcon from '@material-ui/icons/Pause'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 import RepeatIcon from '@material-ui/icons/Repeat'
-import playlist_default from '../../Article/Music/Playlists/playlist/img/playlist_default.jpg'
+// import playlist_default from '../../Article/Music/Playlists/playlist/img/playlist_default.webp'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faRandom, faUser, faUserCheck } from '@fortawesome/free-solid-svg-icons'
 import VolumeUpIcon from '@material-ui/icons/VolumeUp'
@@ -73,7 +73,7 @@ const Audio: React.FC<IAudio> = ({ currentTrack, lastTrackId, volume, following,
                 <div className={classes.trackPanel}>
                     <div className={classes.track}>
                         <div className={classes.singerPhoto}>
-                            <img src={singerPhoto ? singerPhoto : playlist_default} alt="singer" />
+                            {/* <img src={singerPhoto ? singerPhoto : playlist_default} alt="singer" /> */}
                         </div>
                         <div className={classes.trackInf}>
                             <p className={classes.trackName}>{song}</p>

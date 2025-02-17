@@ -1,7 +1,7 @@
 import React from 'react'
 import classes from '../changingPhotos.module.scss'
 import { Button } from '@material-ui/core'
-import defaultPhoto from '../../../images/withoutAvatar/defaultUserPhoto.jpg'
+import defaultPhoto from '../../../images/withoutAvatar/defaultUserPhoto.webp'
 
 interface IDeleteAvatar {
     setUserPhoto: (photo: File) => void

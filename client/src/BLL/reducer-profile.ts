@@ -1,11 +1,11 @@
-import defaultUser from './../components/Article/Profile/images/withoutAvatar/defaultUserPhoto.jpg'
+import defaultUser from './../components/Article/Profile/images/withoutAvatar/defaultUserPhoto.webp'
 import { ProfileAPI } from '../DAL/profileApi'
 import { OptionsAPI } from "../DAL/optionsApi"
 import { resultCode } from '../DAL/api'
 import { setTextError, setTextErrorActionType } from './reducer-app'
 import { RootState, InferActionTypes } from './redux'
 import { ThunkAction } from 'redux-thunk'
-import beautifulLight from '../components/Article/Profile/User/images/profileBackground.jpg'
+import beautifulLight from '../components/Article/Profile/User/images/profileBackground.webp'
 import { postType, postNotificationType, profileNavItem, ChangePhotosMenuItemType, profileType, contactsType } from '../types/ProfileTypes/profileTypes'
 import { formatDate } from '../utils/helpers/functions/function-helpers'
 

@@ -5,7 +5,7 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import Notifications from './notifications/notifications'
 import Btn_Confirm from '../../../../../../common/Btns/Btn_confirm/btn_confirm'
 import { Portal } from '../../../../../../common/Portal/portal'
-import noPostImg from '../../../../../../../images/noPhoto/nophoto.png'
+import noPostImg from '../../../../../../../images/noPhoto/nophoto.webp'
 
 interface IPost {
     currentDate: string
@@ -49,7 +49,7 @@ const PostModal: React.FC<IPost> = (props) => {
             <div className={classes.modalContainer}>
                 <div className={classes.modal}>
                     <div className={classes.postPhoto}>
-                        <img src={props.postImg ? props.postImg : noPostImg} alt="" />
+                        <img loading='lazy' src={props.postImg ? props.postImg : noPostImg} alt="" />
                     </div>
                     <div className={classes.postInf}>
                         <div className={classes.headWrapper}>

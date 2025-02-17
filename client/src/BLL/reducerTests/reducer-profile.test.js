@@ -1,4 +1,4 @@
-import MyAvatar from '../../components/Article/Profile/images/myAvatar/avatar.jpg';
+import MyAvatar from '../../components/Profile/images/withoutAvatar/defaultUserPhoto.webp';
 import reducerProfile from '../reducer-profile';
 import { addPost } from '../reducer-profile';
 import { deletePost } from '../reducer-profile';

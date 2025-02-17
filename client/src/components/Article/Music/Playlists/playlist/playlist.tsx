@@ -1,8 +1,8 @@
 import React, { useState, createRef } from 'react'
 import classes from './playlist.module.css'
 import { trackType } from '../../../../../types/MusicTypes/musicTypes'
-import playlistWithoutUserImg from './img/playlist_default.jpg'
-import PlaylistContextMenu from './playlistContextMenu/playlistContextMenu'
+// import playlistWithoutUserImg from './img/playlist_default.jpg'
+// import PlaylistContextMenu from './playlistContextMenu/playlistContextMenu'
 
 interface IPlaylist {
     id: number
@@ -21,7 +21,7 @@ export interface IMenuStyleState {
 const Playlist: React.FC<IPlaylist> = (props) => {
     const images = []
     const playlistImages = props.music.map((t: trackType) => {
-        return <div key={t.id} className={classes.image}><img alt="images" src={t.singerPhoto} /></div>
+        return <div key={t.id} className={classes.image}><img loading='lazy' alt="images" src={t.singerPhoto} /></div>
     })
     for (let i = 0; i <= 3; i++) {
         images.push(playlistImages[i])
@@ -70,9 +70,9 @@ const Playlist: React.FC<IPlaylist> = (props) => {
         <React.Fragment>
             {props.music.length < 4 ? <li onContextMenu={callContextMenu} className={classes.playlist}>
                 <div className={classes.playlistImg}>
-                    <div className={classes.image}><img className={classes.playlistWithoutUserImg} src={playlistWithoutUserImg} alt=""/></div>
+                    {/* <div className={classes.image}><img loading="lazy" className={classes.playlistWithoutUserImg} src={playlistWithoutUserImg} alt=""/></div> */}
                 </div>
-                {isMenuOpen && <PlaylistContextMenu setEditingStatus={setEditingStatus} playlistId={props.id} styleMenu={menuStyle} deletePlaylist={props.deletePlaylist}/>}
+                {/* {isMenuOpen && <PlaylistContextMenu setEditingStatus={setEditingStatus} playlistId={props.id} styleMenu={menuStyle} deletePlaylist={props.deletePlaylist}/>} */}
                 <div className={classes.playlistsInf}>
                     {isEditCheck}
                     <p>{countTracks}</p>
@@ -81,7 +81,7 @@ const Playlist: React.FC<IPlaylist> = (props) => {
                 <div className={classes.playlistImg}>
                     {images}
                 </div>
-                {isMenuOpen && <PlaylistContextMenu setEditingStatus={setEditingStatus} playlistId={props.id} styleMenu={menuStyle} deletePlaylist={props.deletePlaylist}/>}
+                {/* {isMenuOpen && <PlaylistContextMenu setEditingStatus={setEditingStatus} playlistId={props.id} styleMenu={menuStyle} deletePlaylist={props.deletePlaylist}/>} */}
                 <div className={classes.playlistsInf}>
                     {isEditCheck}
                     <p>{countTracks}</p>

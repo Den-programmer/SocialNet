@@ -1,6 +1,6 @@
 import React, { MouseEvent, useState } from 'react'
 import classes from './loginImg.module.scss'
-import loginEnterImage from '../../../../../images/loginImages/loginEnterImage.png'
+import loginEnterImage from '../../../../../images/loginImages/loginEnterImage.webp'
 import Tilt from 'react-parallax-tilt'
 
 interface ILoginImg {

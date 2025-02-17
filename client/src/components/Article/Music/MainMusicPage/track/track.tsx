@@ -42,7 +42,7 @@ const Track: React.FC<TrackPropsType> = (props) => {
         <li onClick={chooseTrack} className={classes.track}>
             <div className={classes.trackInf}>
                 <div className={classes.icon}>
-                    <img src={props.singerPhoto} alt="singer" />
+                    <img loading="lazy" src={props.singerPhoto} alt="singer" />
                 </div>
                 <div className={classes.Inf}>
                     <div className={classes.singer}>

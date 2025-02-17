@@ -3,7 +3,7 @@ import React from 'react'
 import classes from '../../FriendsComponents/friendsByButton/Friend/friend.module.scss'
 import { NavLink } from 'react-router-dom'
 import { userType } from '../../../../../types/FriendsType/friendsType'
-import defaultUserPhoto from '../../../../Article/Profile/images/withoutAvatar/defaultUserPhoto.jpg'
+import defaultUserPhoto from '../../../../Article/Profile/images/withoutAvatar/defaultUserPhoto.webp'
 
 interface IBlacklist {
     blacklist: Array<userType>

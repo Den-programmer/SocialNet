@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import classes from './addPostForm.module.css';
 import { AddPostFD } from '../addPost';
-import noPostPhoto from '../../../../../../../images/noPhoto/nophoto.png';
+import noPostPhoto from '../../../../../../../images/noPhoto/nophoto.webp';
 
 interface IAddPostForm {
     setIsAddPostWindowOpen: (status: boolean) => void;
@@ -33,7 +33,7 @@ const AddPostForm: React.FC<IAddPostForm> = ({ setIsAddPostWindowOpen, getPostIm
                 <h4>Adding a new post!</h4>
             </div>
             <div className={classes.photo}>
-                <img src={postPhoto ? postPhoto : noPostPhoto} alt="" />
+                <img loading="lazy" src={postPhoto ? postPhoto : noPostPhoto} alt="" />
             </div>
             <div className={classes.btn_selectPhoto}>
                 <label htmlFor="fileInputAddPostPhoto">Select photo</label>

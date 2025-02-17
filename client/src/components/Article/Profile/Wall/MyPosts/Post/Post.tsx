@@ -1,8 +1,8 @@
 import React, { ChangeEvent, createRef } from 'react'
 import classes from './Post.module.scss'
-import noPostImg from '../../../../../../images/noPhoto/nophoto.png'
+import noPostImg from '../../../../../../images/noPhoto/nophoto.webp'
 import { Container, Avatar, makeStyles, createStyles, Theme, TextField } from '@material-ui/core'
-import defaultUserPhoto from '../../../../Profile/images/withoutAvatar/defaultUserPhoto.jpg'
+import defaultUserPhoto from '../../../../Profile/images/withoutAvatar/defaultUserPhoto.webp'
 
 interface IPost {
     userName: string
@@ -83,7 +83,7 @@ const Post: React.FC<IPost> = (props) => {
                 </div>
                 <div className={classes.postBody}>
                     <div className={classes.picture}>
-                        <img src={imageUrl} alt="avatar" />
+                        <img loading="lazy" src={imageUrl} alt="avatar" />
                     </div>
                     <div className={classes.postContentWrapper}>
                         <div ref={postContent} className={classes.postContent}>

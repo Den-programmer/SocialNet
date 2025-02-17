@@ -1,5 +1,4 @@
 import React from 'react'
-import sad from './img/sadImage.png'
 import { Container, makeStyles, Theme, createStyles } from '@material-ui/core'
 import { NavLink } from 'react-router-dom'
 
@@ -43,7 +42,6 @@ const ErrorPage:React.FC<IErrorPage> = (props) => {
     return (
         <Container className={classes.errorPage}>
             <div className={classes.contentContainer}>
-                <img className={classes.errorImage} src={sad} alt=""/>
             </div>
             <div className={classes.contentContainer}>
                 <h1 className={classes.mainTitle}>Sorry, this is page not found!</h1>

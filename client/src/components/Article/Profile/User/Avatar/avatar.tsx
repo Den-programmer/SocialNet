@@ -1,10 +1,10 @@
 import React from 'react'
 import classes from './avatar.module.scss'
-import facebook from '../images/facebook.png'
-import twitter from '../images/twitter.png'
-import youtube from '../images/youtube.png'
+import facebook from '../images/facebook.webp'
+import twitter from '../images/twitter.webp'
+import youtube from '../images/youtube.webp'
 import { contactsType } from '../../../../../types/ProfileTypes/profileTypes'
-import defaultUserPhoto from '../../../Profile/images/withoutAvatar/defaultUserPhoto.jpg'
+import defaultUserPhoto from '../../../Profile/images/withoutAvatar/defaultUserPhoto.webp'
 
 interface IUserAvatar {
     name: string
@@ -36,7 +36,7 @@ const Avatar: React.FC<IUserAvatar> = (props) => {
                 // @ts-ignore
                 <a target="_blank" key={item.id} href={item.value}>
                     <div className={classes.social}>
-                        <img src={item.photo} alt="" />
+                        <img loading='lazy' src={item.photo} alt="" />
                     </div>
                 </a>
             )

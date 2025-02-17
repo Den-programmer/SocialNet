@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import classes from './MyPosts.module.scss'
 import Post from './Post/Post'
 import AddPost from './AddPost/addPost'
-import defaultUser from '../../images/withoutAvatar/defaultUserPhoto.jpg'
+import defaultUser from '../../images/withoutAvatar/defaultUserPhoto.webp'
 import { postType, profileType } from '../../../../../types/ProfileTypes/profileTypes'
 import { Container, TextField, Theme, createStyles, makeStyles } from '@material-ui/core'
 

@@ -1,6 +1,6 @@
 import React, { useState, MouseEvent } from 'react'
 import './user.scss'
-import defaultUserPhoto from './img/defaultUserPhoto.jpg'
+import defaultUserPhoto from './img/defaultUserPhoto.webp'
 import { NavLink, Redirect } from 'react-router-dom'
 import { Button } from '@material-ui/core'
 import { scrollToTop } from '../../../../../../../utils/helpers/functions/function-helpers'
@@ -66,6 +66,7 @@ const User: React.FC<IUser> = (props) => {
         <div className="user" onClick={userHandleClick}>
             <NavLink to={"/Profile/" + props.id}>
                 {props.photo ? <img className="avatar" src={imageUrl} alt="" /> : <img className="avatar" src={defaultUserPhoto} alt="" />}
+                {/* No lazy loading here! */}
                 <h3 className="user-name">{props.username}</h3>
             </NavLink>
             {/* {isMenuOpen && <div className="user-grid__menuWrapper">

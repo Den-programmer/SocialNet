@@ -15,7 +15,7 @@ const Singer:React.FC<ISinger> = ({photo, name, location, subscribersCount}) => 
     return (
         <li className={classes.singer}>
             <div className={classes.singerPhoto}>
-                <img src={photo} alt="singerPhoto" />
+                <img loading="lazy" src={photo} alt="singerPhoto" />
             </div>
             <div className={classes.singerInf}>
                 <div className={classes.name}>{name}</div>

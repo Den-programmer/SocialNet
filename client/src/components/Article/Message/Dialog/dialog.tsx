@@ -5,7 +5,7 @@ import Conversation from './Conversation/conversation'
 import DialogForm from './dialogForm/dialogForm'
 import { Avatar, IconButton } from '@material-ui/core'
 import InfoIcon from '@material-ui/icons/Info'
-import defaultUser from '../../Profile/images/withoutAvatar/defaultUserPhoto.jpg'
+import defaultUser from '../../Profile/images/withoutAvatar/defaultUserPhoto.webp'
 
 interface DialogPropsType {
     isUserProfileMenuOpen: boolean

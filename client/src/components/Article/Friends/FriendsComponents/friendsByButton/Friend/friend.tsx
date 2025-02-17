@@ -1,6 +1,6 @@
 import React from 'react'
 import classes from './friend.module.scss'
-import defaultUserPhoto from './img/defaultUserPhoto.jpg'
+import defaultUserPhoto from './img/defaultUserPhoto.webp'
 import { NavLink } from 'react-router-dom'
 import { Avatar, Container, makeStyles, Theme, createStyles, Button } from '@material-ui/core'
 

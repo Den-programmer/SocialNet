@@ -1,7 +1,7 @@
 import React from 'react'
 import classes from './friend.module.scss'
 import { NavLink } from 'react-router-dom'
-import defaultUser from '../images/withoutAvatar/defaultUserPhoto.jpg'
+import defaultUser from '../images/withoutAvatar/defaultUserPhoto.webp'
 
 interface FriendPropsType {
     avatar: string | File   
