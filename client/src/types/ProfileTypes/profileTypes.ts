@@ -1,6 +1,6 @@
 export type profilePhotosType = {
-    large: string | File
-    small: string | File
+    large: string | undefined | File
+    small: string | undefined | File
 }
 export type contactsType = {
     facebook: string | null

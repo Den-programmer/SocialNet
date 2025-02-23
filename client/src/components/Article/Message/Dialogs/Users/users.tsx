@@ -1,7 +1,6 @@
 import React from 'react'
 import classes from './users.module.scss'
 import User from './User/user'
-import defaultUser from '../../../../Article/Profile/images/withoutAvatar/defaultUserPhoto.webp'
 import { userDialogType } from '../../../../../types/MessagesTypes/messagesTypes'
 import NoDialogs from './NoDialogs/noDialogs'
 
@@ -13,6 +12,8 @@ interface UsersPropType {
     getDialogMessages: (userId: string) => void
     setUserActiveStatus: (userId: string) => void
 }
+
+const defaultUser = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
 
 const Users: React.FC<UsersPropType> = React.memo(({ dialogsData, setUserDialogId, getDialogMessages, userDialogId, setUserActiveStatus, trim }) => {
     function createDialogs(d: userDialogType) {

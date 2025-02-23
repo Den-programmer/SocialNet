@@ -1,7 +1,6 @@
 import React from 'react'
 import classes from '../changingPhotos.module.scss'
 import { Button } from '@material-ui/core'
-import defaultPhoto from '../../../images/withoutAvatar/defaultUserPhoto.webp'
 
 interface IDeleteAvatar {
     setUserPhoto: (photo: File) => void
@@ -10,8 +9,10 @@ interface IDeleteAvatar {
     createNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
 }
 
+const defaultUser = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
+
 const DeleteAvatar:React.FC<IDeleteAvatar> = ({ setUserPhoto, setIsModalOpenStatus, createNotification, error }) => {
-    const photoFile = new File([defaultPhoto], "defaultUserFile.jpg", {
+    const photoFile = new File([defaultUser?defaultUser:''], "defaultUserFile.jpg", {
         type: 'image/jpeg',
         lastModified: 1583871416945
     })

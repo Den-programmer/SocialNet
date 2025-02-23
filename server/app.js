@@ -23,6 +23,8 @@ app.use('/api/posts', require('./routes/posts.routes.js'))
 app.use('/api/users', require('./routes/users.routes.js'))
 app.use('/api/news', require('./routes/news.routes.js'))
 app.use('/api/notifications', require('./routes/notifications.routes.js'))
+app.use('/api/images', require('./routes/images.routes.js'))
+
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {

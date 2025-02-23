@@ -1,4 +1,3 @@
-import MyAvatar from '../../components/Profile/images/withoutAvatar/defaultUserPhoto.webp';
 import reducerProfile from '../reducer-profile';
 import { addPost } from '../reducer-profile';
 import { deletePost } from '../reducer-profile';
@@ -71,8 +70,8 @@ let state = {
         ],
         fullName: "LightL2",
         photos: {
-            large: MyAvatar,
-            small: MyAvatar,
+            large: "avatar",
+            small: "avatar"
         },
         userId: 7735794,
     },

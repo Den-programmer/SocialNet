@@ -1,6 +1,5 @@
 import React, { MouseEvent, useState } from 'react'
 import classes from './loginImg.module.scss'
-import loginEnterImage from '../../../../../images/loginImages/loginEnterImage.webp'
 import Tilt from 'react-parallax-tilt'
 
 interface ILoginImg {
@@ -11,6 +10,8 @@ type ImageStyleType = {
     transform: string
     transition: string
 }
+
+const loginEnterImage = process.env.REACT_APP_CLOUDINARY_LOGIN_ENTER_IMAGE
 
 const LoginImg: React.FC<ILoginImg> = (props) => {
     const commonImageStyle = {

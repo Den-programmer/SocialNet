@@ -9,7 +9,7 @@ interface IProfileMainContent {
     followed: boolean
     posts: Array<postType>
     friends: Array<userType>
-    background: string
+    background: string | undefined
     profile: profileType
     gender: string
     username: string

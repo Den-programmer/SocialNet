@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import classes from './MyPosts.module.scss'
 import Post from './Post/Post'
 import AddPost from './AddPost/addPost'
-import defaultUser from '../../images/withoutAvatar/defaultUserPhoto.webp'
 import { postType, profileType } from '../../../../../types/ProfileTypes/profileTypes'
 import { Container, TextField, Theme, createStyles, makeStyles } from '@material-ui/core'
 
@@ -33,6 +32,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         margin: '50px 0px'
     }
 }))
+
+const defaultUser = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
 
 const MyPosts: React.FC<IMyPosts> = React.memo(props => {
     const s = useStyles()

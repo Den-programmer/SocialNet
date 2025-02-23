@@ -1,16 +1,17 @@
 import React from 'react'
 import classes from './avatar.module.scss'
-import facebook from '../images/facebook.webp'
-import twitter from '../images/twitter.webp'
-import youtube from '../images/youtube.webp'
 import { contactsType } from '../../../../../types/ProfileTypes/profileTypes'
-import defaultUserPhoto from '../../../Profile/images/withoutAvatar/defaultUserPhoto.webp'
 
 interface IUserAvatar {
     name: string
-    avatar: string | File
+    avatar: string | undefined | File
     contacts: contactsType
 }
+
+const defaultUserPhoto = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
+const facebook = process.env.REACT_APP_CLOUDINARY_FACEBOOK
+const twitter = process.env.REACT_APP_CLOUDINARY_X
+const youtube = process.env.REACT_APP_CLOUDINARY_YOUTUBE
 
 const Avatar: React.FC<IUserAvatar> = (props) => {
     const contactsData = Object.keys(props.contacts).map((key, index) => {

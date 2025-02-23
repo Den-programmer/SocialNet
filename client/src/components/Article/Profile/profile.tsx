@@ -15,7 +15,7 @@ export interface IProfile {
     authorizedUserId: string
     posts: Array<postType>
     friends: Array<userType>
-    background: string
+    background: string | undefined
     gender: string
     updateStatus: (status: string) => void
     getIsUserFollowed: (userId: string) => void

@@ -1,6 +1,5 @@
 import React from 'react'
 import Avatar from './Avatar/avatar'
-import defaultAvatar from '../../Profile/images/withoutAvatar/defaultUserPhoto.webp'
 import FollowingInformation from './followingInformation/followingInformation'
 import { IProfile } from '../profile'
 import { contactsType } from '../../../../types/ProfileTypes/profileTypes'
@@ -8,6 +7,8 @@ import { contactsType } from '../../../../types/ProfileTypes/profileTypes'
 interface IUser extends IProfile {
     contacts: contactsType
 }
+
+const defaultAvatar = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
 
 const User: React.FC<IUser> = (props) => {
     const background = { 

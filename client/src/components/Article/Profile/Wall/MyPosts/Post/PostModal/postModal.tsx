@@ -5,7 +5,6 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import Notifications from './notifications/notifications'
 import Btn_Confirm from '../../../../../../common/Btns/Btn_confirm/btn_confirm'
 import { Portal } from '../../../../../../common/Portal/portal'
-import noPostImg from '../../../../../../../images/noPhoto/nophoto.webp'
 
 interface IPost {
     currentDate: string
@@ -20,6 +19,8 @@ interface IPost {
     deletePost: (postId: number) => void
     setIsPostModalOpen: (modalStatus: boolean) => void
 }
+
+const noPostImg = process.env.REACT_APP_CLOUDINARY_NO_PHOTO_URL
 
 const PostModal: React.FC<IPost> = (props) => {
     const [isEdit, setIsEditStatus] = useState<boolean>(false)

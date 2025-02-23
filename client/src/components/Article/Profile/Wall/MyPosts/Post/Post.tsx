@@ -1,8 +1,6 @@
 import React, { ChangeEvent, createRef } from 'react'
 import classes from './Post.module.scss'
-import noPostImg from '../../../../../../images/noPhoto/nophoto.webp'
 import { Container, Avatar, makeStyles, createStyles, Theme, TextField } from '@material-ui/core'
-import defaultUserPhoto from '../../../../Profile/images/withoutAvatar/defaultUserPhoto.webp'
 
 interface IPost {
     userName: string
@@ -14,7 +12,7 @@ interface IPost {
     id: number
     createdAt: string
     likesCount: number
-    avatar: string | File
+    avatar: string | undefined | File
     isModalOpen: boolean
     setIsPostModalOpen: (modalStatus: boolean) => void
     deletePost: (postId: number) => void
@@ -32,7 +30,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     }
 }))
 
+const defaultUserPhoto = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
 // Edit post - false when I click on something that is not post input!
+
+const noPostImg = process.env.REACT_APP_CLOUDINARY_NO_PHOTO_URL
 
 const Post: React.FC<IPost> = (props) => {
     const s = useStyles()

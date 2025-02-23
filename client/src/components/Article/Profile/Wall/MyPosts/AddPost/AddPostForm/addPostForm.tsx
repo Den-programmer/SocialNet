@@ -2,7 +2,6 @@ import React, { ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import classes from './addPostForm.module.css';
 import { AddPostFD } from '../addPost';
-import noPostPhoto from '../../../../../../../images/noPhoto/nophoto.webp';
 
 interface IAddPostForm {
     setIsAddPostWindowOpen: (status: boolean) => void;
@@ -11,6 +10,8 @@ interface IAddPostForm {
     postPhotoError: string;
     onSubmit: (data: AddPostFD) => void;
 }
+
+const noPostPhoto = process.env.REACT_APP_CLOUDINARY_NO_PHOTO_URL
 
 const AddPostForm: React.FC<IAddPostForm> = ({ setIsAddPostWindowOpen, getPostImg, postPhoto, postPhotoError, onSubmit }) => {
     const { register, handleSubmit, formState: { errors } } = useForm<AddPostFD>();

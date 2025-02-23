@@ -1,13 +1,14 @@
-import defaultUser from './../components/Article/Profile/images/withoutAvatar/defaultUserPhoto.webp'
 import { ProfileAPI } from '../DAL/profileApi'
 import { OptionsAPI } from "../DAL/optionsApi"
 import { resultCode } from '../DAL/api'
 import { setTextError, setTextErrorActionType } from './reducer-app'
 import { RootState, InferActionTypes } from './redux'
 import { ThunkAction } from 'redux-thunk'
-import beautifulLight from '../components/Article/Profile/User/images/profileBackground.webp'
 import { postType, postNotificationType, profileNavItem, ChangePhotosMenuItemType, profileType, contactsType } from '../types/ProfileTypes/profileTypes'
 import { formatDate } from '../utils/helpers/functions/function-helpers'
+
+const base_BG = process.env.REACT_APP_CLOUDINARY_BASE_BG
+const defaultUser = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
 
 const entity = 'sn/profilePage/'
 
@@ -100,7 +101,7 @@ const profilePage = {
   ] as Array<ChangePhotosMenuItemType>,
   changePhotosMenuItemId: 1,
   followed: false,
-  background: beautifulLight,
+  background: base_BG,
   gender: 'Not Chosen',
   isAddPostModalOpen: false,
   isPostModalOpen: false,

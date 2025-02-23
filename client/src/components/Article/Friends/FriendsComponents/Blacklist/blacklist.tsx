@@ -3,7 +3,6 @@ import React from 'react'
 import classes from '../../FriendsComponents/friendsByButton/Friend/friend.module.scss'
 import { NavLink } from 'react-router-dom'
 import { userType } from '../../../../../types/FriendsType/friendsType'
-import defaultUserPhoto from '../../../../Article/Profile/images/withoutAvatar/defaultUserPhoto.webp'
 
 interface IBlacklist {
     blacklist: Array<userType>
@@ -19,6 +18,8 @@ const useStyles = makeStyles(() => createStyles({
         height: '100px'
     }
 }))
+
+const defaultUserPhoto = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
 
 const Blacklist: React.FC<IBlacklist> = ({ blacklist, deleteFromBlacklist }) => {
     const s = useStyles()

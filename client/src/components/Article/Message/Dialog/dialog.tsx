@@ -5,7 +5,6 @@ import Conversation from './Conversation/conversation'
 import DialogForm from './dialogForm/dialogForm'
 import { Avatar, IconButton } from '@material-ui/core'
 import InfoIcon from '@material-ui/icons/Info'
-import defaultUser from '../../Profile/images/withoutAvatar/defaultUserPhoto.webp'
 
 interface DialogPropsType {
     isUserProfileMenuOpen: boolean
@@ -15,6 +14,8 @@ interface DialogPropsType {
     setUserProfileMenuStatus: (status: boolean) => void
     userDialogId: string
 }
+
+const defaultUser = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
 
 const Dialog: React.FC<DialogPropsType> = ({ messages, sendMessage, dialogsData, setUserProfileMenuStatus, isUserProfileMenuOpen, userDialogId }) => {
     const Messages = messages.map((ms: message) => {

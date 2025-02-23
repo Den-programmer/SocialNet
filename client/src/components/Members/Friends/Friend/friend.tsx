@@ -1,13 +1,14 @@
 import React from 'react'
 import classes from './friend.module.scss'
 import { NavLink } from 'react-router-dom'
-import defaultUser from '../images/withoutAvatar/defaultUserPhoto.webp'
 
 interface FriendPropsType {
     avatar: string | File   
     username: string
     id: string
 }
+
+const defaultUser = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
 
 const Friend:React.FC<FriendPropsType> = ({avatar, username, id}) => {
     const imageUrl = typeof avatar === 'string'
