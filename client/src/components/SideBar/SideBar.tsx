@@ -1,86 +1,79 @@
-import React from 'react'
-import { navLinkType } from '../../types/SidebarTypes/sidebarTypes'
-import { Drawer, List, makeStyles, Theme, createStyles, Divider, IconButton, useTheme, useMediaQuery } from '@material-ui/core'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import SidebarItem from './SidebarItem/sidebarItem'
-import { RouteComponentProps } from 'react-router-dom'
-import { scrollToTop } from '../../utils/helpers/functions/function-helpers'
+import React from 'react';
+import { Drawer, List, Divider, IconButton, useTheme, useMediaQuery, makeStyles } from '@material-ui/core';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import SidebarItem from './SidebarItem/sidebarItem';
+import { RouteComponentProps } from 'react-router-dom';
+import { scrollToTop } from '../../utils/helpers/functions/function-helpers';
 
 interface SideBarPropsType {
-  navLinks: Array<navLinkType>
-  isSidebarOpen: boolean
-  sidebarWidth: number
-  changeProfileNavItemChosenStatus: (itemId: number) => void
-  changeSidebarIsOpenStatus: (status: boolean) => void
-  choosePage: (isChosen: number) => void
+  navLinks: Array<any>;
+  isSidebarOpen: boolean;
+  sidebarWidth: number;
+  changeProfileNavItemChosenStatus: (itemId: number) => void;
+  changeSidebarIsOpenStatus: (status: boolean) => void;
+  choosePage: (isChosen: number) => void;
 }
 
-const windowWidth = window.screen.width
+const useStyles = makeStyles((theme) => ({
+  drawerPaper: {
+    backgroundColor: '#30445C',
+    overflow: 'hidden',
+    width: (props: { drawerWidth: string }) => props.drawerWidth,
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(1),
+    justifyContent: 'flex-end',
+  },
+}));
 
 const SideBar: React.FC<SideBarPropsType & RouteComponentProps> = (props) => {
-  const isMobile = useMediaQuery("(max-width:1000px)")
-  const drawerWidth = isMobile ? windowWidth : props.sidebarWidth
-  const handleList = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery('(max-width: 1000px)');
+  const drawerWidth = isMobile ? '80vw' : `${props.sidebarWidth}px`;
+  const classes = useStyles({ drawerWidth });
+
+  const handleDrawerClose = () => props.changeSidebarIsOpenStatus(false);
+  const handleListClick = () => {
     setTimeout(() => {
-      scrollToTop()
-    }, 250)
-  }
-  const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-      drawer: {
-        width: '0px',
-        flexShrink: 0,
-        backgroundColor: 'red'
-      },
-      drawerPaper: {
-        width: drawerWidth,
-        backgroundColor: '#30445C',
-        overflow: 'hidden'
-      },
-      drawerHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: theme.spacing(0, 1),
-        ...theme.mixins.toolbar,
-        justifyContent: 'flex-end'
-      },
-      nav: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-      }
-    })
-  )
-
-  const classes = useStyles()
-  const theme = useTheme()
-
-  const handleDrawerClose = () => props.changeSidebarIsOpenStatus(false)
-  const navItems = props.navLinks.map(Link => {
-    return <SidebarItem changeProfileNavItemChosenStatus={props.changeProfileNavItemChosenStatus} 
-    location={props.location.pathname} 
-    key={Link.id} id={Link.id} 
-    isChosen={Link.isChosen} 
-    name={Link.name} 
-    choosePage={props.choosePage} 
-    path={Link.path} 
-    icon={Link.icon}/>
-  })
+      scrollToTop();
+      if (isMobile) handleDrawerClose();
+    }, 250);
+  };
 
   return (
-    <Drawer className={classes.drawer} variant="persistent" open={props.isSidebarOpen} classes={{ paper: classes.drawerPaper }}>
+    <Drawer
+      open={props.isSidebarOpen}
+      variant={isMobile ? 'temporary' : 'persistent'}
+      anchor="left"
+      classes={{ paper: classes.drawerPaper }}
+      onClose={handleDrawerClose}
+    >
       <div className={classes.drawerHeader}>
         <IconButton onClick={handleDrawerClose}>
           {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </IconButton>
       </div>
       <Divider />
-      <List onClick={handleList} className={classes.nav}>
-        {navItems}
+      <List onClick={handleListClick}>
+        {props.navLinks.map((link) => (
+          <SidebarItem 
+            key={link.id} 
+            id={link.id} 
+            isChosen={link.isChosen} 
+            name={link.name} 
+            choosePage={props.choosePage} 
+            path={link.path} 
+            icon={link.icon} 
+            changeProfileNavItemChosenStatus={props.changeProfileNavItemChosenStatus}
+            location={props.location.pathname} 
+          />
+        ))}
       </List>
     </Drawer>
-  )
-}
+  );
+};
 
 export default SideBar
