@@ -115,7 +115,7 @@ const Article: React.FC<ArticlePropType> = React.memo(({ userDialogId, isSidebar
                         <OptionsNav />
                         <ContactsOptions />
                     </Container>)} />
-                    <Route path='/Options' render={() => (<div className={classes.displayContainer}><OptionsContainer /></div>)} />
+                    {/* <Route path='/Options' render={() => (<div className={classes.displayContainer}><OptionsContainer /></div>)} /> */}
                     {/* Notifications! */}
                     <Route path='/Notifications' render={() => (<div className={classes.container}>
                         <ProfileMainContentContainer />
