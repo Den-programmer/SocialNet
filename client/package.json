@@ -22,7 +22,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/vanilla-tilt": "^1.6.2",
     "@typescript-eslint/parser": "^6.21.0",
-    "axios": "^0.21.4",
+    "axios": "^1.8.1",
     "date-fns": "^2.30.0",
     "dotenv": "^16.4.5",
     "gh-pages": "^2.2.0",
