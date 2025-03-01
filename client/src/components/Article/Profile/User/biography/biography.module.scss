@@ -4,34 +4,39 @@
    .title {
        text-transform: uppercase;
        font-family: $Poppins;
+       font-size: 1.5rem;
+       text-align: center;
    }
    .bioTable {
+       width: 100%;
+       margin: auto;
+       border-collapse: collapse;
+
        .bioTableItem {
            display: flex;
            align-items: center;
            border-top: 1px solid #E3E3E3;
            border-bottom: 1px solid #E3E3E3;
-           .bioTableItem__property {
-               padding: 0px 10px;
-               width: 200px;
-               border-right: 1px solid #E3E3E3;
-                p {
-                    font-size: 14px;
-                    color: #737373;
-                }
-           }
-           .bioTableItem__value {
-               padding: 0px 10px;
-               p {
-                    font-size: 14px;
-                    color: #737373;
-               }
-               .bioTableItem__value_second_style {
-                    color: #222222;
-                    font-size: 12px;
-                    font-family: $Lato;
-               }
-           }
+       }
+       th, td {
+           padding: 10px;
+           text-align: left;
+       }
+       th {
+           width: 200px;
+           border-right: 1px solid #E3E3E3;
+           font-size: 14px;
+           color: #737373;
+           font-weight: normal;
+       }
+       td {
+           font-size: 14px;
+           color: #737373;
+       }
+       .bioTableItem__value_second_style {
+           color: #222222;
+           font-size: 12px;
+           font-family: $Lato;
        }
    }
 }

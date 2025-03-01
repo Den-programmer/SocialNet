@@ -1,47 +1,39 @@
-import React from 'react'
-import classes from './biography.module.scss'
-import { Container } from '@material-ui/core'
+import React from 'react';
+import classes from './biography.module.scss';
+import { Container } from '@material-ui/core';
 
 interface IBiography {
-    gender: string
-    userName: string
-    AboutMe: string | null
+    gender: string;
+    userName: string;
+    AboutMe: string | null;
 }
 
 const Biography: React.FC<IBiography> = ({ userName, AboutMe, gender }) => {
     return (
-        <Container>
+        <Container maxWidth="lg">
             <div className={classes.biography}>
                 <h2 className={classes.title}>Biography</h2>
-                <div className={classes.bioTable}>
-                <div className={classes.bioTableItem}>
-                    <div className={classes.bioTableItem__property}>
-                        <p>Name</p>
-                    </div>
-                    <div className={classes.bioTableItem__value}>
-                        <p>{userName}</p>
-                    </div>
-                </div>
-                <div className={classes.bioTableItem}>
-                    <div className={classes.bioTableItem__property}>
-                        <p>Gender</p>
-                    </div>
-                    <div className={classes.bioTableItem__value}>
-                        <p>{gender}</p>
-                    </div>
-                </div>
-                <div className={classes.bioTableItem}>
-                    {AboutMe && <div className={classes.bioTableItem__property}>
-                        <p>About Me</p>
-                    </div>}
-                    {AboutMe && <div className={classes.bioTableItem__value}>
-                        <span className={classes.bioTableItem__value_second_style}>{AboutMe}</span>
-                    </div>}
-                </div>
-            </div>
+                <table className={classes.bioTable}>
+                    <tbody>
+                        <tr className={classes.bioTableItem}>
+                            <th>Name</th>
+                            <td>{userName}</td>
+                        </tr>
+                        <tr className={classes.bioTableItem}>
+                            <th>Gender</th>
+                            <td>{gender}</td>
+                        </tr>
+                        {AboutMe && (
+                            <tr className={classes.bioTableItem}>
+                                <th>About Me</th>
+                                <td className={classes.bioTableItem__value_second_style}>{AboutMe}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </div>
         </Container>
-    )
-}
+    );
+};
 
-export default Biography
+export default Biography;

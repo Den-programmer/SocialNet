@@ -1,5 +1,5 @@
 import React from 'react'
-import { Toolbar, makeStyles, createStyles, Theme, List } from '@material-ui/core'
+import { Toolbar, makeStyles, createStyles, Theme, List, useMediaQuery } from '@material-ui/core'
 import { RouteComponentProps } from 'react-router-dom'
 import { profileNavItem } from '../../../../types/ProfileTypes/profileTypes'
 import ProfileNavItem from './profileNavItem/profileNavItem'
@@ -14,7 +14,7 @@ interface IProfileNav {
 export const useProfileNavStyles = makeStyles((theme: Theme) => createStyles({
     navigation: {
         backgroundColor: '#FAFAFA',
-        padding: '0px 200px'
+        padding: '0px 15%'
     },
     navList: {
         display: 'flex',
@@ -52,6 +52,7 @@ export const useProfileNavStyles = makeStyles((theme: Theme) => createStyles({
 
 const ProfileNav: React.FC<IProfileNav & RouteComponentProps> = (props) => {
     const classes = useProfileNavStyles()
+    const isMobile = useMediaQuery('(max-width: 700px)')
     const navItems = props.profileNav.map((item: profileNavItem) => {
         return (
             <ProfileNavItem choosePage={props.choosePage} location={props.location.pathname} changeProfileNavItemChosenStatus={props.changeProfileNavItemChosenStatus} key={item.id} id={item.id} title={item.title} isChosen={item.isChosen} path={item.path}/>
@@ -60,7 +61,7 @@ const ProfileNav: React.FC<IProfileNav & RouteComponentProps> = (props) => {
     return (
         <Toolbar className={classes.navigation}>
             <List className={classes.navList}>
-                {navItems}
+                {isMobile ? navItems[0] : navItems}
             </List>
         </Toolbar>
     )
