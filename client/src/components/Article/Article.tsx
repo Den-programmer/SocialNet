@@ -8,7 +8,7 @@ const ProfileContainer = lazy(() => import("./Profile/profileContainer"))
 const MessagesContainer = lazy(() => import("./Message/messagesContainer"))
 const News = lazy(() => import("./News/news"))
 const Notifications = lazy(() => import("./Notifications/notificationsContainer"))
-const OptionsContainer = lazy(() => import("./Options/optionsContainer"))
+// const OptionsContainer = lazy(() => import("./Options/optionsContainer"))
 const FindFriendsContainer = lazy(() => import("./Friends/FriendsComponents/FindFriends/findFriendsContainer"))
 const FriendsNavContainer = lazy(() => import('./Friends/FriendsNav/friendsNavContainer'))
 const FriendsByButtonContainer = lazy(() => import("./Friends/FriendsComponents/friendsByButton/friendsByButtonContainer"))
@@ -39,9 +39,10 @@ interface ArticlePropType {
     lastUrl: string
     newsPageId: number | null
     isMembersColumnOpen: boolean
+    headerHeight: string
 }
 
-const Article: React.FC<ArticlePropType> = React.memo(({ userDialogId, isSidebarOpen, drawerWidth, isAuth, lastUrl, newsPageId, isMembersColumnOpen }) => {
+const Article: React.FC<ArticlePropType> = React.memo(({ headerHeight, userDialogId, isSidebarOpen, drawerWidth, isAuth, lastUrl, newsPageId, isMembersColumnOpen }) => {
     const useStyles = makeStyles((theme: Theme) => createStyles({
         content: {
             flexGrow: 1,
@@ -59,18 +60,18 @@ const Article: React.FC<ArticlePropType> = React.memo(({ userDialogId, isSidebar
             marginLeft: 0,
         },
         container: {
-            paddingTop: '64px'
+            paddingTop: headerHeight,
         },
         displayContainer: {
             display: 'flex',
-            paddingTop: '64px',
-            paddingBottom: '64px'
+            paddingTop: headerHeight,
+            paddingBottom: headerHeight
         },
         DataFriendsContainer: {
-            padding: '64px 0px'
+            padding: headerHeight + ' 0px'
         },
         FindFriendsContainer: {
-            padding: '64px 0px'
+            padding: headerHeight + ' 0px'
         }
     }))
     const classes = useStyles()

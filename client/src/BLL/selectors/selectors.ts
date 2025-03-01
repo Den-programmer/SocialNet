@@ -12,3 +12,6 @@ export const getIsModalOpenStatus = (state: RootState) => {
 export const getDate = (state: RootState) => {
     return state.app.date
 }
+export const getHeaderHeight = (state: RootState) => {
+    return state.app.headerHeight
+}

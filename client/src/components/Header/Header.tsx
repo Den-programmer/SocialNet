@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { AppBar, Container, Toolbar, IconButton, Box, Button } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
@@ -13,6 +13,7 @@ interface HeaderProps {
   setLastUrl: (url: string) => void
   logout(): void
   changeSidebarIsOpenStatus: (status: boolean) => void
+  setHeaderHeight: (height: string) => void
 }
 
 const Header: React.FC<HeaderProps & RouteComponentProps> = (props) => {
@@ -48,13 +49,22 @@ const Header: React.FC<HeaderProps & RouteComponentProps> = (props) => {
     },
   }))
   const classes = useStyles()
-
+  const header = useRef<HTMLDivElement>()
   const logout = () => {
     props.setLastUrl(props.location.pathname)
     props.logout()
   }
+
+  useEffect(() => {
+      let node = header.current
+      if (node && node.clientHeight !== undefined) {
+        props.setHeaderHeight(`${node.clientHeight}px`);
+    } else {
+        props.setHeaderHeight('64px')
+      }
+  }, [])
   return (
-    <AppBar className={props.isSidebarOpen ? classes.appBarShift : classes.appBar} color="secondary" position="fixed">
+    <AppBar ref={header} className={props.isSidebarOpen ? classes.appBarShift : classes.appBar} color="secondary" position="fixed">
       <Container>
         <Toolbar className={classes.toolbarWrapper}>
           <Box component="div">

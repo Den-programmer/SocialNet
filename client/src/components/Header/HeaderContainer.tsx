@@ -6,11 +6,13 @@ import { getLoginName, getIsAuthStatus } from '../../BLL/selectors/auth-selector
 import { getIsSidebarOpenStatus, getSidebarWidth } from '../../BLL/selectors/sidebar-selectors'
 import { actions } from '../../BLL/reducer-sidebar'
 import { actions as actions2 } from '../../BLL/reducer-auth'
+import { actions as actions3 } from '../../BLL/reducer-app'
 import { compose } from 'redux'
 import { withRouter } from 'react-router-dom'
 
 const { changeSidebarIsOpenStatus } = actions
 const { setLastUrl } = actions2
+const { setHeaderHeight } = actions3
 
 const mapStateToProps = (state: RootState) => ({
     loginName: getLoginName(state),
@@ -20,7 +22,7 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const HeaderContainer = compose<React.ComponentType>(
-    connect(mapStateToProps, { logout, changeSidebarIsOpenStatus, setLastUrl }),
+    connect(mapStateToProps, { logout, changeSidebarIsOpenStatus, setLastUrl, setHeaderHeight }),
     withRouter
 )(Header)
 

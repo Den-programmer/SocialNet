@@ -14,6 +14,7 @@ type appStateType = {
   isModalOpen: boolean
   date: string
   isSmthLoading: boolean
+  headerHeight: string
 }
 
 const AppState = {
@@ -21,7 +22,8 @@ const AppState = {
   messageError: '',
   isModalOpen: false,
   date: '',
-  isSmthLoading: false
+  isSmthLoading: false,
+  headerHeight: '64px'
 } as appStateType
 
 const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
@@ -51,6 +53,11 @@ const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
         ...state,
         isSmthLoading: action.status
       }
+    case `app/SET_HEADER_HEIGHT`:
+      return {
+        ...state,
+        headerHeight: action.headerHeight
+      }
     default:
       return state
   }
@@ -65,6 +72,7 @@ export const actions = {
   setIsModalOpenStatus: (modalStatus: boolean) => ({ type: `app/SET_IS_MODAL_OPEN_STATUS`, modalStatus } as const),
   getCurrentDate: (date: string) => ({ type: `app/SET_CURRENT_DATE`, date } as const),
   setIsSmthLoadingStatus: (status: boolean) => ({ type: `app/SET_LOADING`, status } as const),
+  setHeaderHeight: (headerHeight: string) => ({ type: `app/SET_HEADER_HEIGHT`, headerHeight } as const)
 }
 
 // Common Action Creators!
