@@ -20,11 +20,23 @@ const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
         container: {
             display: 'flex',
             flexWrap: 'wrap',
-            justifyContent: 'space-around',
-            padding: '40px'
+            justifyContent: 'center',
+            padding: '20px',
+            width: '100%'
+        },
+        userGrid: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '20px',
+            padding: '20px',
+            maxWidth: '1200px',
+            width: '100%',
+            margin: '0 auto'
         }
     }))
+
     const classes = useStyles()
+
     const users = props.users.map((user: userType) => {
         if (user.id !== props.userId) {
             return <User id={user.id}
@@ -35,12 +47,15 @@ const UsersColumn: React.FC<UsersColumnPropsType> = (props) => {
                 followingInProcess={props.followingInProcess}
                 followed={user.followed}
                 username={user.username}
-                photo={user.profile.photos.large} startDialog={props.startDialog} addToBlacklist={props.addToBlacklist} />
+                photo={user.profile.photos.large}
+                startDialog={props.startDialog}
+                addToBlacklist={props.addToBlacklist} />
         }
     })
+
     return (
         <Container className={classes.container}>
-            {users.length === 0 ? <h3 style={{ color: '#222222' }}>There's no such users!</h3> : <div className='user-grid'>{users}</div>}
+            {users.length === 0 ? <h3 style={{ color: '#222222' }}>There's no such users!</h3> : <div className={classes.userGrid}>{users}</div>}
         </Container>
     )
 }

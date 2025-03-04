@@ -1,9 +1,5 @@
 @import '../../../../../../../index.scss';
 
-.user-grid__menuWrapper {
-    z-index: 1;
-}
-
 .user {
     display: flex;
     flex-direction: column;
@@ -13,7 +9,9 @@
     border-radius: 8px;
     background-color: #fff;
     text-align: center;
-
+    width: 100%;
+    max-width: 300px;
+    
     .avatar {
         width: 100%;
         height: auto;
@@ -32,5 +30,14 @@
     .followBtn {
         font-weight: bold;
         font-family: $Poppins;
+    }
+}
+
+@media (max-width: 600px) {
+    .user {
+        max-width: 100%;
+    }
+    .user-grid {
+        grid-template-columns: 1fr;
     }
 }
