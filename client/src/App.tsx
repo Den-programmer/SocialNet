@@ -15,6 +15,7 @@ import SideBar from './components/SideBar/SideBarContainer'
 import { actions } from './BLL/reducer-app'
 import { getSidebarWidth, getIsSidebarOpenStatus } from './BLL/selectors/sidebar-selectors'
 import { getIsLoadingSmthStatus } from './BLL/selectors/profile-selectors'
+import CookieConsent from "react-cookie-consent"
 
 interface IApp {
   Initialized: boolean
@@ -41,11 +42,23 @@ const App: React.FC<IApp> = (props) => {
   }
   return (
     <BrowserRouter><Provider store={store}>
+      <div>
+        <CookieConsent
+          location="bottom"
+          buttonText="Consent"
+          cookieName="myCookieConsent"
+          expires={150}
+          style={{ background: "#222", color: "#fff" }}
+          buttonStyle={{ background: "#4CAF50", color: "#fff" }}
+        >
+          Vi use cookies 🍪 to ensure the website is working properly.
+        </CookieConsent>
+      </div>
       {props.isAuth ? <div className="App">
         <SideBar />
         <div>
           <Header />
-          {props.isSmthLoading ? <Preloader /> : <Article isSidebarOpen={props.isSidebarOpen} drawerWidth={props.drawerWidth}/>}
+          {props.isSmthLoading ? <Preloader /> : <Article isSidebarOpen={props.isSidebarOpen} drawerWidth={props.drawerWidth} />}
           <Footer />
         </div>
       </div>
