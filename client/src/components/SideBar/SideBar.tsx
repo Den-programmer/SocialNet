@@ -32,10 +32,12 @@ const useStyles = makeStyles((theme) => ({
 const SideBar: React.FC<SideBarPropsType & RouteComponentProps> = (props) => {
   const theme = useTheme();
   const isMobile = useMediaQuery('(max-width: 1000px)');
-  const drawerWidth = isMobile ? '80vw' : `${props.sidebarWidth}px`;
+  const drawerWidth = isMobile ? '100vw' : `${props.sidebarWidth}px`;
   const classes = useStyles({ drawerWidth });
 
-  const handleDrawerClose = () => props.changeSidebarIsOpenStatus(false);
+  const handleDrawerClose = () => {
+    props.changeSidebarIsOpenStatus(false);
+  }
   const handleListClick = () => {
     setTimeout(() => {
       scrollToTop();

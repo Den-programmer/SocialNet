@@ -1,18 +1,58 @@
 .userChatProfile {
     border-left: 1px solid #EFEFEF;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
     .userProfile {
         margin: 0 auto;
         text-align: center;
+        width: 100%;
+        max-width: 300px;
+
         .avatar {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             margin: 0 auto;
-            padding: 20px 0;
+            padding: 15px 0;
         }
         .userName {
             font-weight: bold;
+            font-size: 1.2rem;
+        }
+    }
+
+    .root {
+        width: 100%;
+        max-width: 400px;
+        padding: 0 15px;
+    }
+
+    @media (max-width: 768px) {
+        border-left: none;
+        padding: 10px;
+        align-items: stretch;
+
+        .userProfile {
+            .avatar {
+                width: 60px;
+                height: 60px;
+            }
+            .userName {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    @media (max-width: 480px) {
+        .userProfile {
+            .avatar {
+                width: 50px;
+                height: 50px;
+            }
+            .userName {
+                font-size: 0.9rem;
+            }
         }
     }
 }

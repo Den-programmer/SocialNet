@@ -3,7 +3,7 @@ import React from 'react'
 import classes from './dialog.module.scss'
 import Conversation from './Conversation/conversation'
 import DialogForm from './dialogForm/dialogForm'
-import { Avatar, IconButton } from '@material-ui/core'
+import { Avatar, Container, IconButton } from '@material-ui/core'
 import InfoIcon from '@material-ui/icons/Info'
 
 interface DialogPropsType {
@@ -25,13 +25,8 @@ const Dialog: React.FC<DialogPropsType> = ({ messages, sendMessage, dialogsData,
     const checkUserPhoto = currentUser?.photos.large ? currentUser?.photos.large : currentUser?.photos.small ?
         currentUser?.photos.small : defaultUser
     return (
-        <div className={classes.dialog}>
+        <Container maxWidth="lg" className={classes.dialogContainer}>
             <div className={classes.dialog__header}>
-                <div className={classes.dialog__header_profile}>
-                    <Avatar alt="user"
-                        src={checkUserPhoto} />
-                    <h3 className={classes.dialog_userName}>{currentUser?.userName}</h3>
-                </div>
                 <div className={classes.dialog__header_panel}>
                     <IconButton onClick={() => setUserProfileMenuStatus(!isUserProfileMenuOpen)} color="inherit">
                         <InfoIcon className={classes.infoIcon} />
@@ -48,8 +43,8 @@ const Dialog: React.FC<DialogPropsType> = ({ messages, sendMessage, dialogsData,
                 {Messages.length !== 0 ? <div className={classes.messages}>{Messages}</div>
                     : <h3 className={classes.titleNoMessages}>You have not corresponded with this user yet...</h3>}
             </div>
-            <DialogForm sendMessage={sendMessage} userDialogId={userDialogId}/>
-        </div>
+            <DialogForm sendMessage={sendMessage} userDialogId={userDialogId} />
+        </Container>
     )
 }
 

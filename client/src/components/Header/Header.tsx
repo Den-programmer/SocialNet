@@ -63,12 +63,15 @@ const Header: React.FC<HeaderProps & RouteComponentProps> = (props) => {
         props.setHeaderHeight('64px')
       }
   }, [])
+  const handleClickSidebar = () => {
+    props.changeSidebarIsOpenStatus(!props.isSidebarOpen)
+  }
   return (
     <AppBar ref={header} className={props.isSidebarOpen ? classes.appBarShift : classes.appBar} color="secondary" position="fixed">
       <Container>
         <Toolbar className={classes.toolbarWrapper}>
           <Box component="div">
-            <IconButton onClick={() => props.changeSidebarIsOpenStatus(!props.isSidebarOpen)} edge="start" aria-label="menu" color="inherit" >
+            <IconButton onClick={handleClickSidebar} edge="start" aria-label="menu" color="inherit" >
               <MenuIcon />
             </IconButton>
           </Box>

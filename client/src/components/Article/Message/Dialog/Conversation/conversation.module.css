@@ -8,8 +8,8 @@
     padding:5px 10px;
     cursor:pointer;
     margin: 5px;
-    min-width: 150px;
-    max-width: 300px;
+    min-width: 50px;
+    max-width: 150px;
     word-wrap: break-word;
     text-align: center;
 }
