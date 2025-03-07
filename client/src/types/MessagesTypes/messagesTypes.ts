@@ -1,6 +1,8 @@
 export type message = {
     id: number
     messageText: string | null
+    sender: string
+    avatar: string
 }
 export type userDialogType = {
     hasNewMessages: false

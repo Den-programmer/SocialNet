@@ -5,8 +5,30 @@ import { MessagesAPI } from "../DAL/messagesApi"
 import { resultCode } from "../DAL/api"
 
 const messagesPage = {
-    dialogsData: [] as Array<userDialogType>,
-    messages: [] as Array<message>,
+    dialogsData: [
+        {
+            hasNewMessages: false,
+            id: "0",
+            lastDialogActivityDate: Date.now().toString(),
+            lastUserActivityDate: Date.now().toString(),
+            newMessagesCount: 0,
+            photos: {
+                small: null,
+                large: null
+            },
+            userName: "Denis",
+            isActive: false,
+            lastMessage: "Hello, how are you?"
+        }
+
+    ] as Array<userDialogType>,
+    messages: [
+        {
+            id: 1,
+            messageText: "This text has no meaning...",
+            sender: "user"
+        }
+    ] as Array<message>,
     userDialogId: "0",
     trim: '',
     isUserProfileMenuOpen: false
@@ -65,7 +87,7 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): MessagesPag
             return {
                 ...state,
                 trim: action.trim
-            }    
+            }
         default:
             return state
     }
