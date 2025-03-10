@@ -6,7 +6,7 @@ import { Avatar } from "@material-ui/core";
 interface ConversationPropType {
     id: number
     messageText: string | null
-    avatar: string | null
+    avatar?: string | null
 }
 
 const Conversation:React.FC<ConversationPropType> = React.memo(({ messageText, avatar }) => {

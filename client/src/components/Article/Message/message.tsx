@@ -15,7 +15,7 @@ const Messages: React.FC<IMessagesContainer> = (props) => {
     //     <DialogContainer />
     //     {isUserProfileMenuOpen && <UserChatProfileContainer />}
     // </div>
-    return <MessagesPage dialogsData={props.dialogsData} messages={props.messages} userDialogId={props.userDialogId}
+    return <MessagesPage getALLDialogs={props.getALLDialogs} dialogsData={props.dialogsData} messages={props.messages} userDialogId={props.userDialogId}
         sendMessage={props.sendMessage} setUserDialogId={props.setUserDialogId}/>
 }
 

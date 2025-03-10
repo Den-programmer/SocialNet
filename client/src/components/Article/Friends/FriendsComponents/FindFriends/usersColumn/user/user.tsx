@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent } from 'react'
+import React, { useState, MouseEvent, useEffect, useRef } from 'react'
 import './user.scss'
 import defaultUserPhoto from './img/defaultUserPhoto.webp'
 import { NavLink, Redirect } from 'react-router-dom'
@@ -18,70 +18,113 @@ interface IUser {
     addToBlacklist: (itemId: string) => void
 }
 
-// type MenuStyleType = {
-//     top: string
-//     left: string
-// } 
-
 const User: React.FC<IUser> = (props) => {
-    // const [isMenuOpen, setIsMenuOpenStatus] = useState<boolean>(false)
-    // const [styleMenu, setStyleMenu]= useState<MenuStyleType>({ top: 0 + 'px', left: 0 + 'px' })
-    const following = () => {
-        if (props.followed === false) {
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [menuStyle, setMenuStyle] = useState({ top: '0px', left: '0px' })
+    const menuRef = useRef<HTMLDivElement>(null)
+
+    const handleContextMenu = (e: MouseEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        let posX = e.clientX
+        let posY = e.clientY
+        setMenuStyle({ top: posY + 'px', left: posX + 'px' })
+        setIsMenuOpen(true)
+    };
+
+    useEffect(() => {
+        if (isMenuOpen && menuRef.current) {
+            const menuRect = menuRef.current.getBoundingClientRect()
+            let { top, left } = menuRect
+            const overflowRight = (menuRect.right > window.innerWidth)
+            const overflowBottom = (menuRect.bottom > window.innerHeight)
+
+            if (overflowRight) {
+                left = window.innerWidth - menuRect.width
+            }
+            if (overflowBottom) {
+                top = window.innerHeight - menuRect.height
+            }
+            setMenuStyle({ top: top + 'px', left: left + 'px' })
+        }
+    }, [isMenuOpen])
+
+    useEffect(() => {
+        const handleClickOutside = (event: Event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setIsMenuOpen(false)
+            }
+        }
+        document.addEventListener('click', handleClickOutside)
+        return () => {
+            document.removeEventListener('click', handleClickOutside)
+        }
+    }, [])
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsMenuOpen(false)
+        }
+        window.addEventListener('scroll', handleScroll)
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
+    }, [])
+
+    const handleChat = () => {
+        props.startDialog(props.id)
+        return <Redirect to={`/Messages/dialog/${props.id}`} />
+    }
+
+    const handleFollow = () => {
+        if (!props.followed) {
             props.followThunk(props.id)
-            props.createNotification('You\'ve got a new friend!', '/Friends', 'Friends')
+            props.createNotification("You've got a new friend!", '/Friends', 'Friends')
         } else {
             props.unfollowThunk(props.id)
-        }    
+        }
     }
-    // const callContextMenu = (e: MouseEvent<HTMLDivElement>) => {
-    //     setIsMenuOpenStatus(true) 
-    //     const realHigh = e.clientY 
-    //     const realWidth = e.clientX 
-    //     setStyleMenu({ top: realHigh + 'px', left: realWidth + 'px' })
-    //     e.preventDefault()
-    // }
 
-    // const startChatting = () => {
-    //     props.startDialog(props.id)
-    //     return <Redirect to={"/Messages/dialog/" + props.id}/>
-    // }
-
-    // document.addEventListener('click', event => {
-    //     if(event.button !== 2) {
-    //         setIsMenuOpenStatus(false)
-    //     }
-    // })
-    const userHandleClick = () => setTimeout(() => scrollToTop(), 250)
     const imageUrl = typeof props.photo === 'string'
         ? props.photo
         : props.photo instanceof File
             ? URL.createObjectURL(props.photo)
-            // @ts-ignore
-            : props.photo.data && props.photo.contentType
-            // @ts-ignore
-                ? `data:${props.photo.contentType};base64,${Buffer.from(props.photo.data).toString('base64')}`
-                : defaultUserPhoto
+            : defaultUserPhoto
+
     return (
-        <div className="user" onClick={userHandleClick}>
-            <NavLink to={"/Profile/" + props.id}>
-                {props.photo ? <img className="avatar" src={imageUrl} alt="" /> : <img className="avatar" src={defaultUserPhoto} alt="" />}
-                {/* No lazy loading here! */}
+        <div className="user" onClick={() => setTimeout(scrollToTop, 250)} onContextMenu={handleContextMenu}>
+            <NavLink to={`/Profile/${props.id}`}>
+                <img className="avatar" src={imageUrl} alt="User avatar" />
                 <h3 className="user-name">{props.username}</h3>
             </NavLink>
-            {/* {isMenuOpen && <div className="user-grid__menuWrapper">
-                <div style={styleMenu} className="contextMenu">
-                <ul className="contextMenu__list">
-                    <li onClick={startChatting} className="contextMenu__list-item">Write the message</li>
-                    <li className="contextMenu__list-item">Follow</li>
-                    <li className="contextMenu__list-item">Unfollow</li>
-                    <li className="contextMenu__list-item" onClick={() => props.addToBlacklist(props.id)}>To black list</li>
-                </ul>
-            </div>    
-            </div>} */}
-            {!props.followed ? <Button className="followBtn" variant="contained" color="default" disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Add this user to list of friends!">Following</Button> 
-            : 
-            <Button className="followBtn" variant="contained" color="primary" disabled={props.followingInProcess.some(id => id === props.id)} onClick={following} title="Delete this user from your list of friends!">Unfollow</Button>}
+            {isMenuOpen && (
+                <div 
+                    ref={menuRef} 
+                    className="contextMenu" 
+                    style={{ ...menuStyle, position: 'fixed' }}
+                >
+                    <ul className="contextMenu__list">
+                        <li onClick={handleChat} className="contextMenu__list-item">Write a message</li>
+                        <li onClick={handleFollow} className="contextMenu__list-item">
+                            {props.followed ? 'Unfollow' : 'Follow'}
+                        </li>
+                        <li 
+                            className="contextMenu__list-item" 
+                            onClick={() => props.addToBlacklist(props.id)}
+                        >
+                            To blacklist
+                        </li>
+                    </ul>
+                </div>
+            )}
+            <Button 
+                className="followBtn" 
+                variant="contained" 
+                color={props.followed ? "primary" : "default"} 
+                disabled={props.followingInProcess.includes(props.id)} 
+                onClick={handleFollow}
+            >
+                {props.followed ? 'Unfollow' : 'Follow'}
+            </Button>
         </div>
     )
 }

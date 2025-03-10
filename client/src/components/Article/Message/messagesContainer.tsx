@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Messages from "./message"
 import { connect } from 'react-redux'
 import { withAuthRedirect } from "../../../HOC/withAuthRedirect"
 import { compose } from "redux"
-import { sendMessage, actions } from '../../../BLL/reducer-messages'
+import { sendMessage, actions, getALLDialogs } from '../../../BLL/reducer-messages'
 import { RootState } from '../../../BLL/redux'
 import { getDialogsData, getMessagesTrim, getUserDialogId, getMessages } from '../../../BLL/selectors/messages-selectors'
 import { message, userDialogType } from '../../../types/MessagesTypes/messagesTypes'
@@ -30,14 +30,15 @@ export interface IMessagesContainer {
     sendMessage: (userId: string, message: string) => void
     userDialogId: string
     setUserDialogId: (userId: string) => void
+    getALLDialogs: () => void
 }
 
 const MessagesContainer: React.FC<IMessagesContainer> = (props) => {
-    return <Messages dialogsData={props.dialogsData} messages={props.messages} userDialogId={props.userDialogId}
+    return <Messages getALLDialogs={getALLDialogs} dialogsData={props.dialogsData} messages={props.messages} userDialogId={props.userDialogId}
     sendMessage={props.sendMessage} setUserDialogId={props.setUserDialogId}/>
 }
 
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, { sendMessage, setUserDialogId }),
+    connect(mapStateToProps, { sendMessage, setUserDialogId, getALLDialogs }),
     withAuthRedirect
 )(MessagesContainer)

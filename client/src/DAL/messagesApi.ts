@@ -15,7 +15,8 @@ type isMessageViewedtype = {
 
 export const MessagesAPI = {
     getALLDialogs: () => {
-        return instance.get<dialogsType>(`dialogs`).then(res => res.data)
+        debugger
+        return instance.get<dialogsType>(`api/dialogs/getAllDialogs`).then(res => res.data)
     },
     startDialog: (userId: string) => {
         return instance.put<ServerResType<{}>>(`dialogs/${userId}`).then(res => res.data)

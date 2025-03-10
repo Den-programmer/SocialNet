@@ -9,8 +9,8 @@ const messagesPage = {
         {
             hasNewMessages: false,
             id: "0",
-            lastDialogActivityDate: Date.now().toString(),
-            lastUserActivityDate: Date.now().toString(),
+            lastDialogActivityDate: new Date(),
+            lastUserActivityDate: new Date(),
             newMessagesCount: 0,
             photos: {
                 small: null,
@@ -18,9 +18,10 @@ const messagesPage = {
             },
             userName: "Denis",
             isActive: false,
-            lastMessage: "Hello, how are you?"
+            lastMessage: "Hello, how are you?",
+            createdAt: new Date(),
+            updatedAt: new Date()
         }
-
     ] as Array<userDialogType>,
     messages: [
         {
@@ -113,6 +114,7 @@ type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionType
 
 export const getALLDialogs = (): ThunkType => async (dispatch) => {
     try {
+        debugger
         const data = await MessagesAPI.getALLDialogs()
         dispatch(actions.setDialogs(data))
         return data

@@ -5,16 +5,18 @@ export type message = {
     avatar: string
 }
 export type userDialogType = {
-    hasNewMessages: false
+    hasNewMessages: boolean
     id: string
-    lastDialogActivityDate: string
-    lastUserActivityDate: string 
+    lastDialogActivityDate: Date
+    lastUserActivityDate: Date
     newMessagesCount: number
     photos: {
-        small: null | string,
-        large: null | string
-    }
+        small: any
+        large: any
+    },
     userName: string
     isActive: boolean
-    lastMessage?: string | null
+    lastMessage?: string
+    createdAt: Date,
+    updatedAt: Date
 }

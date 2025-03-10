@@ -3,8 +3,8 @@ import { Card, CardContent, TextField, IconButton, Avatar, List, ListItem, ListI
 import { Send, AccountCircle } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { IMessagesContainer } from "./messagesContainer";
-import Conversation from "./Dialog/Conversation/conversation";
-import NoDialogs from "./Dialogs/Users/NoDialogs/noDialogs";
+import Conversation from "../../common/Conversation/conversation";
+import NoDialogs from "../../common/NoDialogs/noDialogs";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -79,15 +79,19 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const MessagesPage: React.FC<IMessagesContainer> = ({ dialogsData, userDialogId, sendMessage, messages, setUserDialogId }) => {
+const MessagesPage: React.FC<IMessagesContainer> = ({ dialogsData, userDialogId, sendMessage, messages, setUserDialogId, getALLDialogs }) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    getALLDialogs()
+  }, [])
 
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (messagesEndRef.current) {
-    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
   const avatar = dialogsData.find((dialog) => dialog.id === userDialogId)?.photos.small || null;
@@ -96,7 +100,7 @@ const MessagesPage: React.FC<IMessagesContainer> = ({ dialogsData, userDialogId,
       key={msg.id}
       className={`${classes.messageWrapper} ${msg.sender === "user" ? classes.userMessageWrapper : classes.botMessageWrapper}`}
     >
-      <Conversation key={msg.id} avatar={avatar} id={msg.id} messageText={msg.messageText}/>
+      <Conversation key={msg.id} avatar={avatar} id={msg.id} messageText={msg.messageText} />
     </div>
   ))
 
@@ -104,7 +108,7 @@ const MessagesPage: React.FC<IMessagesContainer> = ({ dialogsData, userDialogId,
     <ListItem button key={dialog.id} onClick={() => setUserDialogId(dialog.id)}>
       <ListItemAvatar>
         <Avatar>
-          {dialog.photos.small ? <img src={dialog.photos.small} alt="avatar" /> : <AccountCircle />}
+          {dialog.photos?.small ? <img src={dialog.photos?.small} alt="avatar" /> : <AccountCircle />}
         </Avatar>
       </ListItemAvatar>
       <ListItemText primary={dialog.userName} />
@@ -112,29 +116,29 @@ const MessagesPage: React.FC<IMessagesContainer> = ({ dialogsData, userDialogId,
   ))
 
   return (
-  <Card className={classes.root}>
-    <div className={classes.sidebar}>
-      <List>
-        {dialogs.length > 0 ? dialogs : <div className={classes.noDialogsContainer}><NoDialogs /></div>}
-      </List>
-    </div>
-    <CardContent className={classes.messagesContainer}>
-      {messages.length > 0 ? Messages : <div className={classes.noMessages}>No messages</div>}
-      <div ref={messagesEndRef} />
-    </CardContent>
-    <div className={classes.inputContainer}>
-      <TextField
-        className={classes.input}
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Type a message..."
-        onKeyPress={(e) => e.key === "Enter" && sendMessage(userDialogId, input)}
-      />
-      <IconButton onClick={() => sendMessage(userDialogId, input)}>
-        <Send />
-      </IconButton>
-    </div>
-  </Card>
+    <Card className={classes.root}>
+      <div className={classes.sidebar}>
+        <List>
+          {dialogs.length > 0 ? dialogs : <div className={classes.noDialogsContainer}><NoDialogs /></div>}
+        </List>
+      </div>
+      <CardContent className={classes.messagesContainer}>
+        {messages.length > 0 ? Messages : <div className={classes.noMessages}>No messages</div>}
+        <div ref={messagesEndRef} />
+      </CardContent>
+      <div className={classes.inputContainer}>
+        <TextField
+          className={classes.input}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Type a message..."
+          onKeyPress={(e) => e.key === "Enter" && sendMessage(userDialogId, input)}
+        />
+        <IconButton onClick={() => sendMessage(userDialogId, input)}>
+          <Send />
+        </IconButton>
+      </div>
+    </Card>
   );
 }
 
