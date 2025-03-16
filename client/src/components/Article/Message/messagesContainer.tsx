@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Messages from "./message"
 import { connect } from 'react-redux'
 import { withAuthRedirect } from "../../../HOC/withAuthRedirect"
@@ -34,7 +34,7 @@ export interface IMessagesContainer {
 }
 
 const MessagesContainer: React.FC<IMessagesContainer> = (props) => {
-    return <Messages getALLDialogs={getALLDialogs} dialogsData={props.dialogsData} messages={props.messages} userDialogId={props.userDialogId}
+    return <Messages getALLDialogs={props.getALLDialogs} dialogsData={props.dialogsData} messages={props.messages} userDialogId={props.userDialogId}
     sendMessage={props.sendMessage} setUserDialogId={props.setUserDialogId}/>
 }
 

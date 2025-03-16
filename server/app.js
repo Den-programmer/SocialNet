@@ -25,7 +25,7 @@ app.use('/api/news', require('./routes/news.routes.js'))
 app.use('/api/notifications', require('./routes/notifications.routes.js'))
 app.use('/api/images', require('./routes/images.routes.js'))
 
-app.use('/api/messages', require('./routes/messages.routes.js'))
+// app.use('/api/messages', require('./routes/messages.routes.js'))
 app.use('/api/dialogs', require('./routes/dialogs.routes.js'))
 
 

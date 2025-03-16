@@ -157,7 +157,7 @@ export const requestUsers = (pageSize: number, currentPage: number, term: string
         return data
     } catch (error: any) {
         console.error(error)
-        alert(`Something's gone wrong, error status: 500`)
+        // alert(`Something's gone wrong, error status: 500`)
     }
 }
 
@@ -180,7 +180,7 @@ export const requestFollowing = (pageSize: number, currentPage: number, term: st
         return friends
     } catch (error: any) {
         console.error(error)
-        alert(`Something's gone wrong, error status: 500`)
+        // alert(`Something's gone wrong, error status: 500`)
     }
 } 
 
@@ -193,7 +193,7 @@ export const followThunk = (userId: string): ThunkType => async (dispatch) => {
         }
         dispatch(actions.toggleFollowingInProcess(false, userId))
     } catch (error: any) {
-        alert(`Something's gone wrong, error status: ${error.status}`)
+        // alert(`Something's gone wrong, error status: ${error.status}`)
     }
 }
 export const unfollowThunk = (userId: string): ThunkType => async (dispatch) => {
@@ -205,7 +205,7 @@ export const unfollowThunk = (userId: string): ThunkType => async (dispatch) => 
         }
         dispatch(actions.toggleFollowingInProcess(false, userId))
     } catch (error: any) {
-        alert(`Something's gone wrong, error status: ${error.status}`)
+        // alert(`Something's gone wrong, error status: ${error.status}`)
     }
 }
 

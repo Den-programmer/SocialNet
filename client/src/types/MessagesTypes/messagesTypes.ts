@@ -7,6 +7,7 @@ export type message = {
 export type userDialogType = {
     hasNewMessages: boolean
     id: string
+    participants: Array<string>
     lastDialogActivityDate: Date
     lastUserActivityDate: Date
     newMessagesCount: number

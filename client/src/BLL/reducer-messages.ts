@@ -5,34 +5,12 @@ import { MessagesAPI } from "../DAL/messagesApi"
 import { resultCode } from "../DAL/api"
 
 const messagesPage = {
-    dialogsData: [
-        {
-            hasNewMessages: false,
-            id: "0",
-            lastDialogActivityDate: new Date(),
-            lastUserActivityDate: new Date(),
-            newMessagesCount: 0,
-            photos: {
-                small: null,
-                large: null
-            },
-            userName: "Denis",
-            isActive: false,
-            lastMessage: "Hello, how are you?",
-            createdAt: new Date(),
-            updatedAt: new Date()
-        }
-    ] as Array<userDialogType>,
-    messages: [
-        {
-            id: 1,
-            messageText: "This text has no meaning...",
-            sender: "user"
-        }
-    ] as Array<message>,
+    dialogsData: [] as Array<userDialogType>,
+    messages: [] as Array<message>,
     userDialogId: "0",
     trim: '',
-    isUserProfileMenuOpen: false
+    isUserProfileMenuOpen: false,
+    isMessagesLoading: false
 }
 
 type MessagesPageType = typeof messagesPage;
@@ -47,6 +25,11 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): MessagesPag
             return {
                 ...state,
                 messages: [...state.messages, newMessage]
+            }
+        case  `sn/messagesPage/ADD-DIALOG`:
+            return {
+                ...state,
+                dialogsData: [...state.dialogsData, action.dialog]
             }
         case `sn/messagesPage/SET-DIALOGS`:
             const dialogsData = action.dialogs.map((item: userDialogType, index) => {
@@ -100,12 +83,14 @@ type ActionTypes = InferActionTypes<typeof actions>
 
 export const actions = {
     addMessage: (messageText: string) => ({ type: `sn/messagesPage/ADD-MESSAGE`, messageText } as const),
+    addDialog: (dialog: userDialogType) => ({ type: `sn/messagesPage/ADD-DIALOG`, dialog } as const),
     setMessages: (messages: Array<message>) => ({ type: `sn/messagesPage/SET-MESSAGES`, messages } as const),
     setDialogs: (dialogs: Array<userDialogType>) => ({ type: `sn/messagesPage/SET-DIALOGS`, dialogs } as const),
     setUserDialogId: (userId: string) => ({ type: `sn/messagesPage/SET-USER-DIALOG-ID`, userId } as const),
     setUserActiveStatus: (userId: string) => ({ type: `sn/messagesPage/SET-USER-ACTIVE-STATUS`, userId } as const),
     setUserProfileMenuStatus: (status: boolean) => ({ type: `sn/messagesPage/SET_USER_PROFILE_MENU_STATUS`, status } as const),
-    setMessagesTrim: (trim: string) => ({ type: `sn/messagesPage/SET_MESSAGES_TRIM`, trim } as const)
+    setMessagesTrim: (trim: string) => ({ type: `sn/messagesPage/SET_MESSAGES_TRIM`, trim } as const),
+    setIsMessagesLoading: (status: boolean) => ({ type: `sn/messagesPage/SET-IS-MESSAGES-LOADING`, status } as const)
 }
 
 /* Thunk Creators! */
@@ -114,20 +99,26 @@ type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionType
 
 export const getALLDialogs = (): ThunkType => async (dispatch) => {
     try {
-        debugger
+        dispatch(actions.setIsMessagesLoading(true))
         const data = await MessagesAPI.getALLDialogs()
         dispatch(actions.setDialogs(data))
-        return data
+        dispatch(actions.setIsMessagesLoading(false))
     } catch (e) {
+        console.error(e)
+        dispatch(actions.setIsMessagesLoading(false))
         alert(`Something's gone wrong, error status: 500`)
     }
 }
 export const startDialog = (userId: string): ThunkType => async (dispatch) => {
     try {
+        dispatch(actions.setIsMessagesLoading(true))
         const data = await MessagesAPI.startDialog(userId)
         if (data.resultCode === resultCode.Success) {
-            dispatch(getALLDialogs())
+            dispatch(actions.addDialog(data.data))
+            dispatch(actions.setUserDialogId(userId))
+            dispatch(actions.setIsMessagesLoading(false))
         } else {
+            dispatch(actions.setIsMessagesLoading(false))
             alert(`Some error!!!!!!!`)
         }
     } catch (e) {

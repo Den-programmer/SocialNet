@@ -9,5 +9,7 @@ const router = Router()
 router.use(verifyToken)
 
 router.get('/getAllDialogs', DialogsController.getAllDialogs)
+router.post('/addDialog/:userId', DialogsController.addDialog)
+router.delete('/deleteDialog', DialogsController.deleteDialog)
 
 module.exports = router;

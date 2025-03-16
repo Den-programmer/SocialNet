@@ -13,13 +13,13 @@ type isMessageViewedtype = {
     isViewed: boolean
 }
 
+
 export const MessagesAPI = {
     getALLDialogs: () => {
-        debugger
         return instance.get<dialogsType>(`api/dialogs/getAllDialogs`).then(res => res.data)
     },
     startDialog: (userId: string) => {
-        return instance.put<ServerResType<{}>>(`dialogs/${userId}`).then(res => res.data)
+        return instance.post<ServerResType<userDialogType>>(`api/dialogs/addDialog/${userId}`).then(res => res.data)
     },
     getDialogMessages: (userId: string) => {
         return instance.get<dialogMessagesResType>(`dialogs/${userId}/messages`).then(res => res.data)
