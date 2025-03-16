@@ -18,13 +18,9 @@ type MessagesPageType = typeof messagesPage;
 const reducerMessages = (state = messagesPage, action: ActionTypes): MessagesPageType => {
     switch (action.type) {
         case `sn/messagesPage/ADD-MESSAGE`:
-            const newMessage = {
-                id: state.messages.length + 1,
-                messageText: action.messageText
-            } as message
             return {
                 ...state,
-                messages: [...state.messages, newMessage]
+                messages: [...state.messages, action.message]
             }
         case  `sn/messagesPage/ADD-DIALOG`:
             return {
@@ -37,7 +33,7 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): MessagesPag
                 return { ...item, isActive: false }
             })
             const currentDialog = dialogsData.filter((item: userDialogType) => item.isActive && true).find((item: userDialogType) => item)
-            let currentDialogId = currentDialog !== undefined ? currentDialog.id : "0"
+            let currentDialogId = currentDialog !== undefined ? currentDialog._id : "0"
             return {
                 ...state,
                 userDialogId: currentDialogId,
@@ -58,7 +54,7 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): MessagesPag
                 ...state,
                 userDialogId: action.userId,
                 dialogsData: state.dialogsData.map((item: userDialogType) => {
-                    if (action.userId === item.id) return { ...item, isActive: true }
+                    if (action.userId === item._id) return { ...item, isActive: true }
                     return { ...item, isActive: false }
                 })
             }
@@ -82,7 +78,7 @@ const reducerMessages = (state = messagesPage, action: ActionTypes): MessagesPag
 type ActionTypes = InferActionTypes<typeof actions>
 
 export const actions = {
-    addMessage: (messageText: string) => ({ type: `sn/messagesPage/ADD-MESSAGE`, messageText } as const),
+    addMessage: (message: message) => ({ type: `sn/messagesPage/ADD-MESSAGE`, message } as const),
     addDialog: (dialog: userDialogType) => ({ type: `sn/messagesPage/ADD-DIALOG`, dialog } as const),
     setMessages: (messages: Array<message>) => ({ type: `sn/messagesPage/SET-MESSAGES`, messages } as const),
     setDialogs: (dialogs: Array<userDialogType>) => ({ type: `sn/messagesPage/SET-DIALOGS`, dialogs } as const),
@@ -140,7 +136,7 @@ export const sendMessage = (userId: string, message: string): ThunkType => async
         debugger
         const data = await MessagesAPI.sendDialogMessages(userId, message)
         debugger
-        dispatch(actions.addMessage(message))
+        // dispatch(actions.addMessage(message))
     } catch (e) {
         alert(`Something's gone wrong, error status: 500`)
     }

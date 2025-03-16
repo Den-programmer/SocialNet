@@ -94,18 +94,19 @@ const MessagesPage: React.FC<IMessagesContainer> = ({ dialogsData, userDialogId,
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
-  const avatar = dialogsData.find((dialog) => dialog.id === userDialogId)?.photos.small || null;
+  const avatar = dialogsData.find((dialog) => dialog._id === userDialogId)?.photos.small || null;
   const Messages = messages.map((msg) => (
     <div
-      key={msg.id}
+      key={msg._id}
       className={`${classes.messageWrapper} ${msg.sender === "user" ? classes.userMessageWrapper : classes.botMessageWrapper}`}
     >
-      <Conversation key={msg.id} avatar={avatar} id={msg.id} messageText={msg.messageText} />
+      <Conversation key={msg._id} avatar={avatar} id={msg._id} messageText={msg.messageText} />
     </div>
   ))
 
-  const dialogs = dialogsData.map((dialog) => (
-    <ListItem button key={dialog.id} onClick={() => setUserDialogId(dialog.id)}>
+  const dialogs = dialogsData.map((dialog) => {
+    debugger
+    return <ListItem button key={dialog.userName} onClick={() => setUserDialogId(dialog._id)}>
       <ListItemAvatar>
         <Avatar>
           {dialog.photos?.small ? <img src={dialog.photos?.small} alt="avatar" /> : <AccountCircle />}
@@ -113,7 +114,7 @@ const MessagesPage: React.FC<IMessagesContainer> = ({ dialogsData, userDialogId,
       </ListItemAvatar>
       <ListItemText primary={dialog.userName} />
     </ListItem>
-  ))
+  })
 
   return (
     <Card className={classes.root}>

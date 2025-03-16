@@ -1,12 +1,12 @@
 export type message = {
-    id: number
+    _id: number
     messageText: string | null
     sender: string
     avatar: string
 }
 export type userDialogType = {
     hasNewMessages: boolean
-    id: string
+    _id: string
     participants: Array<string>
     lastDialogActivityDate: Date
     lastUserActivityDate: Date
