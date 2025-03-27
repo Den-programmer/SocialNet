@@ -1,11 +1,29 @@
 const { catchRes, StandartRes } = require('../routes/responses/responses.js')
+const Message = require('../models/message.js')
+const cloudinary = require('cloudinary').v2
 
 class MessagesController {
     async addMessage(req, res) {
         try {
-            const { sender, receiver, content } = req.body;
-            const newMessage = new Message({ sender, receiver, content });
+            const { id: receiverId } = req.params;
+            const { content, image } = req.body;
+            const senderId = req.user
+
+            let imagerUrl;
+            if(image) {
+                const uploadResponse = await cloudinary.uploader.upload(image)
+                imageUrl = uploadResponse.secure_url
+            }
+
+            const newMessage = new Message({
+                sender: senderId,
+                receiver: receiverId,
+                content,
+                image: imageUrl
+            });
+
             await newMessage.save();
+
             res.status(201).json(new StandartRes(0, 'Message sent successfully', {data: newMessage}));
         } catch (error) {
             res.status(500).json({ error: 'Failed to send message' });

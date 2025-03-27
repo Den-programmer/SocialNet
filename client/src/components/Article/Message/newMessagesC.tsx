@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, TextField, IconButton, Avatar, List, ListItem, ListItemAvatar, ListItemText } from "@material-ui/core";
-import { Send, AccountCircle } from "@material-ui/icons";
+import { Send, AccountCircle, Collections } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { IMessagesContainer } from "./messagesContainer";
 import Conversation from "../../common/Conversation/conversation";
@@ -60,6 +60,7 @@ const useStyles = makeStyles(() => ({
     alignItems: "center",
     borderTop: "1px solid #ccc",
     padding: 8,
+    position: "relative",
   },
   input: {
     flexGrow: 1,
@@ -76,37 +77,80 @@ const useStyles = makeStyles(() => ({
     fontWeight: 500,
     fontFamily: 'Lato, sans-serif',
     fontStyle: "italic"
+  },
+  listItem: {
+    backgroundColor: "#FFF"
+  },
+  activeListItem: {
+    backgroundColor: "#F5F5F5"
+  },
+  fileInput: {
+    opacity: 0,
+    position: "absolute",
+    width: 0,
+    height: 0,
+    overflow: "hidden",
+  },
+  fileInputContent: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 60,
+    height: 80,
+    marginRight: 8,
+    position: "absolute"
+  },
+  messageImage: {
+    maxWidth: "100%",
+    maxHeight: "100%",
+    borderRadius: "25%",
   }
 }));
 
 const MessagesPage: React.FC<IMessagesContainer> = ({ dialogsData, userDialogId, sendMessage, messages, setUserDialogId, getALLDialogs }) => {
   const classes = useStyles();
-
+  const fileInput = useRef<HTMLInputElement>(null);
   useEffect(() => {
     getALLDialogs()
   }, [])
 
   const [input, setInput] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const handleFileChange = (file: File | null) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImageUrl(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  }
+
+
+  useEffect(() => {
+    handleFileChange(file);
+  }, [file]);
 
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
-  const avatar = dialogsData.find((dialog) => dialog._id === userDialogId)?.photos.small || null;
   const Messages = messages.map((msg) => (
     <div
       key={msg._id}
       className={`${classes.messageWrapper} ${msg.sender === "user" ? classes.userMessageWrapper : classes.botMessageWrapper}`}
     >
-      <Conversation key={msg._id} avatar={avatar} id={msg._id} messageText={msg.messageText} />
+      <Conversation key={msg._id} id={msg._id} messageText={msg.messageText} />
     </div>
   ))
 
   const dialogs = dialogsData.map((dialog) => {
-    debugger
-    return <ListItem button key={dialog.userName} onClick={() => setUserDialogId(dialog._id)}>
+    return <ListItem
+      className={dialog._id === userDialogId ? classes.activeListItem : classes.listItem}
+      button key={dialog.userName} onClick={() => setUserDialogId(dialog._id)}>
       <ListItemAvatar>
         <Avatar>
           {dialog.photos?.small ? <img src={dialog.photos?.small} alt="avatar" /> : <AccountCircle />}
@@ -128,14 +172,27 @@ const MessagesPage: React.FC<IMessagesContainer> = ({ dialogsData, userDialogId,
         <div ref={messagesEndRef} />
       </CardContent>
       <div className={classes.inputContainer}>
+        <div className={classes.fileInputContent}>
+          <img className={classes.messageImage} src={imageUrl} alt="" /> {/* Payload too much */}
+        </div>
         <TextField
           className={classes.input}
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Type a message..."
-          onKeyPress={(e) => e.key === "Enter" && sendMessage(userDialogId, input)}
+          placeholder={file ? "":"Type a message..."}
+          onKeyPress={(e) => e.key === "Enter" && sendMessage(userDialogId, input, imageUrl)}
         />
-        <IconButton onClick={() => sendMessage(userDialogId, input)}>
+
+        <input accept="image/*" id="messageAsPictureFileInput" 
+        onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
+        ref={fileInput} className={classes.fileInput} 
+        type="file" />
+        <label htmlFor="messageAsPictureFileInput">
+          <IconButton component="span"> 
+            <Collections />
+          </IconButton>
+        </label>
+        <IconButton onClick={() => sendMessage(userDialogId, input, imageUrl)}>
           <Send />
         </IconButton>
       </div>

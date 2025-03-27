@@ -27,7 +27,7 @@ const mapStateToProps = (state: RootState) => ({
 export interface IMessagesContainer {
     messages: Array<message>
     dialogsData: Array<userDialogType>
-    sendMessage: (userId: string, message: string) => void
+    sendMessage: (userId: string, message?: string, image?: string) => void
     userDialogId: string
     setUserDialogId: (userId: string) => void
     getALLDialogs: () => void

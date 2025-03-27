@@ -2,7 +2,7 @@ export type message = {
     _id: number
     messageText: string | null
     sender: string
-    avatar: string
+    image: string
 }
 export type userDialogType = {
     hasNewMessages: boolean

@@ -8,8 +8,8 @@ const router = Router()
 
 router.use(verifyToken)
 
-router.get('/getAllDialogs', DialogsController.getAllDialogs)
-router.post('/addDialog/:userId', DialogsController.addDialog)
-router.delete('/deleteDialog', DialogsController.deleteDialog)
+router.get('/getAllDialogs', verifyToken, DialogsController.getAllDialogs)
+router.post('/addDialog/:userId', verifyToken, DialogsController.addDialog)
+router.delete('/deleteDialog', verifyToken, DialogsController.deleteDialog)
 
 module.exports = router;

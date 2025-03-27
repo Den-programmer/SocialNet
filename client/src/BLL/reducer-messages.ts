@@ -130,13 +130,13 @@ export const getDialogMessages = (userId: string): ThunkType => async (dispatch)
         alert(`Something's gone wrong, error status: 500`)
     }
 }
-
-export const sendMessage = (userId: string, message: string): ThunkType => async (dispatch) => {
+ 
+export const sendMessage = (userId: string, message?: string, image?: string): ThunkType => async (dispatch) => {
     try {
         debugger
-        const data = await MessagesAPI.sendDialogMessages(userId, message)
+        const data = await MessagesAPI.sendDialogMessages(userId, message, image)
         debugger
-        // dispatch(actions.addMessage(message))
+        dispatch(actions.addMessage(data.data))
     } catch (e) {
         alert(`Something's gone wrong, error status: 500`)
     }

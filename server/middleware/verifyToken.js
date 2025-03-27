@@ -11,8 +11,15 @@ const verifyToken = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const decoded = jwt.verify(token, process.env.JWT_SECRET, { expiresIn: '7d' })
     req.user = decoded.userId
+    
+    res.cookie("token", token, {
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true, // prevents XSS attacks
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict' // prevents CSRF attacks
+    })
     next()
   } catch (error) {
     return res.status(403).json({ message: 'Invalid token' })
