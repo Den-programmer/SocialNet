@@ -27,7 +27,7 @@
     "date-fns": "^2.30.0",
     "dotenv": "^16.4.5",
     "gh-pages": "^2.2.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^9.0.0",
     "react": "^16.14.0",
     "react-cookie-consent": "^9.0.0",
     "react-dom": "^16.14.0",
