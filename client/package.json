@@ -22,10 +22,10 @@
     "react-parallax-tilt": "^1.7.221",
     "react-redux": "^7.2.9",
     "react-router-dom": "^5.3.4",
+    "react-scripts": "^3.4.0",
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2",
-    "reselect": "^4.1.8",
-    "react-scripts": "3.4.0"
+    "reselect": "^4.1.8"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -64,7 +64,7 @@
     "@types/vanilla-tilt": "^1.6.2",
     "@typescript-eslint/parser": "^6.21.0",
     "dotenv": "^16.4.5",
-    "eslint": "^6.6.0",
+    "eslint": "^6.8.0",
     "gh-pages": "^2.2.0",
     "node-sass": "^4.14.1",
     "sass-loader": "^10.5.2",
