@@ -1,107 +1,93 @@
 import React, { useEffect, useRef } from 'react'
-import { AppBar, Container, Toolbar, IconButton, Box, Button } from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import EmailIcon from '@material-ui/icons/Email'
-import NotificationsIcon from '@material-ui/icons/Notifications'
-import { NavLink, RouteComponentProps } from 'react-router-dom'
+import { Layout, Button, Space } from 'antd'
+import { MenuOutlined, MailOutlined, NotificationOutlined } from '@ant-design/icons'
+import { useLocation, useNavigate, NavLink } from 'react-router-dom'
+import styles from './Header.module.scss'
+import { selectIsSidebarOpenStatus, selectSidebarWidth } from '../../BLL/selectors/sidebar-selectors'
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
+import { selectIsAuthStatus } from '../../BLL/selectors/auth-selectors'
+import { authActions } from '../../BLL/reducer-auth'
+import { useLogoutMutation } from '../../DAL/authApi'
+import { appActions } from '../../BLL/reducer-app'
+import { sidebarActions } from '../../BLL/reducer-sidebar'
 
-interface HeaderProps {
-  isSidebarOpen: boolean
-  isAuth: boolean
-  drawerWidth: number
-  setLastUrl: (url: string) => void
-  logout(): void
-  changeSidebarIsOpenStatus: (status: boolean) => void
-  setHeaderHeight: (height: string) => void
-}
+const { Header: AntHeader } = Layout
 
-const Header: React.FC<HeaderProps & RouteComponentProps> = (props) => {
-  const useStyles = makeStyles((theme: Theme) => createStyles({
-    searchInput: {
-      width: '320px'
-    },
-    headerIcons: {
-      color: '#FFFFFF',
-      margin: '0px 15px'
-    },
-    toolbarWrapper: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between'
-    },
-    logButton: {
-      fontWeight: 'bold'
-    },
-    appBar: {
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    appBarShift: {
-      width: `calc(100% - ${props.drawerWidth}px)`,
-      marginLeft: props.drawerWidth,
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-  }))
-  const classes = useStyles()
-  const header = useRef<HTMLDivElement>()
-  const logout = () => {
-    props.setLastUrl(props.location.pathname)
-    props.logout()
-  }
+const Header: React.FC = ({}) => {
+  const dispatch = useAppDispatch()
+  const headerRef = useRef<HTMLDivElement>(null)
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const isSidebarOpen = useAppSelector(selectIsSidebarOpenStatus)
+  const isAuth = useAppSelector(selectIsAuthStatus)
+  const drawerWidth = useAppSelector(selectSidebarWidth)
+
+  const { changeSidebarIsOpenStatus } = sidebarActions
+  const { setHeaderHeight } = appActions
+  const { setLastUrl } = authActions
+
+  const [logout, { isLoading: isLogoutPending }] = useLogoutMutation()
 
   useEffect(() => {
-      let node = header.current
-      if (node && node.clientHeight !== undefined) {
-        props.setHeaderHeight(`${node.clientHeight}px`);
+    const node = headerRef.current
+    if (node && node.clientHeight !== undefined) {
+      dispatch(setHeaderHeight(`${node.clientHeight}px`))
     } else {
-        props.setHeaderHeight('64px')
-      }
+      dispatch(setHeaderHeight('64px'))
+    }
   }, [])
-  const handleClickSidebar = () => {
-    props.changeSidebarIsOpenStatus(!props.isSidebarOpen)
+
+  const handleSidebarToggle = () => {
+    dispatch(changeSidebarIsOpenStatus(!isSidebarOpen))
   }
+
+  const handleLogout = async () => {
+    dispatch(setLastUrl(location.pathname))
+    await logout().unwrap()
+    localStorage.removeItem('token')
+    localStorage.removeItem('userData')
+    navigate('/login')
+  }
+
   return (
-    <AppBar ref={header} className={props.isSidebarOpen ? classes.appBarShift : classes.appBar} color="secondary" position="fixed">
-      <Container>
-        <Toolbar className={classes.toolbarWrapper}>
-          <Box component="div">
-            <IconButton onClick={handleClickSidebar} edge="start" aria-label="menu" color="inherit" >
-              <MenuIcon />
-            </IconButton>
-          </Box>
-          <Box component='div'>
-            <NavLink className={classes.headerIcons} to="/Messages">
-              <IconButton color="inherit" edge="start">
-                <EmailIcon />
-              </IconButton>
-            </NavLink>
-            <NavLink className={classes.headerIcons} to="/Notifications">
-              <IconButton color="inherit" edge="start">
-                <NotificationsIcon />
-              </IconButton>
-            </NavLink>
-            {props.isAuth ? <NavLink onClick={logout} to="/login">
-              <Button className={classes.logButton} variant="contained" color="primary">
-                Logout
+    <AntHeader
+      ref={headerRef}
+      className={styles.header}
+      style={{
+        width: isSidebarOpen ? `calc(100% - ${drawerWidth}px)` : '100%',
+        marginLeft: isSidebarOpen ? `${drawerWidth}px` : 0,
+      }}
+    >
+      <div className={styles.toolbarWrapper}>
+        <Button
+          type="text"
+          icon={<MenuOutlined />}
+          onClick={handleSidebarToggle}
+          className={styles.menuButton}
+        />
+        <Space>
+          <NavLink to="/Messages" className={styles.iconLink}>
+            <MailOutlined />
+          </NavLink>
+          <NavLink to="/Notifications" className={styles.iconLink}>
+            <NotificationOutlined />
+          </NavLink>
+          {isAuth ? (
+            <Button disabled={isLogoutPending} onClick={handleLogout} type="primary" className={styles.logButton}>
+              Logout
+            </Button>
+          ) : (
+            <NavLink to="/login">
+              <Button disabled={isLogoutPending} type="primary" className={styles.logButton}>
+                Login
               </Button>
-            </NavLink> :
-              <NavLink to='/login'>
-                <Button className={classes.logButton} variant="contained" color="primary">
-                  Login
-              </Button>
-              </NavLink>}
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+            </NavLink>
+          )}
+        </Space>
+      </div>
+    </AntHeader>
   )
 }
-
 
 export default Header

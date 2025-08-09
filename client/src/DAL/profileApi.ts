@@ -1,76 +1,178 @@
-import axios from 'axios'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { baseQuery, ServerResType } from './api'
 import { contactsType, postType, profileType } from '../types/ProfileTypes/profileTypes'
-import { instance } from './api'
+import imageCompression from 'browser-image-compression'
 
-export const ProfileAPI = {
-    getUsersProfile: (userId: string) => {
-        return instance.get(`api/profile/getProfile/${userId}`).then(res => {
-            return res.data
-        })
-    },
-    getUsername: (userId: string) => {
-        return instance.get(`api/username/getUsername/${userId}`).then(res => {
-            return res.data
-        })
-    },
-    updateUsername: (userId: string, username: string) => {
-        return instance.put(`api/username/saveUsername`, { userId, username }).then(rs => {
-            return rs.data
-        })
-    },
-    getUsersPosts: (userId: string) => {
-        return instance.get(`api/posts/getPosts/${userId}`).then(res => {
-            return res.data
-        })
-    },
-    createPost: (userId: string, newPostTitle: string, newPostInformat: string, postPhoto: File) => {
-        const formData = new FormData()
-        formData.append('userId', userId)
-        formData.append('newPostTitle', newPostTitle)
-        formData.append('newPostInformat', newPostInformat)
-        formData.append('postPhoto', postPhoto)
-        return instance.post(`api/posts/createPost`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).then(rs => {
-            return rs.data
-        })
-    },
-    // getStatus: (userId:string)  => {
-    //     return instance.get<string>(`profile/status/${userId}`).then(response => {
-    //         return response.data
-    //     })
-    // },
-    // updateStatus: (status:string) => {
-    //     return instance.put<string>(`profile/status`, { status }).then(response =>{
-    //         return response.data
-    //     })
-    // },
-    updateContacts: (contacts: contactsType, userId: string) => {
-        return instance.put(`api/profile/contacts/updateContacts`, { contacts, userId }).then(res => {
-            return res.data
-        }).catch(error => {
-            console.error("Error updating contacts:", error)
-            throw error 
-        })
-    },
-    updateAboutMe: (aboutMe: string, userId: string) => {
-        return instance.put(`api/profile/aboutMe/updateAboutMe`, { aboutMe, userId }).then(res => {
-            return res.data
-        })
-    },
-    // getIsUserFollowed: (userId: string | null) => {
-    //     return instance.get(`follow/${userId}`)
-    // },
-    getGender: (userId: string) => {
-        return instance.get(`api/gender/getGender/${userId}`).then(res => {
-            return res.data
-        })
-    },
-    updateGender: (gender: string, userId: string) => {
-        return instance.put(`api/gender/updateGender`, { gender, userId }).then(res => {
-            return res.data
-        })
-    }
+export type postPayload = {
+  userId: string | undefined
+  newPostTitle: string
+  newPostInformat: string
+  postPhoto: File
 }
+
+export type photosType = {
+  small: string | null
+  large: string | null
+}
+
+export const profileApi = createApi({
+  reducerPath: 'profileApi',
+  baseQuery,
+  tagTypes: ['Posts'],
+  endpoints: (builder) => ({
+    getUsersProfile: builder.query<profileType, string>({
+      query: (userId) => `api/profile/getProfile/${userId}`,
+      transformResponse: (response: ServerResType<profileType>) => response.data
+    }),
+    getUsername: builder.query<string, string>({
+      query: (userId) => `api/username/getUsername/${userId}`,
+      transformResponse: (response: ServerResType<{ username: string }>) => response.data.username
+    }),
+    updateUsername: builder.mutation<string, { userId: string; username: string }>({
+      query: ({ userId, username }) => {
+        return {
+          url: `api/username/saveUsername`,
+          method: 'PUT',
+          body: { userId, username }
+        }
+      },
+      transformResponse: (response: ServerResType<{ username: string }>) => response.data.username
+    }),
+    getUsersPosts: builder.query<postType[], string>({
+      query: (userId) => `api/posts/getPosts/${userId}`,
+      providesTags: (result, error, userId) => [{ type: 'Posts', id: userId }],
+      transformResponse: (response: ServerResType<postType[]>) => response.data
+    }),
+    createPost: builder.mutation<postType, postPayload>({
+      async queryFn({ userId, newPostTitle, newPostInformat, postPhoto }, _queryApi, _extraOptions, baseQuery) {
+        try {
+          const compressed = await imageCompression(postPhoto, {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1080,
+            useWebWorker: true
+          })
+
+          const userDataString = localStorage.getItem('userData')
+          const userIdfromStorage = userDataString ? JSON.parse(userDataString).userId : ''
+
+          const formData = new FormData()
+          formData.append('userId', userIdfromStorage || userId || '')
+          formData.append('newPostTitle', newPostTitle)
+          formData.append('newPostInformat', newPostInformat)
+          formData.append('postPhoto', compressed)
+
+          const token = localStorage.getItem('token') || ''
+
+          const response = await fetch('api/posts/createPost', {
+            method: 'POST',
+            body: formData,
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+
+          const json = await response.json()
+
+          if (!response.ok) {
+            return { error: { status: response.status, data: json } }
+          }
+
+          return { data: json.data as postType }
+        } catch (error) {
+          return { error: { status: 500, data: 'Compression or network error' } }
+        }
+      },
+      invalidatesTags: (result, error, { userId }) => [{ type: 'Posts', id: userId }]
+    }),
+    updateContacts: builder.mutation<contactsType, { contacts: contactsType; userId: string }>({
+      query: ({ contacts, userId }) => ({
+        url: `api/profile/contacts/updateContacts`,
+        method: 'PUT',
+        body: { contacts, userId }
+      }),
+      transformResponse: (response: ServerResType<{ contacts: contactsType }>) => response.data.contacts
+    }),
+    updateAboutMe: builder.mutation<string, { aboutMe: string; userId: string }>({
+      query: ({ aboutMe, userId }) => ({
+        url: `api/profile/aboutMe/updateAboutMe`,
+        method: 'PUT',
+        body: { aboutMe, userId }
+      }),
+      transformResponse: (response: ServerResType<{ aboutMe: string }>) => response.data.aboutMe
+    }),
+    getGender: builder.query<string, string>({
+      query: (userId) => `api/gender/getGender/${userId}`,
+      transformResponse: (response: ServerResType<{ gender: string }>) => response.data.gender
+    }),
+    updateGender: builder.mutation<string, { gender: string; userId: string }>({
+      query: ({ gender, userId }) => ({
+        url: `api/gender/updateGender`,
+        method: 'PUT',
+        body: { gender, userId }
+      }),
+      transformResponse: (response: ServerResType<{ gender: string }>) => response.data.gender
+    }),
+    setUserPhoto: builder.mutation<{ photos: photosType }, { photo: File; userId: string }>({
+      async queryFn({ photo, userId }) {
+        try {
+          const compressed = await imageCompression(photo, {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1080,
+            useWebWorker: true
+          })
+
+          const formData = new FormData()
+          formData.append('image', compressed)
+          formData.append('userId', userId)
+
+          const token = localStorage.getItem('token') || ''
+
+          const response = await fetch('api/avatar/updateAvatar', {
+            method: 'PUT',
+            body: formData,
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+
+          const json = await response.json()
+
+          if (!response.ok) {
+            return { error: { status: response.status, data: json } }
+          }
+
+          return { data: json.data as { photos: photosType } }
+        } catch (error) {
+          return { error: { status: 500, data: 'Compression or network error' } }
+        }
+      }
+    })
+  })
+})
+
+export const {
+  useGetUsersProfileQuery,
+  useLazyGetUsernameQuery,
+  useGetUsernameQuery,
+  useUpdateUsernameMutation,
+  useGetUsersPostsQuery,
+  useCreatePostMutation,
+  useUpdateContactsMutation,
+  useUpdateAboutMeMutation,
+  useGetGenderQuery,
+  useLazyGetGenderQuery,
+  useUpdateGenderMutation,
+  useSetUserPhotoMutation
+} = profileApi
+
+
+// getStatus: (userId:string)  => {
+//     return instance.get<string>(profile/status/${userId}).then(response => {
+//         return response.data
+//     })
+// },
+// updateStatus: (status:string) => {
+//     return instance.put<string>(profile/status, { status }).then(response =>{
+//         return response.data
+//     })
+// },

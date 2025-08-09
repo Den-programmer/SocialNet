@@ -1,9 +1,6 @@
-@import '../../../../../index.scss';
-
 .biography {
    .title {
        text-transform: uppercase;
-       font-family: $Poppins;
        font-size: 1.5rem;
        text-align: center;
    }
@@ -36,7 +33,6 @@
        .bioTableItem__value_second_style {
            color: #222222;
            font-size: 12px;
-           font-family: $Lato;
        }
    }
 }

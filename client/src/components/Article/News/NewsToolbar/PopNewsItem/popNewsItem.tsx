@@ -1,7 +1,7 @@
 import React from 'react'
 import classes from './popNewsItem.module.scss'
-import { faEye } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faEye } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 interface IPopNewsItem {
     id: number

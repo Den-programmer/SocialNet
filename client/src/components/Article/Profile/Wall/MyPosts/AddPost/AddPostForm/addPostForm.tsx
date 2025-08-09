@@ -11,7 +11,7 @@ interface IAddPostForm {
     onSubmit: (data: AddPostFD) => void;
 }
 
-const noPostPhoto = process.env.REACT_APP_CLOUDINARY_NO_PHOTO_URL
+const noPostPhoto = import.meta.env.VITE_CLOUDINARY_NO_PHOTO_URL
 
 const AddPostForm: React.FC<IAddPostForm> = ({ setIsAddPostWindowOpen, getPostImg, postPhoto, postPhotoError, onSubmit }) => {
     const { register, handleSubmit, formState: { errors } } = useForm<AddPostFD>();

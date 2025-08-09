@@ -1,100 +1,40 @@
 import React from 'react'
-import { Container, Theme, makeStyles, createStyles, Button, useMediaQuery } from '@material-ui/core'
-import { useForm } from 'react-hook-form'
+import { Form, Input, Button, Row, Col } from 'antd'
+import { useAppDispatch } from '../../../../../../hooks/hooks'
+import { setUsersTerm } from '../../../../../../BLL/reducer-friends'
 import { scrollToTop } from '../../../../../../utils/helpers/functions/function-helpers'
+import { useLazyGetUsersQuery } from '../../../../../../DAL/usersApi'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        container: {
-            display: 'flex',
-            justifyContent: 'center',
-            margin: '15px auto',
-            width: '100%',
-        },
-        form: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            width: '100%',
-        },
-        textfieldWrapper: {
-            margin: '10px',
-            width: '100%',
-            maxWidth: '800px',
-        },
-        textfield: {
-            padding: '10px',
-            width: '100%',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            fontSize: '16px',
-            backgroundColor: '#f9f9f9',
-            '&:focus': {
-                borderColor: theme.palette.primary.main,
-                outline: 'none',
-                boxShadow: `0 0 5px ${theme.palette.primary.main}`,
-            }
-        },
-        button: {
-            marginTop: '10px',
-            width: '150px',
-        },
-        textfieldContainer: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-around',
-            width: '100%',
-            margin: '10px',
-        }
-    })
-);
-
-
-interface ISearchNewFriends {
-    requestUsers: (pageSize: number, currentPage: number, term: string) => void
-    pageSize: number
-    currentPage: number
+interface SearchNewFriendsProps {
+   pageSize: number
+   currentPage: number
+   term: string
 }
 
-type SearchValues = {
-    term: string
-}
+const SearchNewFriends: React.FC<SearchNewFriendsProps> = ({ pageSize, currentPage, term }) => {
+  const dispatch = useAppDispatch() 
+  const onFinish = (values: { term: string }) => {
+    dispatch(setUsersTerm(values.term))
+    setTimeout(() => scrollToTop(400), 250)
+  }
+  const [triggerUsers] = useLazyGetUsersQuery()
 
-const SearchNewFriends: React.FC<ISearchNewFriends> = (props) => {
-    const classes = useStyles()
-    const { register, handleSubmit, formState: { isSubmitting } } = useForm<SearchValues>()
-
-    const isSmallScreen = useMediaQuery('(max-width:600px)');
-
-    const onSubmit = (values: SearchValues) => {
-        props.requestUsers(props.pageSize, props.currentPage, values.term)
-    }
-
-    const searchAnimmation = () => {
-        setTimeout(() => scrollToTop(400), 250)
-    }
-
-    return (
-        <Container className={classes.container}>
-            <form onSubmit={handleSubmit(onSubmit)} className={classes.form} style={{ flexDirection: isSmallScreen ? 'column' : 'row' }}>
-                <div className={classes.textfieldContainer}>
-                    <div className={classes.textfieldWrapper}>
-                        <input
-                            {...register('term', { required: true })}
-                            className={classes.textfield}
-                            type="text"
-                            placeholder="Search for friends"
-                        />
-                    </div>
-
-                    <Button onClick={searchAnimmation} color="default" variant="contained" type="submit" disabled={isSubmitting}>
-                        Search
-                    </Button>
-                </div>
-            </form>
-        </Container>
-    )
+  return (
+    <Row justify="center" style={{ margin: '16px 0' }}>
+      <Col xs={22} sm={20} md={16} lg={12} xl={10}>
+        <Form layout="inline" onFinish={onFinish} initialValues={{ term }}>
+          <Form.Item name="term" rules={[{ required: true, message: 'Please enter a search term' }]} style={{ flexGrow: 1 }}>
+            <Input placeholder="Search for friends" allowClear />
+          </Form.Item>
+          <Form.Item>
+            <Button onClick={() => triggerUsers({pageSize, currentPage, term})} type="primary">
+              Search
+            </Button>
+          </Form.Item>
+        </Form>
+      </Col>
+    </Row>
+  )
 }
 
 export default SearchNewFriends

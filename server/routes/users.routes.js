@@ -1,11 +1,16 @@
-const { Router } = require('express')
-const UsersController = require('../controllers/UsersController')
-const { verifyToken } = require('../middleware/verifyToken')
+import { Router } from 'express'
+import UsersController from '../controllers/UsersController.js'
+import { verifyToken } from '../middleware/verifyToken.js'
+
 const router = Router()
 
 router.get('/getUsers/:pageSize?/:currentPage?/:term?', UsersController.getUsers)
-router.post('/followUser/:userId', verifyToken, UsersController.followUser)
-router.delete('/unfollowUser/:userId', verifyToken, UsersController.unfollowUser)
-router.get('/getFriends', verifyToken, UsersController.getFriends)
 
-module.exports = router
+router.use(verifyToken)
+
+router.post('/followUser/:userId', UsersController.followUser)
+router.delete('/unfollowUser/:userId', UsersController.unfollowUser)
+router.get('/isFollowed/:userId', UsersController.isUserFollowed)
+router.get('/getFriends', UsersController.getFriends)
+
+export default router

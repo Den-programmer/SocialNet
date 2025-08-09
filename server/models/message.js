@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+import { Schema, model } from 'mongoose';
 
 const messageSchema = new Schema({
     sender: { 
@@ -16,4 +16,4 @@ const messageSchema = new Schema({
     timestamp: { type: Date, default: Date.now }
 });
 
-module.exports = model('Message', messageSchema);
+export default model('Message', messageSchema);

@@ -1,15 +1,14 @@
-@import '../../../../../index.scss';
+@use '../../../../../utils/assets/variables';
 
-.menuItemTemplate {
+@mixin menuItemTemplate {
     font-size: 12px;
-    font-family: $Lato;
     font-weight: bold;
     cursor: pointer;
 }
-.menuItemActiveTemplate {
+@mixin menuItemActiveTemplate {
     transition: all .3s ease;
-    color: $chosen_color;
-    border-bottom: 1px solid $chosen_color;
+    color: variables.$chosen_color;
+    border-bottom: 1px solid variables.$chosen_color;
     padding: 5px;
     border-radius: 5px;
     background-color: #fff;
@@ -34,7 +33,6 @@
 
 .editPhotoContent__text {
     padding: 0px 10px;
-    font-family: $Lato;
 }
 
 .menu {
@@ -44,12 +42,12 @@
     align-items: center;
     justify-content: space-around;
     .menuItem {
-        @extend .menuItemTemplate;
+        @include menuItemTemplate;
         color: #222222;
-        &:hover { @extend .menuItemActiveTemplate; }
+        &:hover { @include menuItemActiveTemplate; }
     }
     .menuItemActive {
-        @extend .menuItemTemplate;
-        @extend .menuItemActiveTemplate;
+        @include menuItemTemplate;
+        @include menuItemActiveTemplate;
     }
 }

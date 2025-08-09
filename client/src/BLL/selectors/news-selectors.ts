@@ -1,17 +1,17 @@
 import { RootState } from '../redux'
 
-export const getNews = (state: RootState) => {
+export const selectNews = (state: RootState) => {
     return state.newsPage.news
 }
 
-export const getPopularNews = (state: RootState) => {
+export const selectPopularNews = (state: RootState) => {
     return state.newsPage.popularNews
 }
 
-export const getNewsPageId = (state: RootState) => {
+export const selectNewsPageId = (state: RootState) => {
     return state.newsPage.newsPageId
 }
 
-export const getIsNewsLoadingStatus = (state: RootState) => {
+export const selectIsNewsLoadingStatus = (state: RootState) => {
     return state.newsPage.isLoading
 }

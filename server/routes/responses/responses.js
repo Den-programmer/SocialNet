@@ -1,4 +1,4 @@
-class StandartRes {
+export class StandartRes {
     constructor(resultCode, message, data = {}) {
         this.resultCode = resultCode
         this.message = message
@@ -15,7 +15,5 @@ class StandartRes {
     }
 }
 
-const catchRes = new StandartRes(1, "Something is gone wrong...")
+export const catchRes = new StandartRes(1, "Something is gone wrong...")
 
-exports.StandartRes = StandartRes
-exports.catchRes = catchRes

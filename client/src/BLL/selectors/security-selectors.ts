@@ -1,5 +1,5 @@
 import { RootState } from "../redux"
 
-export const getSecurityCaptcha = (state: RootState) => {
+export const selectSecurityCaptcha = (state: RootState) => {
     return state.auth.captchaUrl
 }

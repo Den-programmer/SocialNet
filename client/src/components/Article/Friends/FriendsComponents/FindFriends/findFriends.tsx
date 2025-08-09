@@ -1,40 +1,42 @@
 import React from 'react'
 import SearchNewfriends from './SearchNewFriends/searchNewFriends'
-import UsersColumnContainer from './usersColumn/usersColumnContainer'
-import { Pagination } from '@material-ui/lab'
+import UsersColumn from './usersColumn/usersColumn'
+import { Pagination } from 'antd'
 import { scrollToTop } from '../../../../../utils/helpers/functions/function-helpers'
+import { useAppDispatch, useAppSelector, useAuthRedirect } from '../../../../../hooks/hooks'
+import { changePage } from '../../../../../BLL/reducer-friends'
+import { selectUsersFilter, selectUsersInf } from '../../../../../BLL/selectors/users-selectors'
 
-interface IFindFriends {
-    usersInf: {
-        isFetching: boolean
-        totalCount: number
-        pageSize: number
-        currentPage: number
-    }
-    requestUsers: (pageSize: number, currentPage: number, term: string) => void
-    changePage: (page: number) => void
+const FindFriends: React.FC = () => {
+  const dispatch = useAppDispatch()
+  const usersInf = useAppSelector(selectUsersInf)
+  const { term } = useAppSelector(selectUsersFilter)
+  useAuthRedirect()
+
+  const handleChangePage = (page: number) => {
+    dispatch(changePage(page))
+    setTimeout(() => scrollToTop(400), 250)
+  }
+
+  return (
+    <div>
+      <SearchNewfriends
+        pageSize={usersInf.pageSize}
+        currentPage={usersInf.currentPage}
+        term={term}
+      />
+      <UsersColumn />
+      <div style={{ display: 'flex', justifyContent: 'center', margin: "24px 0" }}>
+        <Pagination
+          current={usersInf.currentPage}
+          pageSize={usersInf.pageSize}
+          total={usersInf.totalCount}
+          onChange={handleChangePage}
+          showSizeChanger={false}
+        />
+      </div>
+    </div>
+  )
 }
-
-const FindFriends: React.FC<IFindFriends> = (props) => {
-    const handleChangePage = (event: React.ChangeEvent<unknown>, page: number) => {
-        props.changePage(page)
-        setTimeout(() => scrollToTop(400), 250)
-    }
-    return (
-        <div>
-            <SearchNewfriends pageSize={props.usersInf.pageSize} currentPage={props.usersInf.currentPage} requestUsers={props.requestUsers} />
-            <UsersColumnContainer />
-            <div className="d-flex justify-center">
-                <Pagination variant="outlined"
-                    shape="rounded"
-                    page={props.usersInf.currentPage}
-                    count={Math.ceil(props.usersInf.totalCount)}
-                    onChange={handleChangePage}
-                    color="secondary" />
-            </div>
-        </div >
-    )
-}
-
 
 export default FindFriends

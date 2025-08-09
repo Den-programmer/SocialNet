@@ -1,24 +1,50 @@
 import React, { RefObject } from 'react'
 import AddNewPhotoComponent from '../../../../../common/AddNewPhotoComponent'
+import { useAddNotificationMutation } from '../../../../../../DAL/notificationApi'
+import { useSetUserPhotoMutation } from '../../../../../../DAL/profileApi'
+import { useAppSelector } from '../../../../../../hooks/hooks'
+import { selectAuthorizedUserId } from '../../../../../../BLL/selectors/auth-selectors'
 
 interface IChangeAvatar {
-    error: string | null
-    setUserPhoto: (photo: File) => void
-    createNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
-    setIsModalOpenStatus: React.Dispatch<React.SetStateAction<boolean>>
+  setIsModalOpenStatus: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ChangeAvatar: React.FC<IChangeAvatar> = ({ error, setUserPhoto, setIsModalOpenStatus, createNotification }) => {
-    const getUserPhoto = (ref: RefObject<HTMLInputElement>) => {
-        const node = ref.current
-        if (node?.files) {
-            const file = node.files[0]
-            setUserPhoto(file)
-        }
+const ChangeAvatar: React.FC<IChangeAvatar> = ({ setIsModalOpenStatus }) => {
+  const [createNotification] = useAddNotificationMutation()
+  const [setUserPhoto, { isLoading, error }] = useSetUserPhotoMutation()
+
+  const authorizedUserId = useAppSelector(selectAuthorizedUserId)
+
+  const getUserPhoto = async (ref: RefObject<HTMLInputElement>) => {
+    const node = ref.current
+    if (node?.files && node.files.length > 0) {
+      const file = node.files[0]
+      let userDataLS = localStorage.getItem('userData')
+      let userId = userDataLS ? JSON.parse(userDataLS).userId : ''
+      try {
+        await setUserPhoto({
+          photo: file,
+          userId:userId || authorizedUserId
+        }).unwrap()
+
+        await createNotification({
+          title: 'Your avatar has been changed successfully!',
+          pageUrl: '/Profile',
+          itemType: 'Profile'
+        })
+
         setIsModalOpenStatus(false)
-        !error && createNotification('Your avatar has been changed successfully!', '/Profile', 'Profile')
+      } catch {}
     }
-    return <AddNewPhotoComponent error={error} onChangeFileInputFunction={getUserPhoto}/>
+  }
+
+  return (
+    <AddNewPhotoComponent
+      error={error}
+      isLoading={isLoading}
+      onChangeFileInputFunction={getUserPhoto}
+    />
+  )
 }
 
 export default ChangeAvatar

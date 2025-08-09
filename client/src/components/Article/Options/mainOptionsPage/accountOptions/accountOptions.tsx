@@ -1,141 +1,119 @@
 import React, { useState } from 'react'
-import ChangeUserName from './ChangeUserName/changeUserName'
-import { contactsType } from '../../../../../types/ProfileTypes/profileTypes'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import { EditOutlined } from '@ant-design/icons'
+import { Card } from 'antd'
 import OptionsTitle from './OptionsTitle/optionsTitle'
-import EditIcon from '@material-ui/icons/Edit'
-import ChangeGender from './ChangeGender/changeGender'
-import ChangeBiography from './ChangeBiography/changeBiography'
-import ChangeMembersColumnStatus from './ChangeMembersColumnStatus/changeMembersColumnStatus'
-
-export interface IChangeOptions {
-    userId: string
-    property: string
-    userName: string
-    contacts: contactsType
-    gender: string
-    aboutMe: string
-    isMembersColumnOpen: boolean
-    accountOptionsMenu: Array<IAccountOption>
-    changeUserName: (userId: string, username: string) => void
-    setGender: (gender: string, userId: string) => void
-    createNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'Friends' | 'News') => void
-    setChangesToAccountOptionsMenu: (accountOptions: Array<IAccountOption>) => void
-    saveAboutMe: (aboutMe: string) => void
-    changeMembersColumnOpenedStatus: (status: boolean) => void
-}
-
-interface IAccountOptions {
-    userId: string
-    messageError: string
-    photo: any
-    userName: string
-    gender: string
-    aboutMe: string
-    contacts: contactsType
-    isMembersColumnOpen: boolean
-    setUserPhotoThunk: (photo: File) => void
-    setUsername: (userId: string, username: string) => void
-    setGender: (gender: string, userId: string) => void
-    createNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'Friends' | 'News') => void
-    saveAboutMe: (aboutMe: string) => void
-    changeMembersColumnOpenedStatus: (status: boolean) => void
-}
+import { selectAuthorizedUserId } from '../../../../../BLL/selectors/auth-selectors'
+import { useAppDispatch, useAppSelector } from '../../../../../hooks/hooks'
+import { selectContacts, selectGender, selectIsMembersColumnOpenedStatus, selectUsersName, selectUsersProfile } from '../../../../../BLL/selectors/profile-selectors'
+import { useUpdateAboutMeMutation, useUpdateGenderMutation, useUpdateUsernameMutation } from '../../../../../DAL/profileApi'
+import { useAddNotificationMutation } from '../../../../../DAL/notificationApi'
+import { profileActions } from '../../../../../BLL/reducer-profile'
+import { contactsType } from '../../../../../types/ProfileTypes/profileTypes'
+import { optionsMenuData } from '../../../../../data/options/optionsMenuData'
 
 export interface IAccountOption {
-    id: number
-    property: string
-    value: string | null
-    isEditIconActive: boolean
-    isEdit: boolean
-    editContent: any
+  id: number
+  property: string
+  value: string | null
+  isEditIconActive: boolean
+  isEdit: boolean
+  editContent: any
 }
 
-export const useEditIconStyles = makeStyles((theme: Theme) => createStyles({
-    editIcon: {
-        padding: '0 10px',
-        color: '#4DCADD'
-    },
-    errorIcon: {
-        color: '#D40000',
-        padding: '0 20px' 
-    }
-}))
+export interface IChangeOptions {
+  userId: string
+  changeMembersColumnOpenedStatus: (status: boolean) => void
+  isMembersColumnOpen: boolean
+  createNotification: (arg: { title: string, pageUrl: string, itemType: 'Profile' | 'Messages' | 'News' | 'Friends' }) => void
+  saveAboutMe: (arg: { aboutMe: string, userId: string }) => void
+  aboutMe: string
+  setGender: (arg: { gender: string, userId: string }) => void
+  gender: string
+  userName: string
+  contacts: contactsType
+  property: string
+  changeUserName: (arg: { userId: string, username: string }) => void
+}
 
-const AccountOptions: React.FC<IAccountOptions> = (props) => {
-    const classes = useEditIconStyles()
-    const [accountOptionsMenu, setChangesToAccountOptionsMenu] = useState<Array<IAccountOption>>([
-        {
-            id: 1, 
-            property: 'Nickname',
-            value: props.userName,
-            isEditIconActive: false,
-            isEdit: false,
-            editContent: ChangeUserName
-        },
-        {
-            id: 2,
-            property: 'Gender',
-            value: props.gender,
-            isEditIconActive: false,
-            isEdit: false,
-            editContent: ChangeGender
-        },
-        {
-            id: 3,
-            property: 'About Me',
-            value: props.aboutMe,
-            isEditIconActive: false,
-            isEdit: false,
-            editContent: ChangeBiography
-        },
-        {
-            id: 4,
-            property: 'Members column',
-            value: props.isMembersColumnOpen ? 'opened' : 'closed',
-            isEditIconActive: false,
-            isEdit: false,
-            editContent: ChangeMembersColumnStatus
-        }
-    ])
-    const menuItems = accountOptionsMenu.map((item: IAccountOption) => {
-        const handleHover = (itemId: number, status: boolean) => {
-            let array = accountOptionsMenu.map((item: IAccountOption) => {
-                if (itemId === item.id && status === true) return { ...item, isEditIconActive: true }
-                return { ...item, isEditIconActive: false }
-            })
-            setChangesToAccountOptionsMenu(array)
-        }
-        const handleClick = (itemId: number) => {
-            let array = accountOptionsMenu.map((item: IAccountOption) => {
-                if (itemId === item.id) return { ...item, isEdit: true }
-                return { ...item, isEdit: false }
-            })
-            setChangesToAccountOptionsMenu(array)
-        }
-        return (
-            <div onClick={() => handleClick(item.id)} onMouseEnter={() => handleHover(item.id, true)} onMouseLeave={() => handleHover(item.id, false)} key={item.id} className="options_itemWrapper">
-                <div className="options_item">
-                    {item.isEdit ? <item.editContent userId={props.userId} changeMembersColumnOpenedStatus={props.changeMembersColumnOpenedStatus} isMembersColumnOpen={props.isMembersColumnOpen} createNotification={props.createNotification} saveAboutMe={props.saveAboutMe} aboutMe={props.aboutMe} setGender={props.setGender} gender={props.gender} userName={props.userName} contacts={props.contacts} property={item.property} 
-                    setChangesToAccountOptionsMenu={setChangesToAccountOptionsMenu} accountOptionsMenu={accountOptionsMenu} 
-                    changeUserName={props.setUsername}/> :
-                        <div className="options_item_content">
-                            <h5 className="options_item_content_property">{item.property}</h5>
-                            <p className="options_item_content_value">{item.value}</p>
-                        </div>}
-                    {item.isEditIconActive && <EditIcon className={classes.editIcon} />}
-                </div>
-            </div>
-        )
-    })
-    return (
-        <div className="options">
-            <OptionsTitle title="Profile Options" />
-            <div>
-                {menuItems}
-            </div>
-        </div>
+const AccountOptions: React.FC = () => {
+  const userId = useAppSelector(selectAuthorizedUserId)
+  const userName = useAppSelector(selectUsersName) || 'Your name'
+  const gender = useAppSelector(selectGender)
+  const isMembersColumnOpen = useAppSelector(selectIsMembersColumnOpenedStatus)
+  const contacts = useAppSelector(selectContacts)
+  const aboutMe = useAppSelector(selectUsersProfile).aboutMe
+
+  const [changeUserName, { }] = useUpdateUsernameMutation()
+  const [setGender] = useUpdateGenderMutation()
+  const [saveAboutMe] = useUpdateAboutMeMutation()
+  const [createNotification] = useAddNotificationMutation()
+  const { changeMembersColumnOpenedStatus } = profileActions
+
+  const dispatch = useAppDispatch()
+
+  const [accountOptionsMenu, setOptions] = useState<IAccountOption[]>(optionsMenuData(userName, gender, aboutMe, isMembersColumnOpen))
+
+  const handleHover = (id: number, status: boolean) => {
+    setOptions((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, isEditIconActive: status } : { ...item, isEditIconActive: false }
+      )
     )
+  }
+
+  const handleClick = (id: number) => {
+    setOptions((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, isEdit: true } : { ...item, isEdit: false }))
+    )
+  }
+  return (
+    <Card title={<OptionsTitle title="Profile Options" />} variant={"borderless"}>
+      {accountOptionsMenu.map((item) => {
+        const EditComponent = item.editContent
+        return (
+          <div
+            key={item.id}
+            onClick={() => handleClick(item.id)}
+            onMouseEnter={() => handleHover(item.id, true)}
+            onMouseLeave={() => handleHover(item.id, false)}
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '12px 0',
+              borderBottom: '1px solid #f0f0f0',
+              cursor: 'pointer'
+            }}
+          >
+            {item.isEdit ? (
+              <EditComponent
+                userId={userId}
+                changeMembersColumnOpenedStatus={(status: boolean) => dispatch(changeMembersColumnOpenedStatus(status))}
+                isMembersColumnOpen={isMembersColumnOpen}
+                createNotification={createNotification}
+                saveAboutMe={saveAboutMe}
+                aboutMe={aboutMe}
+                setGender={setGender}
+                gender={gender}
+                userName={userName}
+                contacts={contacts}
+                property={item.property}
+                changeUserName={changeUserName}
+              />
+            ) : (
+              <>
+                <div>
+                  <h5 style={{ marginBottom: 4 }}>{item.property}</h5>
+                  <p style={{ margin: 0 }}>{item.value}</p>
+                </div>
+                {item.isEditIconActive && <EditOutlined style={{ color: '#4DCADD' }} />}
+              </>
+            )}
+          </div>
+        )
+      })}
+    </Card>
+  )
 }
 
 export default AccountOptions

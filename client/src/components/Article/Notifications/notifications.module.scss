@@ -1,5 +1,3 @@
-@import '../../../index.scss';
-
 $border: 1px solid #E3E3E3;
 $row-height: 50px;
 
@@ -20,7 +18,6 @@ $row-height: 50px;
 
         .headerColumn {
             text-transform: uppercase;
-            font-family: $Poppins;
             font-size: 14px;
             font-weight: bold;
         }
@@ -47,13 +44,11 @@ $row-height: 50px;
 
             .notificationContent {
                 font-size: 16px;
-                font-family: $Poppins;
                 color: #222;
             }
 
             .notificationType {
                 font-size: 14px;
-                font-family: $Lato;
                 color: #555;
                 text-align: center;
             }

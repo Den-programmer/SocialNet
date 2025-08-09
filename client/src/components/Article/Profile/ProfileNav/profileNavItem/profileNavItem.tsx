@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
-import { ListItem, ListItemText } from '@material-ui/core'
-import { useProfileNavStyles } from '../profileNav'
+import { Menu, Typography } from 'antd'
 
 interface IProfileNavItem {
     id: number
@@ -13,19 +12,43 @@ interface IProfileNavItem {
     choosePage: (LinkId: number) => void
 }
 
+const { Text } = Typography
+
 const ProfileNavItem: React.FC<IProfileNavItem> = (props) => {
-    const classes = useProfileNavStyles()
     useEffect(() => {
         if (props.path === props.location) {
             props.choosePage(props.id)
             props.changeProfileNavItemChosenStatus(props.id)
         }
-    }, [])
+    }, [props.location, props.path, props.choosePage, props.changeProfileNavItemChosenStatus, props.id])
+
     return (
-        <NavLink onClick={() => props.changeProfileNavItemChosenStatus(props.id)} key={props.id} className={props.isChosen ? classes.navListLinkActive : classes.navListLink} to={props.path}>
-            <ListItem className={props.isChosen ? classes.navListItemActive : classes.navListItem}>
-                <ListItemText>{props.title}</ListItemText>
-            </ListItem>
+        <NavLink 
+            to={props.path} 
+            onClick={() => props.changeProfileNavItemChosenStatus(props.id)} 
+            key={props.id}
+        >
+            <Menu.Item 
+                key={props.id} 
+                style={{
+                    fontWeight: 'bolder',
+                    textTransform: 'uppercase',
+                    fontFamily: 'Poppins, sans-serif',
+                    fontSize: '14px',
+                    borderBottom: props.isChosen ? '2px solid #4dcadd' : 'none',
+                    color: props.isChosen ? '#4dcadd' : '#222222',
+                    backgroundColor: 'transparent',
+                    padding: '0 20px'
+                }}
+            >
+                <Text 
+                    style={{
+                        color: props.isChosen ? '#4dcadd' : '#222222'
+                    }}
+                >
+                    {props.title}
+                </Text>
+            </Menu.Item>
         </NavLink>
     )
 }

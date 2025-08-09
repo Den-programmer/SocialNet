@@ -1,6 +1,6 @@
-@import '../../../../../index.scss';
+@use "../../../../../utils//assets/mixins";
 
-.containerTemplate {
+@mixin containerTemplate {
     height: 100%;
     margin: 40px auto;
     width: 95%;
@@ -10,11 +10,11 @@
 }
 
 .container {
-    @extend .containerTemplate;
+    @include containerTemplate;
     border: 4px dashed rgb(190, 190, 190);
 }
 .containerActive {
-    @extend .containerTemplate;
+    @include containerTemplate;
     border: 4px dashed rgb(200, 200, 200);
     opacity: 0.9;
 }
@@ -30,7 +30,7 @@
         color: #222;
     }
     .hidden_textfield {
-        @extend .hidden_textfield;
+        @include mixins.hidden_textfield;
     }
 }
 
@@ -43,9 +43,8 @@
         font-size: 15px;
         padding: 20px;
         color: #333333;
-        font-family: $OpenSans;
     }
     .hidden_textfield {
-        @extend .hidden_textfield;
+        @include mixins.hidden_textfield;
     }
 }

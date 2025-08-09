@@ -1,44 +1,39 @@
-import React, { useEffect } from 'react'
 import Friend from './Friend/friend'
 import NoFriendsComponent from './NOfriendsComponent/NOfriendsComponent'
-import { FriendsFilter, UsersInfType, userType } from '../../../../../types/FriendsType/friendsType'
-import { Container, makeStyles, Theme, createStyles } from '@material-ui/core'
+import {
+  useGetFriendsQuery,
+  useFollowUserMutation,
+  useUnfollowUserMutation
+} from '../../../../../DAL/usersApi'
+import { useAuthRedirect } from '../../../../../hooks/hooks'
 
-interface IFriendsByButton {
-    friends: Array<userType>
-    usersInf: UsersInfType
-    filter: FriendsFilter
-    followThunk: (userId: string) => void
-    unfollowThunk: (userId: string) => void
-    requestFollowing: (pageSize: number, currentPage: number, term: string) => void
-}
+const FriendsByButton = () => {
+  useAuthRedirect()
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-    container: {
-        minHeight: '50vh'
-    }
-}))
+  const { data: friendsData, isLoading } = useGetFriendsQuery()
+  const [followUser] = useFollowUserMutation()
+  const [unfollowUser] = useUnfollowUserMutation()
 
-const FriendsByButton: React.FC<IFriendsByButton> = (props) => {
-    const classes = useStyles()
-    useEffect(() => {
-        props.requestFollowing(props.usersInf.pageSize, props.usersInf.currentPage, props.filter.term)
-    }, [props.usersInf.currentPage])
-    const friends = props.friends.map((f: userType) => {
-        return <Friend id={f.id}
-            key={f.id}
-            username={f.username}
-            avatar={f.profile.photos.large}
-            followed={f.followed}
-            follow={props.followThunk}
-            unfollow={props.unfollowThunk} />
-    })
-  
-    return (
-        <Container className={classes.container}>
-            {friends.length !== 0 ? friends : <NoFriendsComponent />}
-        </Container>
-    )
+  if (isLoading) return null
+  if (!friendsData) return <NoFriendsComponent />
+
+  const friends = friendsData.following.map(friend => (
+    <Friend
+      key={friend.id}
+      id={friend.id}
+      username={friend.username}
+      avatar={friend.profile.photos.large}
+      followed={true}
+      follow={followUser}
+      unfollow={unfollowUser}
+    />
+  ))
+
+  return (
+    <div style={{ minHeight: '50vh' }}>
+      {friends.length > 0 ? friends : <NoFriendsComponent />}
+    </div>
+  )
 }
 
 export default FriendsByButton

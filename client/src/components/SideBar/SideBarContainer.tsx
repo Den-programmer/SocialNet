@@ -1,24 +1,34 @@
-import { connect } from 'react-redux'
+import React from 'react'
 import SideBar from './SideBar'
-import { getSideBarNavLinks, getIsSidebarOpenStatus, getSidebarWidth } from '../../BLL/selectors/sidebar-selectors'
-import { RootState } from '../../BLL/redux'
-import { actions } from '../../BLL/reducer-sidebar'
-import { actions as actions2 } from '../../BLL/reducer-profile'
-import { compose } from 'redux'
-import { withRouter } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
+import {
+    selectSideBarNavLinks,
+    selectIsSidebarOpenStatus,
+    selectSidebarWidth,
+} from '../../BLL/selectors/sidebar-selectors'
+import { sidebarActions } from '../../BLL/reducer-sidebar'
+import { profileActions } from '../../BLL/reducer-profile'
 
-const { changeSidebarIsOpenStatus, choosePage } = actions
-const { changeProfileNavItemChosenStatus } = actions2
+const SideBarContainer: React.FC = () => {
+    const dispatch = useAppDispatch()
 
-const mapStateToProps = (state: RootState) => ({
-    navLinks: getSideBarNavLinks(state),
-    isSidebarOpen: getIsSidebarOpenStatus(state),
-    sidebarWidth: getSidebarWidth(state)
-})
+    const navLinks = useAppSelector(selectSideBarNavLinks)
+    const isSidebarOpen = useAppSelector(selectIsSidebarOpenStatus)
+    const sidebarWidth = useAppSelector(selectSidebarWidth)
 
-const SideBarContainer = compose<React.ComponentType>(
-    withRouter,
-    connect(mapStateToProps, { changeSidebarIsOpenStatus, choosePage, changeProfileNavItemChosenStatus })
-)(SideBar)
+    const { changeSidebarIsOpenStatus, choosePage } = sidebarActions
+    const { changeProfileNavItemChosenStatus } = profileActions
+
+    return (
+        <SideBar
+            navLinks={navLinks}
+            isSidebarOpen={isSidebarOpen}
+            sidebarWidth={sidebarWidth}
+            changeSidebarIsOpenStatus={(status) => dispatch(changeSidebarIsOpenStatus(status))}
+            choosePage={(page) => dispatch(choosePage(page))}
+            changeProfileNavItemChosenStatus={(status) => dispatch(changeProfileNavItemChosenStatus(status))}
+        />
+    )
+}
 
 export default SideBarContainer

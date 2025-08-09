@@ -1,13 +1,12 @@
-import React from 'react'
-import FriendsNavContainer from './FriendsNav/friendsNavContainer'
+import FriendsNav from './FriendsNav/friendsNav'
 import FriendsComponents from './FriendsComponents/friendsComponents'
+import { useAuthRedirect } from '../../../hooks/hooks'
 
-interface IFriends {}
-
-const Friends:React.FC<IFriends> = (props) => {
+const Friends = () => {
+    useAuthRedirect()
     return (
         <div>
-            <FriendsNavContainer />
+            <FriendsNav />
             <FriendsComponents />
         </div>
     )

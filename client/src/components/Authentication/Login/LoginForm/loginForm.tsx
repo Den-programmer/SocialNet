@@ -1,97 +1,127 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import classes from './loginForm.module.scss';
-import { RegisterFormDataType } from '../../Login/login';
-import LoginImg from './LoginImg/loginImg';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
+import React from 'react'
+import { Form, Input, Button, Checkbox, Typography, Row, Col } from 'antd'
+import { MailOutlined, LockOutlined } from '@ant-design/icons'
+import LoginImg from './LoginImg/loginImg'
+import { RegisterFormDataType } from '../../Login/login'
+
+const { Title, Text } = Typography
 
 interface LoginFormPropType {
-    captcha: string | null
-    isRegister: boolean
-    setIsRegisterStatus: (status: boolean) => void
-    onSubmit: (data: RegisterFormDataType) => void
+  isLoadingLogin: boolean
+  isLoadingRegistration: boolean
+  captcha: string | null
+  isRegister: boolean
+  setIsRegisterStatus: (status: boolean) => void
+  onSubmit: (data: RegisterFormDataType) => void
 }
 
-const LoginForm: React.FC<LoginFormPropType> = ({ captcha, isRegister, setIsRegisterStatus, onSubmit }) => {
-    const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormDataType>()
-    const defaultIconColor = { color: '#666666' }
-    const validateIconColor = { color: '#FF0000' }
+const LoginForm: React.FC<LoginFormPropType> = ({
+  isLoadingLogin,
+  isLoadingRegistration,
+  captcha,
+  isRegister,
+  setIsRegisterStatus,
+  onSubmit
+}) => {
+  const [form] = Form.useForm<RegisterFormDataType>() 
 
-    return (
-        <div className={classes.formWrapper}>
-            <LoginImg />
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div className={classes.formTitle}>
-                    <h3>{isRegister ? 'Register' : 'Login'}</h3>
-                </div>
+  const loading = isRegister ? isLoadingRegistration : isLoadingLogin
+  return (
+    <Row justify="space-around" align="middle" style={{ marginTop: 40 }}>
+      <Col xs={22} sm={16} md={12} lg={8}>
+        <LoginImg />
+      </Col>
+      <Col xs={22} sm={16} md={12} lg={8}>
+        <Title level={3} style={{ textAlign: 'center', marginBottom: 24 }}>
+          {isRegister ? 'Register' : 'Login'}
+        </Title>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={values => onSubmit(values)}
+          initialValues={{ rememberMe: false }}
+        >
+          <Form.Item
+            name="email"
+            rules={[{ required: true, message: 'Email is required' }, { type: 'email', message: 'Enter a valid email' }]}
+          >
+            <Input
+              prefix={<MailOutlined />}
+              placeholder="Email"
+              size="large"
+              autoComplete="email"
+            />
+          </Form.Item>
 
-                <div className={classes.formItem}>
-                    <span className={classes.envelope}>
-                        <FontAwesomeIcon style={errors.email?.message ? validateIconColor : defaultIconColor} className={classes.inputIcon} icon={faEnvelope} />
-                    </span>
-                    <input
-                        type="text"
-                        {...register('email', { required: 'Email is required', maxLength: 90 })}
-                    />
-                    {errors.email && <p className={classes.error}>{errors.email.message}</p>}
-                </div>
+          {isRegister && <Form.Item
+            name="username"
+            rules={[{ required: true, message: 'Username is required' }, { max: 20, message: 'Max 20 characters' }]}
+          >
+            <Input placeholder="Username" autoComplete="username" size="large" />
+          </Form.Item>
+          }
 
-                {isRegister && (
-                    <div className={classes.formItem}>
-                        <label>Username</label>
-                        <input
-                            type="text"
-                            {...register('username', { required: 'Username is required', maxLength: 20 })}
-                        />
-                        {errors.username && <p className={classes.error}>{errors.username.message}</p>}
-                    </div>
-                )}
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: 'Password is required' }, { min: 7, message: 'Min 7 characters' }]}
+          >
+            <Input.Password
+              prefix={<LockOutlined />}
+              placeholder="Password"
+              size="large"
+            />
+          </Form.Item>
 
-                <div className={classes.formItem}>
-                    <span className={classes.lock}>
-                        <FontAwesomeIcon style={errors.password?.message ? validateIconColor : defaultIconColor} className={classes.inputIcon} icon={faLock} />
-                    </span>
-                    <input
-                        type="password"
-                        {...register('password', { required: 'Password is required', minLength: 7, maxLength: 90 })}
-                    />
-                    {errors.password && <p className={classes.error}>{errors.password.message}</p>}
-                </div>
+          <Form.Item name="rememberMe" valuePropName="checked">
+            <Checkbox>Remember Me</Checkbox>
+          </Form.Item>
 
-                <div className={classes.confirmation}>
-                    <div className={classes.rememberMe}>
-                        <input type="checkbox" {...register('rememberMe')} />
-                        <label>Remember Me</label>
-                    </div>
+          {captcha && (
+            <>
+              <Form.Item>
+                <img src={captcha} alt="captcha" style={{ display: 'block', margin: '0 auto 16px' }} />
+              </Form.Item>
+              <Form.Item
+                name="captcha"
+                rules={[{ required: true, message: 'Captcha is required' }]}
+              >
+                <Input placeholder="Enter captcha" size="large" />
+              </Form.Item>
+            </>
+          )}
 
-                    {/* {captcha && <img className={classes.captcha} src={captcha} alt="captcha" />}
-                    {captcha && (
-                        <div className={classes.captchaInput}>
-                            <input type="text" {...register('captcha', { required: 'Captcha is required' })} />
-                            {errors.captcha && <p className={classes.error}>{errors.captcha.message}</p>}
-                        </div>
-                    )} */}
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              size="large"
+              loading={loading}
+            >
+              {isRegister ? 'Register' : 'Login'}
+            </Button>
+          </Form.Item>
 
-                    <div className={classes.btn_login}>
-                        <button type="submit">{isRegister ? 'Register' : 'Login'}</button>
-                    </div>
-
-                    <div className={classes.isCurrentFormContainer}>
-                        {isRegister ? (
-                            <span onClick={() => setIsRegisterStatus(false)} className={classes.isCurrentForm}>
-                                Already have an account? Try to login!
-                            </span>
-                        ) : (
-                            <span onClick={() => setIsRegisterStatus(true)} className={classes.isCurrentForm}>
-                                Don't have an account? Try to register!
-                            </span>
-                        )}
-                    </div>
-                </div>
-            </form>
-        </div>
-    )
+          <Form.Item style={{ textAlign: 'center', marginBottom: 0 }}>
+            <Text>
+              <Text
+                strong
+                style={{ cursor: 'pointer', color: '#1890ff' }}
+              >
+                {isRegister ? <span onClick={() => {
+                  form.resetFields()
+                  setIsRegisterStatus(false)
+                }}>Login here</span> : <span onClick={() => {
+                  form.resetFields()
+                  setIsRegisterStatus(true)
+                }}>Register here</span>}
+              </Text>
+            </Text>
+          </Form.Item>
+        </Form>
+      </Col>
+    </Row>
+  )
 }
 
 export default LoginForm

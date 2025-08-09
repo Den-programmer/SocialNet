@@ -1,23 +1,24 @@
 import React from 'react'
 import Friend from './Friend/friend'
-import { userType } from '../../../types/FriendsType/friendsType'
 import classes from './friends.module.scss'
+import { useAppSelector } from '../../../hooks/hooks'
+import { selectFriends } from '../../../BLL/selectors/users-selectors'
 
-interface FriendsPropsType {
-    friends: Array<userType>
-}
-
-const Friends:React.FC<FriendsPropsType> = (props) => {
+const Friends:React.FC = () => {
     const friendsArray = []
+    const friendsData = useAppSelector(selectFriends)
 
-    for (let i = 1; i <= props.friends.length; i++) {
+    for (let i = 1; i <= friendsData.length; i++) {
         if (i <= 4) {
-            friendsArray.push(props.friends[i - 1])
+            friendsArray.push(friendsData[i - 1])
         }
     }
 
     const friends = friendsArray.map(f => {
-        return <Friend id={f.id} key={f.id} username={f.username}  avatar={f.profile.photos.large ? f.profile.photos.large : f.profile.photos.small}/>
+        return <Friend id={f.id} key={f.id} 
+        username={f.username}  
+        avatar={f.profile.photos.large ? f.profile.photos.large : f.profile.photos.small}
+        />
     })
     return (
         <div className={classes.friends}>

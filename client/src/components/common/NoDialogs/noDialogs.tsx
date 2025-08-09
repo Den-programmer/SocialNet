@@ -4,7 +4,7 @@ import classes from './noDialogs.module.scss'
 
 interface INoDialogs {  }
 
-const NoDialogs:React.FC<INoDialogs> = (props) => {
+const NoDialogs:React.FC<INoDialogs> = () => {
     return (
         <div className={classes.noDialogs}>
             <h3 className={classes.titleNoDialogs}>You have no dialogs yet!</h3>

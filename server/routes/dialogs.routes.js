@@ -1,15 +1,16 @@
-const { Router } = require('express')
-const DialogsController = require('../controllers/DialogsController')
-const {verifyToken} = require('../middleware/verifyToken.js')
-const dotenv = require('dotenv')
+import { Router } from 'express'
+import DialogsController from '../controllers/DialogsController.js'
+import { verifyToken } from '../middleware/verifyToken.js'
+import dotenv from 'dotenv'
 
 dotenv.config()
+
 const router = Router()
 
-router.use(verifyToken)
+router.use(verifyToken) // защищаем все роуты
 
-router.get('/getAllDialogs', verifyToken, DialogsController.getAllDialogs)
-router.post('/addDialog/:userId', verifyToken, DialogsController.addDialog)
-router.delete('/deleteDialog', verifyToken, DialogsController.deleteDialog)
+router.get('/getAllDialogs', DialogsController.getAllDialogs)
+router.post('/addDialog/:userId', DialogsController.addDialog)
+router.delete('/deleteDialog', DialogsController.deleteDialog)
 
-module.exports = router;
+export default router

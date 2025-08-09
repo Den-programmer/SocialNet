@@ -1,44 +1,58 @@
 import React, { useState, ChangeEvent } from 'react'
-import { IChangeOptions, IAccountOption } from '../accountOptions'
+import { Input, Button, notification } from 'antd'
+import { IChangeOptions } from '../accountOptions'
 import classes from './changeBiography.module.scss'
-import { Snackbar, IconButton } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
-import CloseIcon from '@material-ui/icons/Close'
-import { createReviewChangesBtn } from '../../../../../../utils/helpers/functions/function-helpers'
+import { selectAuthorizedUserId } from '../../../../../../BLL/selectors/auth-selectors'
+import { useAppSelector } from '../../../../../../hooks/hooks'
 
-const ChangeBiography:React.FC<IChangeOptions> = (props) => {
-    let aboutMeInf = props.aboutMe ? props.aboutMe : ''
-    const [aboutMe, setAboutMe] = useState<string>(aboutMeInf)
-    const [isSuccessfulSnackbarOpen, setIsSuccessfulSnackbarOpenStatus] = useState<boolean>(false)
-    const onEditInputChange = (e: ChangeEvent<HTMLInputElement>) => setAboutMe(e.currentTarget.value)
-    const changeAboutMeInformation = (aboutMe: string) => {
-        props.saveAboutMe(aboutMe)
-        let array = props.accountOptionsMenu.map((item: IAccountOption) => {
-            return { ...item, isEdit: false }
-        })
-        props.setChangesToAccountOptionsMenu(array)
-        props.createNotification('Your biography has been changed successfully!', '/Profile', 'Profile')
-    }
-    return (
-        <div className={classes.changeBiography}>
-            <div className={classes.changeBiography_content}>
-                <h5 className={classes.property}>{props.property}</h5>
-                <div className={classes.editInputWrapper}>
-                    <input onChange={onEditInputChange} value={aboutMe} className={classes.editInput} type="text"/>
-                </div>
-            </div>
-            {createReviewChangesBtn(() => changeAboutMeInformation(aboutMe), '/Profile')}
-            <Snackbar open={isSuccessfulSnackbarOpen} autoHideDuration={4000} onClose={() => setIsSuccessfulSnackbarOpenStatus(false)}>
-                <Alert action={
-                    <IconButton size="small" onClick={() => setIsSuccessfulSnackbarOpenStatus(false)} color="inherit">
-                        <CloseIcon fontSize="small" />
-                    </IconButton>
-                } variant="filled" severity="success">
-                    This is a success message!
-                </Alert>
-            </Snackbar>
+const ChangeBiography: React.FC<IChangeOptions> = ({
+  aboutMe: initialAboutMe,
+  property,
+  saveAboutMe,
+  createNotification
+}) => {
+  const [aboutMe, setAboutMe] = useState<string>(initialAboutMe || '')
+
+  const userId = useAppSelector(selectAuthorizedUserId)
+
+  const onEditInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setAboutMe(e.target.value)
+  }
+
+  const changeAboutMeInformation = async () => {
+    await saveAboutMe({aboutMe, userId})
+
+    notification.success({
+      message: 'Biography Updated',
+      description: 'Your biography has been changed successfully!',
+      placement: 'bottomRight'
+    })
+
+    createNotification({
+      title: 'Your biography has been changed successfully!',
+      pageUrl: '/Profile',
+      itemType: 'Profile'
+    })
+  }
+
+  return (
+    <div className={classes.changeBiography}>
+      <div className={classes.changeBiography_content}>
+        <h5 className={classes.property}>{property}</h5>
+        <div className={classes.editInputWrapper}>
+          <Input
+            value={aboutMe}
+            onChange={onEditInputChange}
+            className={classes.editInput}
+          />
         </div>
-    )
+      </div>
+
+      <Button disabled={aboutMe.trim() === '' || aboutMe === initialAboutMe} type="primary" onClick={changeAboutMeInformation}>
+        Save Changes
+      </Button>
+    </div>
+  )
 }
 
 export default ChangeBiography

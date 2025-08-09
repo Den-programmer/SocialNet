@@ -1,9 +1,10 @@
-const { Router } = require('express')
-const UsernameController = require('../controllers/UsernameController')
-const {verifyToken} = require('../middleware/verifyToken.js')
-const dotenv = require('dotenv')
+import { Router } from 'express'
+import UsernameController from '../controllers/UsernameController.js'
+import { verifyToken } from '../middleware/verifyToken.js'
+import dotenv from 'dotenv'
 
 dotenv.config()
+
 const router = Router()
 
 router.use(verifyToken)
@@ -11,4 +12,4 @@ router.use(verifyToken)
 router.get('/getUsername/:userId', UsernameController.getUsername)
 router.put('/saveUsername', UsernameController.saveUsername)
 
-module.exports = router
+export default router

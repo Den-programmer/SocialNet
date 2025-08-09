@@ -1,212 +1,140 @@
-import { UsersAPI } from '../DAL/usersApi'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { userType } from '../types/FriendsType/friendsType'
-import { RootState, InferActionTypes } from './redux'
-import { ThunkAction } from 'redux-thunk'
-import { resultCode } from '../DAL/api'
+import { usersApi } from '../DAL/usersApi'
 
-const Friends = {
-    friends: [] as Array<userType>,
-    friendsInf: {},
-    users: [] as Array<userType>,
-    usersInf: {
-        isFetching: true,
-        totalCount: 0,
-        pageSize: 12,
-        currentPage: 1
+export type FriendsState = {
+  friends: userType[]
+  users: userType[]
+  usersInf: {
+    isFetching: boolean
+    totalCount: number
+    pageSize: number
+    currentPage: number
+  }
+  followingInProcess: string[]
+  filter: {
+    term: string
+  }
+  blacklist: string[]
+}
+
+const initialState: FriendsState = {
+  friends: [],
+  users: [],
+  usersInf: {
+    isFetching: true,
+    totalCount: 0,
+    pageSize: 12,
+    currentPage: 1
+  },
+  followingInProcess: [],
+  filter: { term: '' },
+  blacklist: []
+}
+
+const friendsSlice = createSlice({
+  name: 'friends',
+  initialState,
+  reducers: {
+    setUsersTerm(state, action: PayloadAction<string>) {
+      state.filter.term = action.payload
     },
-    followingInProcess: [] as Array<string>,
-    filter: {
-        term: ''
+    changePage(state, action: PayloadAction<number>) {
+      state.usersInf.currentPage = action.payload
     },
-    blacklist: [
-
-    ] as Array<userType>
-}
-
-const reducerFriends = (state = Friends, action: ActionTypes): typeof Friends => {
-    switch (action.type) {
-        case `sn/Friends/SET-USERS`:
-            return {
-                ...state,
-                users: action.users
-            }
-        case `sn/Friends/SET_FRIENDS`:
-            return {
-                ...state,
-                friends: action.users.filter((user: userType) => user.followed === true)
-            }
-        case `sn/Friends/FOLLOW`:
-            let currentUserArray: Array<object> = state.users.filter(user => {
-                if (user.id === action.userId) return true;
-            })
-            let currentUser: any = currentUserArray.find(item => item)
-            let newFriend = {
-                id: action.userId,
-                username: currentUser.username,
-                profile: {
-                    status: '',
-                    photos: {
-                        large: currentUser.avatar,
-                        small: currentUser.avatar
-                    }
-                },
-                followed: true
-            }
-            return {
-                ...state,
-                users: state.users.map(user => {
-                    if (user.id === action.userId) return { ...user, followed: true }
-                    return user
-                }),
-                friends: [...state.friends, newFriend]
-            }
-        case `sn/Friends/UNFOLLOW`:
-            return {
-                ...state,
-                users: state.users.map(user => {
-                    if (user.id === action.userId) return { ...user, followed: false }
-                    return user
-                }),
-                friends: state.friends.filter(friend => friend.id !== action.userId)
-            }
-        case `sn/Friends/TOGGLE_IS_FOLLOWING_PROCESS`:
-            return {
-                ...state,
-                followingInProcess: action.isFetching ? [...state.followingInProcess, action.userId]
-                    : state.followingInProcess.filter(id => id !== action.userId)
-            }
-        case `sn/Friends/CHANGE-PAGE`:
-            return {
-                ...state,
-                usersInf: { ...state.usersInf, currentPage: action.currentPage }
-            }
-        case `sn/Friends/SET-USERSINF`:
-            return {
-                ...state,
-                usersInf: { ...state.usersInf, totalCount: action.totalCount }
-            }
-        case `sn/Friends/IS_FETCHING`:
-            return {
-                ...state,
-                usersInf: { ...state.usersInf, isFetching: action.isFetching }
-            }
-
-        case `sn/Friends/ADD_TO_BLACKLIST`:
-            const currentBlacked = state.users.filter(item => item.id === action.itemId && true).find(item => item && item)
-            const currentBlackedUser = {
-                id: action.itemId,
-                username: currentBlacked?.username !== undefined ? currentBlacked?.username : '',
-                profile: {
-                    status: '',
-                    photos: {
-                        large: currentBlacked?.profile.photos.large !== undefined ? currentBlacked?.profile.photos.large : '',
-                        small: currentBlacked?.profile.photos.small !== undefined ? currentBlacked?.profile.photos.small : ''
-                    },
-                },
-                followed: false
-            }
-            return {
-                ...state,
-                blacklist: [...state.blacklist, currentBlackedUser]
-            }
-        case `sn/Friends/DELETE_FROM_BLACKLIST`:
-            return {
-                ...state,
-                blacklist: state.blacklist.filter(item => item.id !== action.itemId && true)
-            }
-        case `sn/Friends/SET_USERS_TERM`:
-            return {
-                ...state,
-                filter: { ...state.filter, term: action.term }
-            }
-        default:
-            return state
+    setIsFetching(state, action: PayloadAction<boolean>) {
+      state.usersInf.isFetching = action.payload
+    },
+    addToBlacklist(state, action: PayloadAction<string>) {
+      if (!state.blacklist.includes(action.payload)) {
+        state.blacklist.push(action.payload)
+      }
+    },
+    deleteFromBlacklist(state, action: PayloadAction<string>) {
+      state.blacklist = state.blacklist.filter(id => id !== action.payload)
     }
-}
+  },
+  extraReducers: builder => {
+    builder.addMatcher(
+      usersApi.endpoints.getUsers.matchFulfilled,
+      (state, { payload }) => {
+        state.users = payload.items
+        state.usersInf.totalCount = payload.totalCount
+        state.usersInf.isFetching = false
+      }
+    )
 
-// Action Creators!
+    builder.addMatcher(
+      usersApi.endpoints.getFriends.matchFulfilled,
+      (state, { payload }) => {
+        state.friends = payload.following
+      }
+    )
 
-type ActionTypes = InferActionTypes<typeof actions>
-
-export const actions = {
-    follow: (userId: string) => ({ type: `sn/Friends/FOLLOW`, userId } as const),
-    unfollow: (userId: string) => ({ type: `sn/Friends/UNFOLLOW`, userId } as const),
-    setUsers: (users: Array<userType>) => ({ type: `sn/Friends/SET-USERS`, users } as const),
-    changePage: (currentPage: number) => ({ type: `sn/Friends/CHANGE-PAGE`, currentPage } as const),
-    setUsersInf: (totalCount: number) => ({ type: `sn/Friends/SET-USERSINF`, totalCount } as const),
-    isFetching: (isFetching: boolean) => ({ type: `sn/Friends/IS_FETCHING`, isFetching } as const),
-    toggleFollowingInProcess: (isFetching: boolean, userId: string) => ({ type: `sn/Friends/TOGGLE_IS_FOLLOWING_PROCESS`, isFetching, userId } as const),
-    setFriends: (users: Array<userType>) => ({ type: `sn/Friends/SET_FRIENDS`, users } as const),
-    setUsersTerm: (term: string) => ({ type: `sn/Friends/SET_USERS_TERM`, term } as const),
-    addToBlacklist: (itemId: string) => ({ type: `sn/Friends/ADD_TO_BLACKLIST`, itemId } as const),
-    deleteFromBlacklist: (itemId: string) => ({ type: `sn/Friends/DELETE_FROM_BLACKLIST`, itemId } as const)
-}
-
-// Thunk Creators!
-
-type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionTypes>
-
-export const requestUsers = (pageSize: number, currentPage: number, term: string): ThunkType => async (dispatch) => {
-    try {
-        dispatch(actions.isFetching(true))
-        let data = await UsersAPI.requestUsers(pageSize, currentPage, term)
-        dispatch(actions.isFetching(false))
-        dispatch(actions.setUsers(data.data.items))
-        dispatch(actions.setUsersInf(data.data.totalCount))
-        dispatch(actions.setUsersTerm(term))
-        return data
-    } catch (error: any) {
-        console.error(error)
-        // alert(`Something's gone wrong, error status: 500`)
-    }
-}
-
-export const requestFollowing = (pageSize: number, currentPage: number, term: string): ThunkType => async (dispatch) => {
-    try {
-        let data = await dispatch(requestUsers(pageSize, currentPage, term))
-        const data2 = await UsersAPI.requestFriends()
-        dispatch(actions.setUsersInf(data2.data.totalCount))
-        const friends = data.users.filter((user: userType) => {
-            data2.data.following.forEach(friendId => {
-                if(user.id === friendId) {
-                    return true     
-                } else {
-                    return false
-                }
-            })
-        })
-        dispatch(actions.setFriends(friends))
-        debugger
-        return friends
-    } catch (error: any) {
-        console.error(error)
-        // alert(`Something's gone wrong, error status: 500`)
-    }
-} 
-
-export const followThunk = (userId: string): ThunkType => async (dispatch) => {
-    try {
-        dispatch(actions.toggleFollowingInProcess(true, userId))
-        let data = await UsersAPI.follow(userId)
-        if (data.resultCode === resultCode.Success) {
-            dispatch(actions.follow(userId))
+    builder.addMatcher(
+      usersApi.endpoints.followUser.matchPending,
+      (state, { meta }) => {
+        state.followingInProcess.push(meta.arg.originalArgs)
+      }
+    )
+    builder.addMatcher(
+      usersApi.endpoints.followUser.matchFulfilled,
+      (state, { meta }) => {
+        const userId = meta.arg.originalArgs
+        state.users = state.users.map(u => u.id === userId ? { ...u, followed: true } : u)
+        const user = state.users.find(u => u.id === userId)
+        if (user && !state.friends.find(f => f.id === userId)) {
+          state.friends.push({ ...user, followed: true })
         }
-        dispatch(actions.toggleFollowingInProcess(false, userId))
-    } catch (error: any) {
-        // alert(`Something's gone wrong, error status: ${error.status}`)
-    }
-}
-export const unfollowThunk = (userId: string): ThunkType => async (dispatch) => {
-    try {
-        dispatch(actions.toggleFollowingInProcess(true, userId))
-        let data = await UsersAPI.unfollow(userId)
-        if (data.resultCode === resultCode.Success) {
-            dispatch(actions.unfollow(userId))
-        }
-        dispatch(actions.toggleFollowingInProcess(false, userId))
-    } catch (error: any) {
-        // alert(`Something's gone wrong, error status: ${error.status}`)
-    }
-}
+        state.followingInProcess = state.followingInProcess.filter(id => id !== userId)
+      }
+    )
 
-export default reducerFriends
+    builder.addMatcher(
+      usersApi.endpoints.unfollowUser.matchPending,
+      (state, { meta }) => {
+        state.followingInProcess.push(meta.arg.originalArgs)
+      }
+    )
+    builder.addMatcher(
+      usersApi.endpoints.unfollowUser.matchFulfilled,
+      (state, { meta }) => {
+        const userId = meta.arg.originalArgs
+        state.users = state.users.map(u => u.id === userId ? { ...u, followed: false } : u)
+        state.friends = state.friends.filter(f => f.id !== userId)
+        state.followingInProcess = state.followingInProcess.filter(id => id !== userId)
+      }
+    )
+    builder.addMatcher(
+      usersApi.endpoints.getIsUserFollowed.matchFulfilled,
+      (state, { payload, meta }) => {
+        const userId = meta.arg.originalArgs as string
+        const isFollowed = payload
+
+        state.users = state.users.map(user =>
+          user.id === userId ? { ...user, followed: isFollowed } : user
+        )
+
+        if (isFollowed) {
+          const user = state.users.find(user => user.id === userId)
+          if (user && !state.friends.find(f => f.id === userId)) {
+            state.friends.push({ ...user, followed: true })
+          }
+        } else {
+          state.friends = state.friends.filter(f => f.id !== userId)
+        }
+      }
+    )
+  }
+})
+
+export const {
+  setUsersTerm,
+  changePage,
+  setIsFetching,
+  addToBlacklist,
+  deleteFromBlacklist
+} = friendsSlice.actions
+
+export const friendsActions = friendsSlice.actions
+export default friendsSlice.reducer

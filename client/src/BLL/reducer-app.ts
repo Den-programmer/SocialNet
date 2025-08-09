@@ -1,14 +1,8 @@
-import { login } from "./reducer-auth"
-import { ThunkAction } from "redux-thunk"
-import { RootState, InferActionTypes } from "./redux"
-import { requestUsername, setUserProfileThunk } from "./reducer-profile"
-// import { requestUsers } from "./reducer-friends"
-// import { getALLDialogs, getDialogMessages } from "./reducer-messages"
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
+import { RootState } from './redux'
+import { profileApi } from '../DAL/profileApi'
 
-const SET_TEXT_ERROR = 'app/SET_TEXT_ERROR'
-
-
-type appStateType = {
+type AppState = {
   isInitialized: boolean
   messageError: string
   isModalOpen: boolean
@@ -17,111 +11,70 @@ type appStateType = {
   headerHeight: string
 }
 
-const AppState = {
+const initialState: AppState = {
   isInitialized: false,
   messageError: '',
   isModalOpen: false,
   date: '',
   isSmthLoading: false,
   headerHeight: '64px'
-} as appStateType
+}
 
-const reducerApp = (state = AppState, action: ActionTypes): appStateType => {
-  switch (action.type) {
-    case `app/SET_INITIALIZED`:
-      return {
-        ...state,
-        isInitialized: true
-      }
-    case SET_TEXT_ERROR:
-      return {
-        ...state,
-        messageError: action.text
-      }
-    case `app/SET_IS_MODAL_OPEN_STATUS`:
-      return {
-        ...state,
-        isModalOpen: action.modalStatus
-      }
-    case `app/SET_CURRENT_DATE`:
-      return {
-        ...state,
-        date: action.date
-      }
-    case `app/SET_LOADING`:
-      return {
-        ...state,
-        isSmthLoading: action.status
-      }
-    case `app/SET_HEADER_HEIGHT`:
-      return {
-        ...state,
-        headerHeight: action.headerHeight
-      }
-    default:
-      return state
+export const initialize = createAsyncThunk('app/initialize', async (_, { dispatch, getState }) => {
+  try {
+    const raw = localStorage.getItem('userData')
+    const { userId } = JSON.parse(raw || "")
+    const existingUserId = userId || (getState() as RootState).auth.userId
+
+    await dispatch(profileApi.endpoints.getUsersProfile.initiate(existingUserId)).unwrap()
+    await dispatch(profileApi.endpoints.getUsername.initiate(existingUserId)).unwrap()
+    await dispatch(profileApi.endpoints.getGender.initiate(existingUserId)).unwrap()
+
+    const date = new Date()
+    const formattedDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`
+    dispatch(appActions.setCurrentDate(formattedDate))
+    dispatch(appActions.setInitialized())
+  } catch (e) {
+    console.error('Initialization error:', e)
   }
-}
+})
 
-// Action Creators!
-
-type ActionTypes = InferActionTypes<typeof actions> | setTextErrorActionType
-
-export const actions = {
-  initializedSuccessful: () => ({ type: `app/SET_INITIALIZED` } as const),
-  setIsModalOpenStatus: (modalStatus: boolean) => ({ type: `app/SET_IS_MODAL_OPEN_STATUS`, modalStatus } as const),
-  getCurrentDate: (date: string) => ({ type: `app/SET_CURRENT_DATE`, date } as const),
-  setIsSmthLoadingStatus: (status: boolean) => ({ type: `app/SET_LOADING`, status } as const),
-  setHeaderHeight: (headerHeight: string) => ({ type: `app/SET_HEADER_HEIGHT`, headerHeight } as const)
-}
-
-// Common Action Creators!
-
-export type setTextErrorActionType = ({ type: typeof SET_TEXT_ERROR, text: string })
-export const setTextError = (text: string): setTextErrorActionType => ({ type: SET_TEXT_ERROR, text })
-
-// Thunk Creators!
-
-type ThunkType = ThunkAction<Promise<void>, RootState, unknown, ActionTypes>
-
-export const initialize = (): ThunkType => async (dispatch, getState) => {
-  // @ts-ignore
-  const data = JSON.parse(localStorage.getItem('userData'))
-  if (data && data.token) {
-    const { email, password, rememberMe, captcha } = data
-    try {
-      dispatch(actions.setIsSmthLoadingStatus(true))
-      await dispatch(login(email, password, rememberMe, captcha))
-      const userId = getState().auth.userId
-      await dispatch(requestUsername(userId))
-      await dispatch(setUserProfileThunk(userId))
-      dispatch(actions.initializedSuccessful())
-      dispatch(actions.setIsSmthLoadingStatus(false))
-    } catch (error) {
-      console.error("New Error from reducer app!", error)
+const appSlice = createSlice({
+  name: 'app',
+  initialState,
+  reducers: {
+    setInitialized(state) {
+      state.isInitialized = true
+    },
+    setTextError(state, action: PayloadAction<string>) {
+      state.messageError = action.payload
+    },
+    setIsModalOpenStatus(state, action: PayloadAction<boolean>) {
+      state.isModalOpen = action.payload
+    },
+    setCurrentDate(state, action: PayloadAction<string>) {
+      state.date = action.payload
+    },
+    setIsSmthLoadingStatus(state, action: PayloadAction<boolean>) {
+      state.isSmthLoading = action.payload
+    },
+    setHeaderHeight(state, action: PayloadAction<string>) {
+      state.headerHeight = action.payload
     }
   }
-  dispatch(actions.initializedSuccessful())
-  // let initialPromise = promise.then(() => {
-  //   let userId = getState().auth.userId
-  //   let currentPage = getState().Friends.usersInf.currentPage
-  //   let pageSize = getState().Friends.usersInf.pageSize
-  //   let term = getState().Friends.filter.term
-  //   dispatch(setUserProfileThunk(userId))
-  //   dispatch(getALLDialogs())
-  //   dispatch(requestUsers(pageSize, currentPage, term))
-  // }).then(() => {
-  //   setTimeout(() => {
-  //     let dialogId: number = getState().messagesPage.userDialogId
-  //     dispatch(getDialogMessages(dialogId))
-  //   }, 1000)
-  // })
-}
+})
 
-// Get State!
+export const _getDate = (state: RootState) => state.app.date
 
-export const _getDate = () => AppState.date
+// Actions & Reducer
+export const {
+  setInitialized,
+  setTextError,
+  setIsModalOpenStatus,
+  setCurrentDate,
+  setIsSmthLoadingStatus,
+  setHeaderHeight
+} = appSlice.actions
 
-
-
-export default reducerApp
+export default appSlice.reducer
+export const appActions = appSlice.actions

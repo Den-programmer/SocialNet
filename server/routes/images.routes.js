@@ -1,13 +1,14 @@
-const { Router } = require('express')
-const ImageController = require('../controllers/ImagesController.js')
-const {verifyToken} = require('../middleware/verifyToken.js')
-const dotenv = require('dotenv')
+import { Router } from 'express'
+import ImageController from '../controllers/ImagesController.js'
+import { verifyToken } from '../middleware/verifyToken.js'
+import dotenv from 'dotenv'
 
 dotenv.config()
+
 const router = Router()
 
 router.use(verifyToken)
 
 router.get('/get-secure-images', ImageController.getSecureImages)
 
-module.exports = router
+export default router

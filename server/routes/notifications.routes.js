@@ -1,9 +1,10 @@
-const { Router } = require('express')
-const NotificationsController = require('../controllers/NotificationsController')
-const {verifyToken} = require('../middleware/verifyToken.js')
-const dotenv = require('dotenv')
+import { Router } from 'express'
+import NotificationsController from '../controllers/NotificationsController.js'
+import { verifyToken } from '../middleware/verifyToken.js'
+import dotenv from 'dotenv'
 
 dotenv.config()
+
 const router = Router()
 
 router.use(verifyToken)
@@ -12,7 +13,6 @@ router.get('/getNotifications', NotificationsController.getNotifications)
 router.post('/addNotification', NotificationsController.addNotification)
 router.delete('/deleteNotification/:notificationId', NotificationsController.deleteNotification)
 router.delete('/deleteNotifications', NotificationsController.deleteNotifications)
-
 router.put('/checkNotification/:notificationId', NotificationsController.checkNotification)
 
-module.exports = router
+export default router

@@ -7,7 +7,3 @@
     background: #9053c7;
     background: linear-gradient(-135deg, #c850c0, #4158d0);
 }
-
-.authentication * {
-    box-sizing: border-box;
-}

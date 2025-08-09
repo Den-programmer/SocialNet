@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+import { Schema, model } from 'mongoose'
 
 const Post = new Schema({
     id: { type: String, required: true },
@@ -15,4 +15,4 @@ const Post = new Schema({
     createdAt: { type: Date, required: true, default: Date.now }
 })
 
-module.exports = model('Post', Post)
+export default model('Post', Post)

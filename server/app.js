@@ -1,9 +1,28 @@
-const dotenv = require('dotenv')
+import dotenv from 'dotenv'
 dotenv.config()
-const express = require('express')
-const mongoose = require('mongoose')
-const path = require('path')
-const cors = require('cors')
+
+import express from 'express'
+import mongoose from 'mongoose'
+import path from 'path'
+import cors from 'cors'
+import { fileURLToPath } from 'url'
+import { dirname, resolve } from 'path'
+
+// const __filename = fileURLToPath(import.meta.url)
+// const __dirname = dirname(__filename)
+
+import authRoutes from './routes/auth.routes.js'
+import genderRoutes from './routes/gender.routes.js'
+import avatarRoutes from './routes/avatar.routes.js'
+import profileRoutes from './routes/profile.routes.js'
+import usernameRoutes from './routes/username.routes.js'
+import postsRoutes from './routes/posts.routes.js'
+import usersRoutes from './routes/users.routes.js'
+import newsRoutes from './routes/news.routes.js'
+import notificationsRoutes from './routes/notifications.routes.js'
+import imagesRoutes from './routes/images.routes.js'
+import dialogsRoutes from './routes/dialogs.routes.js'
+import messagesRoutes from './routes/messages.routes.js'
 
 const app = express()
 
@@ -11,39 +30,36 @@ app.use(cors({
     origin: "http://localhost:3000",
     credentials: true
 }))
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-app.use('/api/auth', require('./routes/auth.routes.js'))
-app.use('/api/gender', require('./routes/gender.routes.js'))
-app.use('/api/avatar', require('./routes/avatar.routes.js'))
-app.use('/api/profile', require('./routes/profile.routes.js'))
-app.use('/api/username', require('./routes/username.routes.js'))
-app.use('/api/posts', require('./routes/posts.routes.js'))
-app.use('/api/users', require('./routes/users.routes.js'))
-app.use('/api/news', require('./routes/news.routes.js'))
-app.use('/api/notifications', require('./routes/notifications.routes.js'))
-app.use('/api/images', require('./routes/images.routes.js'))
-
-app.use('/api/dialogs', require('./routes/dialogs.routes.js'))
-app.use('/api/messages', require('./routes/messages.routes.js'))
+app.use('/api/auth', authRoutes)
+app.use('/api/gender', genderRoutes)
+app.use('/api/avatar', avatarRoutes)
+app.use('/api/profile', profileRoutes)
+app.use('/api/username', usernameRoutes)
+app.use('/api/posts', postsRoutes)
+app.use('/api/users', usersRoutes)
+app.use('/api/news', newsRoutes)
+app.use('/api/notifications', notificationsRoutes)
+app.use('/api/images', imagesRoutes)
+app.use('/api/dialogs', dialogsRoutes)
+app.use('/api/messages', messagesRoutes)
 
 // Serve static files in production
-if (process.env.NODE_ENV === 'production') {
-    app.use('/', express.static(path.join(__dirname, 'client', 'build')))
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-    })
-}
+// if (process.env.NODE_ENV === 'production') {
+//     app.use('/', express.static(resolve(__dirname, 'client', 'build')))
+//     app.get('*', (req, res) => {
+//         res.sendFile(resolve(__dirname, 'client', 'build', 'index.html'))
+//     })
+// }
 
 async function startApp() {
     try {
-        await mongoose.connect(process.env.DB_CONNECTION, { 
-            useUnifiedTopology: true, 
-            useNewUrlParser: true 
-        })
-        app.listen(process.env.PORT, () => {
-            console.log('The server has been started on port ' + process.env.PORT + '...')
+        await mongoose.connect(process.env.DB_CONNECTION)
+        app.listen(process.env.PORT || 8000, () => {
+            ('Server started on port ' + (process.env.PORT || 8000))
         })
     } catch (e) {
         console.error('Failed to start the server:', e)

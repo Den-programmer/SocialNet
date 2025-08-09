@@ -1,7 +1,7 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose';
 
 function generateUniqueId() {
-    return mongoose.Types.ObjectId().toString()
+    return new mongoose.Types.ObjectId().toString()
 }
 
-module.exports = {generateUniqueId}
+export {generateUniqueId}

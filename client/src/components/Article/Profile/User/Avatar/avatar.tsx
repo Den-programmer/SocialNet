@@ -1,75 +1,84 @@
-import React from 'react'
+import { FC, useMemo } from 'react'
 import classes from './avatar.module.scss'
 import { contactsType } from '../../../../../types/ProfileTypes/profileTypes'
+import { bufferToUrl } from '../../../../../utils/helpers/functions/function-helpers'
 
-interface IUserAvatar {
-    name: string
-    avatar: string | undefined | File
-    contacts: contactsType
+interface BufferAvatar {
+  contentType: string
+  data: {
+    type: 'Buffer'
+    data: number[]
+  }
 }
 
-const defaultUserPhoto = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
-const facebook = process.env.REACT_APP_CLOUDINARY_FACEBOOK
-const twitter = process.env.REACT_APP_CLOUDINARY_X
-const youtube = process.env.REACT_APP_CLOUDINARY_YOUTUBE
+type AvatarType = string | File | BufferAvatar | undefined
 
-const Avatar: React.FC<IUserAvatar> = (props) => {
-    const contactsData = Object.keys(props.contacts).map((key, index) => {
-        return {
-            id: index + 1,
-            title: key,
-            value: props.contacts[key as keyof contactsType]
-        }
-    })
-    const socialsData = contactsData.map((item, index) => {
-        if (item.title === 'facebook' || item.title === 'twitter' || item.title === 'youtube') {
-            return {
-                id: index + 1,
-                title: item.title,
-                value: item.value,
-                photo: item.title === 'facebook' ? facebook : item.title === 'twitter' ? twitter : youtube
-            }
-        }
-    })
-    const socials = socialsData.map((item) => {
-        if (item) {
-            return (
-                // @ts-ignore
-                <a target="_blank" key={item.id} href={item.value}>
-                    <div className={classes.social}>
-                        <img loading='lazy' src={item.photo} alt="" />
-                    </div>
-                </a>
-            )
-        }
-    })
-    const imageUrl = typeof props.avatar === 'string'
-        ? props.avatar
-        : props.avatar instanceof File
-            ? URL.createObjectURL(props.avatar)
-            // @ts-ignore
-            : props.avatar.data && props.avatar.contentType
-            // @ts-ignore
-                ? `data:${props.avatar.contentType};base64,${Buffer.from(props.avatar.data).toString('base64')}`
-                : defaultUserPhoto
-    return (
-        <div className={classes.avatarWrapper}>
-            <div className={classes.avatar}>
-                <img className={classes.userImg} src={imageUrl} alt="avatar" />
-                <div className={classes.userInf}>
-                    <div className={classes.name}>
-                        <h2>
-                            {props.name}
-                        </h2>
-                    </div>
-                    <div className={classes.horizontal_line}></div>
-                    <div className={classes.socialPanel}>
-                        {socials}
-                    </div>
-                </div>
-            </div>
+interface IUserAvatar {
+  name: string | undefined
+  avatar: AvatarType
+  contacts: contactsType | undefined
+}
+
+const defaultUserPhoto = import.meta.env.VITE_CLOUDINARY_DEFAULT_USER || null
+const facebook = import.meta.env.VITE_CLOUDINARY_FACEBOOK || ''
+const twitter = import.meta.env.VITE_CLOUDINARY_X || ''
+const youtube = import.meta.env.VITE_CLOUDINARY_YOUTUBE || ''
+
+const Avatar: FC<IUserAvatar> = ({ name, avatar, contacts }) => {
+   const imageUrl = useMemo(() => {
+    if (typeof avatar === 'string') return avatar
+    if (avatar instanceof File) return URL.createObjectURL(avatar)
+
+    if (
+      avatar &&
+      typeof avatar === 'object' &&
+      'data' in avatar &&
+      Array.isArray(avatar.data.data)
+    ) {
+      return bufferToUrl(avatar.data, avatar.contentType)
+    }
+
+    return defaultUserPhoto
+  }, [avatar])
+  
+  const socials = useMemo(() => {
+    const iconMap: Record<string, string> = { facebook, twitter, youtube }
+
+    return Object.entries(contacts || {})
+      .filter(([key, value]) => key in iconMap && !!value)
+      .map(([key, value], index) => (
+        <a key={index} href={value as string} target='_blank' rel='noopener noreferrer'>
+          <div className={classes.social}>
+            <img loading='lazy' src={iconMap[key]} alt={key} />
+          </div>
+        </a>
+      ))
+  }, [contacts])
+
+  return (
+    <div className={classes.avatarWrapper}>
+      <div className={classes.avatar}>
+        <img
+          className={classes.userImg}
+          src={imageUrl}
+          alt='avatar'
+          onError={(e) => {
+            e.currentTarget.onerror = null
+            e.currentTarget.src = defaultUserPhoto || ''
+          }}
+        />
+        <div className={classes.userInf}>
+          <div className={classes.name}>
+            <h2>{name}</h2>
+          </div>
+          <div className={classes.horizontal_line} />
+          <div className={classes.socialPanel}>
+            {socials}
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  )
 }
 
 export default Avatar

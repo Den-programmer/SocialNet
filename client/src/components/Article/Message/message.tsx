@@ -1,22 +1,18 @@
 import React from 'react'
-// import DialogContainer from './Dialog/dialogContainer'
-// import DialogsContainer from './Dialogs/dialogsContainer'
-// import UserChatProfileContainer from './UserChatProfile/userChatProfileContainer'
 import MessagesPage from './newMessagesC'
-import { IMessagesContainer } from './messagesContainer'
+import { useAppSelector, useAuthRedirect } from '../../../hooks/hooks'
+import { selectMessages, selectUserDialogId } from '../../../BLL/selectors/messages-selectors'
+import { setUserDialogId } from '../../../BLL/reducer-messages'
 
-// interface IMessages {
-//     isUserProfileMenuOpen: boolean
-// }
+const Messages: React.FC = () => {
+    const userDialogId = useAppSelector(selectUserDialogId)
+    const messages = useAppSelector(selectMessages)
+    useAuthRedirect()
 
-const Messages: React.FC<IMessagesContainer> = (props) => {
-    // return <div style={{ width: '100%' }} className="flex-container">
-    //     <DialogsContainer /> 
-    //     <DialogContainer />
-    //     {isUserProfileMenuOpen && <UserChatProfileContainer />}
-    // </div>
-    return <MessagesPage getALLDialogs={props.getALLDialogs} dialogsData={props.dialogsData} messages={props.messages} userDialogId={props.userDialogId}
-        sendMessage={props.sendMessage} setUserDialogId={props.setUserDialogId}/>
+    return <MessagesPage 
+    messages={messages} 
+    userDialogId={userDialogId}
+    setUserDialogId={setUserDialogId}/>
 }
 
 export default Messages

@@ -4,7 +4,7 @@ import { NavLink }  from 'react-router-dom'
 
 interface INoFriendsComponent {}
 
-const NoFriendsComponent: React.FC<INoFriendsComponent> = (props) => {
+const NoFriendsComponent: React.FC<INoFriendsComponent> = () => {
     return (
         <div className={classes.noFriendsMessage}>
             <div className={classes.title}>

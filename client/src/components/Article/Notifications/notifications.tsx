@@ -1,134 +1,128 @@
-import React, { useEffect, useState } from 'react';
-import classes from './notifications.module.scss';
-import { makeStyles, createStyles, Theme, Container, Checkbox, Button } from '@material-ui/core';
-import { notificationType } from '../../../BLL/reducer-notifications';
-import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
+import React, { useEffect } from 'react'
+import { Button, Checkbox, Typography, Row, Col, Empty } from 'antd'
+import {
+  useGetNotificationsQuery,
+  useDeleteNotificationMutation
+} from '../../../DAL/notificationApi'
+import classes from './notifications.module.scss'
+import { selectIsDeletingLoading, selectMainCheckboxStatus, selectNotifications } from '../../../BLL/selectors/notifications-selectors'
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks'
+import { notificationActions } from '../../../BLL/reducer-notifications'
 
-interface INotifications {
-    notifications: Array<notificationType>;
-    isMainCheckboxAcvtive: boolean;
-    setNotificationsChosenStatus: (status: boolean) => void;
-    updateIsCheckedStatus: (itemId: string) => void;
-    removeNotification: (itemId: string) => void
-    clearAllNotifications: (notifications: string[]) => void
-    fetchNotifications: () => void
-    isDeletingLoading: boolean
-}
+const { Title, Text } = Typography
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        notifications: {
-            minHeight: '100vh',
-        },
-        checkbox: {
-            zIndex: 100,
-        },
-        notificationsIcon: {
-            fontSize: '240px',
-            color: '#E3E3E3',
-        },
-    })
-);
+const Notifications: React.FC = () => {
+  const dispatch = useAppDispatch()
 
-const Notifications: React.FC<INotifications> = (props) => {
-    const [isNotificationChecked, setIsNotificationChecked] = useState<boolean>(false);
-    useEffect(() => {
-        props.fetchNotifications();
-        props.setNotificationsChosenStatus(false);
-    }, []);
+  const { toggleAllCheckedStatus, toggleNotificationChecked } = notificationActions
 
-    const s = useStyles();
+  const notifications = useAppSelector(selectNotifications)
+  const isMainChecked = useAppSelector(selectMainCheckboxStatus)
+  const isDeleting = useAppSelector(selectIsDeletingLoading)
 
-    useEffect(() => {
-        const isAnyChecked = props.notifications.some((item: notificationType) => item.isChecked);
-        setIsNotificationChecked(isAnyChecked);
-    }, [props.notifications])
+  const { refetch } = useGetNotificationsQuery()
+  const [deleteNotification] = useDeleteNotificationMutation()
 
-    const notificationsItems = props.notifications.map((item: notificationType) => {
-        const checkboxHandler = () => props.updateIsCheckedStatus(item._id)
-        return <div key={item._id} className={classes.notificationRow}>
+  useEffect(() => {
+    refetch()
+  }, [refetch])
+
+  const handleToggleAll = () => {
+    dispatch(toggleAllCheckedStatus(!isMainChecked))
+  }
+
+  const handleToggleSingle = (id: string) => {
+    dispatch(toggleNotificationChecked(id))
+  }
+
+  const handleDeleteSingle = async (id: string) => {
+    await deleteNotification(id)
+    refetch()
+  }
+
+  const handleDeleteMany = async () => {
+    const ids = notifications.filter(n => n.isChecked).map(n => n._id)
+    for (const id of ids) {
+      await deleteNotification(id)
+    }
+    refetch()
+  }
+
+  const isAnyChecked = notifications.some(n => n.isChecked)
+
+  return (
+    <div className={classes.notifications}>
+      <Title level={2}>Notifications</Title>
+
+      <div className={classes.notificationsContent}>
+        <Row align="middle" className={classes.notificationsHeader}>
+          <Col span={2}>
             <Checkbox
-                checked={item.isChecked}
-                onClick={checkboxHandler}
-                className={s.checkbox}
-                color="primary"
-                name="notifications"
+              checked={isMainChecked}
+              onChange={handleToggleAll}
+              style={{ opacity: isAnyChecked ? 1 : 0 }}
             />
-            <div className={classes.notificationContent}>
-                <span className={classes.notificationItem__title}>{item.title}</span>
-            </div>
-            <div className={classes.notificationType}>
-                <span>{item.type}</span>
-            </div>
-            {item.isChecked && (
-                <Button
-                    onClick={() => props.removeNotification(item._id)}
-                    color="primary"
-                    className={classes.deleteButton}
-                    disabled={!isNotificationChecked || props.isDeletingLoading}
-                >
-                    Delete
-                </Button>
-            )}
-        </div>
-    });
+          </Col>
+          <Col span={16}>
+            <Text strong>Notification</Text>
+          </Col>
+          <Col span={4}>
+            <Text strong>Type</Text>
+          </Col>
+          <Col span={2}>
+            <Button
+              danger
+              type="primary"
+              onClick={handleDeleteMany}
+              disabled={!isAnyChecked || isDeleting}
+              style={{ opacity: isAnyChecked ? 1 : 0 }}
+            >
+              Delete
+            </Button>
+          </Col>
+        </Row>
 
-    const opacity0 = {
-        opacity: 0
-    }
-    const opacity1 = {
-        opacity: 1
-    }
-
-    const handleDeleteChosenNotifications = () => {
-        const checkedNotifications = props.notifications.filter((notification) => notification.isChecked);
-        const checkedNotificationIds = checkedNotifications.map((notification) => notification._id);
-        props.clearAllNotifications(checkedNotificationIds);
-    }
-
-    const opacityCondition = isNotificationChecked ? opacity1 : opacity0
-    const checkboxHandler = () => {
-        props.setNotificationsChosenStatus(!props.isMainCheckboxAcvtive)
-    }
-    return (
-        <Container className={s.notifications}>
-            <div>
-                <h2 className={classes.title}>Notifications</h2>
-            </div>
-            <div className={classes.notificationsContent}>
-                <div className={classes.notificationsHeader}>
-                    <Checkbox style={opacityCondition}
-                        checked={props.isMainCheckboxAcvtive}
-                        onClick={checkboxHandler}
-                        className={s.checkbox}
-                        color="primary"
-                        name="notifications"
-                    />
-                    <span className={classes.headerColumn}>Notification</span>
-                    <span className={classes.headerColumn}>Type</span>
-                    <Button style={opacityCondition}
-                        onClick={handleDeleteChosenNotifications}
-                        color="primary"
-                        variant='contained'
-                        className={classes.deleteButton}
-                        disabled={!isNotificationChecked || props.isDeletingLoading}
+        {notifications.length ? (
+          <div className={classes.notificationsList}>
+            {notifications.map(n => (
+              <Row key={n._id} align="middle" className={classes.notificationRow}>
+                <Col span={2}>
+                  <Checkbox
+                    checked={n.isChecked}
+                    onChange={() => handleToggleSingle(n._id)}
+                  />
+                </Col>
+                <Col span={16}>
+                  <Text>{n.title}</Text>
+                </Col>
+                <Col span={4}>
+                  <Text type="secondary">{n.type}</Text>
+                </Col>
+                <Col span={2}>
+                  {n.isChecked && (
+                    <Button
+                      danger
+                      type="link"
+                      onClick={() => handleDeleteSingle(n._id)}
+                      disabled={isDeleting}
                     >
-                        Delete
+                      Delete
                     </Button>
-                </div>
-                <div className={classes.notificationsListWrapper}>
-                    {notificationsItems.length !== 0 ? (
-                        <div className={classes.notificationsList}>{notificationsItems}</div>
-                    ) : (
-                        <div className={classes.noNotifications}>
-                            <NotificationsOffIcon className={s.notificationsIcon} />
-                            <h4 className={classes.noNotifications__title}>No notifications yet!</h4>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </Container>
-    );
-};
+                  )}
+                </Col>
+              </Row>
+            ))}
+          </div>
+        ) : (
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description="No notifications yet!"
+            className={classes.noNotifications}
+          />
+        )}
+      </div>
+    </div>
+  )
+}
 
 export default Notifications

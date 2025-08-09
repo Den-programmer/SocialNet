@@ -1,0 +1,32 @@
+.header {
+    background: #001529;
+    padding: 0;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .toolbarWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 16px;
+  }
+  
+  .menuButton {
+    color: white;
+    font-size: 18px;
+  }
+  
+  .iconLink {
+    margin: 0 12px;
+    color: white;
+    font-size: 18px;
+  
+    &:hover {
+      color: #1890ff;
+    }
+  }
+  
+  .logButton {
+    font-weight: bold;
+  }

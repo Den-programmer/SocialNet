@@ -1,108 +1,120 @@
-import React, { ChangeEvent, createRef } from 'react'
+import React, { ChangeEvent, useRef, useEffect, useCallback } from 'react'
+import { Avatar, Typography, Input } from 'antd'
 import classes from './Post.module.scss'
-import { Container, Avatar, makeStyles, createStyles, Theme, TextField } from '@material-ui/core'
+import { useAppDispatch } from '../../../../../../hooks/hooks'
+import { profileActions } from '../../../../../../BLL/reducer-profile'
+import { bufferToUrl } from '../../../../../../utils/helpers/functions/function-helpers'
+
+const { Title, Paragraph } = Typography
 
 interface IPost {
-    userName: string
-    postTitle: string
-    postInf: string
-    postImg: string | File
-    isEditPostTitle: boolean
-    isEditPostInf: boolean
-    id: number
-    createdAt: string
-    likesCount: number
-    avatar: string | undefined | File
-    isModalOpen: boolean
-    setIsPostModalOpen: (modalStatus: boolean) => void
-    deletePost: (postId: number) => void
-    setIsPostTitleEdited: (postId: number, status: boolean) => void
-    setIsPostInfEdited: (postId: number, status: boolean) => void
-    onPostTitleChange: (postId: number, postContent: string) => void
-    onPostInfChange: (postId: number, postContent: string) => void
-    finishEditing: () => void
+  userName: string
+  postTitle: string
+  postInf: string
+  postImg: string | File
+  isEditPostTitle: boolean
+  isEditPostInf: boolean
+  id: number
+  createdAt: string
+  likesCount: number
+  avatar: string | undefined | File
+  isModalOpen: boolean
 }
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-    avatar: {
-        width: '75px',
-        height: '75px'
+const defaultUserPhoto = import.meta.env.VITE_CLOUDINARY_DEFAULT_USER
+const noPostImg = import.meta.env.VITE_CLOUDINARY_NO_PHOTO_URL
+
+const Post: React.FC<IPost> = props => {
+  const postContentRef = useRef<HTMLDivElement>(null)
+
+  const dispatch = useAppDispatch()
+
+  const {
+    finishEditing,
+    setIsPostInfEdited,
+    setIsPostTitleEdited,
+    onPostTitleChange,
+    onPostInfChange
+  } = profileActions
+
+  const handleOutsideClick = useCallback((e: MouseEvent) => {
+    if (postContentRef.current && !postContentRef.current.contains(e.target as Node)) {
+      dispatch(finishEditing())
     }
-}))
+  }, [finishEditing])
 
-const defaultUserPhoto = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
-// Edit post - false when I click on something that is not post input!
+  useEffect(() => {
+    document.addEventListener('click', handleOutsideClick)
+    return () => document.removeEventListener('click', handleOutsideClick)
+  }, [handleOutsideClick])
 
-const noPostImg = process.env.REACT_APP_CLOUDINARY_NO_PHOTO_URL
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) =>
+    dispatch(onPostTitleChange({ postId: props.id, postContent: e.currentTarget.value }))
 
-const Post: React.FC<IPost> = (props) => {
-    const s = useStyles()
-    const postContent = createRef<HTMLDivElement>()
+  const handleInfChange = (e: ChangeEvent<HTMLInputElement>) =>
+    dispatch(onPostInfChange({ postId: props.id, postContent: e.currentTarget.value }))
 
-    const onPostTitleChange = (e: ChangeEvent<HTMLInputElement>) => props.onPostTitleChange(props.id, e.currentTarget.value)
-    const onPostInfChange = (e: ChangeEvent<HTMLInputElement>) => props.onPostInfChange(props.id, e.currentTarget.value)
+  const resolveImage = (img: any, fallback: string) => {
+    if (typeof img === 'string') return img
 
-    document.addEventListener('click', (e: any) => {
-        let node = postContent.current
-        if (node) {
-            if (node && !node.contains(e.target)) {
-                props.finishEditing()
-            }
-        }
-    })
-    const imageUrl = typeof props.postImg === 'string'
-        ? props.postImg
-        : props.postImg instanceof File
-            ? URL.createObjectURL(props.postImg)
-            // @ts-ignore
-            : props.postImg.data && props.postImg.contentType
-                // @ts-ignore
-                ? `data:${props.postImg.contentType};base64,${Buffer.from(props.postImg.data).toString('base64')}`
-                : noPostImg
-    const imageAvatarUrl = typeof props.avatar === 'string'
-        ? props.avatar
-        : props.avatar instanceof File
-            ? URL.createObjectURL(props.avatar)
-            // @ts-ignore
-            : props.avatar.data && props.avatar.contentType
-                // @ts-ignore
-                ? `data:${props.avatar.contentType};base64,${Buffer.from(props.avatar.data).toString('base64')}`
-                : defaultUserPhoto
-    return (
-        <Container>
-            <div className={classes.post}>
-                <div className={classes.postHeaderWrapper}>
-                    <div className={classes.postHeader}>
-                        <div className={classes.avatar}>
-                            <Avatar className={s.avatar} src={imageAvatarUrl} alt="avatar" />
-                            <h6>{props.userName}</h6>
-                        </div>
-                        <div className={classes.date}>
-                            <p>{props.createdAt}</p>
-                        </div>
-                    </div>
-                </div>
-                <div className={classes.postBody}>
-                    <div className={classes.picture}>
-                        <img loading="lazy" src={imageUrl} alt="avatar" />
-                    </div>
-                    <div className={classes.postContentWrapper}>
-                        <div ref={postContent} className={classes.postContent}>
-                            <div onClick={() => props.setIsPostTitleEdited(props.id, true)} className={classes.postTitleContainer}>
-                                {props.isEditPostTitle ? <TextField onChange={onPostTitleChange} label={props.postTitle} variant="outlined" /> :
-                                    <h3 className={classes.postTitle}>{props.postTitle}</h3>}
-                            </div>
-                            <div className={classes.horizontal_line}></div>
-                            <div onClick={() => props.setIsPostInfEdited(props.id, true)} className={classes.postInfContainer}>
-                                {props.isEditPostInf ? <TextField onChange={onPostInfChange} variant="outlined" /> :
-                                    <p className={classes.postInf}>{props.postInf}</p>}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    if (img instanceof File) return URL.createObjectURL(img)
+
+    if (img?.data && img?.contentType) {
+      return bufferToUrl(img, img.contentType)
+    }
+
+    return fallback
+  }
+
+  const postImage = resolveImage(props.postImg, noPostImg)
+  const avatarImage = resolveImage(props.avatar, defaultUserPhoto)
+  return (
+    <div className={classes.post}>
+      <div className={classes.postHeaderWrapper}>
+        <div className={classes.postHeader}>
+          <div className={classes.avatar}>
+            <Avatar size={64} src={avatarImage} />
+            <h6>{props.userName}</h6>
+          </div>
+          <div className={classes.date}>
+            <p>{props.createdAt}</p>
+          </div>
+        </div>
+      </div>
+      <div className={classes.postBody}>
+        <div className={classes.picture}>
+          <img src={postImage} alt='post visual' />
+        </div>
+        <div className={classes.postContentWrapper}>
+          <div ref={postContentRef} className={classes.postContent}>
+            <div onClick={() => dispatch(setIsPostTitleEdited({ postId: props.id, status: true }))} className={classes.postTitleContainer}>
+              {props.isEditPostTitle ? (
+                <Input
+                  onChange={handleTitleChange}
+                  defaultValue={props.postTitle}
+                  placeholder='Post title'
+                />
+              ) : (
+                <Title level={4} className={classes.postTitle}>{props.postTitle}</Title>
+              )}
             </div>
-        </Container >
-    )
+            <div className={classes.horizontal_line} />
+            <div onClick={() => dispatch(setIsPostInfEdited({ postId: props.id, status: true }))} className={classes.postInfContainer}>
+              {props.isEditPostInf ? (
+                <Input
+                  onChange={handleInfChange}
+                  defaultValue={props.postInf}
+                  placeholder='Post content'
+                />
+              ) : (
+                <Paragraph className={classes.postInf}>{props.postInf}</Paragraph>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default Post

@@ -1,164 +1,101 @@
-import { resultCode } from '../DAL/api'
-import { NotificationsAPI } from '../DAL/notificationApi'
-import { RootState, InferActionTypes } from './redux'
-import { ThunkAction } from 'redux-thunk'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { notificationsApi } from '../DAL/notificationApi' 
+import type { NotificationType } from '../DAL/notificationApi'
 
-const entity = 'sn/notificationsPage/'
+interface NotificationsState {
+  notifications: NotificationType[]
+  isMainCheckboxActive: boolean
+  isDeletingLoading: boolean
+}
 
-export type notificationType = {
-  _id: string;
-  isChecked: boolean;
-  type: 'Profile' | 'Messages' | 'Friends' | 'News';
-  author: string | null;
-  avatar: string | null;
-  title: string | null;
-  pageUrl: string | null;
-};
-
-type notificationsType = {
-  notifications: Array<notificationType>;
-  isMainCheckboxAcvtive: boolean;
-  isDeletingLoading: boolean;
-};
-
-const notificationsPage = {
+const initialState: NotificationsState = {
   notifications: [],
-  isMainCheckboxAcvtive: false,
+  isMainCheckboxActive: false,
   isDeletingLoading: false
-} as notificationsType;
-
-type ActionTypes = InferActionTypes<typeof actions>;
-
-const reducerNotifications = (state = notificationsPage, action: ActionTypes): notificationsType => {
-  switch (action.type) {
-    case `/sn/notificationsPage/ADD-NOTIFICATION`:
-      return {
-        ...state,
-        notifications: [...state.notifications, action.notification]
-      };
-    case `/sn/notificationsPage/SET-NOTIFICATIONS-CHOSEN-STATUS`:
-      return {
-        ...state,
-        notifications: state.notifications.map((item: notificationType) => {
-          if (action.status) return { ...item, isChecked: true };
-          return { ...item, isChecked: false };
-        }),
-        isMainCheckboxAcvtive: action.status
-      };
-    case `/sn/notificationsPage/SET-NOTIFICATIONS-STATUS`:
-      let newNotifications = state.notifications.map((item: notificationType) => {
-        if (item._id === action.itemId) return { ...item, isChecked: !item.isChecked };
-        return item;
-      });
-      return {
-        ...state,
-        notifications: newNotifications,
-        isMainCheckboxAcvtive: newNotifications.every((item: notificationType) => item.isChecked !== true ? false : true)
-      };
-    case `/sn/notificationsPage/DELETE-NOTIFICATIONS`:
-      return {
-        ...state,
-        notifications: state.notifications.filter((item: notificationType) => action.itemId !== item._id)
-      };
-    case `/sn/notificationsPage/DELETE-ALL-NOTIFICATIONS`:
-      return {
-        ...state,
-        notifications: state.notifications.filter((notification: notificationType) => !notification.isChecked),
-        isMainCheckboxAcvtive: false
-      };
-    case `/sn/notificationsPage/SET-NOTIFICATIONS`:
-      return {
-        ...state,
-        notifications: action.notifications
-      }
-    case `/sn/notificationsPage/SET-IS-DELETING-LOADING`:
-      return {
-        ...state,
-        isDeletingLoading: action.status
-      }
-    default:
-      return state;
-  }
-};
-
-/* Action Creators! */
-
-export const actions = {
-  setNotificationsChosenStatus: (status: boolean) => ({ type: `/sn/notificationsPage/SET-NOTIFICATIONS-CHOSEN-STATUS`, status } as const),
-  setNotificationStatus: (itemId: string) => ({ type: `/sn/notificationsPage/SET-NOTIFICATIONS-STATUS`, itemId } as const),
-  deleteNotifications: (itemId: string) => ({ type: `/sn/notificationsPage/DELETE-NOTIFICATIONS`, itemId } as const),
-  deleteAllNotifications: (notifications: notificationType[]) => ({ type: `/sn/notificationsPage/DELETE-ALL-NOTIFICATIONS`, notifications } as const),
-  addNotification: (notification: notificationType) => ({ type: `/sn/notificationsPage/ADD-NOTIFICATION`, notification } as const),
-  setNotifications: (notifications: Array<notificationType>) => ({ type: `/sn/notificationsPage/SET-NOTIFICATIONS`, notifications } as const),
-  setIsDeletingLoading: (status: boolean) => ({ type: `/sn/notificationsPage/SET-IS-DELETING-LOADING`, status } as const)
-};
-
-/* Thunks! */
-
-type ThunkType = ThunkAction<Promise<void | any>, RootState, unknown, ActionTypes>;
-
-export const fetchNotifications = (): ThunkType => async (dispatch) => {
-  try {
-    const response = await NotificationsAPI.getNotifications();
-    const data = response.data;
-    dispatch(actions.setNotifications(data.notifications));
-  } catch (error) {
-    console.error('Error fetching notifications:', error);
-  }
-};
-
-export const createNotification = (title: string | null, pageUrl: string | null, itemType: notificationType['type']): ThunkType => async (dispatch) => {
-  try {
-    const res = await NotificationsAPI.addNotification(title, pageUrl, itemType);
-    if (res.resultCode === resultCode.Success) {
-      dispatch(actions.addNotification(res.data.newNotification));
-    } else {
-      console.error('Failed to create notification:', res.statusText);
-    }
-  } catch (error) {
-    console.error('Error creating notification:', error);
-  }
-};
-
-export const removeNotification = (itemId: string): ThunkType => async (dispatch) => {
-  try {
-    dispatch(actions.setIsDeletingLoading(true));
-    const res = await NotificationsAPI.deleteNotification(itemId);
-    if (res.resultCode === resultCode.Success) {
-      dispatch(actions.deleteNotifications(itemId));
-      dispatch(actions.setIsDeletingLoading(false));
-    } else {
-      console.error('Failed to delete notification:', res.statusText);
-      dispatch(actions.setIsDeletingLoading(false));
-    }
-  } catch (error) {
-    console.error('Error deleting notification:', error);
-    dispatch(actions.setIsDeletingLoading(false));
-  }
-};
-
-export const clearAllNotifications = (checkedNotificationIds: string[]): ThunkType => async (dispatch) => {
-  try {
-    for (let id of checkedNotificationIds) {
-      dispatch(removeNotification(id));
-    }
-  } catch (error) {
-    console.error('Error clearing checked notifications:', error);
-  }
 }
 
-export const updateIsCheckedStatus = (notificationId: string): ThunkType => async (dispatch) => {
-  try {
-    const res = await NotificationsAPI.updateIsCheckedStatus(notificationId);
-    if (res.resultCode === resultCode.Success) {
-      const notification = res.data.notification;
-      dispatch(actions.setNotificationStatus(notification._id));
-    } else {
-      console.error('Failed to update notification status:', res.statusText);
+const notificationsSlice = createSlice({
+  name: 'notifications',
+  initialState,
+  reducers: {
+    toggleAllCheckedStatus(state, action: PayloadAction<boolean>) {
+      state.notifications = state.notifications.map(n => ({
+        ...n,
+        isChecked: action.payload
+      }))
+      state.isMainCheckboxActive = action.payload
+    },
+    toggleNotificationChecked(state, action: PayloadAction<string>) {
+      state.notifications = state.notifications.map(n =>
+        n._id === action.payload
+          ? { ...n, isChecked: !n.isChecked }
+          : n
+      )
+      state.isMainCheckboxActive = state.notifications.every(n => n.isChecked)
+    },
+    setDeletingLoading(state, action: PayloadAction<boolean>) {
+      state.isDeletingLoading = action.payload
     }
-  } catch (error) {
-    console.error('Error updating notification status:', error);
+  },
+  extraReducers: builder => {
+    // Når getNotifications lykkes:
+    builder.addMatcher(
+      notificationsApi.endpoints.getNotifications.matchFulfilled,
+      (state, { payload }) => {
+        state.notifications = payload
+        // initial checkbox‐status:
+        state.isMainCheckboxActive = payload.every(n => n.isChecked)
+      }
+    )
+    // Når addNotification lykkes:
+    builder.addMatcher(
+      notificationsApi.endpoints.addNotification.matchFulfilled,
+      (state, { payload }) => {
+        state.notifications.push(payload)
+      }
+    )
+    // Når deleteNotification starter:
+    builder.addMatcher(
+      notificationsApi.endpoints.deleteNotification.matchPending,
+      state => {
+        state.isDeletingLoading = true
+      }
+    )
+    // Når deleteNotification lykkes:
+    builder.addMatcher(
+      notificationsApi.endpoints.deleteNotification.matchFulfilled,
+      (state, { meta }) => {
+        const deletedId = meta.arg.originalArgs
+        state.notifications = state.notifications.filter(n => n._id !== deletedId)
+        state.isDeletingLoading = false
+      }
+    )
+    // Når deleteNotification fejler:
+    builder.addMatcher(
+      notificationsApi.endpoints.deleteNotification.matchRejected,
+      state => {
+        state.isDeletingLoading = false
+      }
+    )
+    // Når updateIsCheckedStatus lykkes:
+    builder.addMatcher(
+      notificationsApi.endpoints.updateIsCheckedStatus.matchFulfilled,
+      (state, { meta }) => {
+        const toggledId = meta.arg.originalArgs
+        state.notifications = state.notifications.map(n =>
+          n._id === toggledId ? { ...n, isChecked: !n.isChecked } : n
+        )
+        state.isMainCheckboxActive = state.notifications.every(n => n.isChecked)
+      }
+    )
   }
-}
+})
 
-export default reducerNotifications
+export const {
+  toggleAllCheckedStatus,
+  toggleNotificationChecked,
+  setDeletingLoading
+} = notificationsSlice.actions
+
+export const notificationActions = notificationsSlice.actions
+export default notificationsSlice.reducer

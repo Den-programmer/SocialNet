@@ -1,5 +1,3 @@
-@import '../../../../../../../index.scss';
-
 .user {
     display: flex;
     flex-direction: column;
@@ -29,7 +27,6 @@
 
     .followBtn {
         font-weight: bold;
-        font-family: $Poppins;
     }
 }
 

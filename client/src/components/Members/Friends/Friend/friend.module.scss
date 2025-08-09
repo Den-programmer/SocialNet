@@ -1,5 +1,3 @@
-@import '../../../../index.scss';
-
 .friend {
     .friendLink {
         display: flex;
@@ -12,7 +10,6 @@
         }
         .userName {
             color: #737373;
-            font-family: $Lato;
             font-size: 12px;
             margin:0 5px;
             &:hover {

@@ -1,122 +1,54 @@
-import React from 'react'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { navLinkType } from '../types/SidebarTypes/sidebarTypes'
-import { InferActionTypes } from './redux'
-import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import EmailIcon from '@material-ui/icons/Email'
-import NewReleasesIcon from '@material-ui/icons/NewReleases'
-import MusicNoteIcon from '@material-ui/icons/MusicNote'
-import NotificationsIcon from '@material-ui/icons/Notifications'
-import SettingsIcon from '@material-ui/icons/Settings'
-import PeopleIcon from '@material-ui/icons/People'
 
-type SidebarType = {
-    navigationLinks: Array<navLinkType>
-    isSidebarOpen: boolean
-    sidebarWidth: number
+type SidebarState = {
+  navigationLinks: Array<Omit<navLinkType, 'icon'> & { iconKey: string }>
+  isSidebarOpen: boolean
+  sidebarWidth: number
 }
 
-const screenWidth = window.screen.width
+const initialState: SidebarState = {
+  navigationLinks: [
+    { id: 7001, name: 'Profile', path: '/Profile', iconKey: 'UserOutlined', isChosen: true },
+    { id: 7002, name: 'Messages', path: '/Messages', iconKey: 'MailOutlined', isChosen: false },
+    { id: 7006, name: 'Friends', path: '/Friends/DataFriends', iconKey: 'TeamOutlined', isChosen: false },
+    { id: 7013, name: 'Notifications', path: '/Notifications', iconKey: 'NotificationOutlined', isChosen: false },
+    { id: 7003, name: 'News', path: '/News', iconKey: 'BellOutlined', isChosen: false },
+    { id: 7015, name: 'Options', path: '/Options/account', iconKey: 'SettingOutlined', isChosen: false }
+  ],
+  isSidebarOpen: false,
+  sidebarWidth: 240
+}
 
-const Sidebar = {
-    navigationLinks: [
-        {
-            id: 7001,
-            name: 'Profile',
-            path: '/Profile',
-            icon: AccountCircleIcon,
-            isChosen: true
-        },
-        {
-            id: 7002,
-            name: 'Messages',
-            path: '/Messages',
-            icon: EmailIcon,
-            isChosen: false
-        },
-        {
-            id: 7006,
-            name: 'Friends',
-            path: '/Friends/DataFriends',
-            icon: PeopleIcon,
-            isChosen: false
-        },
-        {
-            id: 7013,
-            name: 'Notifications',
-            path: '/Notifications',
-            icon: NotificationsIcon,
-            isChosen: false
-        },
-        {
-            id: 7003,
-            name: 'News',
-            path: '/News',
-            icon: NewReleasesIcon,
-            isChosen: false
-        },
-        // {
-        //     id: 7004,
-        //     name: 'Music',
-        //     path: '/Music',
-        //     icon: MusicNoteIcon,
-        //     isChosen: false
-        // },
-        {
-            id: 7015,
-            name: 'Options',
-            path: '/Options/account',
-            icon: SettingsIcon,
-            isChosen: false
-        }
-    ],
-    isSidebarOpen: false,
-    sidebarWidth: 240
-} as SidebarType
-
-const reducerSidebar = (state = Sidebar, action: ActionsType): SidebarType => {
-    switch (action.type) {
-        case `sn/sidebar/ADD_SIDEBAR_NAVLINK`:
-            const newLink = {
-                id: state.navigationLinks.length + 1,
-                name: action.title,
-                path: action.path,
-                icon: action.icon,
-                isChosen: false
-            }
-            return {
-                ...state,
-                navigationLinks: [...state.navigationLinks, newLink]
-            }
-        case `sn/sidebar/DELETE_SIDEBAR_NAVLINK`:
-            return {
-                ...state,
-                navigationLinks: state.navigationLinks.filter(item => item.id !== action.id)
-            }
-        case `sn/sidebar/CHANGE_SIDEBAR_OPEN_STATUS`:  
-            return {
-                ...state,
-                isSidebarOpen: action.status
-            }
-        case `sn/sidebar/CHOOSE_PAGE`:
-            return {
-                ...state,
-                navigationLinks: state.navigationLinks.map((link: navLinkType) => {
-                    if(action.linkId === link.id) return { ...link, isChosen: true }
-                    return { ...link, isChosen: false }
-                })
-            }
-        default:
-            return state
+const sidebarSlice = createSlice({
+  name: 'sidebar',
+  initialState,
+  reducers: {
+    addSideBarNavLink: (state, action: PayloadAction<{ title: string, path: string, iconKey: string }>) => {
+      const newLink: navLinkType = {
+        id: state.navigationLinks.length + 1,
+        name: action.payload.title,
+        path: action.payload.path,
+        iconKey: action.payload.iconKey,
+        isChosen: false
+      }
+      state.navigationLinks.push(newLink)
+    },
+    deleteSideBarNavLink: (state, action: PayloadAction<number>) => {
+      state.navigationLinks = state.navigationLinks.filter(link => link.id !== action.payload)
+    },
+    changeSidebarIsOpenStatus: (state, action: PayloadAction<boolean>) => {
+      state.isSidebarOpen = action.payload
+    },
+    choosePage: (state, action: PayloadAction<number>) => {
+      state.navigationLinks = state.navigationLinks.map(link => ({
+        ...link,
+        isChosen: link.id === action.payload
+      }))
     }
-}
+  }
+})
 
-type ActionsType = InferActionTypes<typeof actions>
+export const sidebarActions = sidebarSlice.actions
 
-export const actions = {
-    addSideBarNavLink: (title: string, path: string, icon: React.ComponentType) => ({ type: `sn/sidebar/ADD_SIDEBAR_NAVLINK`, title, path, icon } as const),
-    deleteSideBarNavLink: (id: number) => ({ type: `sn/sidebar/DELETE_SIDEBAR_NAVLINK`, id } as const),
-    changeSidebarIsOpenStatus: (status: boolean) => ({ type: `sn/sidebar/CHANGE_SIDEBAR_OPEN_STATUS`, status } as const),
-    choosePage: (linkId: number) => ({ type: `sn/sidebar/CHOOSE_PAGE`, linkId } as const)
-}
-
-export default reducerSidebar
+export default sidebarSlice.reducer

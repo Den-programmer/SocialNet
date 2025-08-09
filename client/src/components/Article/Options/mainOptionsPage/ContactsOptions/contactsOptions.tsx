@@ -1,76 +1,107 @@
-import React, { useState } from 'react'
-import '../../options.scss'
+import React, { useState, useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
+import { Tooltip } from 'antd'
+import { EditOutlined } from '@ant-design/icons'
 import OptionsTitle from '../accountOptions/OptionsTitle/optionsTitle'
-import { contactsType } from '../../../../../types/ProfileTypes/profileTypes'
-import { useEditIconStyles } from '../accountOptions/accountOptions'
-import EditIcon from '@material-ui/icons/Edit'
 import ChangeContact from './ChangeContacts/changeContactsForm/changeContact/changeContact'
-import { RouteComponentProps } from 'react-router-dom'
-
-interface IContactsOptions {
-    userName: string
-    contacts: contactsType
-    error: string 
-    updateContacts: (contacts: contactsType) => void
-    createNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'News' | 'Friends') => void
-}
+import '../../options.scss'
+import { useAppSelector } from '../../../../../hooks/hooks'
+import { selectContacts, selectUsersName } from '../../../../../BLL/selectors/profile-selectors'
+import { selectMessageError } from '../../../../../BLL/selectors/selectors'
 
 export interface ICurrentContact {
-    id: number
-    property: string
-    value: string | null
-    isEdit: boolean
-    isEditIconActive: boolean
+  id: number
+  property: string
+  value: string | null
+  isEdit: boolean
+  isEditIconActive: boolean
 }
 
-const ContactsOptions: React.FC<IContactsOptions & RouteComponentProps> = (props) => {
-    const classes = useEditIconStyles()
-    const contacts = Object.keys(props.contacts).map((key, index: number) => {
-        let currentIndex = index + 1
-        return {
-            id: currentIndex,
-            property: key,
-            value: props.contacts[key as keyof contactsType],
-            isEdit: false,
-            isEditIconActive: false
-        }
-    })
-    const [currentContacts, setCurrentContacts] = useState<Array<ICurrentContact>>(contacts)
-    const menuItems = currentContacts.map((item: ICurrentContact) => {
-        const handleHover = (itemId: number, status: boolean) => {
-            let array = currentContacts.map((item: ICurrentContact) => {
-                if (itemId === item.id && status === true) return { ...item, isEditIconActive: true }
-                return { ...item, isEditIconActive: false }
-            })
-            setCurrentContacts(array)
-        }
-        const handleClick = (itemId: number) => {
-            let array = currentContacts.map((item: ICurrentContact) => {
-                if (itemId === item.id) return { ...item, isEdit: true }
-                return { ...item, isEdit: false }
-            })
-            setCurrentContacts(array)
-        }
-        return (
-            <div key={item.id} onClick={() => handleClick(item.id)} onMouseEnter={() => handleHover(item.id, true)} onMouseLeave={() => handleHover(item.id, false)} className="options_itemWrapper">
-                <div className="options_item">
-                    {item.isEdit ? <ChangeContact createNotification={props.createNotification} error={props.error} currentPageUrl={props.location.pathname} key={item.id} id={item.id} 
-                    property={item.property} userName={props.userName} currentContacts={currentContacts} setCurrentContacts={setCurrentContacts} value={item.value} updateContacts={props.updateContacts}/> : <div className="options_item_content">
-                        <h5 className="options_item_content_property">{item.property}</h5>
-                        <p className="options_item_content_value">{item.value ? item.value : 'Not provided'}</p>
-                    </div>}
-                    {item.isEditIconActive && <EditIcon className={classes.editIcon} />}
-                </div>
+interface IContactsOptions {
+  
+}
+
+const ContactsOptions: React.FC<IContactsOptions> = ({}) => {
+  const location = useLocation()
+
+  const userName = useAppSelector(selectUsersName) || 'Your name'
+  const contacts = useAppSelector(selectContacts) || {}
+
+  const error = useAppSelector(selectMessageError) || ''
+
+  const initialContacts = useMemo(() =>
+    Object.entries(contacts).map(([key, val], idx) => ({
+      id: idx + 1,
+      property: key,
+      value: val,
+      isEdit: false,
+      isEditIconActive: false
+    })), [contacts])
+
+  const [currentContacts, setCurrentContacts] = useState<ICurrentContact[]>(initialContacts)
+
+  const handleHover = (id: number, active: boolean) => {
+    setCurrentContacts(currentContacts.map(c =>
+      c.id === id
+        ? { ...c, isEditIconActive: active }
+        : { ...c, isEditIconActive: false }
+    ))
+  }
+
+  const handleClick = (id: number) => {
+    setCurrentContacts(currentContacts.map(c =>
+      c.id === id
+        ? { ...c, isEdit: true }
+        : { ...c, isEdit: false }
+    ))
+  }
+
+  return (
+    <div className="options">
+      <OptionsTitle title="Contacts Options" />
+      <div>
+        {currentContacts.map(item => (
+          <div
+            key={item.id}
+            className="options_itemWrapper"
+            onMouseEnter={() => handleHover(item.id, true)}
+            onMouseLeave={() => handleHover(item.id, false)}
+            onClick={() => handleClick(item.id)}
+          >
+            <div className="options_item">
+              {item.isEdit
+                ? (
+                  <ChangeContact
+                    id={item.id}
+                    property={item.property}
+                    value={item.value}
+                    userName={userName}
+                    currentContacts={currentContacts}
+                    setCurrentContacts={setCurrentContacts}
+                    error={error}
+                    currentPageUrl={location.pathname}
+                  />
+                )
+                : (
+                  <div className="options_item_content">
+                    <h5 className="options_item_content_property">{item.property}</h5>
+                    <p className="options_item_content_value">
+                      {item.value || 'Not provided'}
+                    </p>
+                  </div>
+                )
+              }
+              {item.isEditIconActive && (<div style={{ width: '10%' }}>
+                <Tooltip title="Edit">
+                  <EditOutlined style={{ fontSize: 20, color: '#1890ff' }} />
+                </Tooltip>
+              </div>)}
             </div>
-        )
-    })
-    return (
-        <div className="options">
-            <OptionsTitle title="Contacts Options" />
-            <div>{menuItems}</div>
-        </div>
-    )
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
-
 
 export default ContactsOptions

@@ -1,31 +1,31 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import classes from './followingInformation.module.scss'
-import { postType } from '../../../../../types/ProfileTypes/profileTypes'
 import { userType } from '../../../../../types/FriendsType/friendsType'
+import { useGetIsUserFollowedQuery } from '../../../../../DAL/usersApi'
+import { useAppSelector } from '../../../../../hooks/hooks'
+import { selectPosts } from '../../../../../BLL/selectors/profile-selectors'
+import { useParams } from 'react-router-dom'
 
 interface IFollowingInformation {
-    posts: Array<postType>
-    userId: string
     authorizedUserId: string
-    followed: boolean
     friends: Array<userType>
-    getIsUserFollowed: (userId: string) => void
     follow: (userId: string) => void
     unfollow: (userId: string) => void
 }
 
 const FollowingInformation: React.FC<IFollowingInformation> = (props) => {
-    useEffect(() => {
-        props.getIsUserFollowed(props.userId)
-    })
+    const { userId } = useParams<{ userId: string }>()
+    const { data: followed } = useGetIsUserFollowedQuery(userId || props.authorizedUserId, { skip: !userId }) // Followed can be undefined!
 
     const following = () => {
-        if(props.followed) {
-            props.unfollow(props.userId)
+        if (followed) {
+            props.unfollow(userId || "")
         } else {
-            props.follow(props.userId)
+            props.follow(userId || "")
         }
     }
+
+    const posts = useAppSelector(selectPosts)
 
     return (
         <div className={classes.followingBlock}>
@@ -33,7 +33,7 @@ const FollowingInformation: React.FC<IFollowingInformation> = (props) => {
                 <div className={classes.mainFollowingInf}>
                     <div className={classes.infBlock}>
                         <h3>Posts</h3>
-                        <p>{props.posts.length}</p>
+                        <p>{posts?.length}</p>
                     </div>
                     <div className={classes.infBlock}>
                         <h3>Followers</h3>
@@ -45,11 +45,19 @@ const FollowingInformation: React.FC<IFollowingInformation> = (props) => {
                     </div>
                 </div>
                 <div className={classes.btn_following}>
-                    {props.userId !== props.authorizedUserId ? 
-                    props.followed ? 
-                    <button onClick={following} className={classes.followingButton}>Following</button> : 
-                    <button onClick={following} className={classes.unfollowingButton}>Unfollow</button> : 
-                    <div className={classes.horizontal_line}></div>}
+                    {userId || "" === props.authorizedUserId ? (
+                        followed ? (
+                            <button onClick={following} className={classes.unfollowingButton}>
+                                Unfollow
+                            </button>
+                        ) : (
+                            <button onClick={following} className={classes.followingButton}>
+                                Follow
+                            </button>
+                        )
+                    ) : (
+                        <div className={classes.horizontal_line}></div>
+                    )}
                 </div>
             </div>
         </div>

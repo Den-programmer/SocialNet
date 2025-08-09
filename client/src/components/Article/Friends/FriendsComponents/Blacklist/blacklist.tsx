@@ -1,53 +1,56 @@
-import { Container, createStyles, makeStyles, Button, Avatar } from '@material-ui/core'
-import React from 'react'
-import classes from '../../FriendsComponents/friendsByButton/Friend/friend.module.scss'
-import { NavLink } from 'react-router-dom'
-import { userType } from '../../../../../types/FriendsType/friendsType'
+// import { Avatar, Button, Typography, Empty, Row, Col } from 'antd'
+// import { NavLink } from 'react-router-dom'
+// import { userType } from '../../../../../types/FriendsType/friendsType'
+// import styles from '../../FriendsComponents/friendsByButton/Friend/friend.module.scss'
+// import { useAppSelector } from '../../../../../hooks/hooks'
+// import { selectBlacklist } from '../../../../../BLL/selectors/users-selectors'
+// import { deleteFromBlacklist } from '../../../../../BLL/reducer-friends'
 
-interface IBlacklist {
-    blacklist: Array<userType>
-    deleteFromBlacklist: (itemId: string) => void
-}
+// const { useBreakpoint } = Grid
+// const { Title } = Typography
 
-const useStyles = makeStyles(() => createStyles({
-    container: {
-        minHeight: '100vh'
-    },
-    avatar: {
-        width: '100px',
-        height: '100px'
-    }
-}))
+// const defaultUserPhoto = import.meta.env.VITE_CLOUDINARY_DEFAULT_USER
 
-const defaultUserPhoto = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
-
-const Blacklist: React.FC<IBlacklist> = ({ blacklist, deleteFromBlacklist }) => {
-    const s = useStyles()
-    const blackedUsers = blacklist.map((item: userType) => {
-        const large = item.profile.photos.large
-        const imageUrl = typeof large === 'string'
-        ? large
-        : large instanceof File
-            ? URL.createObjectURL(large)
-            // @ts-ignore
-            : large.data && large.contentType
-            // @ts-ignore
-                ? `data:${large.contentType};base64,${Buffer.from(large.data).toString('base64')}`
-                : defaultUserPhoto
-        return (
-            <div className={classes.user}>
-                <NavLink className={classes.navLink} to={"/Profile/" + item.id}>
-                    <Avatar className={s.avatar} src={imageUrl ? imageUrl : defaultUserPhoto} alt="avatar" />
-                    <h5 className={classes.userName}>{item.username}</h5>
-                </NavLink>
-                <Button onClick={() => deleteFromBlacklist(item.id)} variant="contained" color="secondary">Blacked</Button>
-            </div>
-        )
-    })
+const Blacklist = ({  }) => {
+    //   const screens = useBreakpoint()
+    // const blacklist = useAppSelector(selectBlacklist)
     return (
-        <Container className={classes.container}>
-            {blackedUsers.length === 0 ? <h4 className={classes.noUsersTitle}>No users in the blacklist</h4> : blackedUsers}
-        </Container>
+        <div style={{ minHeight: '100vh', padding: '24px' }}>
+
+            {/* {blacklist.length === 0 ? (
+                <Empty description="No users in the blacklist" />
+            ) : (
+                <Row gutter={[16, 16]}>
+                    {blacklist.map(item => {
+                        const large = item.profile.photos.large
+                        const imageUrl =
+                            typeof large === 'string'
+                                ? large
+                                : large instanceof File
+                                    ? URL.createObjectURL(large)
+                                    : // @ts-ignore
+                                    large?.data && large?.contentType
+                                        ? // @ts-ignore
+                                        `data:${large.contentType};base64,${Buffer.from(large.data).toString('base64')}`
+                                        : defaultUserPhoto
+
+                        return (
+                            <Col xs={24} sm={12} md={8} lg={6} key={item.id}>
+                                <div className={styles.user}>
+                                    <NavLink className={styles.navLink} to={`/Profile/${item.id}`}>
+                                        <Avatar src={imageUrl || defaultUserPhoto} size={100} />
+                                        <Title level={5} className={styles.userName}>{item.username}</Title>
+                                    </NavLink>
+                                    <Button danger type="primary" onClick={() => deleteFromBlacklist(item.id)}>
+                                        Blacked
+                                    </Button>
+                                </div>
+                            </Col>
+                        )
+                    })}
+                </Row>
+            )} */}
+        </div>
     )
 }
 

@@ -5,7 +5,7 @@ interface ISecurityOptions {
 
 }
 
-const SecurityOptions:React.FC<ISecurityOptions> = (props) => {
+const SecurityOptions:React.FC<ISecurityOptions> = () => {
     return (
         <div className={classes.securityOptions}>
             In developing...

@@ -1,0 +1,12 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-around;
+}
+
+.smContainer {
+    width: 80%;
+    display: flex;
+    min-height: 100vh;
+    justify-content: space-around;
+}

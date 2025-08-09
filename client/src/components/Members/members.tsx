@@ -1,32 +1,35 @@
-import React from 'react'
-import classes from './members.module.scss'
-import { Divider, Typography } from '@material-ui/core'
-import Friends from './Friends/friendsContainer'
+import { Divider, Typography } from 'antd'
+import Friends from './Friends/friends'
 import { userType } from '../../types/FriendsType/friendsType'
+import classes from './members.module.scss'
+import { useAppSelector } from '../../hooks/hooks'
 
-interface IMembers {
-    friends: Array<userType>
-}
+const { Paragraph, Title } = Typography
 
-const Members: React.FC<IMembers> = ({ friends }) => {
-    return (<>
-        {friends.length !== 0 && <div className={classes.members}>
-            <div className={classes.title}>
-                <h3>Members</h3>
-            </div>
-            <div className={classes.membersPanel}>
-                <Divider />
-                <div className={classes.membersPanel_items}>
-                    <Typography className={classes.membersPanel_items_item} paragraph={true}>Newest</Typography>
-                    <Typography className={classes.membersPanel_items_item} paragraph={true}>Active</Typography>
-                    <Typography className={classes.membersPanel_items_item} paragraph={true}>Popular</Typography>
+const Members = () => {
+    const friends: Array<userType> = useAppSelector((state) => state.Friends.friends)
+    return (
+        <>
+            {friends.length !== 0 && (
+                <div className={classes.members}>
+                    <div className={classes.title}>
+                        <Title level={3}>Members</Title>
+                    </div>
+                    <div className={classes.membersPanel}>
+                        <Divider />
+                        <div className={classes.membersPanel_items}>
+                            <Paragraph className={classes.membersPanel_items_item}>Newest</Paragraph>
+                            <Paragraph className={classes.membersPanel_items_item}>Active</Paragraph>
+                            <Paragraph className={classes.membersPanel_items_item}>Popular</Paragraph>
+                        </div>
+                        <Divider />
+                    </div>
+                    <Friends />
+                    <Divider />
                 </div>
-                <Divider />
-            </div>
-            <Friends />
-            <Divider />
-        </div>}
-    </>)    
+            )}
+        </>
+    )
 }
 
 export default Members

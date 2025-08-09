@@ -1,6 +1,4 @@
-import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { Button } from '@material-ui/core'
 import classes from './help.module.scss'
 import { format, parseISO } from 'date-fns'
 
@@ -17,7 +15,7 @@ export const createReviewChangesBtn = (func: (...args: any[]) => void, url?: str
     const currentPageUrlCheckout = currentPageUrl ? currentPageUrl : '/'
     return (
         <NavLink onClick={func} to={hasError ? currentPageUrlCheckout : url ? url : currentPageUrlCheckout}>
-            <Button color="primary" variant="contained">Rewiew Change</Button>
+            {/* <div>Rewiew Change</div> # */}
         </NavLink>
     )
 }
@@ -32,4 +30,41 @@ export const scrollToTop = (topNumber: number = 0) => {
         top: topNumber,
         behavior: 'smooth'
     });
+}
+
+export const bufferToUrl = (
+  input:
+    | ArrayBuffer
+    | Uint8Array
+    | { type: 'Buffer'; data: number[] }
+    | { data: any },  // any, чтобы ловить вложенность
+  contentType: string
+): string => {
+
+  let byteArray: Uint8Array
+
+  if (input instanceof Uint8Array) {
+    byteArray = input
+  } else if ('data' in input) {
+    // Проверяем вложенность data.data
+    if (Array.isArray(input.data)) {
+      byteArray = new Uint8Array(input.data)
+    } else if (input.data && Array.isArray(input.data.data)) {
+      byteArray = new Uint8Array(input.data.data)
+    } else {
+      throw new Error('Unsupported nested buffer input format')
+    }
+  } else if (input instanceof ArrayBuffer) {
+    byteArray = new Uint8Array(input)
+  } else {
+    throw new Error('Unsupported buffer input format')
+  }
+
+  const arrayBuffer = new ArrayBuffer(byteArray.byteLength)
+  const view = new Uint8Array(arrayBuffer)
+  view.set(byteArray)
+
+  const blob = new Blob([arrayBuffer], { type: contentType })
+
+  return URL.createObjectURL(blob)
 }

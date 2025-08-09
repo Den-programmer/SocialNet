@@ -1,42 +1,38 @@
 import React from 'react'
 import User from '../User/user'
-import ProfileNav from '../ProfileNav/profileNavContainer'
-import { postType, profileType } from '../../../../types/ProfileTypes/profileTypes'
-import { userType } from '../../../../types/FriendsType/friendsType'
-import EditAvatar from '../User/editPhoto/editPhotoContainer'
+import ProfileNav from '../ProfileNav/profileNav'
+import EditAvatar from '../User/editPhoto/editPhoto'
+import { useAppSelector } from '../../../../hooks/hooks'
+import { selectGender, selectUserBackground, selectUsersName, selectUsersProfile } from '../../../../BLL/selectors/profile-selectors'
+import { selectFriends } from '../../../../BLL/selectors/users-selectors'
+import { selectAuthorizedUserId } from '../../../../BLL/selectors/auth-selectors'
+import { useFollowUserMutation, useUnfollowUserMutation } from '../../../../DAL/usersApi'
 
-interface IProfileMainContent {
-    followed: boolean
-    posts: Array<postType>
-    friends: Array<userType>
-    background: string | undefined
-    profile: profileType
-    gender: string
-    username: string
-    authorizedUserId: string
-    followThunk: (userId: string) => void
-    unfollowThunk: (userId: string) => void
-    getIsUserFollowed: (userId: string) => void
-    updateStatusThunk: (status: string) => void
-}
+const ProfileMainContent:React.FC = () => {
+    const profile = useAppSelector(selectUsersProfile)
 
-const ProfileMainContent:React.FC<IProfileMainContent> = (props) => {
+    const background = useAppSelector(selectUserBackground)
+    const gender = useAppSelector(selectGender)
+    const username = useAppSelector(selectUsersName)
+    const authorizedUserId = useAppSelector(selectAuthorizedUserId)
+
+
+    const friends = useAppSelector(selectFriends)
+    const [follow] = useFollowUserMutation()  
+    const [unfollow] = useUnfollowUserMutation()
     return (
         <div>
             <EditAvatar />
-            <User followed={props.followed} 
-            posts={props.posts} 
-            friends={props.friends} 
-            username={props.username}
-            authorizedUserId={props.authorizedUserId}
-            background={props.background} 
-            updateStatus={props.updateStatusThunk}
-            follow={props.followThunk}
-            unfollow={props.unfollowThunk}
-            gender={props.gender}
-            getIsUserFollowed={props.getIsUserFollowed} 
-            contacts={props.profile.contacts} 
-            profile={props.profile}/>
+            <User
+            friends={friends} 
+            username={username}
+            authorizedUserId={authorizedUserId}
+            background={background} 
+            follow={follow}
+            unfollow={unfollow}
+            gender={gender}
+            contacts={profile.contacts} 
+            profile={profile}/>
             <ProfileNav />
         </div>
     )

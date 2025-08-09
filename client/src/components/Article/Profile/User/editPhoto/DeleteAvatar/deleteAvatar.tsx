@@ -1,35 +1,55 @@
 import React from 'react'
 import classes from '../changingPhotos.module.scss'
-import { Button } from '@material-ui/core'
+import { Button, Typography } from 'antd'
+import { useSetUserPhotoMutation } from '../../../../../../DAL/profileApi'
+import { useAddNotificationMutation } from '../../../../../../DAL/notificationApi'
 
 interface IDeleteAvatar {
-    setUserPhoto: (photo: File) => void
-    error: string | null
-    setIsModalOpenStatus: React.Dispatch<React.SetStateAction<boolean>>
-    createNotification: (title: string | null, pageUrl: string | null, itemType: 'Profile' | 'Messages' | 'Friends' | 'News') => void
+  setIsModalOpenStatus: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const defaultUser = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
+const { Paragraph } = Typography
 
-const DeleteAvatar:React.FC<IDeleteAvatar> = ({ setUserPhoto, setIsModalOpenStatus, createNotification, error }) => {
-    const photoFile = new File([defaultUser?defaultUser:''], "defaultUserFile.jpg", {
+const defaultUser = import.meta.env.VITE_CLOUDINARY_DEFAULT_USER
+
+const DeleteAvatar: React.FC<IDeleteAvatar> = ({ setIsModalOpenStatus }) => {
+  const [setUserPhoto, { isLoading: isUserPhotoLoading }] = useSetUserPhotoMutation()
+  const [createNotification] = useAddNotificationMutation()
+  // #
+  const userId = localStorage.getItem('userId') || ''
+
+  const deleteAvatar = async () => {
+    try {
+      const blob = new Blob([defaultUser?defaultUser:""], { type: 'image/jpeg' })
+      const photoFile = new File([blob], 'defaultUserFile.jpg', {
         type: 'image/jpeg',
-        lastModified: 1583871416945
-    })
+        lastModified: Date.now()
+      })
 
-    const deleteAvatar = () => {
-        setUserPhoto(photoFile)
-        setIsModalOpenStatus(false)
-        !error && createNotification('Your avatar has been deleted successfully! Now you have the default!', '/Profile', 'Profile')
+      await setUserPhoto({ photo: photoFile, userId }).unwrap()
+
+      await createNotification({
+        title: 'Your avatar has been deleted successfully! Now you have the default!',
+        pageUrl: '/Profile',
+        itemType: 'Profile'
+      })
+
+      setIsModalOpenStatus(false)
+    } catch (err) {
+      console.error(err)
     }
-    return (
-        <div className={classes.deleteAvatar}>
-            <p className={classes.text}>
-                If you want to delete your current profile photo but not upload a new one, please use the delete profile photo button.
-            </p>
-            <Button onClick={deleteAvatar} color="primary" variant="contained" component="span">Delete my profile photo</Button>
-        </div>
-    )
+  }
+
+  return (
+    <div className={classes.deleteAvatar}>
+      <Paragraph className={classes.text}>
+        If you want to delete your current profile photo but not upload a new one, please use the delete profile photo button.
+      </Paragraph>
+      <Button type='primary' danger onClick={deleteAvatar} disabled={isUserPhotoLoading}>
+        Delete my profile photo
+      </Button>
+    </div>
+  )
 }
 
 export default DeleteAvatar

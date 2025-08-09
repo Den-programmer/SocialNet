@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+import { Schema, model } from 'mongoose';
 
 const Notification = new Schema({
     isChecked: { type: Boolean, default: false },
@@ -10,4 +10,4 @@ const Notification = new Schema({
     pageUrl: { type: String, required: true },
 })
 
-module.exports = model('Notification', Notification)
+export default model('Notification', Notification)

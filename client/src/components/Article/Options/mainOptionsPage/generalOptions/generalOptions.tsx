@@ -4,7 +4,7 @@ interface IGeneralOptions {
 
 }
 
-const GeneralOptions:React.FC<IGeneralOptions> = (props) => {
+const GeneralOptions:React.FC<IGeneralOptions> = () => {
     const temporaryStyle = { height: '100vh' }
     return (
         <div style={temporaryStyle}>

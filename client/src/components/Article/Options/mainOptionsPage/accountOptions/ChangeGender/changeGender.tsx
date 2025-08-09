@@ -1,43 +1,44 @@
 import React, { useState } from 'react'
+import { Select, notification } from 'antd'
 import classes from './changeGender.module.scss'
-import { Snackbar, IconButton, FormControl, Select, MenuItem } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
-import CloseIcon from '@material-ui/icons/Close'
 import { IChangeOptions } from '../accountOptions'
 
+const { Option } = Select
+
 const ChangeGender: React.FC<IChangeOptions> = (props) => {
-    const [isSuccessfulSnackbarOpen, setIsSuccessfulSnackbarOpenStatus] = useState<boolean>(false)
-    const changeGender = (gender: string) => {
-        props.setGender(gender, props.userId)
-        props.createNotification('You have changed your gender! Now you\'re ' + gender, '/Profile', 'Profile')
-    }
-    return (
-        <div className={classes.changeGender}>
-            <div className={classes.changeGender_content}>
-                <h5 className={classes.property}>{props.property}</h5>
-                <div className={classes.selectList}>
-                    <FormControl style={{ width: '100px' }}>
-                        <Select
-                            value={props.gender}
-                        >
-                            <MenuItem onClick={() => changeGender('Not Chosen')} value={'Not Chosen'}>Not Chosen</MenuItem>
-                            <MenuItem onClick={() => changeGender('Male')} value={'Male'}>Male</MenuItem>
-                            <MenuItem onClick={() => changeGender('Female')} value={'Female'}>Female</MenuItem>
-                        </Select>
-                    </FormControl>
-                </div>
-            </div>
-            <Snackbar open={isSuccessfulSnackbarOpen} autoHideDuration={4000} onClose={() => setIsSuccessfulSnackbarOpenStatus(false)}>
-                <Alert action={
-                    <IconButton size="small" onClick={() => setIsSuccessfulSnackbarOpenStatus(false)} color="inherit">
-                        <CloseIcon fontSize="small" />
-                    </IconButton>
-                } variant="filled" severity="success">
-                    This is a success message!
-                </Alert>
-            </Snackbar>
+  const [genderValue, setGenderValue] = useState<string>(props.gender)
+
+  const changeGender = async (gender: string) => {
+    let userId = props.userId
+    setGenderValue(gender)
+    await props.setGender({gender, userId})
+    props.createNotification({ title: `You have changed your gender! Now you're ${gender}`, pageUrl: '/Profile', itemType: 'Profile'})
+
+    notification.success({
+      message: 'Gender Updated',
+      description: `Your gender is now set to "${gender}"`,
+      placement: 'bottomRight'
+    })
+  }
+
+  return (
+    <div className={classes.changeGender}>
+      <div className={classes.changeGender_content}>
+        <h5 className={classes.property}>{props.property}</h5>
+        <div className={classes.selectList}>
+          <Select
+            style={{ width: 120 }}
+            value={genderValue}
+            onChange={changeGender}
+          >
+            <Option value="Not Chosen">Not Chosen</Option>
+            <Option value="Male">Male</Option>
+            <Option value="Female">Female</Option>
+          </Select>
         </div>
-    )
+      </div>
+    </div>
+  )
 }
 
 export default ChangeGender

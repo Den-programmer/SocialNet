@@ -1,28 +1,16 @@
 import React from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import styles from './optionsTitle.module.scss'
 
 interface IOptionsTitle {
-    title: string
+  title: string
 }
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-    container: {
-        borderBottom: '1px solid #D0D0D0',
-        width: '100%'
-    },
-    optionsTitle: {
-        color: '#222222',
-        fontFamily: 'Poppins, sans-serif'
-    }
-}))
-
-const OptionsTitle:React.FC<IOptionsTitle> = ({ title }) => {
-    const classes = useStyles()
-    return (
-        <div className={classes.container}>
-            <h2 className={classes.optionsTitle}>{title}</h2> 
-        </div>
-    )
+const OptionsTitle: React.FC<IOptionsTitle> = ({ title }) => {
+  return (
+    <div className={styles.container}>
+      <h2 className={styles.optionsTitle}>{title}</h2>
+    </div>
+  )
 }
 
 export default OptionsTitle

@@ -1,96 +1,67 @@
-import React from 'react'
+import { useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import Profile from './profile'
-import { connect } from 'react-redux'
-import { setUserProfileThunk, setStatusThunk, updateStatusThunk, getIsUserFollowed, requestGender, requestUsername, requireUsersPosts } from '../../../BLL/reducer-profile'
-import { followThunk, unfollowThunk } from '../../../BLL/reducer-friends'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
-import { compose } from 'redux'
-import { getFriends } from '../../../BLL/selectors/users-selectors'
-import { getAuthorizedUserId } from '../../../BLL/selectors/auth-selectors'
-import { getUsersProfile, getPosts, getIsUserFollowedStatus, getUserBackground, getGender, getUsersName } from '../../../BLL/selectors/profile-selectors'
-import { RootState } from '../../../BLL/redux'
-import { userType } from '../../../types/FriendsType/friendsType'
-import { postType, profileType } from '../../../types/ProfileTypes/profileTypes'
+import {
+  useGetUsersProfileQuery,
+  useGetGenderQuery,
+  useGetUsernameQuery
+} from '../../../DAL/profileApi'
+import { useFollowUserMutation, useUnfollowUserMutation } from '../../../DAL/usersApi'
+import { selectFriends } from '../../../BLL/selectors/users-selectors'
+import { selectAuthorizedUserId } from '../../../BLL/selectors/auth-selectors'
+import { selectUserBackground } from '../../../BLL/selectors/profile-selectors'
+import { useAppSelector } from '../../../hooks/hooks'
 
-interface IProfileContainer {
-    authorizedUserId: string
-    followed: boolean
-    username: string
-    requireUsersPosts: (userId: string) => void
-    requestUsername: (userId: string) => void
-    setStatusThunk: (userId: string) => void
-    setUserProfileThunk: (userId: string) => void
-    updateStatusThunk: (status: string) => void
-    getIsUserFollowed: (userId: string) => void
-    followThunk: (userId: string) => void
-    unfollowThunk: (userId: string) => void
-    requestGender: (userId: string) => void
-    friends: Array<userType>
-    profile: profileType
-    posts: Array<postType>
-    background: string
-    gender: string
+const ProfileContainer = () => {
+  const navigate = useNavigate()
+  const { userId: paramUserId } = useParams<{ userId?: string }>()
+
+  const authorizedUserId = useAppSelector(selectAuthorizedUserId)
+  const friends = useAppSelector(selectFriends)
+  const background = useAppSelector(selectUserBackground)
+
+  const idToLoad = paramUserId || authorizedUserId
+
+  const {
+    data: profile,
+    refetch: refetchProfile
+  } = useGetUsersProfileQuery(idToLoad, {
+    skip: !idToLoad
+  })
+
+  const { data: gender, refetch: refetchGender } = useGetGenderQuery(idToLoad, {
+    skip: !idToLoad
+  })
+
+  const { data: username, refetch: refetchUsername } = useGetUsernameQuery(idToLoad, {
+    skip: !idToLoad
+  })
+
+  const [follow] = useFollowUserMutation()
+  const [unfollow] = useUnfollowUserMutation()
+
+  useEffect(() => {
+    if (!idToLoad) {
+      navigate('/login')
+    } else {
+      refetchProfile()
+      refetchGender()
+      refetchUsername()
+    }
+  }, [idToLoad, navigate, refetchProfile, refetchGender, refetchUsername])
+
+  return (
+    <Profile
+      follow={follow}
+      unfollow={unfollow}
+      profile={profile}
+      authorizedUserId={authorizedUserId}
+      gender={gender}
+      username={username}
+      friends={friends}
+      background={background}
+    />
+  )
 }
 
-interface IRouteParams {
-    userId: string
-}
-
-class ProfileContainer extends React.Component<IProfileContainer & RouteComponentProps<IRouteParams>> {
-    refreshProfile() {
-        let userId = this.props.match.params.userId// - if another user's page!
-        if (!userId) {
-            userId = this.props.authorizedUserId // - if current user's page!
-            if (!userId) {
-                this.props.history.push("/login") // - user is not authorized!
-            }
-        }
-        this.props.setUserProfileThunk(userId)
-        this.props.setStatusThunk(userId)
-    }
-    componentDidMount() {
-        this.refreshProfile()
-        setTimeout(() => {
-            this.props.requestGender(this.props.profile.userId)
-            this.props.requestUsername(this.props.profile.userId)
-        }, 1000)
-    }
-    componentDidUpdate(prevProps: IProfileContainer & RouteComponentProps<IRouteParams>) {
-        if (this.props.match.params.userId !== prevProps.match.params.userId) {
-            this.refreshProfile()
-            setTimeout(() => {
-                this.props.requestGender(this.props.profile.userId)
-                this.props.requestUsername(this.props.profile.userId)
-            }, 1000)
-        }
-    }
-    render() {
-        return <Profile follow={this.props.followThunk}
-            unfollow={this.props.unfollowThunk}
-            followed={this.props.followed}
-            getIsUserFollowed={this.props.getIsUserFollowed}
-            profile={this.props.profile}
-            authorizedUserId={this.props.authorizedUserId}
-            gender={this.props.gender}
-            username={this.props.username}
-            posts={this.props.posts} friends={this.props.friends} updateStatus={this.props.updateStatusThunk}
-            background={this.props.background} 
-            requireUsersPosts={this.props.requireUsersPosts}/>
-    }
-}
-
-const mapStateToProps = (state: RootState) => ({
-    profile: getUsersProfile(state),
-    posts: getPosts(state),
-    friends: getFriends(state),
-    authorizedUserId: getAuthorizedUserId(state),
-    followed: getIsUserFollowedStatus(state),
-    background: getUserBackground(state),
-    gender: getGender(state),
-    username: getUsersName(state)
-})
-
-export default compose<React.ComponentType>(
-    connect(mapStateToProps, { requireUsersPosts, setUserProfileThunk, requestUsername, setStatusThunk, updateStatusThunk, getIsUserFollowed, followThunk, unfollowThunk, requestGender }),
-    withRouter
-)(ProfileContainer)
+export default ProfileContainer

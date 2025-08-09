@@ -1,0 +1,32 @@
+.sidebar_item_wrapper {
+  width: 100%;
+  text-decoration: none;
+
+  &:hover {
+    background-color: #222F40;
+    transition: all 0.5s linear;
+  }
+
+  &.active {
+    background-color: #222F40;
+  }
+}
+
+.sidebar_item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px 20px;
+  border-bottom: 1px solid #45576D;
+}
+
+.sidebar_item_icon {
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.sidebar_item_text {
+  color: #ffffff;
+  margin-left: 8px;
+  font-size: 15px;
+}

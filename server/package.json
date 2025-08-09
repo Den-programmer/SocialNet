@@ -6,8 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node app.js",
     "server": "nodemon app.js",
-    "client": "npm run start --prefix ../client",
-    "client:install": "npm install --prefix ../client",
+    "client": "npm run dev --prefix ../client",
     "client:build": "npm run build --prefix ../client",
     "dev": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run client\""
   },
@@ -26,24 +25,25 @@
     "url": "https://github.com/Den-programmer/SocialNet/issues"
   },
   "homepage": "https://github.com/Den-programmer/SocialNet#readme",
+  "type": "module",
   "dependencies": {
     "axios": "^1.8.4",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.2",
-    "cheerio": "^1.0.0-rc.12",
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
+    "cheerio": "^1.0.0",
     "cloudinary": "^2.6.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^4.19.2",
-    "express-validator": "^6.15.0",
+    "express": "^4.21.2",
+    "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^6.12.8",
+    "mongoose": "^8.13.2",
     "multer": "^1.4.5-lts.2",
     "path": "^0.12.7"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0",
+    "concurrently": "^9.1.2",
     "cross-env": "^7.0.3",
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.1.9"
   }
 }

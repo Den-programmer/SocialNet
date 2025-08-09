@@ -1,25 +1,25 @@
 import { RootState } from "../redux"
 
-export const getFriends = (state: RootState) => {
+export const selectFriends = (state: RootState) => {
     return state.Friends.friends 
 }
 
-export const getUsersInf = (state: RootState) => {
+export const selectUsersInf = (state: RootState) => {
     return state.Friends.usersInf
 }
  
-export const getUsers = (state: RootState) => {
+export const selectUsers = (state: RootState) => {
     return state.Friends.users
 }
 
-export const getFollowingInProcess = (state: RootState) => {
+export const selectFollowingInProcess = (state: RootState) => {
     return state.Friends.followingInProcess
 }  
 
-export const getUsersFilter = (state: RootState) => {
+export const selectUsersFilter = (state: RootState) => {
     return state.Friends.filter
 }
 
-export const getBlacklist = (state: RootState) => {
+export const selectBlacklist = (state: RootState) => {
     return state.Friends.blacklist
 }

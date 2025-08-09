@@ -1,81 +1,108 @@
-import React from 'react';
-import { Drawer, List, Divider, IconButton, useTheme, useMediaQuery, makeStyles } from '@material-ui/core';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import SidebarItem from './SidebarItem/sidebarItem';
-import { RouteComponentProps } from 'react-router-dom';
-import { scrollToTop } from '../../utils/helpers/functions/function-helpers';
+import React from 'react'
+import { Drawer, Divider, List, Button } from 'antd'
+import { LeftOutlined, RightOutlined } from '@ant-design/icons'
+import SidebarItem from './SidebarItem/sidebarItem'
+import { useLocation } from 'react-router-dom'
+import { scrollToTop } from '../../utils/helpers/functions/function-helpers'
+import {
+  UserOutlined,
+  MailOutlined,
+  NotificationOutlined,
+  BellOutlined,
+  SettingOutlined,
+  TeamOutlined
+} from '@ant-design/icons'
+import { SidebarIconMapType } from '../../types/SidebarTypes/sidebarTypes'
 
 interface SideBarPropsType {
-  navLinks: Array<any>;
-  isSidebarOpen: boolean;
-  sidebarWidth: number;
-  changeProfileNavItemChosenStatus: (itemId: number) => void;
-  changeSidebarIsOpenStatus: (status: boolean) => void;
-  choosePage: (isChosen: number) => void;
+  navLinks: Array<any>
+  isSidebarOpen: boolean
+  sidebarWidth: number
+  changeProfileNavItemChosenStatus: (itemId: number) => void
+  changeSidebarIsOpenStatus: (status: boolean) => void
+  choosePage: (isChosen: number) => void
 }
 
-const useStyles = makeStyles((theme) => ({
-  drawerPaper: {
-    backgroundColor: '#30445C',
-    overflow: 'hidden',
-    width: (props: { drawerWidth: string }) => props.drawerWidth,
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(1),
-    justifyContent: 'flex-end',
-  },
-}));
-
-const SideBar: React.FC<SideBarPropsType & RouteComponentProps> = (props) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery('(max-width: 1000px)');
-  const drawerWidth = isMobile ? '100vw' : `${props.sidebarWidth}px`;
-  const classes = useStyles({ drawerWidth });
+const SideBar: React.FC<SideBarPropsType> = ({
+  navLinks,
+  isSidebarOpen,
+  sidebarWidth,
+  changeProfileNavItemChosenStatus,
+  changeSidebarIsOpenStatus,
+  choosePage
+}) => {
+  const location = useLocation()
+  const isMobile = window.innerWidth <= 1000
+  const drawerWidth = isMobile ? '100vw' : `${sidebarWidth}px`
 
   const handleDrawerClose = () => {
-    props.changeSidebarIsOpenStatus(false);
+    changeSidebarIsOpenStatus(false)
   }
+
   const handleListClick = () => {
     setTimeout(() => {
-      scrollToTop();
-      if (isMobile) handleDrawerClose();
-    }, 250);
-  };
+      scrollToTop()
+      if (isMobile) handleDrawerClose()
+    }, 250)
+  }
+
+
+
+  const iconMap: SidebarIconMapType = {
+    UserOutlined: UserOutlined,
+    MailOutlined: MailOutlined,
+    NotificationOutlined: NotificationOutlined,
+    BellOutlined: BellOutlined,
+    SettingOutlined: SettingOutlined,
+    TeamOutlined: TeamOutlined
+  }
 
   return (
     <Drawer
-      open={props.isSidebarOpen}
-      variant={isMobile ? 'temporary' : 'persistent'}
-      anchor="left"
-      classes={{ paper: classes.drawerPaper }}
+      title={
+        <Button
+          type="text"
+          onClick={handleDrawerClose}
+          icon={document.dir === 'ltr' ? <LeftOutlined /> : <RightOutlined />}
+        />
+      }
+      placement="left"
+      closable={false}
       onClose={handleDrawerClose}
+      open={isSidebarOpen}
+      width={drawerWidth}
+      styles={{
+        body: {
+          padding: 0,
+          backgroundColor: '#30445C'
+        }
+      }}
+      mask={isMobile}
     >
-      <div className={classes.drawerHeader}>
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-        </IconButton>
+      <Divider style={{ margin: 0, backgroundColor: '#ccc' }} />
+      <div onClick={handleListClick}>
+        <List
+          itemLayout="vertical"
+          dataSource={navLinks}
+          renderItem={(link) => {
+            const icon = iconMap[link.iconKey] || <UserOutlined />
+            return <SidebarItem
+              key={link.id}
+              id={link.id}
+              isChosen={link.isChosen}
+              name={link.name}
+              choosePage={choosePage}
+              path={link.path}
+              icon={icon}
+              changeProfileNavItemChosenStatus={changeProfileNavItemChosenStatus}
+              location={location.pathname}
+            />
+          }
+          }
+        />
       </div>
-      <Divider />
-      <List onClick={handleListClick}>
-        {props.navLinks.map((link) => (
-          <SidebarItem 
-            key={link.id} 
-            id={link.id} 
-            isChosen={link.isChosen} 
-            name={link.name} 
-            choosePage={props.choosePage} 
-            path={link.path} 
-            icon={link.icon} 
-            changeProfileNavItemChosenStatus={props.changeProfileNavItemChosenStatus}
-            location={props.location.pathname} 
-          />
-        ))}
-      </List>
     </Drawer>
-  );
-};
+  )
+}
 
 export default SideBar

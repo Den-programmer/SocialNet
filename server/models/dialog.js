@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
@@ -33,4 +33,4 @@ dialogSchema.pre('findOneAndUpdate', function (next) {
 
 const Dialog = mongoose.model('Dialog', dialogSchema);
 
-module.exports = Dialog
+export default Dialog

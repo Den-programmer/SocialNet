@@ -1,23 +1,20 @@
 import React from 'react'
+import { Row, Col } from 'antd'
 import OptionsNav from './OptionsNavigation/optionsNav'
 import MainOptionsPage from './mainOptionsPage/mainOptionsPage'
-import { Container, makeStyles, Theme, createStyles } from '@material-ui/core'
+import { useAuthRedirect } from '../../../hooks/hooks'
 
-interface PropsType {}
-
-const useStyles = makeStyles((theme: Theme) => createStyles({
-    options: {
-        display: 'flex'
-    }
-}))
-
-const Options:React.FC<PropsType> = (props) => {
-    const classes = useStyles()
-    return(
-        <Container className={classes.options}>
-            <OptionsNav />
-            <MainOptionsPage />
-        </Container>
+const Options: React.FC = () => {
+    useAuthRedirect()
+    return (
+        <Row gutter={[24, 24]} style={{ minHeight: '100vh' }}>
+            <Col xs={24} sm={8} md={6} lg={5} xl={4}>
+                <OptionsNav />
+            </Col>
+            <Col xs={24} sm={16} md={18} lg={19} xl={20}>
+                <MainOptionsPage />
+            </Col>
+        </Row>
     )
 }
 

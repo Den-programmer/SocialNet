@@ -1,13 +1,13 @@
 import { RootState } from "../redux"
 
-export const getNotifications = (state: RootState) => {
+export const selectNotifications = (state: RootState) => {
     return state.notifications.notifications
 }
 
-export const getMainCheckboxStatus = (state: RootState) => {
-    return state.notifications.isMainCheckboxAcvtive
+export const selectMainCheckboxStatus = (state: RootState) => {
+    return state.notifications.isMainCheckboxActive
 }
 
-export const getIsDeletingLoading = (state: RootState) => {
+export const selectIsDeletingLoading = (state: RootState) => {
     return state.notifications.isDeletingLoading
 }

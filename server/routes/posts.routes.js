@@ -1,22 +1,20 @@
-const { Router } = require('express')
-const PostsController = require('../controllers/PostsController')
-const multer = require('multer')
-const {verifyToken} = require('../middleware/verifyToken.js')
-const dotenv = require('dotenv')
+import { Router } from 'express'
+import PostsController from '../controllers/PostsController.js'
+import multer from 'multer'
+import { verifyToken } from '../middleware/verifyToken.js'
+import dotenv from 'dotenv'
 
 dotenv.config()
+
 const router = Router()
 
 const storage = multer.memoryStorage()
-const upload = multer({ storage: storage })
+const upload = multer({ storage })
 
-router.use(verifyToken)
+router.get('/getPosts/:userId', verifyToken, PostsController.getPosts)
+router.post('/createPost', upload.single('postPhoto'), verifyToken, PostsController.createPost)
+router.get('/getPost/:userId/:postId', verifyToken, PostsController.getPost)
+router.put('/updatePost/:postId', verifyToken, PostsController.updatePost)
+router.delete('/deletePost/:postId', verifyToken, PostsController.deletePost)
 
-router.get('/getPosts/:userId', PostsController.getPosts)
-router.post('/createPost', upload.single('postPhoto'), PostsController.createPost)
-router.get('/getPost/:userId/:postId', PostsController.getPost)
-router.put('/updatePost/:postId', PostsController.updatePost)
-router.delete('/deletePost/:postId', PostsController.deletePost)
-
-
-module.exports = router
+export default router

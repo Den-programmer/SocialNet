@@ -1,13 +1,13 @@
 import { RootState } from '../redux'
 
-export const getFootLinks = (state: RootState) => {
+export const selectFootLinks = (state: RootState) => {
     return state.Footer.footLinks
 }
 
-export const getYear = (state: RootState) => {
+export const selectYear = (state: RootState) => {
     return state.Footer.year
 }
 
-export const getFootInf = (state: RootState) => {
+export const selectFootInf = (state: RootState) => {
     return state.Footer.footInf
 }

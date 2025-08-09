@@ -1,13 +1,10 @@
-import React from 'react'
 import classes from './mainOptionsPage.module.css'
-import AccountOptionsContainer from './accountOptions/accountOptionsContainer'
+import AccountOptions from './accountOptions/accountOptions'
 
-interface PropsType {}
-
-const MainOptionsPage:React.FC<PropsType> = (props) => {
+const MainOptionsPage = () => {
     return (
         <div className={classes.mainOptionsPage}>
-            <AccountOptionsContainer />
+            <AccountOptions/>
         </div>
     )
 }

@@ -1,69 +1,42 @@
 import React from 'react'
-import { Toolbar, makeStyles, createStyles, Theme, List, useMediaQuery } from '@material-ui/core'
-import { RouteComponentProps } from 'react-router-dom'
+import { Layout, Menu } from 'antd'
 import { profileNavItem } from '../../../../types/ProfileTypes/profileTypes'
-import ProfileNavItem from './profileNavItem/profileNavItem'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { sidebarActions } from '../../../../BLL/reducer-sidebar'
+import { profileActions } from '../../../../BLL/reducer-profile'
+import { useAppSelector, useAppDispatch } from '../../../../hooks/hooks'
+import { selectProfileNavigationMenu } from '../../../../BLL/selectors/profile-selectors'
 
-interface IProfileNav {
-    profileNav: Array<profileNavItem>
-    changeProfileNavItemChosenStatus: (itemId: number) => void
-    setStandartProfileNavOptions: () => void
-    choosePage: (LinkId: number) => void
-}
+const { Header } = Layout
 
-export const useProfileNavStyles = makeStyles((theme: Theme) => createStyles({
-    navigation: {
-        backgroundColor: '#FAFAFA',
-        padding: '0px 15%'
-    },
-    navList: {
-        display: 'flex',
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    navListLink: {
-        color: '#222222',
-        textTransform: 'uppercase',
-        fontWeight: 'bolder',
-        fontFamily: 'Poppins, sans-serif',
-        fontSize: '14px',
-        '&:hover': {
-            transition: 'all .1s linear',
-            color: '#4dcadd'
-        }
-    },
-    navListLinkActive: {
-        color: '#4dcadd',
-        textTransform: 'uppercase',
-        fontWeight: 'bolder',
-        fontFamily: 'Poppins, sans-serif',
-        fontSize: '14px'
-    },
-    navListItem: {
-        '&:hover': {
-            borderBottom: '1px solid #4dcadd'
-        }
-    },
-    navListItemActive: {
-        borderBottom: '1px solid #4dcadd'
-    }
-}))
+const ProfileNav: React.FC = () => {
+    const dispatch = useAppDispatch()
+    const profileNav = useAppSelector(selectProfileNavigationMenu)
+    const { pathname } = useLocation()
+    const navigate = useNavigate()
 
-const ProfileNav: React.FC<IProfileNav & RouteComponentProps> = (props) => {
-    const classes = useProfileNavStyles()
-    const isMobile = useMediaQuery('(max-width: 700px)')
-    const navItems = props.profileNav.map((item: profileNavItem) => {
-        return (
-            <ProfileNavItem choosePage={props.choosePage} location={props.location.pathname} changeProfileNavItemChosenStatus={props.changeProfileNavItemChosenStatus} key={item.id} id={item.id} title={item.title} isChosen={item.isChosen} path={item.path}/>
-        )
-    })
+    const { changeProfileNavItemChosenStatus } = profileActions
+    const { choosePage } = sidebarActions
+
+    const menuItems = profileNav.map((item: profileNavItem) => ({
+        key: item.id,
+        label: item.title,
+        onClick: () => {
+            dispatch(changeProfileNavItemChosenStatus(item.id))
+            dispatch(choosePage(item.id))
+            navigate(item.path)
+        },
+    }))
+
     return (
-        <Toolbar className={classes.navigation}>
-            <List className={classes.navList}>
-                {isMobile ? navItems[0] : navItems}
-            </List>
-        </Toolbar>
+        <Header style={{ backgroundColor: '#FAFAFA', padding: '0 15%' }}>
+            <Menu
+                mode="horizontal"
+                style={{ width: '100%', justifyContent: 'center' }}
+                selectedKeys={[pathname]}
+                items={menuItems}
+            />
+        </Header>
     )
 }
 

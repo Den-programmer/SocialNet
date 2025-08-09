@@ -5,7 +5,7 @@ interface INewsHeaderMenu {
 
 }
 
-const NewsHeaderMenu:React.FC<INewsHeaderMenu> = (props) => {
+const NewsHeaderMenu:React.FC<INewsHeaderMenu> = () => {
     return (
         <div className={classes.newsHeaderMenu}>
 

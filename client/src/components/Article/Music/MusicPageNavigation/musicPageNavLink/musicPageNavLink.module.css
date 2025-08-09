@@ -1,7 +1,0 @@
-.listItem a {
-    color: #B5E61D;
-}
-.listItem a:hover {
-    transition: all .2s ease;
-    color: #C9E661;
-}

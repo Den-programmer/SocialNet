@@ -3,40 +3,51 @@ import Avatar from './Avatar/avatar'
 import FollowingInformation from './followingInformation/followingInformation'
 import { IProfile } from '../profile'
 import { contactsType } from '../../../../types/ProfileTypes/profileTypes'
-import { useMediaQuery } from '@material-ui/core'
+import { Grid } from 'antd'
 import classes from './user.module.scss'
 
 interface IUser extends IProfile {
-    contacts: contactsType
+  contacts: contactsType | undefined
 }
 
-const defaultAvatar = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
+const { useBreakpoint } = Grid
 
-const User: React.FC<IUser> = (props) => {
-    const isMobile = useMediaQuery('(max-width: 800px)')
-    const backgroundMobile: React.CSSProperties = {
-        flexDirection: 'column',
-        justifyContent: 'center',
-        backgroundImage: "url(" + props.background + ")"
-    }
-    const background: React.CSSProperties = {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundImage: "url(" + props.background + ")",
-    }
-    
-    return (
-        <div className={classes.user} style={isMobile ? backgroundMobile : background}>
-            <Avatar contacts={props.contacts} avatar={props.profile.photos.large ? props.profile.photos.large : defaultAvatar} name={props.username} />
-            <FollowingInformation 
-            getIsUserFollowed={props.getIsUserFollowed} 
-            follow={props.follow} unfollow={props.unfollow} 
-            followed={props.followed} userId={props.profile.userId} 
-            authorizedUserId={props.authorizedUserId} posts={props.posts} 
-            friends={props.friends} />
-        </div>
-    )
+const defaultBackground = import.meta.env.VITE_CLOUDINARY_DEFAULT_BACKGROUND
+
+const User: React.FC<IUser> = ({
+  contacts,
+  profile,
+  background,
+  username,
+  follow,
+  unfollow,
+  authorizedUserId,
+  friends
+}) => {
+  const screens = useBreakpoint()
+  const isMobile = !screens.md
+
+  const style: React.CSSProperties = {
+    flexDirection: isMobile ? 'column' : 'row',
+    justifyContent: isMobile ? 'center' : 'space-between',
+    backgroundImage: `url(${background || defaultBackground})`,
+  }
+
+  return (
+    <div className={classes.user} style={style}>
+      <Avatar
+        contacts={contacts}
+        avatar={profile?.photos?.large}
+        name={username}
+      />
+      <FollowingInformation
+        follow={follow}
+        unfollow={unfollow}
+        authorizedUserId={authorizedUserId}
+        friends={friends}
+      />
+    </div>
+  )
 }
-
 
 export default User

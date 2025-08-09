@@ -1,19 +1,23 @@
 import { RootState } from "../redux"
 
-export const getAuthorizedUserId = (state: RootState) => {
+export const selectAuthorizedUserId = (state: RootState) => {
     return state.auth.userId 
 }
-export const getLoginName = (state: RootState) => {
+export const selectLoginName = (state: RootState) => {
     return state.auth.login
 }
-export const getIsAuthStatus = (state: RootState) => {
+export const selectIsAuthStatus = (state: RootState) => {
     return state.auth.isAuth;
 }
 
-export const getLastUrl = (state: RootState) => {
+export const selectLastUrl = (state: RootState) => {
     return state.auth.lastUrl
 }
 
-export const getIsRegisterStatus = (state: RootState) => {
+export const selectIsRegisterStatus = (state: RootState) => {
     return state.auth.isRegister
+}
+
+export const selectCaptchaUrl = (state: RootState) => {
+    return state.auth.captchaUrl
 }

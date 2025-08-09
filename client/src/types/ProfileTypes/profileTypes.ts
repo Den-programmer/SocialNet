@@ -50,3 +50,13 @@ export type ChangePhotosMenuItemType = {
     title: string
     isActive: boolean
 }
+
+export type PostEditingType = {
+  postId: number
+  status: boolean
+}
+
+export type PostChangingType = {
+  postId: number
+  postContent: string
+}

@@ -1,10 +1,25 @@
-import { instance } from "./api"
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { baseQuery, ServerResType } from './api' 
+import { newsType } from '../types/NewsTypes/newsTypes'
 
-export const NewsAPI = {
-    getAllNews: () => {
-        return instance.get('api/news/getNews').then(res => res.data)
-    },
-    getPopularNews: () => {
-        return instance.get('api/news/getPopularNews').then(res => res.data)
-    }
-}
+export const newsApi = createApi({
+  reducerPath: 'newsApi',
+  baseQuery,
+  endpoints: (builder) => ({
+    getAllNews: builder.query<newsType[], void>({
+      query: () => 'api/news/getNews',
+      transformResponse: (response: ServerResType<{ news: newsType[] }>) => {
+        return response.data.news
+      }
+    }),
+    getPopularNews: builder.query<newsType[], void>({
+      query: () => 'api/news/getPopularNews',
+      transformResponse: (response: ServerResType<{ news: newsType[] }>) => response.data.news
+    })
+  })
+})
+
+export const {
+  useGetAllNewsQuery,
+  useGetPopularNewsQuery
+} = newsApi

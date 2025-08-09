@@ -1,35 +1,23 @@
 import React from 'react'
-import { Container, Theme, makeStyles, createStyles } from '@material-ui/core'
-import NewsContentContainer from './NewsContent/newsContentContainer'
-import { getIsSidebarOpenStatus } from '../../../BLL/selectors/sidebar-selectors'
-import { useSelector } from 'react-redux'
-import NewsToolbar from './NewsToolbar/newsToolbarContainer'
+import { Layout } from 'antd'
+import { selectIsSidebarOpenStatus } from '../../../BLL/selectors/sidebar-selectors'
+import NewsContent from './NewsContent/newsContent'
+import NewsToolbar from './NewsToolbar/newsToolbar'
+import styles from './news.module.css'
+import { useAppSelector } from '../../../hooks/hooks'
 
-interface NewsPropType {}
+const { Content } = Layout
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-    container: {
-        minHeight: '100vh',
-        display: 'flex',
-        justifyContent: 'space-around'
-    },
-    smContainer: {
-        width: '80%',
-        display: 'flex',
-        minHeight: '100vh',
-        justifyContent: 'space-around'
-    }
-}))
-
-const News:React.FC<NewsPropType> = (props) => {
-    const isSidebarOpen = useSelector(getIsSidebarOpenStatus)
-    const classes = useStyles()
-    return (
-        <Container className={isSidebarOpen ? classes.smContainer : classes.container}>
-            <NewsContentContainer />
-            <NewsToolbar />
-        </Container>
-    )
+const News: React.FC = () => {
+  const isSidebarOpen = useAppSelector(selectIsSidebarOpenStatus)
+  return (<>
+    <Content className={isSidebarOpen ? styles.smContainer : styles.container}>
+      <NewsContent />
+      <NewsToolbar />
+    </Content>
+  </>)
 }
 
 export default News
+
+

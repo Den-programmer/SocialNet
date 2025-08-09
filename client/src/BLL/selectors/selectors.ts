@@ -1,17 +1,17 @@
 import { RootState } from '../redux'
 
-export const getAppInitializationStatus = (state: RootState) => {
+export const selectAppInitializationStatus = (state: RootState) => {
     return state.app.isInitialized
 }
-export const getMessageError = (state: RootState) => {
+export const selectMessageError = (state: RootState) => {
     return state.app.messageError
 }
-export const getIsModalOpenStatus = (state: RootState) => {
+export const selectIsModalOpenStatus = (state: RootState) => {
     return state.app.isModalOpen
 }
-export const getDate = (state: RootState) => {
+export const selectDate = (state: RootState) => {
     return state.app.date
 }
-export const getHeaderHeight = (state: RootState) => {
+export const selectHeaderHeight = (state: RootState) => {
     return state.app.headerHeight
 }

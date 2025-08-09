@@ -1,67 +1,80 @@
 import React, { useState, ChangeEvent } from 'react'
-import '../../../../../options.scss'
-import { createReviewChangesBtn } from '../../../../../../../../utils/helpers/functions/function-helpers'
-import { contactsType } from '../../../../../../../../types/ProfileTypes/profileTypes'
+import { Input, Typography, Button, message } from 'antd'
 import { ICurrentContact } from '../../../contactsOptions'
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
-import { useEditIconStyles } from '../../../../accountOptions/accountOptions'
-import { TextField } from '@material-ui/core'
+// import classes from './ChangeContact.module.scss'
+import { useAddNotificationMutation } from '../../../../../../../../DAL/notificationApi'
+import { useUpdateContactsMutation } from '../../../../../../../../DAL/profileApi'
+import { useAppSelector } from '../../../../../../../../hooks/hooks'
+import { selectAuthorizedUserId } from '../../../../../../../../BLL/selectors/auth-selectors'
+
+const { Title } = Typography
 
 interface IChangeContact {
-    id: number
-    property: string
-    value: string | null
-    userName: string
-    error: string
-    currentPageUrl: string
-    currentContacts: Array<ICurrentContact>
-    updateContacts: (contacts: contactsType) => void
-    setCurrentContacts: (array: Array<ICurrentContact>) => void
-    createNotification: (title: string | null, pageUrl: string | null, type: 'Profile' | 'Messages' | 'News' | 'Friends') => void
+  id: number
+  property: string
+  value: string | null
+  userName: string
+  error: string
+  currentPageUrl: string
+  currentContacts: Array<ICurrentContact>
+  setCurrentContacts: (array: Array<ICurrentContact>) => void
 }
 
-const ChangeContact: React.FC<IChangeContact> = (props) => {
-    const classes = useEditIconStyles()
-    let contactVal = props.value || 'Not provided'
-    const [currentContact, setCurrentContact] = useState<string>(contactVal)
-    const saveChanges = () => {
-        let contacts: any = {}
-        for (let i = 0; i < props.currentContacts.length; i++) {
-            let key: string = props.currentContacts[i].property
-            if (props.id === i + 1) {
-                contacts[key] = currentContact
-            } else {
-                contacts[key] = props.currentContacts[i].value
-            }
-        }
-        let array = props.currentContacts.map((item: ICurrentContact) => {
-            if (item.id === props.id) return { ...item, value: currentContact }
-            return { ...item, isEdit: false }
-        })
-        props.setCurrentContacts(array)
-        props.updateContacts(contacts)
-        props.createNotification('Your contacts have been changed successfully!', '/Profile', 'Profile')
+const ChangeContact: React.FC<IChangeContact> = props => {
+  const [currentContact, setCurrentContact] = useState<string>(props.value || '')
+
+  const [createNotification] = useAddNotificationMutation()
+  const [updateContacts] = useUpdateContactsMutation()
+
+  const userId = useAppSelector(selectAuthorizedUserId) || ''
+
+  const saveChanges = async () => {
+    const contacts: any = {}
+    for (let i = 0; i < props.currentContacts.length; i++) {
+      const key = props.currentContacts[i].property
+      contacts[key] = props.id === i + 1 ? currentContact : props.currentContacts[i].value
     }
-    const onContactChange = (e: ChangeEvent<HTMLInputElement>) => setCurrentContact(e.currentTarget.value)
-    return (
-        <div className="editContentItem">
-            <div className="editContentItem_main">
-                <h5 className="editContentItem_property">{props.property}</h5>
-                <div className="editContentItem_editInput">
-                    <TextField className={props.error ? "options_errorInput" : ""}
-                     value={currentContact} 
-                     label={currentContact} 
-                     onChange={onContactChange}
-                     type="text" 
-                     />
-                </div>
-            </div>
-            {createReviewChangesBtn(saveChanges, '/Options/contacts', props.error, props.currentPageUrl)}
-            {/* {props.error !== '' && <div className="options_error">
-                <ErrorOutlineIcon className={classes.errorIcon}/>
-            </div>} */}
-        </div>
+
+    const updatedArray = props.currentContacts.map(item =>
+      item.id === props.id
+        ? { ...item, value: currentContact, isEdit: false }
+        : { ...item, isEdit: false }
     )
+
+    props.setCurrentContacts(updatedArray)
+    await updateContacts({ contacts, userId })
+    createNotification({ title: 'Your contacts have been changed successfully!', pageUrl: '/Profile', itemType: 'Profile' })
+    message.success('Contact updated')
+  }
+
+  const onContactChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCurrentContact(e.target.value)
+  }
+
+  return (
+    <div className="editContentItem" style={{ width: '85%' }}>
+      <div>
+        <Title level={5}>{props.property}</Title>
+      </div>
+      <div>
+        <Input
+          value={currentContact}
+          onChange={onContactChange}
+          status={props.error ? 'error' : ''}
+          placeholder="Enter contact"
+        />
+      </div>
+      <div>
+        <Button
+          type='primary'
+          onClick={saveChanges}
+          disabled={props.error !== '' || props.currentPageUrl !== '/Options/contacts'}
+        >
+          Save Changes
+        </Button>
+      </div>
+    </div>
+  )
 }
 
 export default ChangeContact

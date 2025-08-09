@@ -1,13 +1,13 @@
-import { RootState } from "../redux";
+import { RootState } from "../redux"
 
-export const getSideBarNavLinks = (state: RootState) => {
-    return state.Sidebar.navigationLinks;
+export const selectSideBarNavLinks = (state: RootState) => {
+    return state.Sidebar.navigationLinks
 }
 
-export const getIsSidebarOpenStatus = (state: RootState) => {
+export const selectIsSidebarOpenStatus = (state: RootState) => {
     return state.Sidebar.isSidebarOpen
 }
 
-export const getSidebarWidth = (state: RootState) => {
+export const selectSidebarWidth = (state: RootState) => {
     return state.Sidebar.sidebarWidth
 }

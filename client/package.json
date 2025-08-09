@@ -1,73 +1,54 @@
 {
   "name": "social_network",
-  "version": "0.1.0",
   "private": true,
+  "version": "2.0.0",
   "homepage": "https://den-programmer.github.io/SocialNet",
-  "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.36",
-    "@fortawesome/free-regular-svg-icons": "^5.15.4",
-    "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@fortawesome/react-fontawesome": "^0.1.19",
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
-    "@material-ui/lab": "^4.0.0-alpha.61",
-    "axios": "^0.21.4",
-    "browser-image-compression": "^2.0.2",
-    "date-fns": "^2.30.0",
-    "react": "^16.14.0",
-    "react-cookie-consent": "^9.0.0",
-    "react-dom": "^16.14.0",
-    "react-fontawesome": "^1.7.1",
-    "react-hook-form": "^7.53.2",
-    "react-parallax-tilt": "^1.7.221",
-    "react-redux": "^7.2.9",
-    "react-router-dom": "^5.3.4",
-    "react-scripts": "^3.4.0",
-    "redux": "^4.2.1",
-    "redux-thunk": "^2.4.2",
-    "reselect": "^4.1.8"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "proxy": "http://localhost:8000",
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@reduxjs/toolkit": "^2.6.1",
+    "axios": "^1.8.4",
+    "browser-image-compression": "^2.0.2",
+    "date-fns": "^4.1.0",
+    "react": "^19.0.0",
+    "react-cookie-consent": "^9.0.0",
+    "react-dom": "^19.0.0",
+    "react-fontawesome": "^1.7.1",
+    "react-hook-form": "^7.55.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.5.0",
+    "react-vanilla-tilt": "^1.0.0",
+    "redux": "^5.0.1",
+    "redux-thunk": "^3.1.0",
+    "reselect": "^5.1.1"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
-    "@types/jest": "^26.0.24",
-    "@types/node": "^14.18.63",
-    "@types/react": "^16.14.60",
-    "@types/react-dom": "^16.9.24",
-    "@types/react-redux": "^7.1.33",
-    "@types/react-router-dom": "^5.3.3",
-    "@types/vanilla-tilt": "^1.6.2",
-    "@typescript-eslint/parser": "^6.21.0",
-    "dotenv": "^16.4.5",
-    "eslint": "^6.8.0",
-    "gh-pages": "^2.2.0",
-    "node-sass": "^4.14.1",
-    "sass-loader": "^10.5.2",
-    "typescript": "^5.4.5"
+    "@eslint/js": "^9.21.0",
+    "@types/node": "^22.14.1",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "dotenv": "^16.5.0",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "gh-pages": "^6.3.0",
+    "globals": "^15.15.0",
+    "sass": "^1.86.3",
+    "sass-loader": "^16.0.5",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.24.1",
+    "vite": "^6.2.0"
   }
 }

@@ -1,54 +1,21 @@
-import React from 'react'
-import { Container, makeStyles, Theme, createStyles } from '@material-ui/core'
-import { NavLink } from 'react-router-dom'
+import React from 'react';
+import { Typography } from 'antd';
+import { Link } from 'react-router-dom';
+import classes from './ErrorPage.module.scss';
 
-interface IErrorPage {
+const { Title, Text } = Typography;
 
-}
-
-const useStyles = makeStyles((theme: Theme) => createStyles({
-    errorPage: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh'
-    },
-    errorImage: {
-        userSelect: 'none',
-        width: '350px',
-        height: '450px'
-    },
-    contentContainer: {
-        margin: '0px 50px',
-        textAlign: 'center'
-    },
-    mainTitle: {
-        color: '#222222',
-        textTransform: 'uppercase',
-        fontSize: '25px'
-    },
-    subtitle: {
-        color: '#5f5f5f' ,
-        fontWeight: 'bold',
-        fontSize: '18px'
-    },
-    navlink: {
-        color: '#8F2243'
-    }
-}))
-
-const ErrorPage:React.FC<IErrorPage> = (props) => {
-    const classes = useStyles()
-    return (
-        <Container className={classes.errorPage}>
-            <div className={classes.contentContainer}>
-            </div>
-            <div className={classes.contentContainer}>
-                <h1 className={classes.mainTitle}>Sorry, this is page not found!</h1>
-                <h4 className={classes.subtitle}>Try to go to the <NavLink className={classes.navlink} to='/Profile'>profile page</NavLink>!</h4>
-            </div>
-        </Container>
-    )
-}
+const ErrorPage: React.FC = () => {
+  return (
+    <div className={classes.error_page}>
+      <div className={classes.error_content}>
+        <Title level={2}>Sorry, this page was not found!</Title>
+        <Text strong style={{ color: '#5f5f5f', fontSize: 18 }}>
+          Try to go to the <Link className={classes.navlink} to="/Profile">profile page</Link>!
+        </Text>
+      </div>
+    </div>
+  );
+};
 
 export default ErrorPage

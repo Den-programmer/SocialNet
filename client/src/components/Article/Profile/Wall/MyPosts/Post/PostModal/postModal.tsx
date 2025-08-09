@@ -20,7 +20,7 @@ interface IPost {
     setIsPostModalOpen: (modalStatus: boolean) => void
 }
 
-const noPostImg = process.env.REACT_APP_CLOUDINARY_NO_PHOTO_URL
+const noPostImg = import.meta.env.VITE_CLOUDINARY_NO_PHOTO_URL
 
 const PostModal: React.FC<IPost> = (props) => {
     const [isEdit, setIsEditStatus] = useState<boolean>(false)

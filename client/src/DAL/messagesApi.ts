@@ -1,37 +1,57 @@
-import { instance, ServerResType } from './api'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { baseQuery, ServerResType } from './api'
 import { userDialogType, message } from '../types/MessagesTypes/messagesTypes'
 
 type dialogsType = Array<userDialogType>
 
 type dialogMessagesResType = {
-    items: Array<message>
-    totalCount: number
-    error: null | string
-}
-// Not exact type
-type isMessageViewedtype = {
-    isViewed: boolean
+  items: Array<message>
+  totalCount: number
+  error: null | string
 }
 
+// type isMessageViewedtype = {
+//   isViewed: boolean
+// }
 
-export const MessagesAPI = {
-    getALLDialogs: () => {
-        return instance.get<dialogsType>(`api/dialogs/getAllDialogs`).then(res => res.data)
-    },
-    startDialog: (userId: string) => {
-        return instance.post<ServerResType<userDialogType>>(`api/dialogs/addDialog/${userId}`).then(res => res.data)
-    },
-    getDialogMessages: (userId: string) => {
-        return instance.get<dialogMessagesResType>(`dialogs/${userId}/messages`).then(res => res.data)
-    },
-    sendDialogMessages: (userId: string, message: string | undefined, image: string | undefined) => {
-        debugger
-        return instance.post<ServerResType<message>>(`api/message/addMessage/${userId}`, { message, image }).then(res => res.data)
-    },
-    isMessageViewed: (messageId: number) => {
-        return instance.get<ServerResType<isMessageViewedtype>>(`dialogs/messages/${messageId}/viewed`).then(res => res.data)
-    },
-    getNewDialogs: () => {
-        return instance.get<ServerResType<{}>>(`dialogs/messages/new/count`).then(res => res.data)
-    }
-}
+export const messagesApi = createApi({
+  reducerPath: 'messagesApi',
+  baseQuery,
+  endpoints: (builder) => ({
+    getAllDialogs: builder.query<dialogsType[], void>({
+      query: () => `api/dialogs/getAllDialogs`,
+      transformResponse: (response: ServerResType<{ dialogs: dialogsType[]}>) => response.data.dialogs
+    }),
+    startDialog: builder.mutation<any, string>({
+      query: (userId) => ({
+        url: `api/dialogs/addDialog/${userId}`,
+        method: 'POST'
+      })
+    }),
+    getDialogMessages: builder.query<dialogMessagesResType, string>({
+      query: (userId) => `api/dialogs/${userId}/messages`
+    }),
+    sendDialogMessages: builder.mutation<any, { userId: string, message: string | undefined, image: string | undefined }>({
+      query: ({ userId, message, image }) => ({
+        url: `api/message/addMessage/${userId}`,
+        method: 'POST',
+        body: { message, image }
+      })
+    }),
+    isMessageViewed: builder.query<any, number>({
+      query: (messageId) => `api/dialogs/messages/${messageId}/viewed`
+    }),
+    getNewDialogs: builder.query<any, void>({
+      query: () => `api/dialogs/messages/new/count`
+    })
+  })
+})
+
+export const {
+  useGetAllDialogsQuery,
+  useStartDialogMutation,
+  useGetDialogMessagesQuery,
+  useSendDialogMessagesMutation,
+  useIsMessageViewedQuery,
+  useGetNewDialogsQuery
+} = messagesApi

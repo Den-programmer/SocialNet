@@ -2,12 +2,13 @@ import React from 'react'
 import { newsType } from '../../../../types/NewsTypes/newsTypes'
 import classes from './newsToolbar.module.scss'
 import PopNewsItem from './PopNewsItem/popNewsItem'
+import { useGetPopularNewsQuery } from '../../../../DAL/newsAPi'
+import { ServerResType } from '../../../../DAL/api'
 
-interface INewsToolbar {
-    popularNews: Array<newsType>
-}
+interface INewsToolbar {}
 
-const NewsToolbar:React.FC<INewsToolbar> = ({ popularNews }) => {
+const NewsToolbar:React.FC<INewsToolbar> = ({  }) => {
+    const { data: popularNews = [] } = useGetPopularNewsQuery<ServerResType<Array<newsType>>>()
     const popNewsData = popularNews.map((item: newsType) => {
         return <PopNewsItem key={item.id} id={item.id} 
         text={item.text} title={item.title} 

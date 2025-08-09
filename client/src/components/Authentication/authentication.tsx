@@ -1,11 +1,10 @@
-import React from 'react'
 import classes from './authentication.module.css'
-import LoginContainer from './Login/loginContainer'
+import Login from './Login/login'
 
-const Authentication: React.FC<{}> = (props) => {
+const Authentication = () => {
     return (
         <div className={classes.authentication}>
-            <LoginContainer />
+            <Login />
         </div>
     )
 }

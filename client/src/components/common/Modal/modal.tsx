@@ -7,6 +7,7 @@ interface IModal {
     isOpen: boolean
     onCancel: () => void
     onSubmit: () => void
+    children: React.ReactNode
 }
 
 export const Modal: React.FC<IModal> = ({ title, isOpen, onCancel, onSubmit, children }) => {

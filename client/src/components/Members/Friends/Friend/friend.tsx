@@ -8,7 +8,7 @@ interface FriendPropsType {
     id: string
 }
 
-const defaultUser = process.env.REACT_APP_CLOUDINARY_DEFAULT_USER
+const defaultUser = import.meta.env.VITE_CLOUDINARY_DEFAULT_USER
 
 const Friend:React.FC<FriendPropsType> = ({avatar, username, id}) => {
     const imageUrl = typeof avatar === 'string'
