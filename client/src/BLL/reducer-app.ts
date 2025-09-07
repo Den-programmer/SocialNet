@@ -29,6 +29,7 @@ export const initialize = createAsyncThunk('app/initialize', async (_, { dispatc
     await dispatch(profileApi.endpoints.getUsersProfile.initiate(existingUserId)).unwrap()
     await dispatch(profileApi.endpoints.getUsername.initiate(existingUserId)).unwrap()
     await dispatch(profileApi.endpoints.getGender.initiate(existingUserId)).unwrap()
+    await dispatch(profileApi.endpoints.getUserBackground.initiate(existingUserId)).unwrap()
 
     const date = new Date()
     const formattedDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`

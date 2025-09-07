@@ -12,6 +12,7 @@ import { dirname, resolve } from 'path'
 // const __dirname = dirname(__filename)
 
 import authRoutes from './routes/auth.routes.js'
+import backgroundRoutes from './routes/background.routes.js'
 import genderRoutes from './routes/gender.routes.js'
 import avatarRoutes from './routes/avatar.routes.js'
 import profileRoutes from './routes/profile.routes.js'
@@ -35,6 +36,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 app.use('/api/auth', authRoutes)
+app.use('/api/background', backgroundRoutes)
 app.use('/api/gender', genderRoutes)
 app.use('/api/avatar', avatarRoutes)
 app.use('/api/profile', profileRoutes)

@@ -18,11 +18,17 @@ export type photosType = {
 export const profileApi = createApi({
   reducerPath: 'profileApi',
   baseQuery,
-  tagTypes: ['Posts'],
+  tagTypes: ['Posts', 'Profile', 'Background'],
   endpoints: (builder) => ({
     getUsersProfile: builder.query<profileType, string>({
       query: (userId) => `api/profile/getProfile/${userId}`,
-      transformResponse: (response: ServerResType<profileType>) => response.data
+      transformResponse: (response: ServerResType<profileType>) => response.data,
+      providesTags: (result, error, userId) => [{ type: 'Profile', id: userId }]
+    }),
+    getUserBackground: builder.query<string, string>({
+      query: (userId) => `api/background/getBackground/${userId}`,
+      transformResponse: (response: ServerResType<{ background: string }>) => response.data.background,
+      providesTags: (result, error, userId) => [{ type: 'Background', id: userId }]
     }),
     getUsername: builder.query<string, string>({
       query: (userId) => `api/username/getUsername/${userId}`,
@@ -125,6 +131,11 @@ export const profileApi = createApi({
           formData.append('image', compressed)
           formData.append('userId', userId)
 
+          for (let [key, value] of formData.entries()) {
+            console.log(key, value)
+          }
+
+
           const token = localStorage.getItem('token') || ''
 
           const response = await fetch('api/avatar/updateAvatar', {
@@ -143,9 +154,65 @@ export const profileApi = createApi({
 
           return { data: json.data as { photos: photosType } }
         } catch (error) {
-          return { error: { status: 500, data: 'Compression or network error' } }
+          console.error('Upload error raw:', error)
+
+          return {
+            error: {
+              status: 500,
+              data: typeof error === 'object' ? JSON.stringify(error) : String(error)
+            }
+          }
         }
-      }
+      },
+      invalidatesTags: (result, error, { userId }) => [{ type: 'Profile', id: userId }]
+    }),
+    setUserBackground: builder.mutation<string , { photo: File; userId: string }>({
+      async queryFn({ photo, userId }) {
+        try {
+          const compressed = await imageCompression(photo, {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1080,
+            useWebWorker: true
+          })
+
+          const formData = new FormData()
+          formData.append('image', compressed)
+          formData.append('userId', userId)
+
+          for (let [key, value] of formData.entries()) {
+            console.log(key, value)
+          }
+
+
+          const token = localStorage.getItem('token') || ''
+
+          const response = await fetch('api/background/updateBackground', {
+            method: 'PUT',
+            body: formData,
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+
+          const json = await response.json()
+
+          if (!response.ok) {
+            return { error: { status: response.status, data: json } }
+          }
+
+          return { data: json.data as string }
+        } catch (error) {
+          console.error('Upload error raw:', error)
+
+          return {
+            error: {
+              status: 500,
+              data: typeof error === 'object' ? JSON.stringify(error) : String(error)
+            }
+          }
+        }
+      },
+      invalidatesTags: (result, error, { userId }) => [{ type: 'Background', id: userId }]
     })
   })
 })
@@ -162,7 +229,9 @@ export const {
   useGetGenderQuery,
   useLazyGetGenderQuery,
   useUpdateGenderMutation,
-  useSetUserPhotoMutation
+  useSetUserPhotoMutation,
+  useSetUserBackgroundMutation,
+  useGetUserBackgroundQuery
 } = profileApi
 
 

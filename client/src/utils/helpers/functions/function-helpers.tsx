@@ -37,7 +37,7 @@ export const bufferToUrl = (
     | ArrayBuffer
     | Uint8Array
     | { type: 'Buffer'; data: number[] }
-    | { data: any },  // any, чтобы ловить вложенность
+    | { data: any },
   contentType: string
 ): string => {
 
@@ -46,7 +46,6 @@ export const bufferToUrl = (
   if (input instanceof Uint8Array) {
     byteArray = input
   } else if ('data' in input) {
-    // Проверяем вложенность data.data
     if (Array.isArray(input.data)) {
       byteArray = new Uint8Array(input.data)
     } else if (input.data && Array.isArray(input.data.data)) {

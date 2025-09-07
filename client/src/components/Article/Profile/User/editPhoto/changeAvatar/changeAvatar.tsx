@@ -12,20 +12,17 @@ interface IChangeAvatar {
 const ChangeAvatar: React.FC<IChangeAvatar> = ({ setIsModalOpenStatus }) => {
   const [createNotification] = useAddNotificationMutation()
   const [setUserPhoto, { isLoading, error }] = useSetUserPhotoMutation()
-
   const authorizedUserId = useAppSelector(selectAuthorizedUserId)
 
   const getUserPhoto = async (ref: RefObject<HTMLInputElement>) => {
     const node = ref.current
-    if (node?.files && node.files.length > 0) {
+    if (node?.files?.length) {
       const file = node.files[0]
-      let userDataLS = localStorage.getItem('userData')
-      let userId = userDataLS ? JSON.parse(userDataLS).userId : ''
+      const userDataLS = localStorage.getItem('userData')
+      const userId = userDataLS ? JSON.parse(userDataLS).userId : authorizedUserId
+
       try {
-        await setUserPhoto({
-          photo: file,
-          userId:userId || authorizedUserId
-        }).unwrap()
+        await setUserPhoto({ photo: file, userId }).unwrap()
 
         await createNotification({
           title: 'Your avatar has been changed successfully!',

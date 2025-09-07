@@ -25,7 +25,8 @@ class AvatarController {
     try {
       const { userId } = req.body
       const { buffer, mimetype, path } = req.file || {}
-
+      console.log('req.file:', req.file)
+      console.log('req.body:', req.body)
       if (!userId || !buffer || !mimetype) {
         console.error('Incomplete data for updating avatar:', { userId, buffer, mimetype })
         return res.status(400).json(new StandartRes(1, 'Incomplete data for updating avatar.'))

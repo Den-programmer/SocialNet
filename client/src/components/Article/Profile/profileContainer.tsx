@@ -4,12 +4,12 @@ import Profile from './profile'
 import {
   useGetUsersProfileQuery,
   useGetGenderQuery,
-  useGetUsernameQuery
+  useGetUsernameQuery,
+  useGetUserBackgroundQuery
 } from '../../../DAL/profileApi'
 import { useFollowUserMutation, useUnfollowUserMutation } from '../../../DAL/usersApi'
 import { selectFriends } from '../../../BLL/selectors/users-selectors'
 import { selectAuthorizedUserId } from '../../../BLL/selectors/auth-selectors'
-import { selectUserBackground } from '../../../BLL/selectors/profile-selectors'
 import { useAppSelector } from '../../../hooks/hooks'
 
 const ProfileContainer = () => {
@@ -18,7 +18,6 @@ const ProfileContainer = () => {
 
   const authorizedUserId = useAppSelector(selectAuthorizedUserId)
   const friends = useAppSelector(selectFriends)
-  const background = useAppSelector(selectUserBackground)
 
   const idToLoad = paramUserId || authorizedUserId
 
@@ -36,6 +35,9 @@ const ProfileContainer = () => {
   const { data: username, refetch: refetchUsername } = useGetUsernameQuery(idToLoad, {
     skip: !idToLoad
   })
+  const { data: background, refetch: refetchBackground } = useGetUserBackgroundQuery(idToLoad, {
+    skip: !idToLoad
+  })
 
   const [follow] = useFollowUserMutation()
   const [unfollow] = useUnfollowUserMutation()
@@ -47,8 +49,9 @@ const ProfileContainer = () => {
       refetchProfile()
       refetchGender()
       refetchUsername()
+      refetchBackground()
     }
-  }, [idToLoad, navigate, refetchProfile, refetchGender, refetchUsername])
+  }, [idToLoad, navigate, refetchProfile, refetchGender, refetchUsername, refetchBackground])
 
   return (
     <Profile

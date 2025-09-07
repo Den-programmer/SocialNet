@@ -16,7 +16,7 @@ const ProfileMainContent:React.FC = () => {
     const username = useAppSelector(selectUsersName)
     const authorizedUserId = useAppSelector(selectAuthorizedUserId)
 
-
+    
     const friends = useAppSelector(selectFriends)
     const [follow] = useFollowUserMutation()  
     const [unfollow] = useUnfollowUserMutation()

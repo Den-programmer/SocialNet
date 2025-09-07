@@ -35,7 +35,11 @@ const User = new Schema({
     posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
     notifications: [{ type: Schema.Types.ObjectId, ref: 'Notification' }],
     followers: [{ type: Schema.Types.ObjectId, ref: 'User' }], 
-    following: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+    following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    background: {
+        data: { type: Buffer },
+        contentType: { type: String }
+    }
 })
 
 export default model('User', User)
