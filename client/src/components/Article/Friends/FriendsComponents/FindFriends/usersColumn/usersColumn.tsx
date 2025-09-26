@@ -11,11 +11,11 @@ import { selectAuthorizedUserId } from '../../../../../../BLL/selectors/auth-sel
 const { Title } = Typography
 
 interface UsersColumnPropsType {
-    // startDialog: (userId: string) => void
+    startDialog: (userId: string) => void
 }
 
 const UsersColumn: React.FC<UsersColumnPropsType> = ({
-    // startDialog
+    startDialog
 }) => {
     const userId = useAppSelector(selectAuthorizedUserId)
     const pageSize = useAppSelector(selectUsersInf).pageSize
@@ -57,7 +57,7 @@ const UsersColumn: React.FC<UsersColumnPropsType> = ({
                         followed={user.followed}
                         username={user.username}
                         photo={user.profile.photos.large}
-                        // startDialog={startDialog}
+                        startDialog={startDialog}
                     />
                 </Col>
             ))}

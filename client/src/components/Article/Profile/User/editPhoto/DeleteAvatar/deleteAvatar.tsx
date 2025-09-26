@@ -24,7 +24,7 @@ const DeleteAvatar: React.FC<IDeleteAvatar> = ({ setIsModalOpenStatus }) => {
 
     try {
       const blob = new Blob([defaultUser ?? ''], { type: 'image/jpeg' })
-      const photoFile = new File([blob], 'defaultUserFile.jpg', {
+      const photoFile = new File([blob], 'defaultUserFile.jpeg', {
         type: 'image/jpeg',
         lastModified: Date.now()
       })

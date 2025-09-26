@@ -13,13 +13,16 @@ export type AuthState = {
   isRegister: boolean
 }
 
+const userData = localStorage.getItem('userData')
+const standartUserId = userData ? JSON.parse(userData).userId : '0'
+
 const initialState: AuthState = {
-  userId: '0',
+  userId: standartUserId,
   email: null,
   login: null,
   rememberMe: false,
-  isAuth: false,
-  token: null,
+  isAuth: localStorage.getItem('token') ? true : false,
+  token: localStorage.getItem('token') || null,
   captchaUrl: null,
   lastUrl: '',
   isRegister: false

@@ -9,7 +9,7 @@ const router = Router()
 
 router.use(verifyToken)
 
-router.get('/getMessagesBetweenUsers/:user1/:user2', MessagesController.getMessagesBetweenUsers)
+router.get('/getMessagesBetweenUsers/:userId1/:userId2', MessagesController.getMessagesBetweenUsers)
 router.delete('/deleteMessage/:id', MessagesController.deleteMessage)
 router.post('/addMessage/:id', MessagesController.addMessage)
 

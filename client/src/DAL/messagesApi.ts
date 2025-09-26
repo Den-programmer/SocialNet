@@ -10,17 +10,16 @@ type dialogMessagesResType = {
   error: null | string
 }
 
-// type isMessageViewedtype = {
-//   isViewed: boolean
-// }
-
 export const messagesApi = createApi({
   reducerPath: 'messagesApi',
   baseQuery,
+  tagTypes: ['Messages', 'LIST'],
   endpoints: (builder) => ({
-    getAllDialogs: builder.query<dialogsType[], void>({
+    getAllDialogs: builder.query<dialogsType, void>({
       query: () => `api/dialogs/getAllDialogs`,
-      transformResponse: (response: ServerResType<{ dialogs: dialogsType[]}>) => response.data.dialogs
+      providesTags: [{ type: 'Messages', id: 'LIST' }],
+      transformResponse: (response: ServerResType<{ dialogs: dialogsType }>) =>
+        response.data.dialogs
     }),
     startDialog: builder.mutation<any, string>({
       query: (userId) => ({
@@ -28,15 +27,23 @@ export const messagesApi = createApi({
         method: 'POST'
       })
     }),
-    getDialogMessages: builder.query<dialogMessagesResType, string>({
-      query: (userId) => `api/dialogs/${userId}/messages`
+    getDialogMessages: builder.query<dialogMessagesResType, { userId1: string; userId2: string }>({
+      query: ({ userId1, userId2 }) => `api/messages/getMessagesBetweenUsers/${userId1}/${userId2}`,
+      providesTags: (result, error, { userId1 }) => [{ type: 'Messages', id: userId1 }]
     }),
-    sendDialogMessages: builder.mutation<any, { userId: string, message: string | undefined, image: string | undefined }>({
+    sendDialogMessages: builder.mutation<
+      any,
+      { userId: string; message: string | undefined; image: string | undefined }
+    >({
       query: ({ userId, message, image }) => ({
-        url: `api/message/addMessage/${userId}`,
+        url: `api/messages/addMessage/${userId}`,
         method: 'POST',
-        body: { message, image }
-      })
+        body: { content: message, image }
+      }),
+      invalidatesTags: (result, error, { userId }) => [
+        { type: 'Messages', id: userId },
+        { type: 'Messages', id: 'LIST' }
+      ]
     }),
     isMessageViewed: builder.query<any, number>({
       query: (messageId) => `api/dialogs/messages/${messageId}/viewed`

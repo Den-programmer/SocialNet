@@ -60,11 +60,11 @@ const Avatar: FC<IUserAvatar> = ({ name, avatar, contacts }) => {
       <div className={classes.avatar}>
         <img
           className={classes.userImg}
-          src={imageUrl}
+          src={imageUrl || null}
           alt='avatar'
           onError={(e) => {
             e.currentTarget.onerror = null
-            e.currentTarget.src = defaultUserPhoto || ''
+            e.currentTarget.src = defaultUserPhoto || null
           }}
         />
         <div className={classes.userInf}>

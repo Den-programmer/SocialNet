@@ -15,7 +15,7 @@ interface IUser {
   photo: string | File
   followThunk: (userId: string) => void
   unfollowThunk: (userId: string) => void
-  // startDialog: (userId: string) => void
+  startDialog: (userId: string) => void
 }
 
 const User: React.FC<IUser> = ({
@@ -26,7 +26,7 @@ const User: React.FC<IUser> = ({
   photo,
   followThunk,
   unfollowThunk,
-  // startDialog
+  startDialog
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuStyle, setMenuStyle] = useState({ top: '0px', left: '0px' })
@@ -75,8 +75,8 @@ const User: React.FC<IUser> = ({
   }, [])
 
   const handleChat = () => {
-    // startDialog(id)
-    navigate(`/Messages/dialog/${id}`)
+    startDialog(id)
+    navigate(`/Messages`)
   }
 
   const handleFollow = () => {

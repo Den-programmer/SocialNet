@@ -44,20 +44,21 @@ class DialogsController {
         return res.status(400).json({ message: 'Invalid User ID' })
       }
 
-      const currentUserIdObject = req.user
-      const userIdObject = userId
-
-      if (currentUserIdObject.equals(userIdObject)) {
+      const currentUserId = req.user
+      if (currentUserId === userId) {
         return res.status(400).json({ message: 'Cannot create a dialog with yourself' })
       }
 
-      const user = await User.findById(userIdObject)
+      const userObjectId = userId
+      const currentUserObjectId = currentUserId
+
+      const user = await User.findById(userObjectId)
       if (!user) {
         return res.status(404).json({ message: 'User not found' })
       }
 
       const existingDialog = await Dialog.findOne({
-        participants: { $all: [currentUserIdObject, userIdObject] }
+        participants: { $all: [currentUserObjectId, userObjectId] }
       })
 
       if (existingDialog) {
@@ -65,7 +66,7 @@ class DialogsController {
       }
 
       const dialog = new Dialog({
-        participants: [currentUserIdObject, userIdObject],
+        participants: [currentUserObjectId, userObjectId],
         lastDialogActivityDate: new Date(),
         createdAt: new Date(),
         updatedAt: new Date(),

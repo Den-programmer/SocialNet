@@ -6,6 +6,7 @@ import { scrollToTop } from '../../../../../utils/helpers/functions/function-hel
 import { useAppDispatch, useAppSelector, useAuthRedirect } from '../../../../../hooks/hooks'
 import { changePage } from '../../../../../BLL/reducer-friends'
 import { selectUsersFilter, selectUsersInf } from '../../../../../BLL/selectors/users-selectors'
+import { useStartDialogMutation } from '../../../../../DAL/messagesApi'
 
 const FindFriends: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -18,6 +19,8 @@ const FindFriends: React.FC = () => {
     setTimeout(() => scrollToTop(400), 250)
   }
 
+  const [startDialog] = useStartDialogMutation()
+
   return (
     <div>
       <SearchNewfriends
@@ -25,7 +28,7 @@ const FindFriends: React.FC = () => {
         currentPage={usersInf.currentPage}
         term={term}
       />
-      <UsersColumn />
+      <UsersColumn startDialog={startDialog}/>
       <div style={{ display: 'flex', justifyContent: 'center', margin: "24px 0" }}>
         <Pagination
           current={usersInf.currentPage}
