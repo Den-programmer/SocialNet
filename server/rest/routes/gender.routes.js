@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import GenderController from '../controllers/GenderController.js'
-import { verifyToken } from '../middleware/verifyToken.js'
+import { verifyToken } from '../../middleware/verifyToken.js'
 import dotenv from 'dotenv'
 
 dotenv.config()

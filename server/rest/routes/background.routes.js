@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import BackgroundController from '../controllers/BackgroundController.js'
 import multer from 'multer'
-import { verifyToken } from '../middleware/verifyToken.js'
+import { verifyToken } from '../../middleware/verifyToken.js'
 import dotenv from 'dotenv'
 
 dotenv.config()

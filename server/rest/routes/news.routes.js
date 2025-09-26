@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import NewsController from '../controllers/NewsController.js'
-import { verifyToken } from '../middleware/verifyToken.js'
+import { verifyToken } from '../../middleware/verifyToken.js'
 import dotenv from 'dotenv'
 
 dotenv.config()

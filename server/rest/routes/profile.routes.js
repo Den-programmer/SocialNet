@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import ProfileController from '../controllers/ProfileController.js'
-import { verifyToken } from '../middleware/verifyToken.js'
+import { verifyToken } from '../../middleware/verifyToken.js'
 import dotenv from 'dotenv'
 
 dotenv.config()

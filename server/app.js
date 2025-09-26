@@ -11,19 +11,19 @@ import { dirname, resolve } from 'path'
 // const __filename = fileURLToPath(import.meta.url)
 // const __dirname = dirname(__filename)
 
-import authRoutes from './routes/auth.routes.js'
-import backgroundRoutes from './routes/background.routes.js'
-import genderRoutes from './routes/gender.routes.js'
-import avatarRoutes from './routes/avatar.routes.js'
-import profileRoutes from './routes/profile.routes.js'
-import usernameRoutes from './routes/username.routes.js'
-import postsRoutes from './routes/posts.routes.js'
-import usersRoutes from './routes/users.routes.js'
-import newsRoutes from './routes/news.routes.js'
-import notificationsRoutes from './routes/notifications.routes.js'
-import imagesRoutes from './routes/images.routes.js'
-import dialogsRoutes from './routes/dialogs.routes.js'
-import messagesRoutes from './routes/messages.routes.js'
+import authRoutes from './rest/routes/auth.routes.js'
+import backgroundRoutes from './rest/routes/background.routes.js'
+import genderRoutes from './rest/routes/gender.routes.js'
+import avatarRoutes from './rest/routes/avatar.routes.js'
+import profileRoutes from './rest/routes/profile.routes.js'
+import usernameRoutes from './rest/routes/username.routes.js'
+import postsRoutes from './rest/routes/posts.routes.js'
+import usersRoutes from './rest/routes/users.routes.js'
+import newsRoutes from './rest/routes/news.routes.js'
+import notificationsRoutes from './rest/routes/notifications.routes.js'
+import imagesRoutes from './rest/routes/images.routes.js'
+import dialogsRoutes from './rest/routes/dialogs.routes.js'
+import messagesRoutes from './rest/routes/messages.routes.js'
 
 const app = express()
 
