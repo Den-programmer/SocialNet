@@ -27,6 +27,7 @@
   "homepage": "https://github.com/Den-programmer/SocialNet#readme",
   "type": "module",
   "dependencies": {
+    "@apollo/server": "^5.0.0",
     "axios": "^1.8.4",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
@@ -38,11 +39,13 @@
     "express-validator": "^7.2.1",
     "graphql": "^16.11.0",
     "graphql-http": "^1.22.4",
+    "graphql-ws": "^6.0.6",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
     "multer": "^1.4.5-lts.2",
     "path": "^0.12.7",
-    "ruru": "^2.0.0-beta.30"
+    "ruru": "^2.0.0-beta.30",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
