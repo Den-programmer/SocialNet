@@ -1,34 +1,37 @@
 import { Router } from 'express'
-import { check } from 'express-validator'
-import AuthController from '../controllers/AuthController.js'
 import dotenv from 'dotenv'
+import { z } from 'zod'
+import AuthController from '../controllers/AuthController.js'
 
 dotenv.config()
-
 const router = Router()
 
-router.post(
-  '/register',
-  [
-    check('email', 'Invalid email').isEmail(),
-    check('password')
-      .exists().withMessage('Password is required.')
-      .isLength({ min: 6 }).withMessage('Min password length is 6.'),
-    check('username')
-      .isLength({ max: 20 }).withMessage('User name length must be lesser than 20 chars.'),
-  ],
-  AuthController.register
-)
+const validate = (schema) => (req, res, next) => {
+  try {
+    req.body = schema.parse(req.body)
+    next()
+  } catch (err) {
+    return res.status(400).json({ errors: err.errors })
+  }
+}
 
-router.post(
-  '/login',
-  [
-    check('email', 'Enter correct email').normalizeEmail().isEmail(),
-    check('password', 'Enter password').exists()
-  ],
-  AuthController.login
-)
+const registerSchema = z.object({
+  email: z.string().email('Invalid email'),
+  password: z.string()
+    .min(6, 'Min password length is 6')
+    .max(100, 'Password too long'),
+  username: z.string()
+    .max(20, 'User name length must be lesser than 20 chars'),
+})
 
+const loginSchema = z.object({
+  email: z.string().email('Enter correct email'),
+  password: z.string().min(1, 'Enter password'),
+})
+
+// --- Роуты ---
+router.post('/register', validate(registerSchema), AuthController.register)
+router.post('/login', validate(loginSchema), AuthController.login)
 router.post('/logout', AuthController.logout)
 
 export default router

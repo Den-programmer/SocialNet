@@ -6,6 +6,9 @@ import { Button } from 'antd'
 import { scrollToTop } from '../../../../../../../utils/helpers/functions/function-helpers'
 import { addToBlacklist } from '../../../../../../../BLL/reducer-friends'
 import { useAddNotificationMutation } from '../../../../../../../DAL/notificationApi'
+import { setUserDialogId } from '../../../../../../../BLL/reducer-messages'
+import { useStartDialogMutation } from '../../../../../../../DAL/graphQL/graphqlApi'
+import { useAppDispatch } from '../../../../../../../hooks/hooks'
 
 interface IUser {
   followed: boolean
@@ -15,7 +18,6 @@ interface IUser {
   photo: string | File
   followThunk: (userId: string) => void
   unfollowThunk: (userId: string) => void
-  startDialog: (userId: string) => void
 }
 
 const User: React.FC<IUser> = ({
@@ -25,15 +27,16 @@ const User: React.FC<IUser> = ({
   id,
   photo,
   followThunk,
-  unfollowThunk,
-  startDialog
+  unfollowThunk
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuStyle, setMenuStyle] = useState({ top: '0px', left: '0px' })
   const menuRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
 
   const [createNotification] = useAddNotificationMutation()
+  const [startDialog] = useStartDialogMutation()
 
   const handleContextMenu = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -74,18 +77,30 @@ const User: React.FC<IUser> = ({
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const handleChat = () => {
-    startDialog(id)
-    navigate(`/Messages`)
+  const handleChat = async () => {
+    try {
+      const res = await startDialog(id).unwrap()
+      if (!res) {
+        console.error('Failed to start dialog: response is null')
+        return
+      }
+      const dialogId = res[1]._id
+      dispatch(setUserDialogId(dialogId))
+      setIsMenuOpen(false)
+      navigate('/Messages')
+    } catch (err) {
+      console.error('Failed to make a chat.', err)
+    }
   }
 
   const handleFollow = () => {
     if (!followed) {
       followThunk(id)
-      createNotification({title: "You've got a new friend!", pageUrl: '/Friends', itemType: 'Friends'})
+      createNotification({ title: "You've got a new friend!", pageUrl: '/Friends', itemType: 'Friends' })
     } else {
       unfollowThunk(id)
     }
+    setIsMenuOpen(false)
   }
 
   const imageUrl =
@@ -115,7 +130,10 @@ const User: React.FC<IUser> = ({
             </li>
             <li
               className="contextMenu__list-item"
-              onClick={() => addToBlacklist(id)}
+              onClick={() => {
+                dispatch(addToBlacklist(id))
+                setIsMenuOpen(false)
+              }}
             >
               To blacklist
             </li>

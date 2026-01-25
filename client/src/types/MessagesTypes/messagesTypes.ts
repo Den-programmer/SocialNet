@@ -5,19 +5,19 @@ export type message = {
     image: string
 }
 export type userDialogType = {
-    hasNewMessages: boolean
+    hasNewMessages?: boolean   // I need to remove the "?" later there, where it should be removed 
     _id: string
     participants: Array<string>
-    lastDialogActivityDate: Date
-    lastUserActivityDate: Date
-    newMessagesCount: number
+    lastDialogActivityDate?: Date
+    lastUserActivityDate?: Date
+    newMessagesCount?: number
     photos: {
         small: any
         large: any
     },
-    userName: string
-    isActive: boolean
+    username: string
+    isActive?: boolean
     lastMessage?: string
-    createdAt: Date,
-    updatedAt: Date
+    createdAt?: Date,
+    updatedAt?: Date
 }

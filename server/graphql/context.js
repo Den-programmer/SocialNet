@@ -1,29 +1,34 @@
+import { pubsub } from './pubsub.js'
 import jwt from 'jsonwebtoken'
 import User from '../rest/models/user.js'
 
-export default async ({ req, connection }) => {
+export async function verifyJwt(token) {
   try {
-    let token
-
-    if (req && req.headers.authorization) {
-      token = req.headers.authorization.split(' ')[1]
-    }
-
-    if (connection && connection.context && connection.context.Authorization) {
-      token = connection.context.Authorization.split(' ')[1]
-    }
-
-    if (!token) {
-      return { user: null }
-    }
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-
-    const user = await User.findById(decoded.id)
-
-    return { user }
-  } catch (err) {
-    console.error('❌ context error:', err.message)
-    return { user: null }
+    return await User.findById(decoded.userId || decoded.id)
+  } catch (error) {
+    console.error('JWT verification failed:', error.message)
+    return null
   }
+}
+
+export async function getContext({ req, connection } = {}) {
+  let token = null
+
+  // HTTP
+  if (req?.headers?.authorization) {
+    token = req.headers.authorization.split(' ')[1]
+  }
+
+  // WS
+  if (!token && connection?.connectionParams?.Authorization) {
+    token = connection.connectionParams.Authorization.split(' ')[1]
+  }
+
+  let user = null
+  if (token) {
+    user = await verifyJwt(token)
+  }
+
+  return { user, pubsub }
 }

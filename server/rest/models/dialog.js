@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const dialogSchema = new Schema({
     hasNewMessages: { type: Boolean, default: false },
     participants: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
+    messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
     lastDialogActivityDate: { type: Date, default: Date.now },
     lastUserActivityDate: { type: Date, default: Date.now },
     newMessagesCount: { type: Number, default: 0 },

@@ -1,34 +1,47 @@
-import { gql } from 'graphql-tag';
+import { gql } from 'graphql-tag'
 
 export const messagesTypeDefs = gql`
-    type User {
-        id: ID!
-        username: String!
-        email: String!
-    }
-    type Message {
-        id: ID!
-        text: String!
-        sender: User!
-        receiver: User!
-        createdAt: String!
-    }
-    type Conversation {
-        id: ID!
-        participants: [User!]!
-        messages: [Message!]!
-        updatedAt: String!
-    }
+  type Photos {
+    small: String
+    large: String
+  }
 
-    type Query {
-        messages(conversationId: ID!): [Message!]!
-        conversation(id: ID!): Conversation
-    }
-    type Mutation {
-        sendMessage(conversationId: ID!, text: String!): Message!
-    }
+  type User {
+    id: ID!
+    username: String!
+    email: String!
+    photos: Photos
+  }
 
-    type Subscription {
-        messageSent(conversationId: ID!): Message!
-    }
+  type Message {
+    id: ID!
+    text: String
+    sender: User!
+    receiver: User!
+    createdAt: String
+    conversationId: ID!
+    image: String
+  }
+
+  type Dialog {
+    id: ID!
+    participants: [User!]!
+    messages: [Message!]!
+    updatedAt: String!
+  }
+
+  type Query {
+    dialogs: [Dialog!]!
+    messages(conversationId: ID!): [Message!]!
+    conversation(id: ID!): Dialog
+  }
+
+  type Mutation {
+    startDialog(userId: ID!): Dialog!
+    sendMessage(conversationId: ID!, text: String!, image: String): Message!
+  }
+
+  type Subscription {
+    messageSent(conversationId: ID): Message!
+  }
 `

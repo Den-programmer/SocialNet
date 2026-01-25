@@ -17,7 +17,7 @@ const Friends:React.FC = () => {
     const friends = friendsArray.map(f => {
         return <Friend id={f.id} key={f.id} 
         username={f.username}  
-        avatar={f.profile.photos.large ? f.profile.photos.large : f.profile.photos.small}
+        avatar={f.profile?.photos?.large || f.profile?.photos?.small}
         />
     })
     return (

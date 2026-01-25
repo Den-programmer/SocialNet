@@ -3,15 +3,16 @@ dotenv.config()
 
 import express from 'express'
 import mongoose from 'mongoose'
-import { ApolloServer } from '@apollo/server'
-import { expressMiddleware } from '@as-integrations/express4'
+import cors from 'cors'
 import http from 'http'
 import { WebSocketServer } from 'ws'
-import { useServer } from 'graphql-ws/use/ws'
+import { createHandler } from 'graphql-http/lib/use/express'
+import { useServer } from 'graphql-ws/lib/use/ws'
+import { makeExecutableSchema } from '@graphql-tools/schema'
+
 import { typeDefs, resolvers } from './graphql/schema.js'
-import context from './graphql/context.js'
-import cors from 'cors'
-import bodyParser from 'body-parser'
+import {getContext} from './graphql/context.js'
+
 
 import authRoutes from './rest/routes/auth.routes.js'
 import backgroundRoutes from './rest/routes/background.routes.js'
@@ -28,11 +29,9 @@ import dialogsRoutes from './rest/routes/dialogs.routes.js'
 import messagesRoutes from './rest/routes/messages.routes.js'
 
 const app = express()
-const httpServer = http.createServer(app)
 
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(express.json())
 
 app.use('/api/auth', authRoutes)
 app.use('/api/background', backgroundRoutes)
@@ -48,46 +47,45 @@ app.use('/api/images', imagesRoutes)
 app.use('/api/dialogs', dialogsRoutes)
 app.use('/api/messages', messagesRoutes)
 
-const apolloServer = new ApolloServer({
-    typeDefs,
-    resolvers,
-})
-await apolloServer.start()
+const schema = makeExecutableSchema({ typeDefs, resolvers })
 
-app.use(
-    '/graphql',
-    cors(),
-    bodyParser.json(),
-    expressMiddleware(apolloServer, {
-        context: async ({ req, res }) => ({ req, res, ...context }),
-    })
-)
+const httpServer = http.createServer(app)
 
 const wsServer = new WebSocketServer({
-    server: httpServer,
-    path: '/graphql',
+  server: httpServer,
+  path: '/graphql'
 })
 
+app.use(
+  '/graphql',
+  createHandler({
+    schema,
+    context: async (req) => {
+      return getContext({ req })
+    }
+  })
+)
+
 useServer(
-    {
-        schema: apolloServer.schema,
-        context: async (ctx, msg, args) => {
-            return { ...context }
-        },
-    },
-    wsServer
+  {
+    schema,
+    context: async (ctx) => {
+      return getContext({ connection: ctx })
+    }
+  },
+  wsServer
 )
 
 async function startApp() {
-    try {
-        await mongoose.connect(process.env.DB_CONNECTION)
-        httpServer.listen(process.env.PORT || 8000, () => {
-            console.log('🚀 Server started on port ' + (process.env.PORT || 8000))
-        })
-    } catch (e) {
-        console.error('❌ Failed to start the server:', e)
-        process.exit(1)
-    }
+  try {
+    await mongoose.connect(process.env.DB_CONNECTION)
+    httpServer.listen(process.env.PORT || 8000, () => {
+      console.log(`🚀 Server running on port ${process.env.PORT || 8000}`)
+    })
+  } catch (err) {
+    console.error('❌ Failed to start server:', err)
+    process.exit(1)
+  }
 }
 
 startApp()

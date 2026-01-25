@@ -10,13 +10,9 @@ import { selectAuthorizedUserId } from '../../../../../../BLL/selectors/auth-sel
 
 const { Title } = Typography
 
-interface UsersColumnPropsType {
-    startDialog: (userId: string) => void
-}
+interface UsersColumnPropsType { }
 
-const UsersColumn: React.FC<UsersColumnPropsType> = ({
-    startDialog
-}) => {
+const UsersColumn: React.FC<UsersColumnPropsType> = ({ }) => {
     const userId = useAppSelector(selectAuthorizedUserId)
     const pageSize = useAppSelector(selectUsersInf).pageSize
     const currentPage = useAppSelector(selectUsersInf).currentPage
@@ -24,7 +20,6 @@ const UsersColumn: React.FC<UsersColumnPropsType> = ({
     const { data, isLoading } = useGetUsersQuery({ pageSize, currentPage, term })
 
     let users = data?.items || []
-    debugger
 
     const filteredUsers = Array.isArray(users) ? users.filter((user: userType) => user.id !== userId) : []
 
@@ -32,7 +27,7 @@ const UsersColumn: React.FC<UsersColumnPropsType> = ({
 
     const [followThunk] = useFollowUserMutation()
     const [unfollowThunk] = useFollowUserMutation()
-    debugger
+    // debugger
     if (filteredUsers.length === 0) {
         return (
             <Row justify="center" style={{ marginTop: '32px' }}>
@@ -43,7 +38,7 @@ const UsersColumn: React.FC<UsersColumnPropsType> = ({
         )
     }
 
-    if(isLoading) return <Preloader /> 
+    if (isLoading) return <Preloader />
 
     return (
         <Row gutter={[16, 16]} justify="center" style={{ padding: '20px' }}>
@@ -57,7 +52,6 @@ const UsersColumn: React.FC<UsersColumnPropsType> = ({
                         followed={user.followed}
                         username={user.username}
                         photo={user.profile.photos.large}
-                        startDialog={startDialog}
                     />
                 </Col>
             ))}
@@ -65,4 +59,10 @@ const UsersColumn: React.FC<UsersColumnPropsType> = ({
     )
 }
 
-export default UsersColumn
+const UsersColumnWithApollo: React.FC<UsersColumnPropsType> = (props) => {
+    return (
+        <UsersColumn {...props} />
+    )
+}
+
+export default UsersColumnWithApollo

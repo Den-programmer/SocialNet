@@ -3,6 +3,10 @@ import jwt from 'jsonwebtoken'
 
 dotenv.config()
 
+export function decodeToken(token) {
+  return jwt.verify(token, process.env.JWT_SECRET)
+}
+
 export const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization
   const token = authHeader && authHeader.split(' ')[1]
@@ -12,7 +16,7 @@ export const verifyToken = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const decoded = decodeToken(token)
     req.user = decoded.userId
 
     res.cookie('token', token, {
