@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col, Typography } from 'antd'
 import User from './user/user'
 import { userType } from '../../../../../../types/FriendsType/friendsType'
-import { useFollowUserMutation, useGetUsersQuery } from '../../../../../../DAL/usersApi'
+import { useFollowUserMutation, useUnfollowUserMutation, useGetUsersQuery } from '../../../../../../DAL/usersApi'
 import { useAppSelector } from '../../../../../../hooks/hooks'
 import { selectFollowingInProcess, selectUsersFilter, selectUsersInf } from '../../../../../../BLL/selectors/users-selectors'
 import Preloader from '../../../../../common/preloader/preloader'
@@ -26,8 +26,8 @@ const UsersColumn: React.FC<UsersColumnPropsType> = ({ }) => {
     const followingInProcess = useAppSelector(selectFollowingInProcess)
 
     const [followThunk] = useFollowUserMutation()
-    const [unfollowThunk] = useFollowUserMutation()
-    // debugger
+    const [unfollowThunk] = useUnfollowUserMutation()
+    
     if (filteredUsers.length === 0) {
         return (
             <Row justify="center" style={{ marginTop: '32px' }}>

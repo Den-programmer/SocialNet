@@ -12,22 +12,26 @@ interface SearchNewFriendsProps {
 }
 
 const SearchNewFriends: React.FC<SearchNewFriendsProps> = ({ pageSize, currentPage, term }) => {
-  const dispatch = useAppDispatch() 
-  const onFinish = (values: { term: string }) => {
-    dispatch(setUsersTerm(values.term))
+  const dispatch = useAppDispatch()
+  const [form] = Form.useForm()
+  const [triggerUsers] = useLazyGetUsersQuery()
+
+  const handleSearch = () => {
+    const searchTerm = form.getFieldValue('term') || ''
+    dispatch(setUsersTerm(searchTerm))
+    triggerUsers({ pageSize, currentPage, term: searchTerm })
     setTimeout(() => scrollToTop(400), 250)
   }
-  const [triggerUsers] = useLazyGetUsersQuery()
 
   return (
     <Row justify="center" style={{ margin: '16px 0' }}>
       <Col xs={22} sm={20} md={16} lg={12} xl={10}>
-        <Form layout="inline" onFinish={onFinish} initialValues={{ term }}>
-          <Form.Item name="term" rules={[{ required: true, message: 'Please enter a search term' }]} style={{ flexGrow: 1 }}>
+        <Form layout="inline" form={form} initialValues={{ term }}>
+          <Form.Item name="term" style={{ flexGrow: 1 }}>
             <Input placeholder="Search for friends" allowClear />
           </Form.Item>
           <Form.Item>
-            <Button onClick={() => triggerUsers({pageSize, currentPage, term})} type="primary">
+            <Button onClick={handleSearch} type="primary">
               Search
             </Button>
           </Form.Item>

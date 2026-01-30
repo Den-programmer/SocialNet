@@ -47,8 +47,7 @@ const MessagesPage: React.FC = () => {
   const messages = selectedDialog?.messages || []
   const messagesTotalCount = messages.length
 
-  // For loading state, you may want to add a loading state for messages
-  const messagesLoading = dialogsLoading // Or use a separate loading if you have one
+  const messagesLoading = dialogsLoading
 
   // For sending messages
   const [sendMessage] = useSendDialogMessagesMutation()
@@ -127,6 +126,7 @@ const MessagesPage: React.FC = () => {
               renderItem={(dialog: any) => {
                 // Find the other participant (not the authorized user)
                 const otherUser = dialog.participants.find((u: any) => u.id !== authorizedUserId)
+                debugger
                 const dialogId = dialog.id
                 const avatarSrc = otherUser?.photos?.small || undefined
                 const conversationUsername = otherUser?.username || 'Unknown User'
