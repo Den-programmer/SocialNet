@@ -1,10 +1,3 @@
-.horizontal_line {
-    width: 800px;
-    height: 1px;
-    background-color: #E3E3E3;
-    margin: 0 auto;
-}
-
 .post {
     margin-bottom: 100px;
     .postHeaderWrapper {
@@ -55,8 +48,16 @@
             display: flex;
             justify-content: center;
             border-left: 1px solid #E3E3E3;
+            position: relative;
+            .horizontal_line {
+                width: 80%;
+                height: 1px;
+                background-color: #E3E3E3;
+                margin: 0 auto;
+            }
             .postContent {
                 text-align: center;
+                width: 100%;
                 .postTitleContainer {
                     margin: 10px 0px;
                 }
@@ -67,7 +68,7 @@
                     font-size: 18px;
                 }
                 .postInf {  
-                    width: 800px;
+                    width: 80%;
                     word-wrap: break-word;
                     font-size: 15px;
                     color: silver;
