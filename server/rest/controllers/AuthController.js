@@ -16,12 +16,20 @@ class AuthController {
       }
 
       const hashedPassword = await bcrypt.hash(password, 12)
-      const user = new User({ email, password: hashedPassword, username, rememberMe })
+      const user = new User({ email, password: hashedPassword, username })
 
       await user.save()
+      
+      const expiresIn = rememberMe ? '7d' : '1h'
+      const token = jwt.sign(
+        { userId: user.id },
+        process.env.JWT_SECRET,
+        { expiresIn }
+      )
+
       return res
         .status(201)
-        .json(new StandartRes(0, 'User is created.', { userId: user.id }))
+        .json(new StandartRes(0, 'User is created.', { userId: user.id, token }))
     } catch (e) {
       console.error(e)
       return res.status(500).json(catchRes)
@@ -30,7 +38,7 @@ class AuthController {
 
   async login(req, res) {
     try {
-      const { email, password } = req.body
+      const { email, password, rememberMe } = req.body
 
       const user = await User.findOne({ email })
       const epErrRes = new StandartRes(1, 'Invalid email or password.')
@@ -44,10 +52,11 @@ class AuthController {
         return res.status(400).json(epErrRes)
       }
 
+      const expiresIn = rememberMe ? '7d' : '1h'
       const token = jwt.sign(
         { userId: user.id },
         process.env.JWT_SECRET,
-        { expiresIn: '1h' }
+        { expiresIn }
       )
 
       return res.json(

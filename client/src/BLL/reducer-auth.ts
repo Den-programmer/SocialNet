@@ -15,12 +15,13 @@ export type AuthState = {
 
 const userData = localStorage.getItem('userData')
 const standartUserId = userData ? JSON.parse(userData).userId : '0'
+const savedRememberMe = localStorage.getItem('rememberMe') === 'true'
 
 const initialState: AuthState = {
   userId: standartUserId,
   email: null,
   login: null,
-  rememberMe: false,
+  rememberMe: savedRememberMe,
   isAuth: localStorage.getItem('token') ? true : false,
   token: localStorage.getItem('token') || null,
   captchaUrl: null,
@@ -48,7 +49,6 @@ const authSlice = createSlice({
         state.login = payload.userId
         state.email = payload.userId
         state.isAuth = true
-        state.rememberMe = true
         state.token = payload.token
 
         localStorage.setItem('userData', JSON.stringify({
@@ -60,18 +60,21 @@ const authSlice = createSlice({
 
     builder.addMatcher(
       authApi.endpoints.login.matchFulfilled,
-      (state, { payload }) => {
+      (state, { payload, meta }) => {
+        const rememberMe = (meta.arg.originalArgs as any)?.rememberMe ?? false
+        
         state.userId = payload.userId
         state.login = payload.userId
         state.email = payload.userId
         state.isAuth = true
-        state.rememberMe = true
+        state.rememberMe = rememberMe
         state.token = payload.token
 
         localStorage.setItem('userData', JSON.stringify({
           userId: payload.userId
         }))
         localStorage.setItem('token', payload.token ?? '')
+        localStorage.setItem('rememberMe', rememberMe.toString())
       }
     )
 

@@ -4,7 +4,6 @@ const User = new Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     username: { type: String, default: 'Your nickname' },
-    rememberMe: { type: Boolean, default: false },
     captcha: { type: String, default: '' },
     gender: { type: String, default: 'Not Chosen' },
     profile: {
