@@ -1,24 +1,65 @@
-import { useGetGroqChatCompletionQuery } from "../../../DAL/AI/aiAPI"
 import { useAuthRedirect } from "../../../hooks/hooks"
 import classes from './aiPage.module.scss'
+import { Card, Tabs, Avatar, Row, Col, Typography } from 'antd'
+import {
+  RobotOutlined,
+  MessageOutlined,
+  ThunderboltOutlined,
+  HistoryOutlined
+} from '@ant-design/icons'
+import Title from "antd/es/typography/Title"
+import AIChatInterface from "./AIChatInterface/aiChatInterface"
 
 const AIPage = () => { 
-  let data = {
-    data: {
-      content: "This is a mock AI response."
-    }
-  }
-  let isLoading = false
-  let error = null
   useAuthRedirect()
-  // const { data, error, isLoading } = useGetGroqChatCompletionQuery("Hello,AI!")
-  console.log(data)
   return (
-    <div className={classes.aipage}>
-      <h1>AI Page</h1>
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error occurred while fetching AI response.</p>}
-      {data && <p>AI Response: {data.data.content || "No content"}</p>}
+    <div className={classes.aiPage}>
+      <div className={classes.aiHeader}>
+        <Row align="middle" gutter={16}>
+          <Col>
+            <Avatar
+              size={96}
+              icon={<RobotOutlined />}
+              className={classes.aiAvatar}
+            />
+          </Col>
+
+          <Col>
+            <Title level={2} className={classes.aiTitle}>
+              AI Assistant
+            </Title>
+            <Typography className={classes.aiSubtitle}>
+              Your personal intelligence layer
+            </Typography>
+          </Col>
+        </Row>
+      </div>
+
+      <Card className={classes.aiCard}>
+        <Tabs
+          defaultActiveKey="chat"
+          items={[
+            {
+              key: 'chat',
+              label: 'Chat',
+              icon: <MessageOutlined />,
+              children: <AIChatInterface />
+            },
+            {
+              key: 'tools',
+              label: 'Tools',
+              icon: <ThunderboltOutlined />,
+              children: <div>AI Tools & Actions</div>
+            },
+            {
+              key: 'history',
+              label: 'History',
+              icon: <HistoryOutlined />,
+              children: <div>Conversation History</div>
+            }
+          ]}
+        />
+      </Card>
     </div>
   )
 }

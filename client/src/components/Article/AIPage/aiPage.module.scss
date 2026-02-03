@@ -1,4 +1,39 @@
-.aipage {
-    width: 100%;
-    min-height: 100vh;
+.aiPage {
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.aiHeader {
+  height: 260px;
+  padding: 40px;
+  color: white;
+  background: linear-gradient(
+    135deg,
+    #0b1c2d 0%,
+    #123a8c 45%,
+    #6a11cb 100%
+  );
+  display: flex;
+  align-items: center;
+}
+
+.aiAvatar {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.aiTitle {
+  color: white !important;
+  margin-bottom: 0;
+}
+
+.aiSubtitle {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.aiCard {
+  margin: -60px 32px 32px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
