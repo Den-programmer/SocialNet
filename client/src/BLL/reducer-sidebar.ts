@@ -14,7 +14,8 @@ const initialState: SidebarState = {
     { id: 7006, name: 'Friends', path: '/Friends/DataFriends', iconKey: 'TeamOutlined', isChosen: false },
     { id: 7013, name: 'Notifications', path: '/Notifications', iconKey: 'NotificationOutlined', isChosen: false },
     { id: 7003, name: 'News', path: '/News', iconKey: 'BellOutlined', isChosen: false },
-    { id: 7015, name: 'Options', path: '/Options/account', iconKey: 'SettingOutlined', isChosen: false }
+    { id: 7015, name: 'Options', path: '/Options/account', iconKey: 'SettingOutlined', isChosen: false },
+    { id: 7010, name: 'AI', path: '/AIPage', iconKey: 'GlobalOutlined', isChosen: false }
   ],
   isSidebarOpen: false,
   sidebarWidth: 240

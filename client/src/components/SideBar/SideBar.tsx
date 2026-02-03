@@ -10,7 +10,8 @@ import {
   NotificationOutlined,
   BellOutlined,
   SettingOutlined,
-  TeamOutlined
+  TeamOutlined,
+  GlobalOutlined
 } from '@ant-design/icons'
 import { SidebarIconMapType } from '../../types/SidebarTypes/sidebarTypes'
 
@@ -54,7 +55,8 @@ const SideBar: React.FC<SideBarPropsType> = ({
     NotificationOutlined: NotificationOutlined,
     BellOutlined: BellOutlined,
     SettingOutlined: SettingOutlined,
-    TeamOutlined: TeamOutlined
+    TeamOutlined: TeamOutlined,
+    GlobalOutlined: GlobalOutlined
   }
 
   return (

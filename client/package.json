@@ -25,6 +25,7 @@
     "graphql": "^16.11.0",
     "graphql-tag": "^2.12.6",
     "graphql-ws": "^6.0.6",
+    "groq-sdk": "^0.37.0",
     "react": "^19.0.0",
     "react-cookie-consent": "^9.0.0",
     "react-dom": "^19.0.0",

@@ -29,6 +29,7 @@ const Wall = lazy(() => import('./Profile/Wall/wall'))
 const ProfileMainContent = lazy(() => import('./Profile/ProfileMainContent/profileMainContent'))
 const SingleNewsPageContent = lazy(() => import('./News/SingleNewsPageContent/singleNewsPageContent'))
 const Blacklist = lazy(() => import('./Friends/FriendsComponents/Blacklist/blacklist'))
+const AIPage = lazy(() => import('./AIPage/aiPage'))
 
 interface ArticlePropType {
   isSidebarOpen: boolean
@@ -70,6 +71,7 @@ const Article: React.FC<ArticlePropType> = React.memo(({
             <Route path='/Messages' element={<div className="flex-content"><ProfileMainContent /><Messages /></div>} />
             <Route path={`/News/:newsId`} element={<SingleNewsPageContent />} />
             <Route path='/News' element={<News />} />
+            <Route path='/AIPage' element={<AIPage />} />
             <Route path='/Options/account' element={<div className="flex-content"><OptionsNav /><AccountOptions /></div>} />
             <Route path='/Options/general' element={<div className="flex-content"><OptionsNav /><GeneralOptions /></div>} />
             <Route path='/Options/security' element={<div className="flex-content"><OptionsNav /><SecurityOptions /></div>} />

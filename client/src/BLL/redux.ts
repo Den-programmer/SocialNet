@@ -14,6 +14,7 @@ import { messagesApi } from '../DAL/messagesApi'
 import { newsApi } from '../DAL/newsAPi'
 import { notificationsApi } from '../DAL/notificationApi'
 import { usersApi } from '../DAL/usersApi'
+import { aiApi } from '../DAL/AI/aiAPI'
 
 export const store = configureStore({
   reducer: {
@@ -31,7 +32,8 @@ export const store = configureStore({
     [messagesApi.reducerPath]: messagesApi.reducer,
     [newsApi.reducerPath]: newsApi.reducer,
     [notificationsApi.reducerPath]: notificationsApi.reducer,
-    [usersApi.reducerPath]: usersApi.reducer
+    [usersApi.reducerPath]: usersApi.reducer,
+    [aiApi.reducerPath]: aiApi.reducer
   },  
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
   .concat(profileApi.middleware)
@@ -40,6 +42,7 @@ export const store = configureStore({
   .concat(newsApi.middleware)
   .concat(notificationsApi.middleware)
   .concat(usersApi.middleware)
+  .concat(aiApi.middleware)
 })
 
 export type RootState = ReturnType<typeof store.getState>
