@@ -6,7 +6,7 @@ import styles from './Header.module.scss'
 import { selectIsSidebarOpenStatus, selectSidebarWidth } from '../../BLL/selectors/sidebar-selectors'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 import { selectIsAuthStatus } from '../../BLL/selectors/auth-selectors'
-import { authActions } from '../../BLL/reducer-auth'
+import { authActions, clearToken } from '../../BLL/reducer-auth'
 import { useLogoutMutation } from '../../DAL/authApi'
 import { appActions } from '../../BLL/reducer-app'
 import { sidebarActions } from '../../BLL/reducer-sidebar'
@@ -45,7 +45,7 @@ const Header: React.FC = ({}) => {
   const handleLogout = async () => {
     dispatch(setLastUrl(location.pathname))
     await logout().unwrap()
-    localStorage.removeItem('token')
+    clearToken()
     localStorage.removeItem('userData')
     navigate('/login')
   }

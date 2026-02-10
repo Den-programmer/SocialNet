@@ -3,9 +3,6 @@ import { RootState } from "../redux"
 export const selectAuthorizedUserId = (state: RootState) => {
     return state.auth.userId 
 }
-export const selectLoginName = (state: RootState) => {
-    return state.auth.login
-}
 export const selectIsAuthStatus = (state: RootState) => {
     return state.auth.isAuth;
 }

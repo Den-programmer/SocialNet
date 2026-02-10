@@ -1,13 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { authApi } from '../DAL/authApi'
 
+let accessToken: string | null = ''
+
+export const setToken = (token: string) => {
+  accessToken = token
+}
+
+export const getToken = () => accessToken
+
+export const clearToken = () => {
+  accessToken = null
+}
+
 export type AuthState = {
   userId: string
   email: string | null
-  login: string | null
   rememberMe: boolean
   isAuth: boolean
-  token: string | null
   captchaUrl: string | null
   lastUrl: string
   isRegister: boolean
@@ -20,10 +30,8 @@ const savedRememberMe = localStorage.getItem('rememberMe') === 'true'
 const initialState: AuthState = {
   userId: standartUserId,
   email: null,
-  login: null,
   rememberMe: savedRememberMe,
-  isAuth: localStorage.getItem('token') ? true : false,
-  token: localStorage.getItem('token') || null,
+  isAuth: getToken() ? true : false,
   captchaUrl: null,
   lastUrl: '',
   isRegister: false
@@ -46,15 +54,13 @@ const authSlice = createSlice({
       (state, { payload }) => {
         state.isRegister = true
         state.userId = payload.userId
-        state.login = payload.userId
         state.email = payload.userId
         state.isAuth = true
-        state.token = payload.token
 
         localStorage.setItem('userData', JSON.stringify({
           userId: payload.userId
         }))
-        localStorage.setItem('token', payload.token ?? '')
+        setToken(payload.token || '')
       }
     )
 
@@ -64,17 +70,15 @@ const authSlice = createSlice({
         const rememberMe = (meta.arg.originalArgs as any)?.rememberMe ?? false
         
         state.userId = payload.userId
-        state.login = payload.userId
         state.email = payload.userId
         state.isAuth = true
         state.rememberMe = rememberMe
-        state.token = payload.token
 
         localStorage.setItem('userData', JSON.stringify({
           userId: payload.userId
         }))
-        localStorage.setItem('token', payload.token ?? '')
         localStorage.setItem('rememberMe', rememberMe.toString())
+        setToken(payload.token || '')
       }
     )
 
@@ -83,16 +87,16 @@ const authSlice = createSlice({
       (state) => {
         state.userId = '0'
         state.email = null
-        state.login = null
         state.rememberMe = false
         state.isAuth = false
-        state.token = null
         state.captchaUrl = null
         state.lastUrl = ''
         state.isRegister = false
 
         localStorage.removeItem('userData')
-        localStorage.removeItem('token')
+        localStorage.removeItem('rememberMe')
+
+        clearToken()
       }
     )
   }

@@ -21,16 +21,21 @@ export type profileType = {
     userId: string
 }
 
-export type postType = {
-    id: number
-    postTitle: string
-    postInf: string
-    postImg: File | string
-    likesCount: number
-    isEditTitle: boolean
-    isEditPostInf: boolean
-    owner: string
-    createdAt: string
+export type PostType = {
+  id: string
+  _id: string
+  postTitle: string
+  postInf: string
+  postImg: File | string
+  likesCount: number
+  owner: string
+  createdAt: string
+}
+
+export type PostEditState = {
+  isEditing: boolean
+  draftTitle: string
+  draftInf: string
 }
 
 export type postNotificationType = {
@@ -49,14 +54,4 @@ export type ChangePhotosMenuItemType = {
     id: number
     title: string
     isActive: boolean
-}
-
-export type PostEditingType = {
-  postId: number
-  status: boolean
-}
-
-export type PostChangingType = {
-  postId: number
-  postContent: string
 }

@@ -90,7 +90,7 @@ const notificationsSlice = createSlice({
     )
   }
 })
-
+ /// REfactor: Reducer‐logikken for at toggle checkbox‐status er spredt mellem to matchers (updateIsCheckedStatus og toggleNotificationChecked). Det kunne måske samles i én funktion for at undgå duplikering.
 export const {
   toggleAllCheckedStatus,
   toggleNotificationChecked,

@@ -28,3 +28,14 @@ export const enteredNothingError:FieldValidator = (val) => {
     
     return undefined;
 }
+
+export const runValidators = (
+  value: string,
+  validators: FieldValidator[]
+): string | undefined => {
+  for (const validate of validators) {
+    const error = validate(value)
+    if (error) return error
+  }
+  return undefined
+}

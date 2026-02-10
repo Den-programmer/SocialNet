@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import profileReducer, { profileActions } from '../reducer-profile';
-import { postType, } from '../../types/ProfileTypes/profileTypes';
+import { PostType, } from '../../types/ProfileTypes/profileTypes';
 
 describe('Profile Reducer', () => {
   let initialState: ReturnType<typeof profileReducer>;
@@ -152,7 +152,7 @@ describe('Profile Reducer', () => {
 
   describe('setIsPostTitleEdited', () => {
     beforeEach(() => {
-      const postData: postType[] = [
+      const postData: PostType[] = [
         {
           id: 1,
           postTitle: 'Test Post',
@@ -219,7 +219,7 @@ describe('Profile Reducer', () => {
 
   describe('setIsPostInfEdited', () => {
     beforeEach(() => {
-      const postData: postType[] = [
+      const postData: PostType[] = [
         {
           id: 1,
           postTitle: 'Test Post',
@@ -258,7 +258,7 @@ describe('Profile Reducer', () => {
 
   describe('finishEditing', () => {
     beforeEach(() => {
-      const postData: postType[] = [
+      const postData: PostType[] = [
         {
           id: 1,
           postTitle: 'Test Post 1',
@@ -297,7 +297,7 @@ describe('Profile Reducer', () => {
 
   describe('onPostTitleChange', () => {
     beforeEach(() => {
-      const postData: postType[] = [
+      const postData: PostType[] = [
         {
           id: 1,
           postTitle: 'Original Title',
@@ -353,7 +353,7 @@ describe('Profile Reducer', () => {
 
   describe('onPostInfChange', () => {
     beforeEach(() => {
-      const postData: postType[] = [
+      const postData: PostType[] = [
         {
           id: 1,
           postTitle: 'Test Title',

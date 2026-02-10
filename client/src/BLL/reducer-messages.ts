@@ -54,18 +54,6 @@ const messagesSlice = createSlice({
       }
     )
     builder.addMatcher(
-      messagesApi.endpoints.getDialogMessages.matchFulfilled,
-      (state, { payload }) => {
-        state.messages = payload.items
-      }
-    )
-    builder.addMatcher(
-      messagesApi.endpoints.sendDialogMessages.matchFulfilled,
-      (state, { payload }) => {
-        state.messages.push(payload)
-      }
-    )
-    builder.addMatcher(
       messagesApi.endpoints.startDialog.matchFulfilled,
       (state, { payload }) => {
         state.dialogs.push({ ...payload, isActive: false })

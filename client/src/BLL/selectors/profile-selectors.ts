@@ -58,3 +58,15 @@ export const selectIsMembersColumnOpenedStatus = (state: RootState) => {
 export const selectIsLoadingSmthStatus = (state: RootState) => {
     return state.app.isSmthLoading
 }
+
+export const selectPostEdits = (
+  state: RootState,
+  postId: string
+) => {
+  return state.profilePage.edits[postId]
+}
+
+
+export const selectTotalPostsCount = (state: RootState) => {
+  return state.profilePage.totalPostsCount
+}

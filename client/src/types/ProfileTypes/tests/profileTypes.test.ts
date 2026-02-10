@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   profileType,
-  postType,
+  PostType,
   contactsType,
   profileNavItem,
   ChangePhotosMenuItemType,
@@ -133,9 +133,9 @@ describe('Profile Types', () => {
     });
   });
 
-  describe('postType', () => {
+  describe('PostType', () => {
     it('should have all required post properties', () => {
-      const post: postType = {
+      const post: PostType = {
         id: 1,
         postTitle: 'My First Post',
         postInf: 'Post information',
@@ -160,7 +160,7 @@ describe('Profile Types', () => {
 
     it('should accept File as postImg', () => {
       const file = new File(['content'], 'photo.jpg', { type: 'image/jpeg' });
-      const post: postType = {
+      const post: PostType = {
         id: 1,
         postTitle: 'My Post',
         postInf: 'Information',
@@ -176,7 +176,7 @@ describe('Profile Types', () => {
     });
 
     it('should track edit states', () => {
-      const post: postType = {
+      const post: PostType = {
         id: 1,
         postTitle: 'Title',
         postInf: 'Info',
@@ -324,7 +324,7 @@ describe('Profile Types', () => {
     });
 
     it('should maintain post array structure', () => {
-      const posts: postType[] = [
+      const posts: PostType[] = [
         {
           id: 1,
           postTitle: 'Post 1',

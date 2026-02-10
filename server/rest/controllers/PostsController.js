@@ -45,8 +45,6 @@ class PostsController {
           contentType: mimetype
         },
         likesCount: 0,
-        isEditTitle: false,
-        isEditPostInf: false,
         owner: userId
       })
 
@@ -82,35 +80,104 @@ class PostsController {
     }
   }
 
-  async updatePost(req, res) {
+  async updatePostTitle(req, res) {
     try {
-      const { postId, updatedPostTitle, updatedPostInformat, updatedPostPhoto } = req.body
+      const { postId, updatedPostTitle } = req.body
 
-      if (!postId || !updatedPostTitle || !updatedPostInformat || !updatedPostPhoto) {
-        return res.status(400).json(new StandartRes(1, 'Incomplete data for updating post.'))
+      if (!postId || typeof updatedPostTitle !== 'string') {
+        return res
+          .status(400)
+          .json(new StandartRes(1, 'Invalid payload'))
       }
 
-      const updatedPost = await Post.findByIdAndUpdate(
+      const title = updatedPostTitle.trim()
+
+      if (!title) {
+        return res
+          .status(400)
+          .json(new StandartRes(1, 'Title cannot be empty'))
+      }
+
+      if (!Post.db.base.Types.ObjectId.isValid(postId)) {
+        return res
+          .status(400)
+          .json(new StandartRes(1, 'Invalid postId'))
+      }
+
+      const post = await Post.findByIdAndUpdate(
         postId,
-        {
-          postTitle: updatedPostTitle,
-          postInf: updatedPostInformat,
-          postImg: updatedPostPhoto
-        },
-        { new: true }
+        { $set: { postTitle: title } },
+        { new: true, runValidators: true }
       )
 
-      if (!updatedPost) {
-        return res.status(404).json(new StandartRes(1, 'Post not found.'))
+      if (!post) {
+        return res
+          .status(404)
+          .json(new StandartRes(1, 'Post not found'))
       }
 
-      res.json(new StandartRes(0, '', { updatedPost }))
+      return res.json(
+        new StandartRes(0, '', {
+          postId,
+          updatedPostTitle: post.postTitle
+        })
+      )
+
     } catch (e) {
       console.error(e)
-      res.status(500).json(catchRes)
+      return res.status(500).json(catchRes)
     }
   }
 
+
+  async updatePostInf(req, res) {
+    try {
+      const { postId, updatedPostInformat } = req.body
+
+      if (!postId || typeof updatedPostInformat !== 'string') {
+        return res
+          .status(400)
+          .json(new StandartRes(1, 'Invalid payload'))
+      }
+
+      const content = updatedPostInformat.trim()
+
+      if (!content) {
+        return res
+          .status(400)
+          .json(new StandartRes(1, 'Content cannot be empty'))
+      }
+
+      if (!Post.db.base.Types.ObjectId.isValid(postId)) {
+        return res
+          .status(400)
+          .json(new StandartRes(1, 'Invalid postId'))
+      }
+
+      const post = await Post.findByIdAndUpdate(
+        postId,
+        { $set: { postInf: content } },
+        { new: true, runValidators: true }
+      )
+
+      if (!post) {
+        return res
+          .status(404)
+          .json(new StandartRes(1, 'Post not found'))
+      }
+
+      return res.json(
+        new StandartRes(0, '', {
+          postId,
+          updatedPostInformat: post.postInf
+        })
+      )
+
+    } catch (e) {
+      console.error(e)
+      return res.status(500).json(catchRes)
+    }
+  }
   async deletePost(req, res) {
     try {
       const { postId } = req.body

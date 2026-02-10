@@ -3,7 +3,7 @@ import classes from './followingInformation.module.scss'
 import { userType } from '../../../../../types/FriendsType/friendsType'
 import { useGetIsUserFollowedQuery } from '../../../../../DAL/usersApi'
 import { useAppSelector } from '../../../../../hooks/hooks'
-import { selectPosts } from '../../../../../BLL/selectors/profile-selectors'
+import { selectTotalPostsCount } from '../../../../../BLL/selectors/profile-selectors'
 import { useParams } from 'react-router-dom'
 
 interface IFollowingInformation {
@@ -17,6 +17,8 @@ const FollowingInformation: React.FC<IFollowingInformation> = (props) => {
     const { userId } = useParams<{ userId: string }>()
     const { data: followed } = useGetIsUserFollowedQuery(userId || props.authorizedUserId, { skip: !userId }) // Followed can be undefined!
 
+    const totalPostsCount = useAppSelector(selectTotalPostsCount)
+
     const following = () => {
         if (followed) {
             props.unfollow(userId || "")
@@ -25,15 +27,13 @@ const FollowingInformation: React.FC<IFollowingInformation> = (props) => {
         }
     }
 
-    const posts = useAppSelector(selectPosts)
-
     return (
         <div className={classes.followingBlock}>
             <div className={classes.followingContainer}>
                 <div className={classes.mainFollowingInf}>
                     <div className={classes.infBlock}>
                         <h3>Posts</h3>
-                        <p>{posts?.length}</p>
+                        <p>{totalPostsCount}</p>
                     </div>
                     <div className={classes.infBlock}>
                         <h3>Followers</h3>

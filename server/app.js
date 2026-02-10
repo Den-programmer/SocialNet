@@ -27,7 +27,7 @@ import notificationsRoutes from './rest/routes/notifications.routes.js'
 import imagesRoutes from './rest/routes/images.routes.js'
 import dialogsRoutes from './rest/routes/dialogs.routes.js'
 import messagesRoutes from './rest/routes/messages.routes.js'
-import AIroutes from './rest/routes/AI.routes.js'
+// import AIroutes from './rest/routes/AI.routes.js'
 
 const app = express()
 
@@ -47,7 +47,7 @@ app.use('/api/notifications', notificationsRoutes)
 app.use('/api/images', imagesRoutes)
 app.use('/api/dialogs', dialogsRoutes)
 app.use('/api/messages', messagesRoutes)
-app.use("/api/ai", AIroutes)
+// app.use("/api/ai", AIroutes)
 
 const schema = makeExecutableSchema({ typeDefs, resolvers })
 

@@ -17,7 +17,7 @@ import {
   selectIsMembersColumnOpenedStatus,
 } from '../profile-selectors';
 import { RootState } from '../../redux';
-import { profileType, postType } from '../../../types/ProfileTypes/profileTypes';
+import { profileType, PostType } from '../../../types/ProfileTypes/profileTypes';
 
 describe('Profile Selectors', () => {
   let mockState: RootState;
@@ -43,26 +43,22 @@ describe('Profile Selectors', () => {
       userId: '123'
     };
 
-    const mockPosts: postType[] = [
+    const mockPosts: PostType[] = [
       {
-        id: 1,
+        id: "qafsdfsdgsgs",
         postTitle: 'Post 1',
         postInf: 'Information 1',
         postImg: 'img1.jpg',
         likesCount: 10,
-        isEditTitle: false,
-        isEditPostInf: false,
         owner: 'user123',
         createdAt: '2024-01-01'
       },
       {
-        id: 2,
+        id: "qdgdffgjghkgsgs",
         postTitle: 'Post 2',
         postInf: 'Information 2',
         postImg: 'img2.jpg',
         likesCount: 20,
-        isEditTitle: false,
-        isEditPostInf: false,
         owner: 'user123',
         createdAt: '2024-01-02'
       }

@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { userDialogType } from '../../types/MessagesTypes/messagesTypes'
+import { getToken } from '../../BLL/reducer-auth'
 
 // GraphQL queries/mutations 
 const GET_ALL_DIALOGS = `
@@ -106,7 +107,7 @@ export const messagesApi = createApi({
     baseUrl: 'http://localhost:8000/graphql',
     prepareHeaders: (headers) => {
       headers.set('Content-Type', 'application/json')
-      const token = localStorage.getItem('token')
+      const token = getToken()
       if (token) headers.set('Authorization', `Bearer ${token}`)
       return headers
     }

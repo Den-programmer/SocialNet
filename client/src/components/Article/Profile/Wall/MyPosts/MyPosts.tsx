@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import classes from './MyPosts.module.scss'
 import Post from './Post/Post'
 import AddPost from './AddPost/addPost'
-import { postType, profileType } from '../../../../../types/ProfileTypes/profileTypes'
+import { PostType, profileType } from '../../../../../types/ProfileTypes/profileTypes'
 import { Input, Typography, Row, Col } from 'antd'
 import { useCreatePostMutation, useGetUsersPostsQuery } from '../../../../../DAL/profileApi'
 import { useAppDispatch, useAppSelector } from '../../../../../hooks/hooks'
@@ -30,7 +30,7 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
     isPostModalOpen
   } = props
 
-  const { setIsAddPostModalOpen } = profileActions
+  const { setIsAddPostModalOpen, setPostsCount } = profileActions
   
   const dispatch = useAppDispatch()
 
@@ -40,19 +40,25 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
 
   const { data: postsData, isLoading: isPostsLoading } = useGetUsersPostsQuery(idToLoad!)
   const posts = postsData || []
-  const [createPost] = useCreatePostMutation()
 
-  const renderedPosts = posts.map((post: postType) => {  
+  useEffect(() => {
+    if (postsData) {
+      dispatch(setPostsCount(postsData.length))
+    }
+  }, [postsData, dispatch, setPostsCount])
+
+  const [createPost] = useCreatePostMutation()
+  
+  const renderedPosts = posts.map((post: PostType) => {  
     return <Post
       key={post.id}
       id={post.id}
+      _id={post._id}
       userName={userName}
       postTitle={post.postTitle}
       postInf={post.postInf}
       postImg={post.postImg}
       createdAt={post.createdAt}
-      isEditPostTitle={post.isEditTitle}
-      isEditPostInf={post.isEditPostInf}
       likesCount={post.likesCount}
       avatar={profile.photos.large}
       isModalOpen={isPostModalOpen}

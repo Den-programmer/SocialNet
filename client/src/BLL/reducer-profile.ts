@@ -1,10 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { postType, profileType, profileNavItem, ChangePhotosMenuItemType } from '../types/ProfileTypes/profileTypes'
+import { PostType, profileType, profileNavItem, ChangePhotosMenuItemType } from '../types/ProfileTypes/profileTypes'
 import { profileApi } from '../DAL/profileApi'
-import { PostChangingType } from '../types/ProfileTypes/profileTypes'
+
+interface PostEditState {
+  isEditing: boolean
+  draftTitle: string
+  draftInf: string
+}
 
 interface ProfileState {
-  posts: postType[]
+  posts: PostType[]
+  totalPostsCount: number
+  editingPostId: string | null
+  edits: Record<string, PostEditState>
   username: string
   postNotification: Array<{ id: number; name: string }>
   profile: profileType
@@ -21,6 +29,9 @@ interface ProfileState {
 
 const initialState: ProfileState = {
   posts: [],
+  totalPostsCount: 0,
+  editingPostId: null,
+  edits: {},
   username: 'Your nickname',
   postNotification: [
     { id: 1, name: 'Delete Post' },
@@ -70,40 +81,71 @@ const profileSlice = createSlice({
   reducers: {
     changeProfileNavItemChosenStatus(state, { payload }: PayloadAction<number>) {
       state.profileNavigationMenu = state.profileNavigationMenu.map(item => ({
-        ...item, isChosen: item.id === payload
+        ...item,
+        isChosen: item.id === payload
       }))
     },
+
     choosePhotosMenuItem(state, { payload }: PayloadAction<number>) {
       state.changePhotosMenu = state.changePhotosMenu.map(item => ({
-        ...item, isActive: item.id === payload
+        ...item,
+        isActive: item.id === payload
       }))
       state.changePhotosMenuItemId = payload
     },
+
     setIsAddPostModalOpen(state, { payload }: PayloadAction<boolean>) {
       state.isAddPostModalOpen = payload
     },
+
     setIsPostModalOpen(state, { payload }: PayloadAction<boolean>) {
       state.isPostModalOpen = payload
     },
+
     changeMembersColumnOpenedStatus(state, { payload }: PayloadAction<boolean>) {
       state.isMembersColumnOpen = payload
     },
-    setIsPostTitleEdited(state, { payload }: PayloadAction<{ postId: number; status: boolean }>) {
-      state.posts = state.posts.map(post => post.id === payload.postId ? { ...post, isEditTitle: payload.status } : { ...post, isEditTitle: false })
+
+    setPostsCount(state, { payload }: PayloadAction<number>) {
+      state.totalPostsCount = payload
     },
-    setIsPostInfEdited(state, { payload }: PayloadAction<{ postId: number; status: boolean }>) {
-      state.posts = state.posts.map(post => post.id === payload.postId ? { ...post, isEditPostInf: payload.status } : { ...post, isEditPostInf: false })
+
+    startEdit(state, { payload: postId }: PayloadAction<string>) {
+      const post = state.posts.find(p => p._id === postId || p.id === postId)
+      if (!post) return
+
+      state.editingPostId = postId
+
+      state.edits[postId] = {
+        isEditing: true,
+        draftTitle: post.postTitle,
+        draftInf: post.postInf
+      }
     },
-    finishEditing(state) {
-      state.posts = state.posts.map(post => ({ ...post, isEditTitle: false, isEditPostInf: false }))
+
+    updateDraft(
+      state,
+      { payload }: PayloadAction<{ postId: string; field: 'title' | 'inf'; value: string }>
+    ) {
+      const edit = state.edits[payload.postId]
+      if (!edit) return
+
+      if (payload.field === 'title') {
+        edit.draftTitle = payload.value
+      } else {
+        edit.draftInf = payload.value
+      }
     },
-    onPostTitleChange(state, { payload }: PayloadAction<PostChangingType>) {
-      state.posts = state.posts.map(post => post.id === payload.postId ? { ...post, postTitle: payload.postContent } : post)
-    },
-    onPostInfChange(state, { payload }: PayloadAction<PostChangingType>) {
-      state.posts = state.posts.map(post => post.id === payload.postId ? { ...post, postInf: payload.postContent } : post)
+
+    finishEdit(state, { payload }: PayloadAction<string | undefined>) {
+      const postId = payload ?? state.editingPostId
+      if (!postId) return
+
+      state.editingPostId = null
+      delete state.edits[postId]
     }
   },
+
   extraReducers: builder => {
     builder.addMatcher(
       profileApi.endpoints.getUsersProfile.matchFulfilled,
@@ -111,70 +153,32 @@ const profileSlice = createSlice({
         state.profile = payload
       }
     )
-    builder.addMatcher(
-      profileApi.endpoints.getUserBackground.matchFulfilled,
-      (state, { payload }) => {
-        state.background = payload
-      }
-    )
+
     builder.addMatcher(
       profileApi.endpoints.getUsername.matchFulfilled,
       (state, { payload }) => {
         state.username = payload
       }
     )
-    builder.addMatcher(
-      profileApi.endpoints.getUsersPosts.matchFulfilled,
-      (state, { payload }) => {
-        state.posts = payload
-      }
-    )
+
     builder.addMatcher(
       profileApi.endpoints.updateUsername.matchFulfilled,
       (state, { meta }) => {
         state.username = meta.arg.originalArgs.username
       }
     )
-    builder.addMatcher(
-      profileApi.endpoints.createPost.matchFulfilled,
-      (state, { payload }) => {
-        state.posts.push(payload)
-      }
-    )
+
     builder.addMatcher(
       profileApi.endpoints.updateContacts.matchFulfilled,
       (state, { meta }) => {
         state.profile.contacts = meta.arg.originalArgs.contacts
       }
     )
-    builder.addMatcher(
-      profileApi.endpoints.updateAboutMe.matchFulfilled,
-      (state, { meta }) => {
-        state.profile.aboutMe = meta.arg.originalArgs.aboutMe
-      }
-    )
-    builder.addMatcher(
-      profileApi.endpoints.getGender.matchFulfilled,
-      (state, { payload }) => {
-        state.gender = payload
-      }
-    )
-    builder.addMatcher(
-      profileApi.endpoints.updateGender.matchFulfilled,
-      (state, { meta }) => {
-        state.gender = meta.arg.originalArgs.gender
-      }
-    ),
+
     builder.addMatcher(
       profileApi.endpoints.setUserPhoto.matchFulfilled,
       (state, { payload }) => {
         state.profile.photos.large = payload.photos.large ?? ''
-      }
-    )
-    builder.addMatcher(
-      profileApi.endpoints.setUserBackground.matchFulfilled,
-      (state, { payload }) => {
-        state.background = payload
       }
     )
   }

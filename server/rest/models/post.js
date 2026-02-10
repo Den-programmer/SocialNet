@@ -9,8 +9,6 @@ const Post = new Schema({
         contentType: { type: String, required: true }
     },
     likesCount: { type: Number, required: true },
-    isEditTitle: { type: Boolean, required: true },
-    isEditPostInf: { type: Boolean, required: true },
     owner: { type: Schema.Types.ObjectId, ref: 'User'  },
     createdAt: { type: Date, required: true, default: Date.now }
 })

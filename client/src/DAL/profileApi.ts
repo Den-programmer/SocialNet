@@ -1,7 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQuery, ServerResType } from './api'
-import { contactsType, postType, profileType } from '../types/ProfileTypes/profileTypes'
+import { contactsType, PostType, profileType } from '../types/ProfileTypes/profileTypes'
 import imageCompression from 'browser-image-compression'
+import { getToken } from '../BLL/reducer-auth'
 
 export type postPayload = {
   userId: string | undefined
@@ -44,12 +45,12 @@ export const profileApi = createApi({
       },
       transformResponse: (response: ServerResType<{ username: string }>) => response.data.username
     }),
-    getUsersPosts: builder.query<postType[], string>({
+    getUsersPosts: builder.query<PostType[], string>({
       query: (userId) => `api/posts/getPosts/${userId}`,
       providesTags: (result, error, userId) => [{ type: 'Posts', id: userId }],
-      transformResponse: (response: ServerResType<postType[]>) => response.data
+      transformResponse: (response: ServerResType<PostType[]>) => response.data
     }),
-    createPost: builder.mutation<postType, postPayload>({
+    createPost: builder.mutation<PostType, postPayload>({
       async queryFn({ userId, newPostTitle, newPostInformat, postPhoto }, _queryApi, _extraOptions, baseQuery) {
         try {
           const compressed = await imageCompression(postPhoto, {
@@ -67,7 +68,7 @@ export const profileApi = createApi({
           formData.append('newPostInformat', newPostInformat)
           formData.append('postPhoto', compressed)
 
-          const token = localStorage.getItem('token') || ''
+          const token = getToken() || ''
 
           const response = await fetch('api/posts/createPost', {
             method: 'POST',
@@ -83,12 +84,40 @@ export const profileApi = createApi({
             return { error: { status: response.status, data: json } }
           }
 
-          return { data: json.data as postType }
+          return { data: json.data as PostType }
         } catch (error) {
           return { error: { status: 500, data: 'Compression or network error' } }
         }
       },
       invalidatesTags: (result, error, { userId }) => [{ type: 'Posts', id: userId }]
+    }),
+    updatePostTitle: builder.mutation
+    <{ updatedPostTitle: string; postId: string },{ postId: string; newTitle: string }>
+    ({
+      query: (body) => ({
+        url: 'api/posts/updatePostTitle',
+        method: 'PUT',
+        body: {
+          postId: body.postId,
+          updatedPostTitle: body.newTitle
+        }
+      }),
+      invalidatesTags: ['Posts']
+    }),
+
+    updatePostInformat: builder.mutation<
+      { updatedPostInformat: string; postId: string },
+      { postId: string; newInformat: string }
+    >({
+      query: (body) => ({
+        url: 'api/posts/updatePostInformat',
+        method: 'PUT',
+        body: {
+          postId: body.postId,
+          updatedPostInformat: body.newInformat
+        }
+      }),
+      invalidatesTags: ['Posts']
     }),
     updateContacts: builder.mutation<contactsType, { contacts: contactsType; userId: string }>({
       query: ({ contacts, userId }) => ({
@@ -136,7 +165,7 @@ export const profileApi = createApi({
           }
 
 
-          const token = localStorage.getItem('token') || ''
+          const token = getToken() || ''
 
           const response = await fetch('api/avatar/updateAvatar', {
             method: 'PUT',
@@ -166,7 +195,7 @@ export const profileApi = createApi({
       },
       invalidatesTags: (result, error, { userId }) => [{ type: 'Profile', id: userId }]
     }),
-    setUserBackground: builder.mutation<string , { photo: File; userId: string }>({
+    setUserBackground: builder.mutation<string, { photo: File; userId: string }>({
       async queryFn({ photo, userId }) {
         try {
           const compressed = await imageCompression(photo, {
@@ -184,7 +213,7 @@ export const profileApi = createApi({
           }
 
 
-          const token = localStorage.getItem('token') || ''
+          const token = getToken() || ''
 
           const response = await fetch('api/background/updateBackground', {
             method: 'PUT',
@@ -231,7 +260,9 @@ export const {
   useUpdateGenderMutation,
   useSetUserPhotoMutation,
   useSetUserBackgroundMutation,
-  useGetUserBackgroundQuery
+  useGetUserBackgroundQuery,
+  useUpdatePostTitleMutation,
+  useUpdatePostInformatMutation
 } = profileApi
 
 

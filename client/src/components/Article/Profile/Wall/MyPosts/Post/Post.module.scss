@@ -1,5 +1,16 @@
+@mixin centeredContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0px;
+    input, textarea {
+        width: fit-content;
+    }
+}
+
 .post {
     margin-bottom: 100px;
+
     .postHeaderWrapper {
         display: flex;
         align-items: center;
@@ -9,21 +20,25 @@
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
         border-bottom: none;
+
         .postHeader {
             width: 90%;
             padding: 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             .avatar {
                 display: flex;
                 align-items: center;
+
                 h6 {
                     margin: 0px 10px;
                     font-size: 18px;
                     color: #222222;
                 }
             }
+
             .date {
                 p {
                     color: rgb(200, 200, 200);
@@ -31,43 +46,53 @@
             }
         }
     }
+
     .postBody {
         display: flex;
         align-items: center;
         border: 1px solid #E3E3E3;
         min-height: 300px;
+
         .picture {
             width: 30%;
+
             img {
                 width: 100%;
                 height: 300px;
             }
         }
+
         .postContentWrapper {
             width: 70%;
             display: flex;
             justify-content: center;
             border-left: 1px solid #E3E3E3;
             position: relative;
+
             .horizontal_line {
                 width: 80%;
                 height: 1px;
                 background-color: #E3E3E3;
                 margin: 0 auto;
             }
+
             .postContent {
                 text-align: center;
                 width: 100%;
+
                 .postTitleContainer {
-                    margin: 10px 0px;
-                }
+                    @include centeredContent;
+                }   
+
                 .postInfContainer {
-                    margin: 10px 0px;
+                    @include centeredContent;
                 }
+
                 .postTitle {
                     font-size: 18px;
                 }
-                .postInf {  
+
+                .postInf {
                     width: 80%;
                     word-wrap: break-word;
                     font-size: 15px;
@@ -77,5 +102,8 @@
                 }
             }
         }
+    }
+    .postFooter {
+        @include centeredContent;
     }
 }

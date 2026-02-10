@@ -14,7 +14,8 @@ const upload = multer({ storage })
 router.get('/getPosts/:userId', verifyToken, PostsController.getPosts)
 router.post('/createPost', upload.single('postPhoto'), verifyToken, PostsController.createPost)
 router.get('/getPost/:userId/:postId', verifyToken, PostsController.getPost)
-router.put('/updatePost/:postId', verifyToken, PostsController.updatePost)
+router.put('/updatePostTitle', verifyToken, PostsController.updatePostTitle)
+router.put('/updatePostInformat', verifyToken, PostsController.updatePostInf)
 router.delete('/deletePost/:postId', verifyToken, PostsController.deletePost)
 
 export default router
