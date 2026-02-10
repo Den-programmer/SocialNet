@@ -11,6 +11,8 @@
 
 // const defaultUserPhoto = import.meta.env.VITE_CLOUDINARY_DEFAULT_USER
 
+// Revoke object URL when component unmounts or photo changes
+
 const Blacklist = ({  }) => {
     //   const screens = useBreakpoint()
     // const blacklist = useAppSelector(selectBlacklist)

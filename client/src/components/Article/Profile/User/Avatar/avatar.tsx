@@ -1,14 +1,10 @@
-import { FC, useMemo } from 'react'
+import { FC, useEffect, useState, useMemo } from 'react'
 import classes from './avatar.module.scss'
 import { contactsType } from '../../../../../types/ProfileTypes/profileTypes'
-import { bufferToUrl } from '../../../../../utils/helpers/functions/function-helpers'
 
-interface BufferAvatar {
+type BufferAvatar = {
   contentType: string
-  data: {
-    type: 'Buffer'
-    data: number[]
-  }
+  data: { type: 'Buffer'; data: number[] }
 }
 
 type AvatarType = string | File | BufferAvatar | undefined
@@ -19,28 +15,45 @@ interface IUserAvatar {
   contacts: contactsType | undefined
 }
 
-const defaultUserPhoto = import.meta.env.VITE_CLOUDINARY_DEFAULT_USER || null
+const defaultUserPhoto = import.meta.env.VITE_CLOUDINARY_DEFAULT_USER || ''
 const facebook = import.meta.env.VITE_CLOUDINARY_FACEBOOK || ''
 const twitter = import.meta.env.VITE_CLOUDINARY_X || ''
 const youtube = import.meta.env.VITE_CLOUDINARY_YOUTUBE || ''
 
+type ResolvedImage = { url: string; revoke?: () => void }
+
+const bufferToUrl = (input: { type: 'Buffer'; data: number[] }, contentType: string): ResolvedImage => {
+  const byteArray = new Uint8Array(input.data)
+  const blob = new Blob([byteArray], { type: contentType })
+  const url = URL.createObjectURL(blob)
+  return {
+    url,
+    revoke: () => URL.revokeObjectURL(url)
+  }
+}
+
+const resolveImage = (img: AvatarType, fallback: string): ResolvedImage => {
+  if (typeof img === 'string') return { url: img }
+  if (img instanceof File) {
+    const url = URL.createObjectURL(img)
+    return { url, revoke: () => URL.revokeObjectURL(url) }
+  }
+  if (img && 'data' in img && Array.isArray(img.data.data)) {
+    return bufferToUrl(img.data, img.contentType)
+  }
+  return { url: fallback }
+}
+
 const Avatar: FC<IUserAvatar> = ({ name, avatar, contacts }) => {
-   const imageUrl = useMemo(() => {
-    if (typeof avatar === 'string') return avatar
-    if (avatar instanceof File) return URL.createObjectURL(avatar)
+  const [imageUrl, setImageUrl] = useState(defaultUserPhoto)
 
-    if (
-      avatar &&
-      typeof avatar === 'object' &&
-      'data' in avatar &&
-      Array.isArray(avatar.data.data)
-    ) {
-      return bufferToUrl(avatar.data, avatar.contentType)
-    }
+  useEffect(() => {
+    const result = resolveImage(avatar, defaultUserPhoto)
+    setImageUrl(result.url)
 
-    return defaultUserPhoto
+    return () => result.revoke?.()
   }, [avatar])
-  
+
   const socials = useMemo(() => {
     const iconMap: Record<string, string> = { facebook, twitter, youtube }
 
@@ -60,11 +73,11 @@ const Avatar: FC<IUserAvatar> = ({ name, avatar, contacts }) => {
       <div className={classes.avatar}>
         <img
           className={classes.userImg}
-          src={imageUrl || null}
+          src={imageUrl || defaultUserPhoto}
           alt='avatar'
-          onError={(e) => {
+          onError={e => {
             e.currentTarget.onerror = null
-            e.currentTarget.src = defaultUserPhoto || null
+            e.currentTarget.src = defaultUserPhoto
           }}
         />
         <div className={classes.userInf}>
@@ -72,9 +85,7 @@ const Avatar: FC<IUserAvatar> = ({ name, avatar, contacts }) => {
             <h2>{name}</h2>
           </div>
           <div className={classes.horizontal_line} />
-          <div className={classes.socialPanel}>
-            {socials}
-          </div>
+          <div className={classes.socialPanel}>{socials}</div>
         </div>
       </div>
     </div>

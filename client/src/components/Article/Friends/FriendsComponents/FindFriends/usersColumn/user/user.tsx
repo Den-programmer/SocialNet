@@ -1,9 +1,8 @@
 import React, { useState, MouseEvent, useEffect, useRef } from 'react'
 import './user.scss'
-import defaultUserPhoto from './img/defaultUserPhoto.webp'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Button } from 'antd'
-import { scrollToTop } from '../../../../../../../utils/helpers/functions/function-helpers'
+import { bufferToUrl, scrollToTop } from '../../../../../../../utils/helpers/functions/function-helpers'
 import { addToBlacklist } from '../../../../../../../BLL/reducer-friends'
 import { useAddNotificationMutation } from '../../../../../../../DAL/notificationApi'
 import { setUserDialogId } from '../../../../../../../BLL/reducer-messages'
@@ -20,6 +19,8 @@ interface IUser {
   unfollowThunk: (userId: string) => void
 }
 
+const defaultUserPhoto = import.meta.env.VITE_CLOUDINARY_DEFAULT_USER || ''
+
 const User: React.FC<IUser> = ({
   followed,
   followingInProcess,
@@ -31,6 +32,9 @@ const User: React.FC<IUser> = ({
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuStyle, setMenuStyle] = useState({ top: '0px', left: '0px' })
+
+  const [imageUrl, setImageUrl] = useState<string>(photo || defaultUserPhoto)
+
   const menuRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -103,12 +107,33 @@ const User: React.FC<IUser> = ({
     setIsMenuOpen(false)
   }
 
-  const imageUrl =
-    typeof photo === 'string'
-      ? photo
-      : photo instanceof File
-        ? URL.createObjectURL(photo)
-        : defaultUserPhoto
+  useEffect(() => {
+    let objectUrl: string | null = null
+
+    if (photo instanceof File) {
+      objectUrl = URL.createObjectURL(photo)
+      setImageUrl(objectUrl)
+
+    } else if (typeof photo === 'string') {
+      setImageUrl(photo)
+
+     // @ts-ignore
+    } else if (photo?.data && photo?.contentType) {
+      // @ts-ignore
+      const result = bufferToUrl(photo, photo.contentType)
+      objectUrl = result.url
+      setImageUrl(result.url)
+    }
+
+    // Fallback
+    else {
+      setImageUrl(defaultUserPhoto)
+    }
+
+    return () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl)
+    }
+  }, [photo])
 
   return (
     <div className="user" onClick={() => setTimeout(scrollToTop, 250)} onContextMenu={handleContextMenu}>

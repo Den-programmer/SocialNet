@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef, useEffect, useCallback } from 'react'
+import React, { ChangeEvent, useRef, useEffect, useCallback, useState } from 'react'
 import { Avatar, Typography, Input, Button, message } from 'antd'
 import classes from './Post.module.scss'
 import { useAppDispatch, useAppSelector } from '../../../../../../hooks/hooks'
@@ -10,6 +10,7 @@ import {
 } from '../../../../../../DAL/profileApi'
 import { selectPostEdits } from '../../../../../../BLL/selectors/profile-selectors'
 import { enteredNothingError, FieldValidator, maxLengthCreator, minLengthCreator, required, runValidators } from '../../../../../../utils/validators/validators'
+import { ResolvedImage } from '../../../../../../types/AppTypes/appTypes'
 
 const { Title, Paragraph } = Typography
 
@@ -46,29 +47,48 @@ const infValidators: FieldValidator[] = [
 const Post: React.FC<IPost> = props => {
   const postContentRef = useRef<HTMLDivElement>(null)
   const dispatch = useAppDispatch()
-
-  const { startEdit, updateDraft, finishEdit } =
-    profileActions
+  const { startEdit, updateDraft, finishEdit } = profileActions
 
   const [updatePostTitle, { isLoading: isUpdatingTitle }] = useUpdatePostTitleMutation()
   const [updatePostInf, { isLoading: isUpdatingInf }] = useUpdatePostInformatMutation()
 
   const isLoading = isUpdatingTitle || isUpdatingInf
 
+  const [avatarImage, setAvatarImage] = useState<string>(props.avatar || defaultUserPhoto)
+  const [postImage, setPostImage] = useState<string>(noPostImg)
+
+  const resolveImage = useCallback((img: any, fallback: string): ResolvedImage => {
+    if (!img) return { url: fallback }
+    if (typeof img === 'string') return { url: img }
+    if (img instanceof File) {
+      const url = URL.createObjectURL(img)
+      return { url, revoke: () => URL.revokeObjectURL(url) }
+    }
+    if (img?.data && img?.contentType) return bufferToUrl(img, img.contentType)
+    return { url: fallback }
+  }, [])
+
+  useEffect(() => {
+    const result = resolveImage(props.avatar, defaultUserPhoto)
+    setAvatarImage(result.url)
+    return () => result.revoke?.()
+  }, [props.avatar, resolveImage])
+
+  useEffect(() => {
+    const result = resolveImage(props.postImg, noPostImg)
+    setPostImage(result.url)
+    return () => result.revoke?.()
+  }, [props.postImg, resolveImage])
+
   const postEdit = useAppSelector(state =>
     selectPostEdits(state, props._id)
-  ) ?? {
-    isEditing: false,
-    draftTitle: '',
-    draftInf: ''
-  }
+  ) ?? { isEditing: false, draftTitle: '', draftInf: '' }
 
   const saveChanges = useCallback(async () => {
-    if (!postEdit?.isEditing) return
+    if (!postEdit.isEditing) return
 
     const title = postEdit.draftTitle.trim()
     const inf = postEdit.draftInf.trim()
-
     const titleChanged = title !== props.postTitle
     const infChanged = inf !== props.postInf
 
@@ -79,35 +99,17 @@ const Post: React.FC<IPost> = props => {
 
     if (titleChanged) {
       const error = runValidators(title, titleValidators)
-      if (error) {
-        message.warning(error)
-        return
-      }
+      if (error) { message.warning(error); return }
     }
 
     if (infChanged) {
       const error = runValidators(inf, infValidators)
-      if (error) {
-        message.warning(error)
-        return
-      }
+      if (error) { message.warning(error); return }
     }
 
     try {
-      if (titleChanged) {
-        await updatePostTitle({
-          postId: props._id,
-          newTitle: title
-        }).unwrap()
-      }
-
-      if (infChanged) {
-        await updatePostInf({
-          postId: props._id,
-          newInformat: inf
-        }).unwrap()
-      }
-
+      if (titleChanged) await updatePostTitle({ postId: props._id, newTitle: title }).unwrap()
+      if (infChanged) await updatePostInf({ postId: props._id, newInformat: inf }).unwrap()
       message.success('Post updated')
     } catch (err) {
       console.error(err)
@@ -125,60 +127,29 @@ const Post: React.FC<IPost> = props => {
     dispatch,
     finishEdit
   ])
-  const handleOutsideClick = useCallback(
-    (e: MouseEvent) => {
-      if (
-        postContentRef.current &&
-        !postContentRef.current.contains(e.target as Node)
-      ) {
-        saveChanges()
-      }
-    },
-    [saveChanges]
-  )
+
+  const handleOutsideClick = useCallback((e: MouseEvent) => {
+    if (postContentRef.current && !postContentRef.current.contains(e.target as Node)) {
+      saveChanges()
+    }
+  }, [saveChanges])
 
   useEffect(() => {
     document.addEventListener('click', handleOutsideClick)
     return () => document.removeEventListener('click', handleOutsideClick)
   }, [handleOutsideClick])
 
-  const resolveImage = (img: any, fallback: string) => {
-    if (typeof img === 'string') return img
-    if (img instanceof File) return URL.createObjectURL(img)
-    if (img?.data && img?.contentType) {
-      return bufferToUrl(img, img.contentType)
-    }
-    return fallback
-  }
-
-
   const handleStartEdit = (e: React.MouseEvent) => {
     e.stopPropagation()
     dispatch(startEdit(props._id))
   }
 
-  const handleChange =
-    (field: 'title' | 'inf') =>
-      (e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(
-          updateDraft({
-            postId: props._id,
-            field,
-            value: e.target.value
-          })
-        )
-      }
-
-  const handleConfirm = async () => {
-    await saveChanges()
+  const handleChange = (field: 'title' | 'inf') => (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(updateDraft({ postId: props._id, field, value: e.target.value }))
   }
 
-  const hasChanges =
-  postEdit.draftTitle !== props.postTitle ||
-  postEdit.draftInf !== props.postInf
-
-  const postImage = resolveImage(props.postImg, noPostImg)
-  const avatarImage = resolveImage(props.avatar, defaultUserPhoto)
+  const handleConfirm = async () => { await saveChanges() }
+  const hasChanges = postEdit.draftTitle !== props.postTitle || postEdit.draftInf !== props.postInf
 
   return (
     <div className={classes.post}>
@@ -188,7 +159,6 @@ const Post: React.FC<IPost> = props => {
             <Avatar size={64} src={avatarImage} />
             <h6>{props.userName}</h6>
           </div>
-
           <div className={classes.date}>
             <p>{props.createdAt}</p>
           </div>
@@ -197,67 +167,38 @@ const Post: React.FC<IPost> = props => {
 
       <div className={classes.postBody}>
         <div className={classes.picture}>
-          <img src={postImage} alt='post visual' />
+          <img src={postImage} alt="post visual" />
         </div>
 
         <div className={classes.postContentWrapper}>
           <div ref={postContentRef} className={classes.postContent}>
-
-            <div
-              className={classes.postTitleContainer}
-              onClick={handleStartEdit}
-            >
+            <div className={classes.postTitleContainer} onClick={handleStartEdit}>
               {postEdit.isEditing ? (
-                <Input
-                  value={postEdit.draftTitle}
-                  name='postTitle'
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    handleChange('title')(e)
-                  }
-                  placeholder='Post title'
-                />
+                <Input value={postEdit.draftTitle} onChange={handleChange('title')} placeholder="Post title" />
               ) : (
-                <Title level={4} className={classes.postTitle}>
-                  {props.postTitle}
-                </Title>
+                <Title level={4} className={classes.postTitle}>{props.postTitle}</Title>
               )}
             </div>
 
             <div className={classes.horizontal_line} />
 
-            <div
-              className={classes.postInfContainer}
-              onClick={handleStartEdit}
-            >
+            <div className={classes.postInfContainer} onClick={handleStartEdit}>
               {postEdit.isEditing ? (
-                <Input
-                  value={postEdit.draftInf}
-                  name='postInf'
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    handleChange('inf')(e)
-                  }
-                  placeholder='Post content'
-                />
+                <Input value={postEdit.draftInf} onChange={handleChange('inf')} placeholder="Post content" />
               ) : (
-                <Paragraph className={classes.postInf}>
-                  {props.postInf}
-                </Paragraph>
+                <Paragraph className={classes.postInf}>{props.postInf}</Paragraph>
               )}
             </div>
-
           </div>
         </div>
       </div>
 
       <div className={classes.postFooter}>
-        {postEdit.isEditing && <Button
-          type='primary'
-          disabled={!postEdit.isEditing || !hasChanges || isLoading}
-          onClick={handleConfirm}
-          loading={isLoading}
-        >
-          Confirm
-        </Button>}
+        {postEdit.isEditing && (
+          <Button type="primary" disabled={!hasChanges || isLoading} onClick={handleConfirm} loading={isLoading}>
+            Confirm
+          </Button>
+        )}
       </div>
     </div>
   )

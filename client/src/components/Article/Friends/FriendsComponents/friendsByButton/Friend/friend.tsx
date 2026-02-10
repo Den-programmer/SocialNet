@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Avatar, Button, Card } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import classes from './friend.module.scss'
-import defaultUserPhoto from './img/defaultUserPhoto.webp'
+
+const defaultUserPhoto = import.meta.env.VITE_CLOUDINARY_DEFAULT_USER || ''
 
 interface IFriend {
   id: string
@@ -15,19 +16,36 @@ interface IFriend {
 }
 
 const Friend: React.FC<IFriend> = ({ id, avatar, username, followed, follow, unfollow }) => {
+  const [imageUrl, setImageUrl] = useState<string>(defaultUserPhoto)
+
+  useEffect(() => {
+    let objectUrl: string | null = null
+
+    if (typeof avatar === 'string') {
+      setImageUrl(avatar)
+    } else if (avatar instanceof File) {
+      objectUrl = URL.createObjectURL(avatar)
+      setImageUrl(objectUrl)
+    } else if (
+      avatar &&
+      typeof avatar === 'object' &&
+      'data' in avatar &&
+       // @ts-ignore
+      Array.isArray(avatar.data)
+    ) {
+      // @ts-ignore
+      setImageUrl(`data:${avatar.contentType};base64,${Buffer.from(avatar.data).toString('base64')}`)
+    } else {
+      setImageUrl(defaultUserPhoto)
+    }
+
+    return () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl)
+    }
+  }, [avatar])
+
   const handleToggleFollow = () => {
     followed ? unfollow(id) : follow(id)
-  }
-
-  const getImageUrl = (): string => {
-    if (typeof avatar === 'string') return avatar
-    if (avatar instanceof File) return URL.createObjectURL(avatar)
-    // @ts-ignore
-    if (avatar?.data && avatar?.contentType) {
-      // @ts-ignore
-      return `data:${avatar.contentType};base64,${Buffer.from(avatar.data).toString('base64')}`
-    }
-    return defaultUserPhoto
   }
 
   return (
@@ -36,7 +54,7 @@ const Friend: React.FC<IFriend> = ({ id, avatar, username, followed, follow, unf
         <NavLink to={`/Profile/${id}`} className={classes.navLink}>
           <Avatar
             size={100}
-            src={getImageUrl()}
+            src={imageUrl}
             icon={<UserOutlined />}
             className={classes.avatar}
           />
