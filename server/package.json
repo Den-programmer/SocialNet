@@ -28,7 +28,7 @@
   "type": "module",
   "dependencies": {
     "@graphql-tools/schema": "^10.0.25",
-    "axios": "^1.12.0",
+    "axios": "^1.13.5",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
     "cheerio": "^1.0.0",
