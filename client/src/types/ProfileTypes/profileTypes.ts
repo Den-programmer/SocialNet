@@ -4,13 +4,11 @@ export type profilePhotosType = {
 }
 export type contactsType = {
     facebook: string | null
-    website: string | null
-    vk: string | null
     twitter: string | null
     instagram: string | null
     youtube: string | null
     github: string | null
-    mainLink: string | null
+    linkedin: string | null
 }
 
 export type profileType = {

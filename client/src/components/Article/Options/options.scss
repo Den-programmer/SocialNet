@@ -4,8 +4,9 @@
 
 .options {
     margin: 0px 20px;
-    width: 100%;
+    width: calc(100% - 40px);
     min-height: 100vh;
+    overflow-x: hidden;
     .options_itemWrapper {
         height: 70px;
         display: flex;
@@ -18,23 +19,31 @@
             justify-content: space-between;
             height: 50px;
             width: 100%;
+            gap: 10px;
             &:hover {
                 background-color: '#f5f6f7'; 
             }
             .options_item_content {
                 display: flex;
                 align-items: center;
+                flex: 1;
+                min-width: 0;
+                gap: 10px;
                 padding: 0 10px;
                 .options_item_content_property {
-                    width: 200px;
+                    flex-shrink: 0;
+                    min-width: 100px;
                     font-size: 14px;
                     color: #222222;
                     text-transform: capitalize;
                 }
                 .options_item_content_value {
-                    width: 600px;
+                    flex: 1;
+                    min-width: 0;
                     font-size: 14px;
                     color: #2D2D2D;
+                    word-break: break-word;
+                    overflow-wrap: break-word;
                 }
             }
         }
@@ -46,20 +55,26 @@
 
 .editContentItem {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    width: 100%;
+    overflow-x: hidden;
     .editContentItem_main {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
         padding: 0 10px;
         .editContentItem_property {
-            width: 200px;
+            flex-shrink: 0;
+            min-width: 100px;
             font-size: 14px;
             color: #222222;
             text-transform: capitalize;
         }
         .editContentItem_editInput {
-            width: 400px;
+            flex: 1;
+            min-width: 200px;
+            max-width: 100%;
         }
     }
 }
@@ -70,4 +85,6 @@
 .options_errorInput {
     outline: none;
     border: 2px solid #D40000;
+    width: 100%;
+    box-sizing: border-box;
 }

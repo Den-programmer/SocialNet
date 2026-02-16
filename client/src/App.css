@@ -1,5 +1,12 @@
 * {
     font-family:Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
 ul {
@@ -27,8 +34,11 @@ a {
 /* Half Selectors and True Selectors! */
 
 .container {
-    width: 1170px;
+    max-width: 1170px;
+    width: 100%;
     margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 .flex-container {
     display:flex;

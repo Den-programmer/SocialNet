@@ -41,14 +41,12 @@ const initialState: ProfileState = {
     status: '',
     aboutMe: '',
     contacts: {
-      facebook: '',
-      website: '',
-      vk: '',
-      twitter: '',
-      instagram: '',
-      youtube: '',
-      github: '',
-      mainLink: ''
+      facebook: null,
+      twitter: null,
+      instagram: null,
+      youtube: null,
+      github: null,
+      linkedin: null,
     },
     photos: { large: '', small: '' },
     userId: '0'

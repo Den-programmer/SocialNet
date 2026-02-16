@@ -6,25 +6,31 @@
 
 .avatarWrapper {
     padding: 0px 10%;
+
     .avatar {
         display: flex;
         align-items: center;
+
         .userImg {
             width: 100px;
             height: 100px;
-            border-radius:50px;
+            border-radius: 50px;
         }
+
         .userInf {
             margin: 0px 10px;
+
             .name {
                 h2 {
                     color: #FFF;
                 }
             }
+
             .socialPanel {
                 display: flex;
                 align-items: center;
                 margin: 10px 0px;
+
                 .social {
                     background-color: #EBECEC;
                     height: 30px;
@@ -35,6 +41,7 @@
                     align-items: center;
                     cursor: pointer;
                     margin-right: 10px;
+
                     img {
                         width: 16px;
                         height: 16px;
@@ -43,4 +50,4 @@
             }
         }
     }
-} 
+}
