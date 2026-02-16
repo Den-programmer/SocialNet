@@ -12,7 +12,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema'
 
 import { typeDefs, resolvers } from './graphql/schema.js'
 import {getContext} from './graphql/context.js'
-
+import { securityHeaders, corsConfig, rateLimitMiddleware, validateInputLength } from './security/securityHeaders.js'
 
 import authRoutes from './rest/routes/auth.routes.js'
 import backgroundRoutes from './rest/routes/background.routes.js'
@@ -31,8 +31,13 @@ import messagesRoutes from './rest/routes/messages.routes.js'
 
 const app = express()
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
-app.use(express.json())
+// Security middleware
+app.use(securityHeaders)
+app.use(cors(corsConfig))
+app.use(validateInputLength('10mb'))
+app.use(rateLimitMiddleware(100, 60000)) // 100 requests per minute
+
+app.use(express.json({ limit: '10mb' }))
 
 app.use('/api/auth', authRoutes)
 app.use('/api/background', backgroundRoutes)

@@ -1,0 +1,442 @@
+// ===== KEYFRAMES =====
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+// ===== COLORS =====
+$color-primary: #1677ff;
+$color-text-dark: #1f1f1f;
+$color-text-light: #8c8c8c;
+$color-text-muted: #bfbfbf;
+$color-text-secondary: #595959;
+$color-border: #e8e8e8;
+$color-background-light: #fafafa;
+$color-background-lighter: #f5f5f5;
+$color-background-lightest: #f5f7fa;
+$color-background-selection: #e6f7ff;
+$color-message-other: #e8e8e8;
+$color-success: #52c41a;
+
+// ===== LAYOUT CONTAINERS =====
+.card {
+  width: 100%;
+  max-width: 100%;
+  height: 100vh;
+  border-radius: 0;
+  display: flex;
+  padding: 0;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: none;
+  border: none;
+  margin: 0;
+}
+
+.dialogsSection {
+  flex: 0 0 35%;
+  border-right: 1px solid $color-border;
+  background: $color-background-light;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dialogsHeader {
+  padding: 20px;
+  border-bottom: 1px solid $color-border;
+  background: #fff;
+}
+
+.dialogsTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: $color-text-dark;
+}
+
+.dialogsCount {
+  font-size: 12px;
+  color: $color-text-light;
+  margin-top: 4px;
+  display: block;
+}
+
+.dialogsList {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 8px;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.noConversationsContainer {
+  padding: 20px;
+  text-align: center;
+}
+
+// ===== DIALOG ITEM =====
+.dialogItem {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  padding: 12px 12px;
+  border-radius: 10px;
+  margin: 6px 8px;
+
+  &:hover {
+    background-color: $color-background-lighter !important;
+    transform: translateX(4px);
+  }
+}
+
+.dialogItemSelected {
+  background-color: $color-background-selection;
+  border-left: 4px solid $color-primary;
+}
+
+.dialogItemUnselected {
+  border-left: 4px solid transparent;
+}
+
+.dialogUserName {
+  font-size: 15px;
+  color: $color-text-dark;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dialogUserNameSelected {
+  color: $color-primary;
+}
+
+.dialogUserNameMetadata {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dialogLastMessage {
+  font-size: 12px;
+  color: $color-text-light;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+.onlineDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: $color-success;
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+
+// ===== MESSAGES SECTION =====
+.messagesSection {
+  flex: 1 1 65%;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  position: relative;
+  min-width: 0;
+}
+
+.noSelectionState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  color: $color-text-light;
+}
+
+// ===== MESSAGES HEADER =====
+.messagesHeader {
+  padding: 16px 24px;
+  border-bottom: 1px solid $color-border;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userName {
+  font-size: 16px;
+  font-weight: 600;
+  color: $color-text-dark;
+}
+
+.userStatus {
+  font-size: 12px;
+  color: $color-text-light;
+}
+
+.headerActions {
+  display: flex;
+  gap: 8px;
+}
+
+// ===== MESSAGES CONTAINER =====
+.messagesContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: $color-background-lightest;
+}
+
+.messageBubble {
+  display: flex;
+  animation: slideIn 0.3s ease-out;
+}
+
+.messageBubbleOwn {
+  justify-content: flex-end;
+}
+
+.messageBubbleOther {
+  justify-content: flex-start;
+}
+
+.messageWrapper {
+  display: flex;
+  gap: 10px;
+  max-width: 70%;
+  align-items: flex-end;
+}
+
+.messageWrapperOwn {
+  flex-direction: row-reverse;
+}
+
+.messageWrapperOther {
+  flex-direction: row;
+}
+
+.messageContent {
+  max-width: 100%;
+  padding: 12px 16px;
+  word-break: break-word;
+}
+
+.messageContentOwn {
+  border-radius: 18px 18px 4px 18px;
+  background: $color-primary;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(22, 119, 255, 0.3);
+}
+
+.messageContentOther {
+  border-radius: 18px 18px 18px 4px;
+  background: $color-message-other;
+  color: #333;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.messageSenderName {
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.messageSenderNameOwn {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.messageSenderNameOther {
+  color: $color-text-secondary;
+}
+
+.messageText {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.emptyMessage {
+  font-style: italic;
+  opacity: 0.6;
+  font-size: 14px;
+}
+
+.messageImage {
+  margin-top: 12px;
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+
+  &:hover {
+    transform: scale(1.03);
+    filter: brightness(1.1);
+  }
+}
+
+.messageImageOnly {
+  margin-top: 0;
+}
+
+.messageTimestamp {
+  font-size: 11px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.messageTimestampOwn {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.messageTimestampOther {
+  color: $color-text-light;
+}
+
+.noMessagesState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.noMessagesText {
+  font-size: 16px;
+  color: $color-text-muted;
+  font-style: italic;
+}
+
+// ===== AVATARS & BADGES =====
+.avatarBadge {
+  box-shadow: 0 0 0 2px #fff;
+}
+
+.avatarPrimary {
+  background-color: $color-primary;
+}
+
+.avatarBorder {
+  border: 2px solid $color-primary;
+}
+
+// ===== EMPTY STATE =====
+.emptyMargin {
+  margin-top: 40px;
+}
+
+.noSelectionMargin {
+  margin-top: 0;
+}
+
+// ===== MESSAGE IMAGE WRAPPER =====
+.messageImageWrapper {
+  margin-top: 12px;
+
+  &.imageOnly {
+    margin-top: 0;
+  }
+}
+.inputSection {
+  display: flex;
+  align-items: flex-end;
+  padding: 16px 20px;
+  border-top: 1px solid $color-border;
+  background: #fff;
+  gap: 10px;
+}
+
+.imagePreview {
+  position: relative;
+}
+
+.imagePreviewImg {
+  max-width: 70px;
+  max-height: 90px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: 2px solid $color-border;
+}
+
+.deleteImageButton {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.messageInput {
+  flex-grow: 1;
+  border-radius: 20px;
+  padding: 12px 18px;
+  resize: none;
+  background: $color-background-lighter;
+  border: 1px solid $color-border;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:focus {
+    background: #fff;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+  }
+}
+
+.uploadButton {
+  transition: all 0.2s ease;
+  color: $color-primary;
+  border-color: $color-primary;
+  border: 2px solid $color-primary;
+
+  &:hover {
+    background-color: rgba(22, 119, 255, 0.1);
+    transform: scale(1.1);
+  }
+}
+
+.sendButton {
+  background: $color-primary;
+  box-shadow: 0 2px 8px rgba(22, 119, 255, 0.3);
+  transition: all 0.2s ease;
+  border: none;
+
+  &:hover {
+    box-shadow: 0 6px 16px rgba(22, 119, 255, 0.4);
+    transform: translateY(-3px) scale(1.05);
+  }
+}
