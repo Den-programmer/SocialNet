@@ -44,7 +44,7 @@
     "groq-sdk": "^0.37.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
-    "multer": "^2.0.2",
+    "multer": "^2.1.1",
     "path": "^0.12.7",
     "ruru": "^2.0.0-beta.30",
     "ws": "^8.18.3",
