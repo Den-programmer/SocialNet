@@ -39,3 +39,11 @@ export const optionsMenuData = (userName: string, gender: string, aboutMe: strin
     }
   ]
 }
+
+// Common emojis for the emoji picker
+export const EMOJI_ROWS = [
+  ['😀', '😂', '😊', '😍', '😎', '🤔', '😢', '😡', '🥳', '😴'],
+  ['👍', '👎', '❤️', '🔥', '✅', '💯', '🎉', '🙏', '💪', '👏'],
+  ['😅', '🤣', '😇', '🥰', '😏', '😒', '😭', '😤', '🤩', '😜'],
+  ['🌹', '🌟', '⚡', '🌈', '🎵', '🚀', '🍕', '☕', '🎮', '🌍'],
+]

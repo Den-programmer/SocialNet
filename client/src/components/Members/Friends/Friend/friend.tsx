@@ -16,26 +16,12 @@ const Friend: React.FC<FriendPropsType> = ({ avatar, username, id }) => {
     useEffect(() => {
         let objectUrl: string | null = null
 
-        if (typeof avatar === 'string') {
+        if (typeof avatar === 'string' && avatar) {
             setImageUrl(avatar)
 
         } else if (avatar instanceof File) {
             objectUrl = URL.createObjectURL(avatar)
             setImageUrl(objectUrl)
-
-        } else if (
-            avatar &&
-            typeof avatar === 'object' &&
-            // @ts-ignore
-            avatar.data &&
-            // @ts-ignore
-            avatar.contentType
-        ) {
-            
-            setImageUrl(
-                // @ts-ignore
-                `data:${avatar.contentType};base64,${Buffer.from(avatar.data).toString('base64')}`
-            )
 
         } else {
             setImageUrl(defaultUser)

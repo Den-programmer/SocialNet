@@ -3,14 +3,12 @@ import { Avatar, Typography, Input, Button, message } from 'antd'
 import classes from './Post.module.scss'
 import { useAppDispatch, useAppSelector } from '../../../../../../hooks/hooks'
 import { profileActions } from '../../../../../../BLL/reducer-profile'
-import { bufferToUrl } from '../../../../../../utils/helpers/functions/function-helpers'
 import {
   useUpdatePostTitleMutation,
   useUpdatePostInformatMutation
 } from '../../../../../../DAL/profileApi'
 import { selectPostEdits } from '../../../../../../BLL/selectors/profile-selectors'
 import { enteredNothingError, FieldValidator, maxLengthCreator, minLengthCreator, required, runValidators } from '../../../../../../utils/validators/validators'
-import { ResolvedImage } from '../../../../../../types/AppTypes/appTypes'
 
 const { Title, Paragraph } = Typography
 
@@ -57,27 +55,29 @@ const Post: React.FC<IPost> = props => {
   const [avatarImage, setAvatarImage] = useState<string>(props.avatar || defaultUserPhoto)
   const [postImage, setPostImage] = useState<string>(noPostImg)
 
-  const resolveImage = useCallback((img: any, fallback: string): ResolvedImage => {
-    if (!img) return { url: fallback }
-    if (typeof img === 'string') return { url: img }
-    if (img instanceof File) {
-      const url = URL.createObjectURL(img)
-      return { url, revoke: () => URL.revokeObjectURL(url) }
-    }
-    if (img?.data && img?.contentType) return bufferToUrl(img, img.contentType)
-    return { url: fallback }
+  const resolveImage = useCallback((img: any, fallback: string): string => {
+    if (!img) return fallback
+    if (typeof img === 'string') return img
+    if (img instanceof File) return URL.createObjectURL(img)
+    return fallback
   }, [])
 
   useEffect(() => {
     const result = resolveImage(props.avatar, defaultUserPhoto)
-    setAvatarImage(result.url)
-    return () => result.revoke?.()
+    setAvatarImage(result)
+
+    return () => {
+      if (props.avatar instanceof File) URL.revokeObjectURL(result)
+    }
   }, [props.avatar, resolveImage])
 
   useEffect(() => {
     const result = resolveImage(props.postImg, noPostImg)
-    setPostImage(result.url)
-    return () => result.revoke?.()
+    setPostImage(result)
+
+    return () => {
+      if (props.postImg instanceof File) URL.revokeObjectURL(result)
+    }
   }, [props.postImg, resolveImage])
 
   const postEdit = useAppSelector(state =>

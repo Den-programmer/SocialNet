@@ -90,6 +90,10 @@ class DialogsController {
         return res.status(400).json({ message: 'Dialog ID is required' })
       }
 
+      // Delete all messages belonging to this dialog
+      const Message = (await import('../models/message.js')).default
+      await Message.deleteMany({ conversationId: dialogId })
+
       const deletedDialog = await Dialog.findByIdAndDelete(dialogId)
       if (!deletedDialog) {
         return res.status(404).json({ message: 'Dialog not found' })

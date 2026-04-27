@@ -179,6 +179,20 @@ const profileSlice = createSlice({
         state.profile.photos.large = payload.photos.large ?? ''
       }
     )
+
+    builder.addMatcher(
+      profileApi.endpoints.getUserBackground.matchFulfilled,
+      (state, { payload }) => {
+        state.background = payload
+      }
+    )
+
+    builder.addMatcher(
+      profileApi.endpoints.setUserBackground.matchFulfilled,
+      (state, { payload }) => {
+        state.background = payload
+      }
+    )
   }
 })
 

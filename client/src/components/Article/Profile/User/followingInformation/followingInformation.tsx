@@ -35,14 +35,14 @@ const FollowingInformation: React.FC<IFollowingInformation> = (props) => {
                         <h3>Posts</h3>
                         <p>{totalPostsCount}</p>
                     </div>
-                    <div className={classes.infBlock}>
+                    {/* <div className={classes.infBlock}>
                         <h3>Followers</h3>
                         <p>123 thous.</p>
                     </div>
                     <div className={classes.infBlock}>
                         <h3>Following</h3>
                         <p>{props.friends.length}</p>
-                    </div>
+                    </div> */}
                 </div>
                 <div className={classes.btn_following}>
                     {userId || "" === props.authorizedUserId ? (

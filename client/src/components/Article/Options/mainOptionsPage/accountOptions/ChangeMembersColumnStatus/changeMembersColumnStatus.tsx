@@ -2,7 +2,6 @@ import { Select, notification } from 'antd'
 import { IChangeOptions } from '../accountOptions'
 import '../../../options.scss'
 
-const { Option } = Select
 // const { Title } = Typography
 
 const ChangeMembersColumnStatus: React.FC<IChangeOptions> = ({
@@ -11,6 +10,11 @@ const ChangeMembersColumnStatus: React.FC<IChangeOptions> = ({
   changeMembersColumnOpenedStatus
 }) => {
   // const [isSuccessfulSnackbarOpen, setIsSuccessfulSnackbarOpenStatus] = useState(false)
+
+  const statusOptions = [
+    { value: 'opened', label: 'opened' },
+    { value: 'closed', label: 'closed' }
+  ]
 
   const handleChange = (value: string) => {
     const newState = value === 'opened'
@@ -33,10 +37,8 @@ const ChangeMembersColumnStatus: React.FC<IChangeOptions> = ({
             style={{ width: 120 }}
             value={isMembersColumnOpen ? 'opened' : 'closed'}
             onChange={handleChange}
-          >
-            <Option value="opened">opened</Option>
-            <Option value="closed">closed</Option>
-          </Select>
+            options={statusOptions}
+          />
         </div>
       </div>
     </div>

@@ -4,6 +4,8 @@ import { getToken } from '../../BLL/reducer-auth'
 export const wsClient = createClient({
   url: 'ws://localhost:8000/graphql',
   connectionParams: () => ({
-    authorization: `Bearer ${getToken()}`
-  })
+    Authorization: `Bearer ${getToken()}`
+  }),
+  shouldRetry: () => true,
+  retryAttempts: 5
 })

@@ -20,9 +20,12 @@ export async function getContext({ req, connection } = {}) {
     token = req.headers.authorization.split(' ')[1]
   }
 
-  // WS
-  if (!token && connection?.connectionParams?.Authorization) {
-    token = connection.connectionParams.Authorization.split(' ')[1]
+  // WS — check both capitalizations for robustness
+  if (!token && connection?.connectionParams) {
+    const authHeader =
+      connection.connectionParams.Authorization ||
+      connection.connectionParams.authorization
+    if (authHeader) token = authHeader.split(' ')[1]
   }
 
   let user = null

@@ -1,6 +1,8 @@
 import User from '../models/user.js'
 import { catchRes, StandartRes } from '../routes/responses/responses.js'
-import { unlink } from 'fs/promises'
+import { cloudinaryAPI as cloudinary } from '../../cloudinaryConfig.js'
+import { compressImage } from '../functions/functions.js'
+import { deleteCloudinaryResource } from '../functions/cloudinaryHelper.js'
 
 class BackgroundController {
   async getBackground(req, res) {
@@ -26,9 +28,6 @@ class BackgroundController {
       const { userId } = req.body
       const { buffer, mimetype } = req.file || {}
 
-      console.log('req.file:', req.file)
-      console.log('req.body:', req.body)
-
       if (!userId || !buffer || !mimetype) {
         console.error('Incomplete data for updating background:', { userId, buffer, mimetype })
         return res
@@ -36,14 +35,26 @@ class BackgroundController {
           .json(new StandartRes(1, 'Incomplete data for updating background.'))
       }
 
+      // Get existing user to retrieve old background URL
+      const existingUser = await User.findById(userId)
+      const oldBackgroundUrl = existingUser?.background
+
+      const compressedBuffer = await compressImage(buffer, mimetype)
+
+      const imageUrl = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: 'backgrounds', resource_type: 'image' },
+          (error, result) => {
+            if (error) return reject(error)
+            resolve(result.secure_url)
+          }
+        )
+        stream.end(compressedBuffer)
+      })
+
       const updatedUser = await User.findByIdAndUpdate(
         userId,
-        {
-          $set: {
-            'background.data': buffer,
-            'background.contentType': mimetype,
-          },
-        },
+        { $set: { background: imageUrl } },
         { new: true }
       )
 
@@ -54,11 +65,11 @@ class BackgroundController {
           .json(new StandartRes(1, 'User not found or update failed.'))
       }
 
-      if (!updatedUser.background) {
-        console.error('User does not have background property.')
-        return res
-          .status(500)
-          .json(new StandartRes(1, 'User does not have background property.'))
+      // Delete old background from Cloudinary if it exists and is different from new one
+      if (oldBackgroundUrl && oldBackgroundUrl !== imageUrl) {
+        deleteCloudinaryResource(oldBackgroundUrl).catch(err =>
+          console.error('Failed to delete old background from Cloudinary:', err)
+        )
       }
 
       return res.json(new StandartRes(0, '', { background: updatedUser.background }))

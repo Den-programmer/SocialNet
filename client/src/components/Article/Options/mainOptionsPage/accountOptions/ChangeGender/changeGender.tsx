@@ -3,10 +3,14 @@ import { Select, notification } from 'antd'
 import classes from './changeGender.module.scss'
 import { IChangeOptions } from '../accountOptions'
 
-const { Option } = Select
-
 const ChangeGender: React.FC<IChangeOptions> = (props) => {
   const [genderValue, setGenderValue] = useState<string>(props.gender)
+
+  const genderOptions = [
+    { value: 'Not Chosen', label: 'Not Chosen' },
+    { value: 'Male', label: 'Male' },
+    { value: 'Female', label: 'Female' }
+  ]
 
   const changeGender = async (gender: string) => {
     let userId = props.userId
@@ -30,11 +34,8 @@ const ChangeGender: React.FC<IChangeOptions> = (props) => {
             style={{ width: 120 }}
             value={genderValue}
             onChange={changeGender}
-          >
-            <Option value="Not Chosen">Not Chosen</Option>
-            <Option value="Male">Male</Option>
-            <Option value="Female">Female</Option>
-          </Select>
+            options={genderOptions}
+          />
         </div>
       </div>
     </div>

@@ -1,11 +1,10 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import Avatar from './Avatar/avatar'
 import FollowingInformation from './followingInformation/followingInformation'
 import { IProfile } from '../profile'
 import { contactsType } from '../../../../types/ProfileTypes/profileTypes'
 import { Grid } from 'antd'
 import classes from './user.module.scss'
-import { bufferToUrl } from '../../../../utils/helpers/functions/function-helpers'
 
 interface IUser extends IProfile {
   contacts: contactsType | undefined
@@ -28,19 +27,7 @@ const User: React.FC<IUser> = ({
   const screens = useBreakpoint()
   const isMobile = !screens.md
 
-   const backgroundUrl = useMemo(() => {
-      if (typeof background === 'string') return background
-      if (
-        background &&
-        typeof background === 'object' &&
-        'data' in background &&
-        // @ts-ignore
-        Array.isArray(background.data.data)
-      ) {
-        // @ts-ignore
-        return bufferToUrl(background.data, background.contentType)
-      }
-    }, [background])
+  const backgroundUrl = typeof background === 'string' ? background : undefined
 
   const style: React.CSSProperties = {
     flexDirection: isMobile ? 'column' : 'row',

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Menu, Typography } from 'antd'
+import { Typography } from 'antd'
 
 interface IProfileNavItem {
     id: number
@@ -28,8 +28,7 @@ const ProfileNavItem: React.FC<IProfileNavItem> = (props) => {
             onClick={() => props.changeProfileNavItemChosenStatus(props.id)} 
             key={props.id}
         >
-            <Menu.Item 
-                key={props.id} 
+            <div
                 style={{
                     fontWeight: 'bolder',
                     textTransform: 'uppercase',
@@ -48,7 +47,7 @@ const ProfileNavItem: React.FC<IProfileNavItem> = (props) => {
                 >
                     {props.title}
                 </Text>
-            </Menu.Item>
+            </div>
         </NavLink>
     )
 }

@@ -1,7 +1,9 @@
 import User from '../models/user.js'
 import Post from '../models/post.js'
 import { catchRes, StandartRes } from '../routes/responses/responses.js'
-import { generateUniqueId } from '../functions/functions.js'
+import { generateUniqueId, compressImage } from '../functions/functions.js'
+import { cloudinaryAPI as cloudinary } from '../../cloudinaryConfig.js'
+import { deleteCloudinaryResource } from '../functions/cloudinaryHelper.js'
 
 class PostsController {
   async getPosts(req, res) {
@@ -36,14 +38,24 @@ class PostsController {
         return res.status(400).json(new StandartRes(1, 'Incomplete data for creating post.'))
       }
 
+      const compressedBuffer = await compressImage(buffer, mimetype)
+
+      const imageUrl = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: 'post_images', resource_type: 'image' },
+          (error, result) => {
+            if (error) return reject(error)
+            resolve(result.secure_url)
+          }
+        )
+        stream.end(compressedBuffer)
+      })
+
       const newPost = await Post.create({
         id: generateUniqueId(),
         postTitle: newPostTitle,
         postInf: newPostInformat,
-        postImg: {
-          data: buffer,
-          contentType: mimetype
-        },
+        postImg: imageUrl,
         likesCount: 0,
         owner: userId
       })
@@ -180,7 +192,7 @@ class PostsController {
   }
   async deletePost(req, res) {
     try {
-      const { postId } = req.body
+      let postId = req.body?.postId || req.params?.postId
 
       if (!postId) {
         return res.status(400).json(new StandartRes(1, 'Post id is undefined.'))
@@ -190,6 +202,13 @@ class PostsController {
 
       if (!deletedPost) {
         return res.status(404).json(new StandartRes(1, 'Post not found.'))
+      }
+
+      // Delete the post image from Cloudinary if it exists
+      if (deletedPost.postImg) {
+        deleteCloudinaryResource(deletedPost.postImg).catch(err =>
+          console.error('Failed to delete post image from Cloudinary:', err)
+        )
       }
 
       res.json(new StandartRes(0, 'Post deleted successfully.', { deletedPost }))

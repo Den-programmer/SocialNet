@@ -1,6 +1,7 @@
 import { catchRes, StandartRes } from '../routes/responses/responses.js'
 import Message from '../models/message.js'
-import { v2 as cloudinary } from 'cloudinary'
+import { cloudinaryAPI as cloudinary } from '../../cloudinaryConfig.js'
+import { deleteCloudinaryResource } from '../functions/cloudinaryHelper.js'
 
 class MessagesController {
   async addMessage(req, res) {
@@ -68,6 +69,13 @@ class MessagesController {
       const deletedMessage = await Message.findByIdAndDelete(id)
       if (!deletedMessage) {
         return res.status(404).json({ message: 'Message not found' })
+      }
+
+      // Delete the message image from Cloudinary if it exists
+      if (deletedMessage.image) {
+        deleteCloudinaryResource(deletedMessage.image).catch(err =>
+          console.error('Failed to delete message image from Cloudinary:', err)
+        )
       }
 
       res.json(new StandartRes(0, 'Message deleted successfully', { message: deletedMessage }))

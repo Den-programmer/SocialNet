@@ -160,11 +160,6 @@ export const profileApi = createApi({
           formData.append('image', compressed)
           formData.append('userId', userId)
 
-          for (let [key, value] of formData.entries()) {
-            console.log(key, value)
-          }
-
-
           const token = getToken() || ''
 
           const response = await fetch('api/avatar/updateAvatar', {
@@ -208,10 +203,6 @@ export const profileApi = createApi({
           formData.append('image', compressed)
           formData.append('userId', userId)
 
-          for (let [key, value] of formData.entries()) {
-            console.log(key, value)
-          }
-
 
           const token = getToken() || ''
 
@@ -229,7 +220,7 @@ export const profileApi = createApi({
             return { error: { status: response.status, data: json } }
           }
 
-          return { data: json.data as string }
+          return { data: json.data.background as string }
         } catch (error) {
           console.error('Upload error raw:', error)
 

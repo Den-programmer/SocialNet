@@ -159,13 +159,21 @@ export const createValidator = (schema) => {
       req.body = validatedData
       next()
     } catch (err) {
-      const errors = err.errors.map(e => ({
-        path: e.path.join('.'),
-        message: e.message,
-      }))
+      // Handle Zod validation errors (uses .issues property)
+      if (err.issues) {
+        const errors = err.issues.map(e => ({
+          path: e.path.join('.'),
+          message: e.message,
+        }))
+        return res.status(400).json({
+          error: 'Validation failed',
+          details: errors,
+        })
+      }
+      // Fallback for other errors
       return res.status(400).json({
         error: 'Validation failed',
-        details: errors,
+        details: err.message || 'Unknown validation error',
       })
     }
   }

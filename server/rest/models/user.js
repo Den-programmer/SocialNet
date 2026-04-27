@@ -20,14 +20,8 @@ const User = new Schema({
             mainLink: { type: String, default: '' }
         },
         photos: {
-            large: {
-                data: { type: Buffer },
-                contentType: { type: String }
-            },
-            small: {
-                data: { type: Buffer },
-                contentType: { type: String }
-            }
+            large: { type: String, default: '' },
+            small: { type: String, default: '' }
         },
         userId: Schema.Types.ObjectId
     },
@@ -35,10 +29,7 @@ const User = new Schema({
     notifications: [{ type: Schema.Types.ObjectId, ref: 'Notification' }],
     followers: [{ type: Schema.Types.ObjectId, ref: 'User' }], 
     following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    background: {
-        data: { type: Buffer },
-        contentType: { type: String }
-    }
+    background: { type: String, default: '' }
 })
 
 export default model('User', User)

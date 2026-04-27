@@ -1,6 +1,8 @@
 import User from '../models/user.js'
 import { catchRes, StandartRes } from '../routes/responses/responses.js'
-import { unlink } from 'fs/promises'
+import { cloudinaryAPI as cloudinary } from '../../cloudinaryConfig.js'
+import { compressImage } from '../functions/functions.js'
+import { deleteCloudinaryResource } from '../functions/cloudinaryHelper.js'
 
 class AvatarController {
   async getAvatar(req, res) {
@@ -12,7 +14,7 @@ class AvatarController {
       }
 
       const user = await User.findById(userId)
-      const { photos } = user
+      const { photos } = user.profile || {}
 
       return res.json(new StandartRes(0, '', { photos }))
     } catch (e) {
@@ -24,22 +26,36 @@ class AvatarController {
   async updateAvatar(req, res) {
     try {
       const { userId } = req.body
-      const { buffer, mimetype, path } = req.file || {}
-      console.log('req.file:', req.file)
-      console.log('req.body:', req.body)
+      const { buffer, mimetype } = req.file || {}
+
       if (!userId || !buffer || !mimetype) {
         console.error('Incomplete data for updating avatar:', { userId, buffer, mimetype })
         return res.status(400).json(new StandartRes(1, 'Incomplete data for updating avatar.'))
       }
 
+      // Get existing user to retrieve old avatar URL
+      const existingUser = await User.findById(userId)
+      const oldAvatarUrl = existingUser?.profile?.photos?.large
+
+      const compressedBuffer = await compressImage(buffer, mimetype)
+
+      const imageUrl = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: 'avatars', resource_type: 'image' },
+          (error, result) => {
+            if (error) return reject(error)
+            resolve(result.secure_url)
+          }
+        )
+        stream.end(compressedBuffer)
+      })
+
       const updatedUser = await User.findByIdAndUpdate(
         userId,
         {
           $set: {
-            'profile.photos.large.data': buffer,
-            'profile.photos.large.contentType': mimetype,
-            'profile.photos.small.data': buffer,
-            'profile.photos.small.contentType': mimetype,
+            'profile.photos.large': imageUrl,
+            'profile.photos.small': imageUrl,
           },
         },
         { new: true }
@@ -50,15 +66,14 @@ class AvatarController {
         return res.status(404).json(new StandartRes(1, 'User not found or update failed.'))
       }
 
-      const { photos } = updatedUser.profile || {}
-      if (!photos) {
-        console.error('User does not have photos property.')
-        return res.status(500).json(new StandartRes(1, 'User does not have photos property.'))
+      // Delete old avatar from Cloudinary if it exists and is different from new one
+      if (oldAvatarUrl && oldAvatarUrl !== imageUrl) {
+        deleteCloudinaryResource(oldAvatarUrl).catch(err =>
+          console.error('Failed to delete old avatar from Cloudinary:', err)
+        )
       }
 
-      if (path) {
-        await unlink(path)
-      }
+      const { photos } = updatedUser.profile || {}
 
       return res.json(new StandartRes(0, '', { photos }))
     } catch (e) {

@@ -1,5 +1,5 @@
 import { catchRes, StandartRes } from '../routes/responses/responses.js'
-import { v2 as cloudinary } from 'cloudinary'
+import { cloudinaryAPI as cloudinary } from '../../cloudinaryConfig.js'
 
 class ImageController {
   async getSecureImages(req, res) {

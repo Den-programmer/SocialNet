@@ -36,12 +36,35 @@ export const messagesTypeDefs = gql`
     conversation(id: ID!): Dialog
   }
 
+  type DeletedMessage {
+    messageId: ID!
+    conversationId: ID!
+  }
+
+  type TypingStatus {
+    userId: ID!
+    username: String!
+    conversationId: ID!
+    isTyping: Boolean!
+  }
+
+  type DeletedDialog {
+    dialogId: ID!
+  }
+
   type Mutation {
     startDialog(userId: ID!): Dialog!
     sendMessage(conversationId: ID!, text: String!, image: String): Message!
+    deleteMessage(messageId: ID!): Boolean!
+    deleteDialog(dialogId: ID!): Boolean!
+    setTyping(conversationId: ID!, isTyping: Boolean!): Boolean!
   }
 
   type Subscription {
     messageSent(conversationId: ID): Message!
+    messageDeleted(conversationId: ID): DeletedMessage!
+    dialogStarted: Dialog!
+    dialogDeleted: DeletedDialog!
+    userTyping(conversationId: ID): TypingStatus!
   }
 `

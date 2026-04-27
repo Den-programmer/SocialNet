@@ -2,7 +2,7 @@ import React, { useState, MouseEvent, useEffect, useRef } from 'react'
 import './user.scss'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Button } from 'antd'
-import { bufferToUrl, scrollToTop } from '../../../../../../../utils/helpers/functions/function-helpers'
+import { scrollToTop } from '../../../../../../../utils/helpers/functions/function-helpers'
 import { addToBlacklist } from '../../../../../../../BLL/reducer-friends'
 import { useAddNotificationMutation } from '../../../../../../../DAL/notificationApi'
 import { setUserDialogId } from '../../../../../../../BLL/reducer-messages'
@@ -114,19 +114,10 @@ const User: React.FC<IUser> = ({
       objectUrl = URL.createObjectURL(photo)
       setImageUrl(objectUrl)
 
-    } else if (typeof photo === 'string') {
+    } else if (typeof photo === 'string' && photo) {
       setImageUrl(photo)
 
-     // @ts-ignore
-    } else if (photo?.data && photo?.contentType) {
-      // @ts-ignore
-      const result = bufferToUrl(photo, photo.contentType)
-      objectUrl = result.url
-      setImageUrl(result.url)
-    }
-
-    // Fallback
-    else {
+    } else {
       setImageUrl(defaultUserPhoto)
     }
 

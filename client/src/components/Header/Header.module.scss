@@ -2,13 +2,17 @@
     background: #001529;
     padding: 0;
     transition: all 0.3s ease-in-out;
+    min-height: 64px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
   }
   
   .toolbarWrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 100%;
+    height: inherit;
     padding: 0 16px;
   }
   

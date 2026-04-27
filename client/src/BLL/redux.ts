@@ -10,7 +10,8 @@ import reducerSidebar from './reducer-sidebar'
 import reducerNotifications from './reducer-notifications'
 import { authApi } from '../DAL/authApi'
 import { profileApi } from '../DAL/profileApi'
-import { messagesApi } from '../DAL/messagesApi'
+import { messagesApi as restMessagesApi } from '../DAL/messagesApi'
+import { messagesApi as graphqlMessagesApi } from '../DAL/graphQL/graphqlApi'
 import { newsApi } from '../DAL/newsAPi'
 import { notificationsApi } from '../DAL/notificationApi'
 import { usersApi } from '../DAL/usersApi'
@@ -29,7 +30,8 @@ export const store = configureStore({
     app: reducerApp,
     [profileApi.reducerPath]: profileApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
-    [messagesApi.reducerPath]: messagesApi.reducer,
+    [restMessagesApi.reducerPath]: restMessagesApi.reducer,
+    [graphqlMessagesApi.reducerPath]: graphqlMessagesApi.reducer,
     [newsApi.reducerPath]: newsApi.reducer,
     [notificationsApi.reducerPath]: notificationsApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
@@ -38,7 +40,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
   .concat(profileApi.middleware)
   .concat(authApi.middleware)
-  .concat(messagesApi.middleware)
+  .concat(restMessagesApi.middleware)
+  .concat(graphqlMessagesApi.middleware)
   .concat(newsApi.middleware)
   .concat(notificationsApi.middleware)
   .concat(usersApi.middleware)

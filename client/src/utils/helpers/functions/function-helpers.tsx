@@ -1,7 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import classes from './help.module.scss'
 import { format, parseISO } from 'date-fns'
-import { ResolvedImage } from '../../../types/AppTypes/appTypes'
 
 export const createFriendsNavBtn = (hint: string, link: string, nameOfBtn: string) => {
   return (
@@ -31,22 +30,4 @@ export const scrollToTop = (topNumber: number = 0) => {
     top: topNumber,
     behavior: 'smooth'
   });
-}
-
-export const bufferToUrl = (
-  input: any,
-  contentType: string
-): ResolvedImage => {
-  const byteArray =
-    input instanceof Uint8Array
-      ? input
-      : new Uint8Array(input.data?.data || input.data || input)
-
-  const blob = new Blob([byteArray], { type: contentType })
-  const url = URL.createObjectURL(blob)
-
-  return {
-    url,
-    revoke: () => URL.revokeObjectURL(url)
-  }
 }
