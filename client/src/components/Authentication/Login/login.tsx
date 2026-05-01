@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import classes from './login.module.css'
 import LoginForm from './LoginForm/loginForm'
 import { selectCaptchaUrl, selectIsRegisterStatus } from '../../../BLL/selectors/auth-selectors'
@@ -22,6 +22,7 @@ const Login: React.FC = () => {
     const dispatch = useAppDispatch()
     const location = useLocation()  
     const navigate = useNavigate()
+    const [error, setError] = useState<string | null>(null)
 
     const captcha = useAppSelector(selectCaptchaUrl)
     const isRegister = useAppSelector(selectIsRegisterStatus)
@@ -32,17 +33,27 @@ const Login: React.FC = () => {
     const [register, { isLoading: isLoadingRegistration}] = useRegisterMutation()
 
     const onSubmitLogin = async (formData: LoginFormDataType) => {
-        await login(formData).unwrap()
-        const redirectTo = location.state?.from || '/'
-        dispatch(setLastUrl(redirectTo))
-        navigate(redirectTo)
+        try {
+            setError(null)
+            await login(formData).unwrap()
+            const redirectTo = location.state?.from || '/'
+            dispatch(setLastUrl(redirectTo))
+            navigate(redirectTo)
+        } catch (err: any) {
+            setError(err?.data?.message || 'Invalid email or password')
+        }
     }
 
     const onSubmitRegister = async (formData: RegisterFormDataType) => {
-        await register(formData).unwrap()
-        const redirectTo = location.state?.from || '/'
-        dispatch(setLastUrl(redirectTo))
-        navigate(redirectTo)
+        try {
+            setError(null)
+            await register(formData).unwrap()
+            const redirectTo = location.state?.from || '/'
+            dispatch(setLastUrl(redirectTo))
+            navigate(redirectTo)
+        } catch (err: any) {
+            setError(err?.data?.message || 'Registration failed')
+        }
     }
 
     return (
@@ -54,6 +65,8 @@ const Login: React.FC = () => {
                 isRegister={isRegister}
                 setIsRegisterStatus={(status) => dispatch(setIsRegisterStatus(status))}
                 onSubmit={isRegister ? onSubmitRegister : onSubmitLogin}
+                error={error}
+                setError={setError}
             />
         </div>
     );

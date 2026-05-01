@@ -90,6 +90,17 @@ class DialogsController {
         return res.status(400).json({ message: 'Dialog ID is required' })
       }
 
+      const dialog = await Dialog.findById(dialogId)
+      if (!dialog) {
+        return res.status(404).json({ message: 'Dialog not found' })
+      }
+
+      // Security check: Only participants can delete the dialog
+      const isParticipant = dialog.participants.some(p => p.toString() === req.user)
+      if (!isParticipant) {
+        return res.status(403).json({ message: 'Not authorized to delete this dialog' })
+      }
+
       // Delete all messages belonging to this dialog
       const Message = (await import('../models/message.js')).default
       await Message.deleteMany({ conversationId: dialogId })

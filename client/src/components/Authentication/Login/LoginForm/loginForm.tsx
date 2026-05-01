@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Button, Checkbox, Typography, Row, Col } from 'antd'
+import { Form, Input, Button, Checkbox, Typography, Row, Col, Alert } from 'antd'
 import { MailOutlined, LockOutlined } from '@ant-design/icons'
 import LoginImg from './LoginImg/loginImg'
 import { RegisterFormDataType } from '../../Login/login'
@@ -13,6 +13,8 @@ interface LoginFormPropType {
   isRegister: boolean
   setIsRegisterStatus: (status: boolean) => void
   onSubmit: (data: RegisterFormDataType) => void
+  error: string | null
+  setError: (error: string | null) => void
 }
 
 const LoginForm: React.FC<LoginFormPropType> = ({
@@ -21,7 +23,9 @@ const LoginForm: React.FC<LoginFormPropType> = ({
   captcha,
   isRegister,
   setIsRegisterStatus,
-  onSubmit
+  onSubmit,
+  error,
+  setError
 }) => {
   const [form] = Form.useForm<RegisterFormDataType>() 
 
@@ -35,6 +39,17 @@ const LoginForm: React.FC<LoginFormPropType> = ({
         <Title level={3} style={{ textAlign: 'center', marginBottom: 24 }}>
           {isRegister ? 'Register' : 'Login'}
         </Title>
+        {error && (
+          <Alert
+            message="Error"
+            description={error}
+            type="error"
+            showIcon
+            closable
+            onClose={() => setError(null)}
+            style={{ marginBottom: 16 }}
+          />
+        )}
         <Form
           form={form}
           layout="vertical"
@@ -110,9 +125,11 @@ const LoginForm: React.FC<LoginFormPropType> = ({
               >
                 {isRegister ? <span onClick={() => {
                   form.resetFields()
+                  setError(null)
                   setIsRegisterStatus(false)
                 }}>Login here</span> : <span onClick={() => {
                   form.resetFields()
+                  setError(null)
                   setIsRegisterStatus(true)
                 }}>Register here</span>}
               </Text>

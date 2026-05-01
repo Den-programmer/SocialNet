@@ -43,8 +43,15 @@ class MessagesController {
   async getMessagesBetweenUsers(req, res) {
     try {
       const { userId1, userId2 } = req.params
+      const currentUserId = req.user
+
       if (!userId1 || !userId2) {
         return res.status(400).json({ message: 'Both user IDs are required' })
+      }
+
+      // Security check: Only allow users to fetch their own messages
+      if (currentUserId !== userId1 && currentUserId !== userId2) {
+        return res.status(403).json({ message: 'Unauthorized to view these messages' })
       }
 
       const messages = await Message.find({
@@ -64,12 +71,21 @@ class MessagesController {
   async deleteMessage(req, res) {
     try {
       const { id } = req.params
+      const currentUserId = req.user
+
       if (!id) return res.status(400).json({ message: 'Message ID is required' })
 
-      const deletedMessage = await Message.findByIdAndDelete(id)
-      if (!deletedMessage) {
+      const message = await Message.findById(id)
+      if (!message) {
         return res.status(404).json({ message: 'Message not found' })
       }
+
+      // Security check: Only the sender can delete their own message
+      if (message.sender.toString() !== currentUserId) {
+        return res.status(403).json({ message: 'Not authorized to delete this message' })
+      }
+
+      const deletedMessage = await Message.findByIdAndDelete(id)
 
       // Delete the message image from Cloudinary if it exists
       if (deletedMessage.image) {
