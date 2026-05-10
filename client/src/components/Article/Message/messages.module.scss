@@ -347,7 +347,7 @@ $color-success: #52c41a;
   letter-spacing: -0.1px;
 }
 
-.userStatus {
+.userStatusActive {
   font-size: 11px;
   color: $color-success;
   font-weight: 500;
@@ -361,6 +361,24 @@ $color-success: #52c41a;
     height: 6px;
     border-radius: 50%;
     background: $color-success;
+    display: none;
+  }
+}
+
+.userStatusOffline {
+  font-size: 11px;
+  color: $color-primary;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $color-primary;
     display: inline-block;
   }
 }

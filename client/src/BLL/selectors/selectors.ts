@@ -15,3 +15,7 @@ export const selectDate = (state: RootState) => {
 export const selectHeaderHeight = (state: RootState) => {
     return state.app.headerHeight
 }
+
+export const selectUsersOnline = (state: RootState) => {
+    return state.app.usersOnline
+}

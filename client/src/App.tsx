@@ -16,7 +16,7 @@ const App: React.FC = () => {
   const isAuth = useAppSelector(selectIsAuthStatus)
   const drawerWidth = useAppSelector(selectSidebarWidth)
   const isSidebarOpen = useAppSelector(selectIsSidebarOpenStatus)
-
+  
   return (
     <>
       <CookieConsent

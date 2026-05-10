@@ -9,6 +9,7 @@ type AppState = {
   date: string
   isSmthLoading: boolean
   headerHeight: string
+  usersOnline: Array<{ userId: string; socketId: string }>
 }
 
 const initialState: AppState = {
@@ -17,7 +18,8 @@ const initialState: AppState = {
   isModalOpen: false,
   date: '',
   isSmthLoading: false,
-  headerHeight: '64px'
+  headerHeight: '64px',
+  usersOnline: []
 }
 
 export const initialize = createAsyncThunk('app/initialize', async (_, { dispatch, getState }) => {
@@ -61,6 +63,9 @@ const appSlice = createSlice({
     },
     setHeaderHeight(state, action: PayloadAction<string>) {
       state.headerHeight = action.payload
+    },
+    setUsersOnline(state, action: PayloadAction<Array<{ userId: string; socketId: string }>>) {
+      state.usersOnline = action.payload
     }
   }
 })

@@ -46,12 +46,14 @@ import {
 import { useLazyGetUsersQuery } from '../../../DAL/usersApi'
 import classes from './messages.module.scss'
 import { EMOJI_ROWS } from '../../../data/options/optionsMenuData'
+import { selectUsersOnline } from '../../../BLL/selectors/selectors'
 
 const { TextArea } = Input
 const { Text, Title } = Typography
 
 const MessagesPage: React.FC = () => {
   const dispatch = useAppDispatch()
+  const onlineUsers = useAppSelector(selectUsersOnline)
   const userDialogId = useAppSelector(selectUserDialogId)
   const authorizedUserId = useAppSelector(selectAuthorizedUserId)
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
@@ -66,6 +68,8 @@ const MessagesPage: React.FC = () => {
   const selectedDialog = (dialogsData?.find((d: any) => d.id === userDialogId) || null) as any
   const messages: any[] = selectedDialog?.messages || []
   const messagesLoading = dialogsLoading
+  const selectedConversationOtherId = selectedDialog?.participants?.find((u: any) => u.id !== authorizedUserId)?.id
+  const isSelectedUserOnline = onlineUsers.some((u: any) => u.userId === selectedConversationOtherId)
 
   const [sendMessage, { isLoading: isSending }] = useSendDialogMessagesMutation()
   const [deleteMessage] = useDeleteMessageMutation()
@@ -423,10 +427,10 @@ const MessagesPage: React.FC = () => {
                   <div className={classes.userName}>
                     {selectedDialog?.participants?.find((u: any) => u.id !== authorizedUserId)?.username || 'Unknown'}
                   </div>
-                  <div className={classes.userStatus}>
+                  <div className={`${isSelectedUserOnline ? classes.userStatusActive : classes.userStatusOffline}`}>
                     {typingUsers.length > 0
                       ? `${typingUsers.map(t => t.username).join(', ')} typing...`
-                      : 'Active now'
+                      : isSelectedUserOnline ? 'Active now' : 'Offline'
                     }
                   </div>
                 </div>

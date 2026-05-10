@@ -6,9 +6,10 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node app.js",
     "server": "nodemon app.js",
+    "socket": "npm run dev --prefix ../socket",
     "client": "npm run dev --prefix ../client",
     "client:build": "npm run build --prefix ../client",
-    "dev": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run client\""
+    "dev": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run socket\" \"npm run client\""
   },
   "repository": {
     "type": "git",

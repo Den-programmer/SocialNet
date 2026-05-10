@@ -1,13 +1,14 @@
-import React, { Suspense, lazy, useEffect } from 'react'
+import React, { Suspense, lazy, useEffect, useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import '../../App.css'
 import { Layout, Spin } from 'antd'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks'
 import { selectUserDialogId } from '../../BLL/selectors/messages-selectors'
-import { selectLastUrl, selectIsAuthStatus } from '../../BLL/selectors/auth-selectors'
+import { selectLastUrl, selectIsAuthStatus, selectAuthorizedUserId } from '../../BLL/selectors/auth-selectors'
 import { selectIsMembersColumnOpenedStatus } from '../../BLL/selectors/profile-selectors'
 import { selectHeaderHeight } from '../../BLL/selectors/selectors'
-import { initialize } from '../../BLL/reducer-app'
+import { appActions, initialize } from '../../BLL/reducer-app'
+import { io, Socket } from 'socket.io-client'
 
 const { Content } = Layout
 
@@ -42,9 +43,34 @@ const Article: React.FC<ArticlePropType> = React.memo(({
 }) => {
   const dispatch = useAppDispatch()
 
+  const userId = useAppSelector(state => selectAuthorizedUserId(state) || '')
+
+  const [socket, setSocket] = useState<Socket | null>(null)
+
   useEffect(() => {
     dispatch(initialize())
   }, [])
+
+  useEffect(() => {
+    const newSocket: Socket = io("http://localhost:7000")
+    setSocket(newSocket)
+
+    return () => {
+      newSocket.disconnect()
+    }
+  }, [userId])
+  console.log('Socket:', socket)
+
+  useEffect(() => {
+    if (socket && userId) {
+      socket.emit("addNewUser", userId)
+      socket.on("getOnlineUsers", (onlineUsers: Array<{ userId: string; socketId: string }>) => {
+        dispatch(appActions.setUsersOnline(onlineUsers))
+      })
+    } else {
+      return
+    }
+  }, [socket && userId])
 
   const headerHeight = useAppSelector(selectHeaderHeight)
   const userDialogId = useAppSelector(selectUserDialogId)
@@ -67,7 +93,7 @@ const Article: React.FC<ArticlePropType> = React.memo(({
             <Route path='/Profile/:userId' element={<div className="flex-content"><ProfileContainer />{isMembersColumnOpen && <MembersContainer />}</div>} />
             <Route path='/Profile' element={<div className="flex-content"><ProfileContainer />{isMembersColumnOpen && <MembersContainer />}</div>} />
             <Route path='/Wall' element={<div className="flex-content"><ProfileMainContent /><Wall /></div>} />
-            {/* Maybe it has to be changed to route param - :userDialogId */}<Route path={`/Messages/dialog/${userDialogId}`} element={<div className="flex-content"><ProfileMainContent /><Messages/></div>} /> 
+            {/* Maybe it has to be changed to route param - :userDialogId */}<Route path={`/Messages/dialog/${userDialogId}`} element={<div className="flex-content"><ProfileMainContent /><Messages /></div>} />
             <Route path='/Messages' element={<div className="flex-content"><ProfileMainContent /><Messages /></div>} />
             <Route path={`/News/:newsId`} element={<SingleNewsPageContent />} />
             <Route path='/News' element={<News />} />
@@ -78,8 +104,8 @@ const Article: React.FC<ArticlePropType> = React.memo(({
             <Route path='/Options/contacts' element={<div className="flex-content"><OptionsNav /><ContactsOptions /></div>} />
             <Route path='/Notifications' element={<div className="flex-content"><ProfileMainContent /><Notifications /></div>} />
             <Route path='/Friends/DataFriends' element={<div className="flex-content"><ProfileMainContent /><FriendsNav /><FriendsByButton /></div>} />
-            <Route path='/Friends/FindUsers' element={<div className="flex-content"><ProfileMainContent /><FriendsNav/><FindFriends /></div>} />
-            <Route path='/Friends' element={<FriendsNav/>} />
+            <Route path='/Friends/FindUsers' element={<div className="flex-content"><ProfileMainContent /><FriendsNav /><FindFriends /></div>} />
+            <Route path='/Friends' element={<FriendsNav />} />
             <Route path='/Blacklist' element={<div className="flex-content"><ProfileMainContent /><FriendsNav /><Blacklist /></div>} />
             <Route path='/' element={<Navigate to='/Profile' replace />} />
             {isAuth && <Route path='/login' element={<Navigate to={lastUrl} replace />} />}
