@@ -41,7 +41,7 @@ describe('Profile Utilities', () => {
 
   describe('Profile Update', () => {
     it('should merge profile updates', () => {
-      const mergeProfileUpdate = (current: any, updates: any) => ({
+      const mergeProfileUpdate = (current: Record<string, unknown>, updates: Record<string, unknown>) => ({
         ...current,
         ...updates
       });

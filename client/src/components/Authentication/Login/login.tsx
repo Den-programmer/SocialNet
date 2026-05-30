@@ -39,8 +39,9 @@ const Login: React.FC = () => {
             const redirectTo = location.state?.from || '/'
             dispatch(setLastUrl(redirectTo))
             navigate(redirectTo)
-        } catch (err: any) {
-            setError(err?.data?.message || 'Invalid email or password')
+        } catch (err: unknown) {
+            const error = err as { data?: { message?: string } }
+            setError(error?.data?.message || 'Invalid email or password')
         }
     }
 
@@ -51,8 +52,9 @@ const Login: React.FC = () => {
             const redirectTo = location.state?.from || '/'
             dispatch(setLastUrl(redirectTo))
             navigate(redirectTo)
-        } catch (err: any) {
-            setError(err?.data?.message || 'Registration failed')
+        } catch (err: unknown) {
+            const error = err as { data?: { message?: string } }
+            setError(error?.data?.message || 'Registration failed')
         }
     }
 

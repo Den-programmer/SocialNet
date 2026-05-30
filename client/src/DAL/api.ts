@@ -1,5 +1,5 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { BaseQueryFn } from '@reduxjs/toolkit/query'
+import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { getToken } from '../BLL/reducer-auth'
 
 export const baseQuery = fetchBaseQuery({
@@ -13,7 +13,7 @@ export const baseQuery = fetchBaseQuery({
     return headers
   },
   credentials: 'include'
-}) satisfies BaseQueryFn<any, unknown, unknown>
+}) satisfies BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>
 
 export type ServerResType<T> = {
   resultCode: number

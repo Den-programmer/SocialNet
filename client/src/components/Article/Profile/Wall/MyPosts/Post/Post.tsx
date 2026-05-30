@@ -55,7 +55,7 @@ const Post: React.FC<IPost> = props => {
   const [avatarImage, setAvatarImage] = useState<string>(props.avatar || defaultUserPhoto)
   const [postImage, setPostImage] = useState<string>(noPostImg)
 
-  const resolveImage = useCallback((img: any, fallback: string): string => {
+  const resolveImage = useCallback((img: string | File | undefined | null, fallback: string): string => {
     if (!img) return fallback
     if (typeof img === 'string') return img
     if (img instanceof File) return URL.createObjectURL(img)

@@ -17,7 +17,7 @@ export interface IAccountOption {
   value: string | null
   isEditIconActive: boolean
   isEdit: boolean
-  editContent: any
+  editContent: React.ComponentType<IChangeOptions>
 }
 
 export interface IChangeOptions {

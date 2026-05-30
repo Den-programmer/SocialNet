@@ -1,11 +1,11 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQuery, ServerResType } from './api'
-import { userDialogType, message } from '../types/MessagesTypes/messagesTypes'
+import { userDialogType, MessageType } from '../types/MessagesTypes/messagesTypes'
 
 type dialogsType = Array<userDialogType>
 
 type dialogMessagesResType = {
-  items: Array<message>
+  items: Array<MessageType>
   totalCount: number
   error: null | string
 }
@@ -21,7 +21,7 @@ export const messagesApi = createApi({
       transformResponse: (response: ServerResType<{ dialogs: dialogsType }>) =>
         response.data.dialogs
     }),
-    startDialog: builder.mutation<any, string>({
+    startDialog: builder.mutation<userDialogType, string>({
       query: (userId) => ({
         url: `api/dialogs/addDialog/${userId}`,
         method: 'POST'
@@ -32,7 +32,7 @@ export const messagesApi = createApi({
       providesTags: (result, error, { userId1 }) => [{ type: 'Messages', id: userId1 }]
     }),
     sendDialogMessages: builder.mutation<
-      any,
+      MessageType,
       { userId: string; message: string | undefined; image: string | undefined }
     >({
       query: ({ userId, message, image }) => ({
@@ -45,10 +45,10 @@ export const messagesApi = createApi({
         { type: 'Messages', id: 'LIST' }
       ]
     }),
-    isMessageViewed: builder.query<any, number>({
+    isMessageViewed: builder.query<boolean, number>({
       query: (messageId) => `api/dialogs/messages/${messageId}/viewed`
     }),
-    getNewDialogs: builder.query<any, void>({
+    getNewDialogs: builder.query<{ count: number }, void>({
       query: () => `api/dialogs/messages/new/count`
     })
   })

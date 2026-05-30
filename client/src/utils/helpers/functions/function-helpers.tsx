@@ -10,7 +10,7 @@ export const createFriendsNavBtn = (hint: string, link: string, nameOfBtn: strin
   )
 }
 
-export const createReviewChangesBtn = (func: (...args: any[]) => void, url?: string, error?: string, currentPageUrl?: string) => {
+export const createReviewChangesBtn = (func: (...args: unknown[]) => void, url?: string, error?: string, currentPageUrl?: string) => {
   const hasError = error && error !== ''
   const currentPageUrlCheckout = currentPageUrl ? currentPageUrl : '/'
   return (

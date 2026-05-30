@@ -84,11 +84,11 @@ const User: React.FC<IUser> = ({
   const handleChat = async () => {
     try {
       const res = await startDialog(id).unwrap()
-      if (!res) {
-        console.error('Failed to start dialog: response is null')
+      if (!res || !res.id) {
+        console.error('Failed to start dialog: response is null or missing id')
         return
       }
-      const dialogId = res[1]._id
+      const dialogId = res.id
       dispatch(setUserDialogId(dialogId))
       setIsMenuOpen(false)
       navigate('/Messages')

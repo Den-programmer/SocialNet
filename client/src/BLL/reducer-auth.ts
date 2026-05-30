@@ -67,7 +67,7 @@ const authSlice = createSlice({
     builder.addMatcher(
       authApi.endpoints.login.matchFulfilled,
       (state, { payload, meta }) => {
-        const rememberMe = (meta.arg.originalArgs as any)?.rememberMe ?? false
+        const rememberMe = (meta.arg.originalArgs as { rememberMe?: boolean })?.rememberMe ?? false
         
         state.userId = payload.userId
         state.email = payload.userId

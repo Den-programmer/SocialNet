@@ -2,7 +2,7 @@ import React from 'react'
 import classes from './btn_confirm.module.css'
 
 interface IProps {
-    clickFunction: any
+    clickFunction: () => void
 }
 
 const Btn_Confirm: React.FC<IProps> = ({clickFunction}) => {

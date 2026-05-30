@@ -9,24 +9,31 @@ export const sanitizeInput = (input: string): string => {
 /**
  * Sanitize object input recursively
  */
-export const sanitizeObject = (obj: any): any => {
+/**
+ * Sanitize object input recursively
+ */
+export const sanitizeObject = <T>(obj: T): T => {
   if (typeof obj === 'string') {
-    return sanitizeInput(obj)
+    return sanitizeInput(obj) as unknown as T
   }
   
   if (Array.isArray(obj)) {
-    return obj.map(item => sanitizeObject(item))
+    return obj.map(item => sanitizeObject(item)) as unknown as T
   }
   
   if (typeof obj === 'object' && obj !== null) {
-    const sanitized: any = {}
-    for (const key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        sanitized[key] = sanitizeObject(obj[key])
+    const sanitized: Record<string, unknown> = {}
+    const typedObj = obj as Record<string, unknown>
+    for (const key in typedObj) {
+      if (Object.prototype.hasOwnProperty.call(typedObj, key)) {
+        sanitized[key] = sanitizeObject(typedObj[key])
       }
     }
-    return sanitized
+    return sanitized as unknown as T
   }
+  
+  return obj
+}
   
   return obj
 }
@@ -143,19 +150,19 @@ export const isSafeUrl = (url: string): boolean => {
 /**
  * Validate form data before sending
  */
-export const validateFormData = (data: any): {
+export const validateFormData = (data: Record<string, unknown>): {
   isValid: boolean
   errors: Record<string, string>
 } => {
   const errors: Record<string, string> = {}
   
   // Validate email if present
-  if (data.email && !validateEmail(data.email)) {
+  if (data.email && typeof data.email === 'string' && !validateEmail(data.email)) {
     errors.email = 'Invalid email format'
   }
   
   // Validate password if present
-  if (data.password) {
+  if (data.password && typeof data.password === 'string') {
     const passwordValidation = validatePassword(data.password)
     if (!passwordValidation.isValid) {
       errors.password = passwordValidation.errors[0]

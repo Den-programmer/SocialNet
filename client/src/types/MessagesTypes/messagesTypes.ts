@@ -1,23 +1,29 @@
-export type message = {
-    _id: number
-    messageText: string | null
-    sender: string
-    image: string
-}
-export type userDialogType = {
-    hasNewMessages?: boolean   // I need to remove the "?" later there, where it should be removed 
-    _id: string
-    participants: Array<string>
-    lastDialogActivityDate?: Date
-    lastUserActivityDate?: Date
-    newMessagesCount?: number
-    photos: {
-        small: any
-        large: any
-    },
+export type MessageParticipant = {
+    id: string
     username: string
+    email?: string
+    photos: {
+        small: string | null
+        large: string | null
+    }
+}
+
+export type MessageType = {
+    id: string
+    text: string | null
+    image?: string | null
+    createdAt: string
+    conversationId: string
+    sender: MessageParticipant
+    receiver: MessageParticipant
+}
+
+export type userDialogType = {
+    id: string
+    updatedAt: string
+    participants: MessageParticipant[]
+    messages: MessageType[]
     isActive?: boolean
-    lastMessage?: string
-    createdAt?: Date,
-    updatedAt?: Date
+    hasNewMessages?: boolean
+    newMessagesCount?: number
 }

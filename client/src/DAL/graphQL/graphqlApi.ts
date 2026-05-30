@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { useState, useEffect, useRef } from 'react'
-import { userDialogType } from '../../types/MessagesTypes/messagesTypes'
+import { userDialogType, MessageType } from '../../types/MessagesTypes/messagesTypes'
 import { getToken } from '../../BLL/reducer-auth'
 import { wsClient } from './wsClient'
 
@@ -193,18 +193,18 @@ export const messagesApi = createApi({
 
   endpoints: (builder) => ({
 
-    getAllDialogs: builder.query({
+    getAllDialogs: builder.query<userDialogType[], void>({
       query: () => ({
         url: '',
         method: 'POST',
         body: { query: GET_ALL_DIALOGS }
       }),
-      transformResponse: (res: any) => {
+      transformResponse: (res: { data?: { dialogs: userDialogType[] }, errors?: unknown[] }) => {
         if (res?.errors) {
           console.error('getAllDialogs graphql errors:', res.errors)
-          return [] as dialogsType
+          return [] as userDialogType[]
         }
-        return (res?.data?.dialogs ?? []) as dialogsType
+        return (res?.data?.dialogs ?? []) as userDialogType[]
       },
       providesTags: [{ type: 'Messages', id: 'LIST' }],
 
@@ -229,13 +229,13 @@ export const messagesApi = createApi({
           unsubMessage = wsClient.subscribe(
             { query: SUBSCRIPTION_MESSAGE_SENT },
             {
-              next: ({ data }: any) => {
+              next: ({ data }: { data: { messageSent: MessageType } }) => {
                 const newMsg = data?.messageSent
                 if (!newMsg) return
-                updateCachedData((draft: any[]) => {
-                  const dialog = draft.find((d: any) => d.id === newMsg.conversationId)
+                updateCachedData((draft: userDialogType[]) => {
+                  const dialog = draft.find((d: userDialogType) => d.id === newMsg.conversationId)
                   if (dialog) {
-                    const alreadyExists = dialog.messages.some((m: any) => m.id === newMsg.id)
+                    const alreadyExists = dialog.messages.some((m: MessageType) => m.id === newMsg.id)
                     if (!alreadyExists) {
                       dialog.messages.push(newMsg)
                       dialog.updatedAt = newMsg.createdAt
@@ -245,7 +245,7 @@ export const messagesApi = createApi({
                   }
                 })
               },
-              error: (err: any) => console.error('WS messageSent error:', err),
+              error: (err: unknown) => console.error('WS messageSent error:', err),
               complete: () => {}
             }
           )
@@ -254,19 +254,19 @@ export const messagesApi = createApi({
           unsubDelete = wsClient.subscribe(
             { query: SUBSCRIPTION_MESSAGE_DELETED },
             {
-              next: ({ data }: any) => {
+              next: ({ data }: { data: { messageDeleted: { messageId: string, conversationId: string } } }) => {
                 const deleted = data?.messageDeleted
                 if (!deleted) return
-                updateCachedData((draft: any[]) => {
-                  const dialog = draft.find((d: any) => d.id === deleted.conversationId)
+                updateCachedData((draft: userDialogType[]) => {
+                  const dialog = draft.find((d: userDialogType) => d.id === deleted.conversationId)
                   if (dialog) {
                     dialog.messages = dialog.messages.filter(
-                      (m: any) => m.id !== deleted.messageId
+                      (m: MessageType) => m.id !== deleted.messageId
                     )
                   }
                 })
               },
-              error: (err: any) => console.error('WS messageDeleted error:', err),
+              error: (err: unknown) => console.error('WS messageDeleted error:', err),
               complete: () => {}
             }
           )
@@ -275,17 +275,17 @@ export const messagesApi = createApi({
           unsubDialog = wsClient.subscribe(
             { query: SUBSCRIPTION_DIALOG_STARTED },
             {
-              next: ({ data }: any) => {
+              next: ({ data }: { data: { dialogStarted: userDialogType } }) => {
                 const newDialog = data?.dialogStarted
                 if (!newDialog) return
-                updateCachedData((draft: any[]) => {
-                  const exists = draft.some((d: any) => d.id === newDialog.id)
+                updateCachedData((draft: userDialogType[]) => {
+                  const exists = draft.some((d: userDialogType) => d.id === newDialog.id)
                   if (!exists) {
                     draft.push(newDialog)
                   }
                 })
               },
-              error: (err: any) => console.error('WS dialogStarted error:', err),
+              error: (err: unknown) => console.error('WS dialogStarted error:', err),
               complete: () => {}
             }
           )
@@ -294,17 +294,17 @@ export const messagesApi = createApi({
           unsubDialogDeleted = wsClient.subscribe(
             { query: SUBSCRIPTION_DIALOG_DELETED },
             {
-              next: ({ data }: any) => {
+              next: ({ data }: { data: { dialogDeleted: { dialogId: string } } }) => {
                 const deleted = data?.dialogDeleted
                 if (!deleted) return
-                updateCachedData((draft: any[]) => {
-                  const idx = draft.findIndex((d: any) => d.id === deleted.dialogId)
+                updateCachedData((draft: userDialogType[]) => {
+                  const idx = draft.findIndex((d: userDialogType) => d.id === deleted.dialogId)
                   if (idx !== -1) {
                     draft.splice(idx, 1)
                   }
                 })
               },
-              error: (err: any) => console.error('WS dialogDeleted error:', err),
+              error: (err: unknown) => console.error('WS dialogDeleted error:', err),
               complete: () => {}
             }
           )
@@ -320,16 +320,16 @@ export const messagesApi = createApi({
       }
     }),
 
-    startDialog: builder.mutation({
+    startDialog: builder.mutation<userDialogType, string>({
       query: (userId) => ({
         url: '',
         method: 'POST',
         body: { query: START_DIALOG, variables: { userId } }
       }),
-      transformResponse: (res: any) => {
+      transformResponse: (res: { data: { startDialog: userDialogType }, errors?: unknown[] }) => {
         if (res?.errors) {
           console.error('startDialog graphql errors:', res.errors)
-          return null
+          return null as unknown as userDialogType
         }
         return res.data.startDialog
       },
@@ -340,8 +340,8 @@ export const messagesApi = createApi({
           const { data: newDialog } = await queryFulfilled
           if (newDialog) {
             dispatch(
-              messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: any[]) => {
-                const exists = draft.some((d: any) => d.id === newDialog.id)
+              messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: userDialogType[]) => {
+                const exists = draft.some((d: userDialogType) => d.id === newDialog.id)
                 if (!exists) {
                   draft.push(newDialog)
                 }
@@ -354,26 +354,26 @@ export const messagesApi = createApi({
       }
     }),
 
-    sendDialogMessages: builder.mutation({
+    sendDialogMessages: builder.mutation<MessageType, { conversationId: string, text: string | null, image?: string | null }>({
       query: ({ conversationId, text, image }) => ({
         url: '',
         method: 'POST',
         body: { query: SEND_DIALOG_MESSAGE, variables: { conversationId, text: text || '', image } }
       }),
-      transformResponse: (res: any) => {
+      transformResponse: (res: { data?: { sendMessage: MessageType }, errors?: unknown[] }) => {
         if (res?.errors) {
           console.error('sendDialogMessages graphql errors:', res.errors)
-          return null
+          return null as unknown as MessageType
         }
-        return res?.data?.sendMessage ?? null
+        return res?.data?.sendMessage ?? null as unknown as MessageType
       },
       // Optimistically update cache
       async onQueryStarted({ conversationId, text, image }, { dispatch, queryFulfilled }) {
         const tempId = `temp-${Date.now()}`
         // We patch the cache optimistically
         const patchResult = dispatch(
-          messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: any[]) => {
-            const dialog = draft.find((d: any) => d.id === conversationId)
+          messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: userDialogType[]) => {
+            const dialog = draft.find((d: userDialogType) => d.id === conversationId)
             if (dialog) {
               dialog.messages.push({
                 id: tempId,
@@ -381,8 +381,8 @@ export const messagesApi = createApi({
                 image: image || null,
                 createdAt: new Date().toISOString(),
                 conversationId,
-                sender: { id: '__optimistic__', username: '' },
-                receiver: { id: '', username: '' }
+                sender: { id: '__optimistic__', username: '', photos: { small: null, large: null } },
+                receiver: { id: '', username: '', photos: { small: null, large: null } }
               })
             }
           })
@@ -397,15 +397,15 @@ export const messagesApi = createApi({
             return
           }
           dispatch(
-            messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: any[]) => {
-              const dialog = draft.find((d: any) => d.id === conversationId)
+            messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: userDialogType[]) => {
+              const dialog = draft.find((d: userDialogType) => d.id === conversationId)
               if (dialog) {
-                const realAlreadyExists = dialog.messages.some((m: any) => m.id === data.id)
+                const realAlreadyExists = dialog.messages.some((m: MessageType) => m.id === data.id)
                 if (realAlreadyExists) {
                   // Subscription beat us — just drop the temp placeholder
-                  dialog.messages = dialog.messages.filter((m: any) => m.id !== tempId)
+                  dialog.messages = dialog.messages.filter((m: MessageType) => m.id !== tempId)
                 } else {
-                  const idx = dialog.messages.findIndex((m: any) => m.id === tempId)
+                  const idx = dialog.messages.findIndex((m: MessageType) => m.id === tempId)
                   if (idx !== -1) dialog.messages[idx] = data
                 }
               }
@@ -417,13 +417,13 @@ export const messagesApi = createApi({
       }
     }),
 
-    deleteMessage: builder.mutation({
+    deleteMessage: builder.mutation<boolean, { messageId: string, conversationId: string }>({
       query: ({ messageId }) => ({
         url: '',
         method: 'POST',
         body: { query: DELETE_MESSAGE, variables: { messageId } }
       }),
-      transformResponse: (res: any) => {
+      transformResponse: (res: { data?: { deleteMessage: boolean }, errors?: unknown[] }) => {
         if (res?.errors) {
           console.error('deleteMessage graphql errors:', res.errors)
           return false
@@ -432,10 +432,10 @@ export const messagesApi = createApi({
       },
       async onQueryStarted({ messageId, conversationId }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: any[]) => {
-            const dialog = draft.find((d: any) => d.id === conversationId)
+          messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: userDialogType[]) => {
+            const dialog = draft.find((d: userDialogType) => d.id === conversationId)
             if (dialog) {
-              dialog.messages = dialog.messages.filter((m: any) => m.id !== messageId)
+              dialog.messages = dialog.messages.filter((m: MessageType) => m.id !== messageId)
             }
           })
         )
@@ -447,13 +447,13 @@ export const messagesApi = createApi({
       }
     }),
 
-    setTyping: builder.mutation({
+    setTyping: builder.mutation<boolean, { conversationId: string, isTyping: boolean }>({
       query: ({ conversationId, isTyping }) => ({
         url: '',
         method: 'POST',
         body: { query: SET_TYPING, variables: { conversationId, isTyping } }
       }),
-      transformResponse: (res: any) => {
+      transformResponse: (res: { data?: { setTyping: boolean }, errors?: unknown[] }) => {
         if (res?.errors) {
           console.error('setTyping graphql errors:', res.errors)
           return false
@@ -462,13 +462,13 @@ export const messagesApi = createApi({
       }
     }),
 
-    deleteDialog: builder.mutation({
+    deleteDialog: builder.mutation<boolean, { dialogId: string }>({
       query: ({ dialogId }) => ({
         url: '',
         method: 'POST',
         body: { query: DELETE_DIALOG, variables: { dialogId } }
       }),
-      transformResponse: (res: any) => {
+      transformResponse: (res: { data?: { deleteDialog: boolean }, errors?: unknown[] }) => {
         if (res?.errors) {
           console.error('deleteDialog graphql errors:', res.errors)
           return false
@@ -477,11 +477,8 @@ export const messagesApi = createApi({
       },
       async onQueryStarted({ dialogId }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: any[]) => {
-            const idx = draft.findIndex((d: any) => d.id === dialogId)
-            if (idx !== -1) {
-              draft.splice(idx, 1)
-            }
+          messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: userDialogType[]) => {
+            return draft.filter((d: userDialogType) => d.id !== dialogId)
           })
         )
         try {
@@ -528,12 +525,12 @@ export function useTypingSubscription(conversationId: string | undefined) {
           variables: { conversationId }
         },
         {
-          next: ({ data }: any) => {
+          next: ({ data }: { data: { userTyping: TypingState } }) => {
             const typing = data?.userTyping
             if (!typing) return
 
             if (typing.isTyping) {
-              setTypingUsers((prev: TypingState[]) => {
+              setTypingUsers((prev) => {
                 const exists = prev.some((t: TypingState) => t.userId === typing.userId)
                 if (exists) return prev
                 return [...prev, typing]
@@ -559,7 +556,7 @@ export function useTypingSubscription(conversationId: string | undefined) {
               }
             }
           },
-          error: (err: any) => console.error('WS userTyping error:', err),
+          error: (err: unknown) => console.error('WS userTyping error:', err),
           complete: () => {}
         }
       )

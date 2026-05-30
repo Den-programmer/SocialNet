@@ -13,10 +13,10 @@ import {
   TeamOutlined,
   GlobalOutlined
 } from '@ant-design/icons'
-import { SidebarIconMapType } from '../../types/SidebarTypes/sidebarTypes'
+import { SidebarIconMapType, navLinkType } from '../../types/SidebarTypes/sidebarTypes'
 
 interface SideBarPropsType {
-  navLinks: Array<any>
+  navLinks: Array<navLinkType>
   isSidebarOpen: boolean
   sidebarWidth: number
   changeProfileNavItemChosenStatus: (itemId: number) => void
