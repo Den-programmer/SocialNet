@@ -36,7 +36,7 @@ const MessagesPage: React.FC = () => {
   const {
     data: dialogsData,
     isLoading: dialogsLoading,
-  } = useGetAllDialogsQuery({})
+  } = useGetAllDialogsQuery()
 
   const messagesLoading = dialogsLoading
 

@@ -11,8 +11,8 @@ import {
 } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from '../../../../hooks/hooks'
-import { userDialogType, MessageParticipant } from '../../../types/MessagesTypes/messagesTypes'
-import { userType } from '../../../types/FriendsType/friendsType'
+import { userDialogType, MessageParticipant } from '../../../../types/MessagesTypes/messagesTypes'
+import { userType } from '../../../../types/FriendsType/friendsType'
 
 
 const { Text, Title } = Typography

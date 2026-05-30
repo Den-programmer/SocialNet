@@ -15,7 +15,7 @@ import { EMOJI_ROWS } from '../../../../data/options/optionsMenuData'
 import { selectUsersOnline } from '../../../../BLL/selectors/selectors'
 import { useAppSelector } from '../../../../hooks/hooks'
 import Upload, { UploadChangeParam, UploadFile } from 'antd/es/upload'
-import TextArea from 'antd/es/input/TextArea'
+import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import imageCompression from 'browser-image-compression'
 import { MessageType, userDialogType, MessageParticipant } from '../../../../types/MessagesTypes/messagesTypes'
 
@@ -33,7 +33,7 @@ interface MessagesPanelProps {
 }
 
 const MessagesPanel: React.FC<MessagesPanelProps> = ({ messages, selectedDialog, userDialogId, authorizedUserId, setLightboxImage, messagesLoading, mobileShowChat, setMobileShowChat }) => {
-    const inputRef = useRef<HTMLTextAreaElement | null>(null)
+    const inputRef = useRef<TextAreaRef | null>(null)
     const messagesEndRef = useRef<HTMLDivElement | null>(null)
     const onlineUsers = useAppSelector(selectUsersOnline)
     const [sendMessage, { isLoading: isSending }] = useSendDialogMessagesMutation()

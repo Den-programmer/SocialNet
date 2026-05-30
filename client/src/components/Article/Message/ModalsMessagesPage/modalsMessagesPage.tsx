@@ -3,8 +3,8 @@ import { useState } from "react"
 import { Button, List, Input, Spin, Avatar } from "antd"
 import { SearchOutlined, UserOutlined } from '@ant-design/icons'
 import Modal from 'antd/es/modal/Modal'
-import { userDialogType } from '../../../types/MessagesTypes/messagesTypes'
-import { userType } from '../../../types/FriendsType/friendsType'
+import { userDialogType } from '../../../../types/MessagesTypes/messagesTypes'
+import { userType } from '../../../../types/FriendsType/friendsType'
 
 interface ModalsMessagesPageProps {
     fetchUsers: (params: { pageSize: number; term?: string }) => void
@@ -111,8 +111,8 @@ const ModalsMessagesPage: React.FC<ModalsMessagesPageProps> = ({ userDialogId, f
                                         <List.Item.Meta
                                             avatar={
                                                 <Avatar
-                                                    src={user.photos?.small}
-                                                    icon={!user.photos?.small && <UserOutlined />}
+                                                    src={user.profile.photos?.small as string}
+                                                    icon={!user.profile.photos?.small && <UserOutlined />}
                                                 />
                                             }
                                             title={user.username}
