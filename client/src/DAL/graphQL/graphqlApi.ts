@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { userDialogType, MessageType } from '../../types/MessagesTypes/messagesTypes'
 import { getToken } from '../../BLL/reducer-auth'
 import { wsClient } from './wsClient'
+import { socketService } from '../socket'
 
 // ===== GraphQL operation strings =====
 
@@ -208,7 +209,7 @@ export const messagesApi = createApi({
       },
       providesTags: [{ type: 'Messages', id: 'LIST' }],
 
-      // Real-time: push incoming messages via WebSocket subscription
+      // Real-time: push incoming messages via WebSocket subscription and Socket.IO
       async onCacheEntryAdded(
         _,
         { updateCachedData, cacheDataLoaded, cacheEntryRemoved, dispatch }
@@ -224,26 +225,42 @@ export const messagesApi = createApi({
         let unsubDialog: (() => void) | undefined
         let unsubDialogDeleted: (() => void) | undefined
 
+        // Helper to add message to cache
+        const addMessageToCache = (newMsg: MessageType) => {
+          updateCachedData((draft: userDialogType[]) => {
+            const dialog = draft.find((d: userDialogType) => d.id === newMsg.conversationId)
+            if (dialog) {
+              const alreadyExists = dialog.messages.some((m: MessageType) => m.id === newMsg.id)
+              if (!alreadyExists) {
+                dialog.messages.push(newMsg)
+                dialog.updatedAt = newMsg.createdAt
+                // Important: sort the list of dialogs so the active one moves to top
+                draft.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+              }
+            } else {
+              dispatch(messagesApi.util.invalidateTags([{ type: 'Messages', id: 'LIST' }]))
+            }
+          })
+        }
+
+        // Socket.IO Listener
+        const socket = socketService.socket
+        if (socket) {
+          socket.on('getMessage', (msg: MessageType) => {
+            console.log('Received message via Socket.IO:', msg)
+            addMessageToCache(msg)
+          })
+        }
+
         try {
-          // Subscribe to new messages
+          // Subscribe to new messages (GraphQL Subscriptions as backup/alternative)
           unsubMessage = wsClient.subscribe(
             { query: SUBSCRIPTION_MESSAGE_SENT },
             {
               next: ({ data }: { data: { messageSent: MessageType } }) => {
                 const newMsg = data?.messageSent
                 if (!newMsg) return
-                updateCachedData((draft: userDialogType[]) => {
-                  const dialog = draft.find((d: userDialogType) => d.id === newMsg.conversationId)
-                  if (dialog) {
-                    const alreadyExists = dialog.messages.some((m: MessageType) => m.id === newMsg.id)
-                    if (!alreadyExists) {
-                      dialog.messages.push(newMsg)
-                      dialog.updatedAt = newMsg.createdAt
-                    }
-                  } else {
-                    dispatch(messagesApi.util.invalidateTags([{ type: 'Messages', id: 'LIST' }]))
-                  }
-                })
+                addMessageToCache(newMsg)
               },
               error: (err: unknown) => console.error('WS messageSent error:', err),
               complete: () => {}
@@ -282,6 +299,7 @@ export const messagesApi = createApi({
                   const exists = draft.some((d: userDialogType) => d.id === newDialog.id)
                   if (!exists) {
                     draft.push(newDialog)
+                    draft.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
                   }
                 })
               },
@@ -313,6 +331,7 @@ export const messagesApi = createApi({
         }
 
         await cacheEntryRemoved
+        socket?.off('getMessage')
         unsubMessage?.()
         unsubDelete?.()
         unsubDialog?.()
@@ -340,10 +359,11 @@ export const messagesApi = createApi({
           const { data: newDialog } = await queryFulfilled
           if (newDialog) {
             dispatch(
-              messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: userDialogType[]) => {
+              messagesApi.util.updateQueryData('getAllDialogs', undefined, (draft: userDialogType[]) => {
                 const exists = draft.some((d: userDialogType) => d.id === newDialog.id)
                 if (!exists) {
                   draft.push(newDialog)
+                  draft.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
                 }
               })
             )
@@ -358,21 +378,21 @@ export const messagesApi = createApi({
       query: ({ conversationId, text, image }) => ({
         url: '',
         method: 'POST',
-        body: { query: SEND_DIALOG_MESSAGE, variables: { conversationId, text: text || '', image } }
+        body: { query: SEND_DIALOG_MESSAGE, variables: { conversationId, text: text || '', image: image || null } }
       }),
-      transformResponse: (res: { data?: { sendMessage: MessageType }, errors?: unknown[] }) => {
+      transformResponse: (res: { data?: { sendMessage: MessageType }, errors?: any[] }) => {
         if (res?.errors) {
           console.error('sendDialogMessages graphql errors:', res.errors)
-          return null as unknown as MessageType
+          throw new Error(res.errors[0]?.message || 'GraphQL Error')
         }
-        return res?.data?.sendMessage ?? null as unknown as MessageType
+        return res?.data?.sendMessage as MessageType
       },
       // Optimistically update cache
       async onQueryStarted({ conversationId, text, image }, { dispatch, queryFulfilled }) {
         const tempId = `temp-${Date.now()}`
         // We patch the cache optimistically
         const patchResult = dispatch(
-          messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: userDialogType[]) => {
+          messagesApi.util.updateQueryData('getAllDialogs', undefined, (draft: userDialogType[]) => {
             const dialog = draft.find((d: userDialogType) => d.id === conversationId)
             if (dialog) {
               dialog.messages.push({
@@ -384,6 +404,8 @@ export const messagesApi = createApi({
                 sender: { id: '__optimistic__', username: '', photos: { small: null, large: null } },
                 receiver: { id: '', username: '', photos: { small: null, large: null } }
               })
+              dialog.updatedAt = new Date().toISOString()
+              draft.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
             }
           })
         )
@@ -397,9 +419,10 @@ export const messagesApi = createApi({
             return
           }
           dispatch(
-            messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: userDialogType[]) => {
+            messagesApi.util.updateQueryData('getAllDialogs', undefined, (draft: userDialogType[]) => {
               const dialog = draft.find((d: userDialogType) => d.id === conversationId)
               if (dialog) {
+                dialog.updatedAt = data.createdAt
                 const realAlreadyExists = dialog.messages.some((m: MessageType) => m.id === data.id)
                 if (realAlreadyExists) {
                   // Subscription beat us — just drop the temp placeholder
@@ -408,6 +431,7 @@ export const messagesApi = createApi({
                   const idx = dialog.messages.findIndex((m: MessageType) => m.id === tempId)
                   if (idx !== -1) dialog.messages[idx] = data
                 }
+                draft.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
               }
             })
           )
@@ -432,7 +456,7 @@ export const messagesApi = createApi({
       },
       async onQueryStarted({ messageId, conversationId }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: userDialogType[]) => {
+          messagesApi.util.updateQueryData('getAllDialogs', undefined, (draft: userDialogType[]) => {
             const dialog = draft.find((d: userDialogType) => d.id === conversationId)
             if (dialog) {
               dialog.messages = dialog.messages.filter((m: MessageType) => m.id !== messageId)
@@ -477,7 +501,7 @@ export const messagesApi = createApi({
       },
       async onQueryStarted({ dialogId }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          messagesApi.util.updateQueryData('getAllDialogs', {}, (draft: userDialogType[]) => {
+          messagesApi.util.updateQueryData('getAllDialogs', undefined, (draft: userDialogType[]) => {
             return draft.filter((d: userDialogType) => d.id !== dialogId)
           })
         )

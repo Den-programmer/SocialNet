@@ -8,7 +8,7 @@ import { selectLastUrl, selectIsAuthStatus, selectAuthorizedUserId } from '../..
 import { selectIsMembersColumnOpenedStatus } from '../../BLL/selectors/profile-selectors'
 import { selectHeaderHeight } from '../../BLL/selectors/selectors'
 import { appActions, initialize } from '../../BLL/reducer-app'
-import { io, Socket } from 'socket.io-client'
+import { socketService } from '../../DAL/socket'
 
 const { Content } = Layout
 
@@ -52,25 +52,20 @@ const Article: React.FC<ArticlePropType> = React.memo(({
   }, [])
 
   useEffect(() => {
-    const newSocket: Socket = io("http://localhost:7000")
-    setSocket(newSocket)
+    if (!userId) return
+
+    const socket = socketService.connect(userId)
+
+    socket.on("getOnlineUsers", (onlineUsers: Array<{ userId: string; socketId: string }>) => {
+      dispatch(appActions.setUsersOnline(onlineUsers))
+    })
 
     return () => {
-      newSocket.disconnect()
+      socketService.disconnect()
     }
   }, [userId])
-  console.log('Socket:', socket)
-
-  useEffect(() => {
-    if (socket && userId) {
-      socket.emit("addNewUser", userId)
-      socket.on("getOnlineUsers", (onlineUsers: Array<{ userId: string; socketId: string }>) => {
-        dispatch(appActions.setUsersOnline(onlineUsers))
-      })
-    } else {
-      return
-    }
-  }, [socket && userId])
+  
+  console.log('Socket initialized')
 
   const headerHeight = useAppSelector(selectHeaderHeight)
   const userDialogId = useAppSelector(selectUserDialogId)

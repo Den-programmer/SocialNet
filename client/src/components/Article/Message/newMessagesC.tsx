@@ -106,6 +106,7 @@ const MessagesPage: React.FC = () => {
       setNewDialogSearch={setNewDialogSearch} 
       setUserDialogId={handleSetUserDialogId} 
       userDialogId={userDialogId} 
+      authorizedUserId={authorizedUserId}
       fetchUsers={fetchUsers} 
       dialogsData={dialogsData} 
       messagesLoading={messagesLoading} 

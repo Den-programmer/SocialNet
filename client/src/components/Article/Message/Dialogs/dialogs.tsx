@@ -53,10 +53,17 @@ const Dialogs: React.FC<DialogsProps> = ({ userDialogId, fetchUsers, dialogsData
     // Auto-select first dialog when dialogs load
     useEffect(() => {
         if (!userDialogId && dialogsData && dialogsData.length > 0) {
-            const firstDialog = dialogsData[0]
+            const sortedByDate = [...dialogsData].sort((a, b) => {
+                return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+            })
+            const firstDialog = sortedByDate[0]
             setUserDialogId(firstDialog.id)
         }
     }, [dialogsData, userDialogId, dispatch, setUserDialogId])
+
+    const sortedDialogs = [...filteredDialogs].sort((a, b) => {
+        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    })
 
     return (
         < div className={`${classes.dialogsSection} ${mobileShowChat ? classes.dialogsSectionHidden : ''}`}>
@@ -94,10 +101,10 @@ const Dialogs: React.FC<DialogsProps> = ({ userDialogId, fetchUsers, dialogsData
             <div className={classes.dialogsList}>
                 {dialogsLoading ? (
                     <div className={classes.loadingContainer}><Spin /></div>
-                ) : filteredDialogs.length > 0 ? (
+                ) : sortedDialogs.length > 0 ? (
                     <List
                         itemLayout="horizontal"
-                        dataSource={filteredDialogs}
+                        dataSource={sortedDialogs}
                         renderItem={(dialog: userDialogType) => {
                             const otherUser = dialog.participants.find((u: MessageParticipant) => u.id !== authorizedUserId)
                             const dialogId = dialog.id

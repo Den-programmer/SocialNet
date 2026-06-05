@@ -4,6 +4,7 @@
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -11,19 +12,43 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(0.9); }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: scale(0.9);
+  }
 }
 
 @keyframes popIn {
-  0% { opacity: 0; transform: scale(0.85); }
-  70% { transform: scale(1.04); }
-  100% { opacity: 1; transform: scale(1); }
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  70% {
+    transform: scale(1.04);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 // ===== COLORS =====
@@ -147,13 +172,18 @@ $color-success: #52c41a;
   &::-webkit-scrollbar {
     width: 4px;
   }
+
   &::-webkit-scrollbar-track {
     background: transparent;
   }
+
   &::-webkit-scrollbar-thumb {
     background: $color-border;
     border-radius: 4px;
-    &:hover { background: $color-text-muted; }
+
+    &:hover {
+      background: $color-text-muted;
+    }
   }
 }
 
@@ -397,17 +427,31 @@ $color-success: #52c41a;
   flex-direction: column;
   gap: 3px;
   background: $color-background-lightest;
+  position: relative;
+}
 
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: $color-border;
-    border-radius: 6px;
-    &:hover { background: $color-text-muted; }
+.typingIndicator {
+  font-size: 11px;
+  color: $color-text-light;
+  font-style: italic;
+  margin: 4px 0 8px 48px;
+  animation: fadeIn 0.3s ease;
+}
+
+&::-webkit-scrollbar {
+  width: 5px;
+}
+
+&::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+&::-webkit-scrollbar-thumb {
+  background: $color-border;
+  border-radius: 6px;
+
+  &:hover {
+    background: $color-text-muted;
   }
 }
 
@@ -576,9 +620,17 @@ $color-success: #52c41a;
     background: #8e8e93;
     animation: typingBounce 1.4s infinite ease-in-out both;
 
-    &:nth-child(1) { animation-delay: 0s; }
-    &:nth-child(2) { animation-delay: 0.2s; }
-    &:nth-child(3) { animation-delay: 0.4s; }
+    &:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.4s;
+    }
   }
 }
 
@@ -589,10 +641,14 @@ $color-success: #52c41a;
 }
 
 @keyframes typingBounce {
-  0%, 80%, 100% {
+
+  0%,
+  80%,
+  100% {
     transform: scale(0.6);
     opacity: 0.4;
   }
+
   40% {
     transform: scale(1);
     opacity: 1;
@@ -600,8 +656,15 @@ $color-success: #52c41a;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 // ===== DATE SEPARATOR =====
@@ -902,6 +965,7 @@ $color-success: #52c41a;
   &::-webkit-scrollbar {
     width: 4px;
   }
+
   &::-webkit-scrollbar-thumb {
     background: $color-border;
     border-radius: 4px;

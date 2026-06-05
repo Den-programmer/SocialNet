@@ -12,9 +12,18 @@ const USER_TYPING = 'USER_TYPING'
 
 export const messagesResolvers = {
   User: {
+    id: (user) => user.id || user._id.toString(),
     photos: (user) => {
       return user.profile?.photos || { small: '', large: '' }
     }
+  },
+
+  Message: {
+    id: (message) => message.id || message._id.toString()
+  },
+
+  Dialog: {
+    id: (dialog) => dialog.id || dialog._id.toString()
   },
 
   Query: {
@@ -23,6 +32,7 @@ export const messagesResolvers = {
       return Dialog.find({ participants: user._id })
         .populate('participants')
         .populate({ path: 'messages', populate: { path: 'sender receiver' } })
+        .sort({ updatedAt: -1 }) // Sort by latest activity
     },
 
     messages: async (_, { conversationId }, { user }) => {
@@ -105,12 +115,14 @@ export const messagesResolvers = {
       const conversation = await Dialog.findById(conversationId)
       if (!conversation) throw new Error('Conversation not found')
 
-      const receiverId = conversation.participants.find(
+      // Ensure participants exists and find the other user
+      const participants = conversation.participants || []
+      const receiverId = participants.find(
         p => p.toString() !== user._id.toString()
-      )
+      ) || user._id // Fallback to sender for self-chat or single participant dialogs
 
       let imageUrl
-      if (image) {
+      if (image && image.startsWith('data:')) {
         try {
           const uploadResponse = await cloudinary.uploader.upload(image, {
             folder: 'messages_images',
@@ -119,7 +131,7 @@ export const messagesResolvers = {
           imageUrl = uploadResponse.secure_url
         } catch (uploadErr) {
           console.error('Cloudinary upload failed:', uploadErr)
-          throw new Error('Image upload failed')
+          throw new Error('Image upload failed: ' + uploadErr.message)
         }
       }
 
@@ -127,22 +139,30 @@ export const messagesResolvers = {
         conversationId,
         sender: user._id,
         receiver: receiverId,
-        text,
+        text: text || '',
         image: imageUrl || undefined,
         createdAt: new Date()
       })
 
-      await message.save()
+      try {
+        await message.save()
 
-      conversation.messages.push(message._id)
-      conversation.updatedAt = new Date()
-      await conversation.save()
+        // Update dialog references and activity
+        await Dialog.findByIdAndUpdate(conversationId, {
+          $push: { messages: message._id },
+          updatedAt: new Date(),
+          lastDialogActivityDate: new Date(),
+          lastMessage: text || (imageUrl ? 'Image' : '')
+        })
 
-      const populatedMessage = await message.populate('sender receiver')
+        const populatedMessage = await message.populate('sender receiver')
+        pubsub.publish(MESSAGE_SENT, { messageSent: populatedMessage })
 
-      pubsub.publish(MESSAGE_SENT, { messageSent: populatedMessage })
-
-      return populatedMessage
+        return populatedMessage
+      } catch (saveErr) {
+        console.error('Failed to save message:', saveErr)
+        throw new Error('Failed to save message to database')
+      }
     },
 
     deleteDialog: async (_, { dialogId }, { user }) => {

@@ -34,7 +34,7 @@ const AddPostForm: React.FC<IAddPostForm> = ({ setIsAddPostWindowOpen, getPostIm
                 <h4>Adding a new post!</h4>
             </div>
             <div className={classes.photo}>
-                <img loading="lazy" src={postPhoto ? postPhoto : noPostPhoto} alt="" />
+                <img loading="lazy" src={postPhoto || noPostPhoto} alt="" />
             </div>
             <div className={classes.btn_selectPhoto}>
                 <label htmlFor="fileInputAddPostPhoto">Select photo</label>

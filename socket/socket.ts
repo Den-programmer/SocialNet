@@ -14,9 +14,28 @@ io.on("connection", (socket) => {
         if (!onlineUsers.some((user) => user.userId === userId)) {
             onlineUsers.push({ userId, socketId: socket.id });
             console.log("Online users:", onlineUsers);
+        } else {
+            // Update socketId if user already exists
+            const index = onlineUsers.findIndex(u => u.userId === userId);
+            onlineUsers[index].socketId = socket.id;
         }
         io.emit("getOnlineUsers", onlineUsers);
     });
+
+    socket.on("sendMessage", (message) => {
+        const user = onlineUsers.find((user) => user.userId === message.receiverId);
+        if (user) {
+            io.to(user.socketId).emit("getMessage", message);
+        }
+    });
+
+    socket.on("typing", (data) => {
+        const user = onlineUsers.find((user) => user.userId === data.receiverId);
+        if (user) {
+            io.to(user.socketId).emit("userTyping", data);
+        }
+    });
+
     socket.on("disconnect", () => {
         onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
         console.log("A user disconnected!", socket.id);
