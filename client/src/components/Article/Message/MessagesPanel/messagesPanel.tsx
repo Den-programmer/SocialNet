@@ -1,16 +1,13 @@
 import classes from '../messages.module.scss'
 import { Spin } from 'antd'
 import { useEffect, useRef, useState } from 'react'
-import { selectUsersOnline } from '../../../../BLL/selectors/selectors'
-import { useAppSelector } from '../../../../hooks/hooks'
 
-import { MessageType, userDialogType, MessageParticipant } from '../../../../types/MessagesTypes/messagesTypes'
+import { MessageType, userDialogType } from '../../../../types/MessagesTypes/messagesTypes'
 import NoMessages from './noMessages/noMessages'
 import NoConversation from './noConversation/noConversation'
 import MessageFragment from './messageFragment/messageFragment'
 import MessagesHeader from './MessagesHeader/messageHeader'
 import MessagesInputArea from './MessagesInputArea/messagesInputArea'
-import { wsClient } from '../../../../DAL/graphQL/wsClient'
 import { socketService } from '../../../../DAL/socket'
 
 interface MessagesPanelProps {
@@ -27,58 +24,27 @@ interface MessagesPanelProps {
 const MessagesPanel: React.FC<MessagesPanelProps> = ({ messages, selectedDialog, userDialogId, authorizedUserId, setLightboxImage, messagesLoading, mobileShowChat, setMobileShowChat }) => {
    
     const messagesEndRef = useRef<HTMLDivElement | null>(null)
-    const onlineUsers = useAppSelector(selectUsersOnline)
     const [typingUser, setTypingUser] = useState<string | null>(null)
 
     useEffect(() => {
         if (!userDialogId) return
 
-        // 1. GraphQL Subscription
-        const unsubGql = wsClient.subscribe(
-            {
-                query: `
-                subscription OnUserTyping($conversationId: ID) {
-                  userTyping(conversationId: $conversationId) {
-                    userId
-                    username
-                    conversationId
-                    isTyping
-                  }
-                }
-              `,
-                variables: { conversationId: userDialogId }
-            },
-            {
-                next: ({ data }: any) => {
-                    const typing = data?.userTyping
-                    if (typing && typing.userId !== authorizedUserId) {
-                        setTypingUser(typing.isTyping ? typing.username : null)
-                    }
-                },
-                error: () => { },
-                complete: () => { }
+        const handleUserTyping = (data: { userId: string; username: string; conversationId: string; isTyping: boolean }) => {
+            if (data.conversationId === userDialogId && data.userId !== authorizedUserId) {
+                setTypingUser(data.isTyping ? data.username : null)
             }
-        )
-
-        // 2. Socket.IO listener
-        const socket = socketService.socket
-        if (socket) {
-            socket.on('userTyping', (data: any) => {
-                if (data.conversationId === userDialogId) {
-                    setTypingUser(data.isTyping ? data.username : null)
-                }
-            })
         }
 
+        const removeReadySubscription = socketService.onSocketAvailable((socket) => {
+            socket.on('userTyping', handleUserTyping)
+        })
+
         return () => {
-            unsubGql()
-            socket?.off('userTyping')
+            removeReadySubscription()
+            socketService.socket?.off('userTyping', handleUserTyping)
             setTypingUser(null)
         }
     }, [userDialogId, authorizedUserId])
-
-    const selectedConversationOtherId = selectedDialog?.participants?.find((u: MessageParticipant) => u.id !== authorizedUserId)?.id
-    const isSelectedUserOnline = onlineUsers.some((u: { userId: string }) => u.userId === selectedConversationOtherId)
 
     
 
@@ -117,6 +83,7 @@ const MessagesPanel: React.FC<MessagesPanelProps> = ({ messages, selectedDialog,
         })()
 
         return <MessageFragment
+            key={msg.id}
             userDialogId={userDialogId}
             msg={msg}
             idx={idx}

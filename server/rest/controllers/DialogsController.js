@@ -1,7 +1,9 @@
+import mongoose from 'mongoose'
 import User from '../models/user.js'
 import Dialog from '../models/dialog.js'
+import Message from '../models/message.js'
 import { catchRes, StandartRes } from '../routes/responses/responses.js'
-import mongoose from 'mongoose'
+import { serializeDialog } from '../functions/messageSerializers.js'
 
 class DialogsController {
   async getAllDialogs(req, res) {
@@ -11,21 +13,21 @@ class DialogsController {
       }
 
       const dialogs = await Dialog.find({ participants: req.user })
-        .populate({
-          path: 'participants',
-          select: 'username',
-          match: { _id: { $ne: req.user } }
-        })
+        .sort({ updatedAt: -1 })
+        .populate([
+          { path: 'participants', select: 'username email profile.photos' },
+          {
+            path: 'messages',
+            populate: {
+              path: 'sender receiver',
+              select: 'username email profile.photos'
+            }
+          }
+        ])
 
-      const filteredDialogs = dialogs.map(dialog => {
-        const otherUser = dialog.participants.find(p => p !== null)
-        return {
-          ...dialog.toObject(),
-          otherUser
-        }
-      })
+      const formattedDialogs = dialogs.map(dialog => serializeDialog(dialog))
 
-      res.status(200).json(new StandartRes(0, 'Dialogs fetched successfully', { dialogs: filteredDialogs }))
+      res.status(200).json(new StandartRes(0, 'Dialogs fetched successfully', { dialogs: formattedDialogs }))
     } catch (e) {
       console.error('Error in fetching dialogs:', e)
       res.status(500).json({ error: 'Internal Server Error', details: e.message })
@@ -44,39 +46,54 @@ class DialogsController {
         return res.status(400).json({ message: 'Invalid User ID' })
       }
 
-      const currentUserId = req.user
+      const currentUserId = req.user.toString()
       if (currentUserId === userId) {
         return res.status(400).json({ message: 'Cannot create a dialog with yourself' })
       }
 
-      const userObjectId = userId
-      const currentUserObjectId = currentUserId
-
-      const user = await User.findById(userObjectId)
+      const user = await User.findById(userId)
       if (!user) {
         return res.status(404).json({ message: 'User not found' })
       }
 
-      const existingDialog = await Dialog.findOne({
-        participants: { $all: [currentUserObjectId, userObjectId] }
-      })
+      let dialog = await Dialog.findOne({
+        participants: { $all: [currentUserId, userId] }
+      }).populate([
+        { path: 'participants', select: 'username email profile.photos' },
+        {
+          path: 'messages',
+          populate: {
+            path: 'sender receiver',
+            select: 'username email profile.photos'
+          }
+        }
+      ])
 
-      if (existingDialog) {
-        return res.status(409).json({ message: 'Dialog already exists' })
+      if (!dialog) {
+        dialog = new Dialog({
+          participants: [currentUserId, userId],
+          messages: [],
+          lastDialogActivityDate: new Date(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          newMessagesCount: 0,
+          userName: user.username
+        })
+
+        await dialog.save()
+        await dialog.populate([
+          { path: 'participants', select: 'username email profile.photos' },
+          {
+            path: 'messages',
+            populate: {
+              path: 'sender receiver',
+              select: 'username email profile.photos'
+            }
+          }
+        ])
       }
 
-      const dialog = new Dialog({
-        participants: [currentUserObjectId, userObjectId],
-        lastDialogActivityDate: new Date(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        newMessagesCount: 0,
-        userName: user.username
-      })
-
-      await dialog.save()
-
-      res.status(201).json(new StandartRes(0, 'Dialog created successfully', { dialog }))
+      res.status(200).json(new StandartRes(0, 'Dialog ready successfully', { dialog: serializeDialog(dialog) }))
     } catch (e) {
       console.error('Error in addDialog:', e)
       res.status(500).json({ message: 'Internal Server Error', error: e.message })
@@ -95,14 +112,11 @@ class DialogsController {
         return res.status(404).json({ message: 'Dialog not found' })
       }
 
-      // Security check: Only participants can delete the dialog
       const isParticipant = dialog.participants.some(p => p.toString() === req.user)
       if (!isParticipant) {
         return res.status(403).json({ message: 'Not authorized to delete this dialog' })
       }
 
-      // Delete all messages belonging to this dialog
-      const Message = (await import('../models/message.js')).default
       await Message.deleteMany({ conversationId: dialogId })
 
       const deletedDialog = await Dialog.findByIdAndDelete(dialogId)
@@ -110,8 +124,14 @@ class DialogsController {
         return res.status(404).json({ message: 'Dialog not found' })
       }
 
-      res.status(200).json(new StandartRes(0, 'Dialog deleted successfully', { dialog: deletedDialog }))
+      res.status(200).json(new StandartRes(0, 'Dialog deleted successfully', {
+        dialog: {
+          id: deletedDialog.id || deletedDialog._id.toString(),
+          participants: deletedDialog.participants.map(participant => participant.toString())
+        }
+      }))
     } catch (e) {
+      console.error('Error in deleteDialog:', e)
       res.status(500).json(catchRes)
     }
   }

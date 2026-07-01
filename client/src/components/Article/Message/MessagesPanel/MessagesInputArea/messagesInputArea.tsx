@@ -10,7 +10,7 @@ import {
 import Upload, { UploadChangeParam, UploadFile } from 'antd/es/upload'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import { EmojiPickerContent } from '../../messages-utils/messages-utils'
-import { useSendDialogMessagesMutation, useSetTypingMutation } from '../../../../../DAL/graphQL/graphqlApi'
+import { useSendDialogMessagesMutation } from '../../../../../DAL/messagesApi'
 import imageCompression from 'browser-image-compression'
 import { socketService } from '../../../../../DAL/socket'
 import { userDialogType } from '../../../../../types/MessagesTypes/messagesTypes'
@@ -26,7 +26,6 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
     const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
     const [sendMessage, { isLoading: isSending }] = useSendDialogMessagesMutation()
-    const [setTyping] = useSetTypingMutation()
 
     const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
     const isTypingRef = useRef(false)
@@ -44,6 +43,18 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
     const [input, setInput] = useState('')
     const [imageUrl, setImageUrl] = useState<string>()
 
+    const emitTyping = (isTyping: boolean) => {
+        const receiverId = selectedDialog?.participants.find(p => p.id !== authorizedUserId)?.id
+        if (!receiverId) return
+
+        socketService.socket?.emit('typing', {
+            conversationId,
+            receiverId,
+            isTyping,
+            username: selectedDialog?.participants.find(p => p.id === authorizedUserId)?.username
+        })
+    }
+
     const handleSend = async () => {
         if ((!input.trim() && !imageUrl) || !conversationId || isSending) return
         const text = input.trim()
@@ -54,23 +65,12 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
 
         if (isTypingRef.current) {
             isTypingRef.current = false
-            setTyping({ conversationId, isTyping: false })
             if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
+            emitTyping(false)
         }
 
         try {
-            const result = await sendMessage({ conversationId, text, image: imageUrl }).unwrap()
-            
-            // Real-time notification via Socket.IO
-            if (result && selectedDialog) {
-                const receiverId = selectedDialog.participants.find(p => p.id !== authorizedUserId)?.id
-                if (receiverId) {
-                    socketService.socket?.emit('sendMessage', {
-                        ...result,
-                        receiverId
-                    })
-                }
-            }
+            await sendMessage({ conversationId, text, image: imageUrl }).unwrap()
         } catch {
             antMessage.error('Failed to send message')
         }
@@ -81,37 +81,23 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
     useEffect(() => {
         return () => {
             if (isTypingRef.current) {
-                setTyping({ conversationId, isTyping: false })
+                emitTyping(false)
             }
             if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
         }
-    }, [conversationId, setTyping])
-
-    const emitTyping = (isTyping: boolean) => {
-        const receiverId = selectedDialog?.participants.find(p => p.id !== authorizedUserId)?.id
-        if (receiverId) {
-            socketService.socket?.emit('typing', {
-                conversationId,
-                receiverId,
-                isTyping,
-                username: selectedDialog?.participants.find(p => p.id === authorizedUserId)?.username
-            })
-        }
-    }
+    }, [conversationId])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setInput(e.target.value)
 
         if (!isTypingRef.current) {
             isTypingRef.current = true
-            setTyping({ conversationId, isTyping: true })
             emitTyping(true)
         }
 
         if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
         typingTimeoutRef.current = setTimeout(() => {
             isTypingRef.current = false
-            setTyping({ conversationId, isTyping: false })
             emitTyping(false)
         }, 3000)
     }

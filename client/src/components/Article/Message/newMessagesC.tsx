@@ -8,7 +8,7 @@ import {
   useGetAllDialogsQuery,
   useStartDialogMutation,
   useDeleteDialogMutation,
-} from '../../../DAL/graphQL/graphqlApi'
+} from '../../../DAL/messagesApi'
 import { setUserDialogId } from '../../../BLL/reducer-messages'
 import { useLazyGetUsersQuery } from '../../../DAL/usersApi'
 import classes from './messages.module.scss'

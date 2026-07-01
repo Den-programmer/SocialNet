@@ -26,4 +26,10 @@ export type userDialogType = {
     isActive?: boolean
     hasNewMessages?: boolean
     newMessagesCount?: number
+    userName?: string
+    photos?: {
+        small: string | null
+        large: string | null
+    }
+    lastMessage?: string
 }

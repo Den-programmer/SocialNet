@@ -10,7 +10,6 @@ import {
     PlusOutlined
 } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
-import { useAppDispatch } from '../../../../hooks/hooks'
 import { userDialogType, MessageParticipant } from '../../../../types/MessagesTypes/messagesTypes'
 import { userType } from '../../../../types/FriendsType/friendsType'
 
@@ -34,7 +33,6 @@ interface DialogsProps {
 }
 
 const Dialogs: React.FC<DialogsProps> = ({ userDialogId, fetchUsers, dialogsData, dialogsLoading, authorizedUserId, setUserDialogId, setNewDialogSearch, setShowNewDialogModal, setDeleteDialogId, mobileShowChat, setMobileShowChat }: DialogsProps) => {
-    const dispatch = useAppDispatch()
     const [search, setSearch] = useState('')
 
     const handleOpenNewDialog = () => {
@@ -50,16 +48,24 @@ const Dialogs: React.FC<DialogsProps> = ({ userDialogId, fetchUsers, dialogsData
         return otherUser?.username?.toLowerCase().includes(search.toLowerCase())
     })
 
-    // Auto-select first dialog when dialogs load
+    // Keep the selected dialog valid when the cache changes.
     useEffect(() => {
-        if (!userDialogId && dialogsData && dialogsData.length > 0) {
-            const sortedByDate = [...dialogsData].sort((a, b) => {
-                return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-            })
-            const firstDialog = sortedByDate[0]
-            setUserDialogId(firstDialog.id)
+        if (!dialogsData || dialogsData.length === 0) {
+            if (userDialogId) {
+                setUserDialogId('')
+            }
+            return
         }
-    }, [dialogsData, userDialogId, dispatch, setUserDialogId])
+
+        const sortedByDate = [...dialogsData].sort((a, b) => {
+            return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        })
+        const selectedDialogExists = dialogsData.some((dialog) => dialog.id === userDialogId)
+
+        if (!selectedDialogExists) {
+            setUserDialogId(sortedByDate[0]?.id || '')
+        }
+    }, [dialogsData, userDialogId, setUserDialogId])
 
     const sortedDialogs = [...filteredDialogs].sort((a, b) => {
         return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()

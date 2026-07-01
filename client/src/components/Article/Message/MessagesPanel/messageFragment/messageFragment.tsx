@@ -6,7 +6,7 @@ import {
     DeleteOutlined
 } from '@ant-design/icons'
 import { MessageType } from '../../../../../types/MessagesTypes/messagesTypes'
-import { useDeleteMessageMutation } from '../../../../../DAL/graphQL/graphqlApi'
+import { useDeleteMessageMutation } from '../../../../../DAL/messagesApi'
 
 interface MessageProps {
     msg: MessageType

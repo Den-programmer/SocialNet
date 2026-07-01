@@ -4,14 +4,6 @@ dotenv.config()
 import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
-import http from 'http'
-import { WebSocketServer } from 'ws'
-import { createHandler } from 'graphql-http/lib/use/express'
-import { useServer } from 'graphql-ws/lib/use/ws'
-import { makeExecutableSchema } from '@graphql-tools/schema'
-
-import { typeDefs, resolvers } from './graphql/schema.js'
-import {getContext} from './graphql/context.js'
 import { securityHeaders, corsConfig, rateLimitMiddleware, validateInputLength } from './security/securityHeaders.js'
 
 import authRoutes from './rest/routes/auth.routes.js'
@@ -31,11 +23,10 @@ import messagesRoutes from './rest/routes/messages.routes.js'
 
 const app = express()
 
-// Security middleware
 app.use(securityHeaders)
 app.use(cors(corsConfig))
 app.use(validateInputLength('10mb'))
-app.use(rateLimitMiddleware(100, 60000)) // 100 requests per minute
+app.use(rateLimitMiddleware(100, 60000))
 
 app.use(express.json({ limit: '10mb' }))
 
@@ -52,45 +43,16 @@ app.use('/api/notifications', notificationsRoutes)
 app.use('/api/images', imagesRoutes)
 app.use('/api/dialogs', dialogsRoutes)
 app.use('/api/messages', messagesRoutes)
-// app.use("/api/ai", AIroutes)
-
-const schema = makeExecutableSchema({ typeDefs, resolvers })
-
-const httpServer = http.createServer(app)
-
-const wsServer = new WebSocketServer({
-  server: httpServer,
-  path: '/graphql'
-})
-
-app.use(
-  '/graphql',
-  createHandler({
-    schema,
-    context: async (req) => {
-      return getContext({ req })
-    }
-  })
-)
-
-useServer(
-  {
-    schema,
-    context: async (ctx) => {
-      return getContext({ connection: ctx })
-    }
-  },
-  wsServer
-)
+// app.use('/api/ai', AIroutes)
 
 async function startApp() {
   try {
     await mongoose.connect(process.env.DB_CONNECTION)
-    httpServer.listen(process.env.PORT || 8000, () => {
-      console.log(`🚀 Server running on port ${process.env.PORT || 8000}`)
+    app.listen(process.env.PORT || 8000, () => {
+      console.log(`Server running on port ${process.env.PORT || 8000}`)
     })
   } catch (err) {
-    console.error('❌ Failed to start server:', err)
+    console.error('Failed to start server:', err)
     process.exit(1)
   }
 }

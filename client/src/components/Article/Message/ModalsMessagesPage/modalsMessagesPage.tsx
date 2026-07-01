@@ -13,7 +13,7 @@ interface ModalsMessagesPageProps {
     filteredUsers: userType[]
     isUsersLoading: boolean
     authorizedUserId: string
-    deleteDialog: (args: { dialogId: string }) => { unwrap: () => Promise<boolean> }
+    deleteDialog: (args: { dialogId: string }) => { unwrap: () => Promise<unknown> }
     handleStartDialog: (userId: string) => void
     userDialogId: string
     setUserDialogId: (dialogId: string) => void

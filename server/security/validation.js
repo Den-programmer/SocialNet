@@ -82,11 +82,18 @@ export const updatePostContentSchema = z.object({
 
 export const messageSchema = z.object({
   content: z.string()
-    .min(1, 'Message cannot be empty')
     .max(5000, 'Message must be less than 5000 characters')
-    .trim(),
-  image: z.string().url().optional().or(z.string().length(0)),
-})
+    .trim()
+    .optional()
+    .default(''),
+  image: z.string().optional().default(''),
+}).refine(
+  (payload) => Boolean(payload.content?.trim()) || Boolean(payload.image?.trim()),
+  {
+    message: 'Message cannot be empty',
+    path: ['content'],
+  }
+)
 
 export const notificationSchema = z.object({
   title: z.string()

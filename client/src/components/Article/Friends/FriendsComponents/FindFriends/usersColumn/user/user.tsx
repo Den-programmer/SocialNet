@@ -6,7 +6,7 @@ import { scrollToTop } from '../../../../../../../utils/helpers/functions/functi
 import { addToBlacklist } from '../../../../../../../BLL/reducer-friends'
 import { useAddNotificationMutation } from '../../../../../../../DAL/notificationApi'
 import { setUserDialogId } from '../../../../../../../BLL/reducer-messages'
-import { useStartDialogMutation } from '../../../../../../../DAL/graphQL/graphqlApi'
+import { useStartDialogMutation } from '../../../../../../../DAL/messagesApi'
 import { useAppDispatch } from '../../../../../../../hooks/hooks'
 
 interface IUser {
