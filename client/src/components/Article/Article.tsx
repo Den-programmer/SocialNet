@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useState } from 'react'
+import React, { Suspense, lazy, useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import '../../App.css'
 import { Layout, Spin } from 'antd'
@@ -44,8 +44,6 @@ const Article: React.FC<ArticlePropType> = React.memo(({
   const dispatch = useAppDispatch()
 
   const userId = useAppSelector(state => selectAuthorizedUserId(state) || '')
-
-  const [socket, setSocket] = useState<Socket | null>(null)
 
   useEffect(() => {
     dispatch(initialize())

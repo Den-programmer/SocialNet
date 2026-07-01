@@ -34,9 +34,6 @@ export const sanitizeObject = <T>(obj: T): T => {
   
   return obj
 }
-  
-  return obj
-}
 
 /**
  * Escape HTML entities - safe for displaying user content
@@ -170,7 +167,7 @@ export const validateFormData = (data: Record<string, unknown>): {
   }
   
   // Validate username if present
-  if (data.username && !validateUsername(data.username)) {
+  if (data.username && typeof data.username === 'string' && !validateUsername(data.username)) {
     errors.username = 'Invalid username format'
   }
   

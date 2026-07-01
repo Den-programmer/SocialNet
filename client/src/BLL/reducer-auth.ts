@@ -1,16 +1,45 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { authApi } from '../DAL/authApi'
 
-let accessToken: string | null = ''
+const TOKEN_STORAGE_KEY = 'authToken'
+const REMEMBER_ME_STORAGE_KEY = 'rememberMe'
 
-export const setToken = (token: string) => {
+const readStorage = (key: string) => {
+  if (typeof localStorage === 'undefined') return null
+  return localStorage.getItem(key)
+}
+
+const writeStorage = (key: string, value: string) => {
+  if (typeof localStorage === 'undefined') return
+  localStorage.setItem(key, value)
+}
+
+const removeStorage = (key: string) => {
+  if (typeof localStorage === 'undefined') return
+  localStorage.removeItem(key)
+}
+
+const storedToken = readStorage(TOKEN_STORAGE_KEY)
+const storedRememberMe = readStorage(REMEMBER_ME_STORAGE_KEY) === 'true'
+
+let accessToken: string | null = storedToken
+
+export const setToken = (token: string, rememberMe = false) => {
   accessToken = token
+
+  if (rememberMe && token) {
+    writeStorage(TOKEN_STORAGE_KEY, token)
+    return
+  }
+
+  removeStorage(TOKEN_STORAGE_KEY)
 }
 
 export const getToken = () => accessToken
 
 export const clearToken = () => {
   accessToken = null
+  removeStorage(TOKEN_STORAGE_KEY)
 }
 
 export type AuthState = {
@@ -23,15 +52,13 @@ export type AuthState = {
   isRegister: boolean
 }
 
-const userData = localStorage.getItem('userData')
+const userData = readStorage('userData')
 const standartUserId = userData ? JSON.parse(userData).userId : '0'
-const savedRememberMe = localStorage.getItem('rememberMe') === 'true'
-
 const initialState: AuthState = {
   userId: standartUserId,
   email: null,
-  rememberMe: savedRememberMe,
-  isAuth: getToken() ? true : false,
+  rememberMe: storedRememberMe,
+  isAuth: !!getToken(),
   captchaUrl: null,
   lastUrl: '',
   isRegister: false
@@ -51,16 +78,20 @@ const authSlice = createSlice({
   extraReducers: builder => {
     builder.addMatcher(
       authApi.endpoints.register.matchFulfilled,
-      (state, { payload }) => {
+      (state, { payload, meta }) => {
+        const rememberMe = (meta.arg.originalArgs as { rememberMe?: boolean })?.rememberMe ?? false
+
         state.isRegister = true
         state.userId = payload.userId
         state.email = payload.userId
         state.isAuth = true
+        state.rememberMe = rememberMe
 
-        localStorage.setItem('userData', JSON.stringify({
+        writeStorage('userData', JSON.stringify({
           userId: payload.userId
         }))
-        setToken(payload.token || '')
+        writeStorage(REMEMBER_ME_STORAGE_KEY, rememberMe.toString())
+        setToken(payload.token || '', rememberMe)
       }
     )
 
@@ -74,11 +105,11 @@ const authSlice = createSlice({
         state.isAuth = true
         state.rememberMe = rememberMe
 
-        localStorage.setItem('userData', JSON.stringify({
+        writeStorage('userData', JSON.stringify({
           userId: payload.userId
         }))
-        localStorage.setItem('rememberMe', rememberMe.toString())
-        setToken(payload.token || '')
+        writeStorage(REMEMBER_ME_STORAGE_KEY, rememberMe.toString())
+        setToken(payload.token || '', rememberMe)
       }
     )
 
@@ -93,8 +124,8 @@ const authSlice = createSlice({
         state.lastUrl = ''
         state.isRegister = false
 
-        localStorage.removeItem('userData')
-        localStorage.removeItem('rememberMe')
+        removeStorage('userData')
+        removeStorage(REMEMBER_ME_STORAGE_KEY)
 
         clearToken()
       }

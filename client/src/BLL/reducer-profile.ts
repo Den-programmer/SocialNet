@@ -57,7 +57,7 @@ const initialState: ProfileState = {
     { id: 7013, title: 'Notifications', isChosen: false, path: '/Notifications' },
     { id: 7002, title: 'Messages', isChosen: false, path: '/Messages' },
     { id: 7006, title: 'Friends', isChosen: false, path: '/Friends/DataFriends' },
-    { id: 7014, title: 'Following', isChosen: false, path: '/' }
+    { id: 7014, title: 'AI', isChosen: false, path: '/AIPage' }
   ],
   changePhotosMenu: [
     { id: 1, title: 'Change profile photo', isActive: true },

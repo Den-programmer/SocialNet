@@ -5,6 +5,8 @@ import LoginImg from './LoginImg/loginImg'
 import { RegisterFormDataType } from '../../Login/login'
 
 const { Title, Text } = Typography
+const savedRememberMe =
+  typeof localStorage !== 'undefined' && localStorage.getItem('rememberMe') === 'true'
 
 interface LoginFormPropType {
   isLoadingLogin: boolean
@@ -54,7 +56,7 @@ const LoginForm: React.FC<LoginFormPropType> = ({
           form={form}
           layout="vertical"
           onFinish={values => onSubmit(values)}
-          initialValues={{ rememberMe: false }}
+          initialValues={{ rememberMe: savedRememberMe }}
         >
           <Form.Item
             name="email"
