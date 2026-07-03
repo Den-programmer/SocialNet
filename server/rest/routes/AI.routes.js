@@ -9,6 +9,6 @@ const router = Router()
 
 router.use(verifyToken) 
 
-router.post('/getAIoutput', AIController.getAIContent)
+router.post('/chat', AIController.getAIContent)
 
 export default router

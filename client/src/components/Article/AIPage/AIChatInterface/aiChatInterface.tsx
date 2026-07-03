@@ -1,55 +1,79 @@
-import React from 'react'
-import { useGetGroqChatCompletionQuery } from "../../../../DAL/AI/aiAPI"
-import classes from './aiChatInterface.module.scss'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Card, Input, Button, Avatar, Typography } from 'antd'
 import { SendOutlined, RobotOutlined, UserOutlined } from '@ant-design/icons'
+import { useGetChatCompletionMutation } from '../../../../DAL/AI/aiAPI'
+import classes from './aiChatInterface.module.scss'
 
 const { Text } = Typography
 
 interface Msg {
     role: 'user' | 'ai'
-    text: string 
+    text: string
 }
 
 const AIChatInterface: React.FC = () => {
-    let data = {
-      data: {
-        content: "This is a mock AI response."
-      }
-    }
-    const isLoading: boolean = false
-    const error = "In developing"
     const [value, setValue] = useState('')
-    // const { data, error, isLoading } = useGetGroqChatCompletionQuery(value)
-    const content = data?.data.content || ''
 
     const [messages, setMessages] = useState<Msg[]>([
-        { role: 'ai', text: 'Hi! How can I help you?' }
+        {
+            role: 'ai',
+            text: 'Hi! How can I help you?'
+        }
     ])
-    
-    const send = () => {
-        if (!value.trim()) return
+
+    const [getChatCompletion, { isLoading }] =
+        useGetChatCompletionMutation()
+
+    const send = async () => {
+        const text = value.trim()
+
+        if (!text) return
 
         setMessages((prev) => [
             ...prev,
-            { role: 'user', text: value },
-            { role: 'ai', text: error ? error.toString() : isLoading ? '...' : content }
+            {
+                role: 'user',
+                text
+            }
         ])
 
         setValue('')
+
+        try {
+            const response = await getChatCompletion(text).unwrap()
+
+            setMessages((prev) => [
+                ...prev,
+                {
+                    role: 'ai',
+                    text: response.data.content
+                }
+            ])
+        } catch {
+            setMessages((prev) => [
+                ...prev,
+                {
+                    role: 'ai',
+                    text: 'Something went wrong.'
+                }
+            ])
+        }
     }
 
     return (
         <div className={classes.aiChat}>
-            <span>AI Chat Interface</span>
             <Card className={classes.aiChatCard}>
                 <div className={classes.aiChatMessages}>
                     {messages.map((m, i) => (
-                        <div key={i} className={classes.aiMsg + ` ${m.role}`}>
+                        <div key={i} className={`${classes.aiMsg} ${classes[m.role]}`}>
                             <Avatar
-                                icon={m.role === 'ai' ? <RobotOutlined /> : <UserOutlined />}
+                                icon={
+                                    m.role === 'ai'
+                                        ? <RobotOutlined />
+                                        : <UserOutlined />
+                                }
                             />
+
                             <div className={classes.aiMsgBubble}>
                                 <Text>{m.text}</Text>
                             </div>
@@ -60,21 +84,27 @@ const AIChatInterface: React.FC = () => {
                 <div className={classes.aiChatInput}>
                     <Input.TextArea
                         value={value}
-                        onChange={e => setValue(e.target.value)}
-                        onPressEnter={e => {
+                        onChange={(e) => setValue(e.target.value)}
+                        autoSize={{ minRows: 1, maxRows: 4 }}
+                        placeholder="Write a message..."
+                        onPressEnter={(e) => {
                             if (!e.shiftKey) {
                                 e.preventDefault()
                                 send()
                             }
                         }}
-                        placeholder="Skriv til AI..."
-                        autoSize={{ minRows: 1, maxRows: 4 }}
                     />
-                    <Button type="primary" icon={<SendOutlined />} onClick={send} />
+
+                    <Button
+                        type="primary"
+                        loading={isLoading}
+                        icon={<SendOutlined />}
+                        onClick={send}
+                    />
                 </div>
             </Card>
         </div>
     )
 }
 
-export default AIChatInterface 
+export default AIChatInterface

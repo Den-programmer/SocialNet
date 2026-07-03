@@ -5,12 +5,9 @@ export const aiApi = createApi({
   reducerPath: 'aiApi',
   baseQuery,
   endpoints: builder => ({
-    getGroqChatCompletion: builder.query<
-      ServerResType<{ content: string }>,
-      string
-    >({
+    getChatCompletion: builder.mutation<ServerResType<{ content: string }>, string>({
       query: (content) => ({
-        url: '/api/ai/getAIoutput',
+        url: 'api//ai/chat',
         method: 'POST',
         body: { content }
       })
@@ -19,5 +16,5 @@ export const aiApi = createApi({
 })
 
 export const {
-    useGetGroqChatCompletionQuery
+  useGetChatCompletionMutation
 } = aiApi
