@@ -47,14 +47,34 @@
 .aiHistoryList {
   background: white;
   border-radius: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .aiHistoryItem {
   cursor: pointer;
   border-radius: 12px;
   padding-inline: 16px !important;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .aiHistoryItemActive {
   background: rgba(22, 119, 255, 0.08);
+}
+
+.aiHistoryItemContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.aiHistoryItemActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
