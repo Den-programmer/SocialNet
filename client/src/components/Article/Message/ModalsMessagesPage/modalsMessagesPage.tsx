@@ -1,6 +1,6 @@
 import classes from '../messages.module.scss'
 import { useState } from "react"
-import { Button, List, Input, Spin, Avatar } from "antd"
+import { Button, Input, Spin, Avatar } from "antd"
 import { SearchOutlined, UserOutlined } from '@ant-design/icons'
 import Modal from 'antd/es/modal/Modal'
 import { userDialogType } from '../../../../types/MessagesTypes/messagesTypes'
@@ -96,53 +96,42 @@ const ModalsMessagesPage: React.FC<ModalsMessagesPageProps> = ({ userDialogId, f
                         isUsersLoading ? (
                             <div className={classes.loadingContainer} style={{ height: 200 }}><Spin /></div>
                         ) : (
-                            <List
-                                className={classes.newDialogUserList}
-                                dataSource={filteredUsers}
-                                renderItem={(user: userType) => {
+                            <ul className={classes.newDialogUserList}>
+                                {filteredUsers.map((user: userType) => {
                                     const userId = String(user.id || '')
-                                    // Check if dialog already exists
                                     const existingDialog = dialogsData?.find(d => 
                                         d.participants.some(p => p.id === userId) && 
                                         d.participants.some(p => p.id === authorizedUserId)
                                     )
 
                                     return (
-                                        <List.Item
-                                            className={classes.newDialogUserItem}
-                                            actions={[
-                                                <Button
-                                                    key="start"
-                                                    type="primary"
-                                                    size="small"
-                                                    loading={startingDialogFor === userId}
-                                                    onClick={() => {
-                                                        if (existingDialog) {
-                                                            setUserDialogId(existingDialog.id)
-                                                            setShowNewDialogModal(false)
-                                                        } else {
-                                                            handleStartDialog(userId)
-                                                        }
-                                                    }}
-                                                >
-                                                    {existingDialog ? 'Open' : 'Message'}
-                                                </Button>
-                                            ]}
-                                        >
-                                            <List.Item.Meta
-                                                avatar={
-                                                    <Avatar
-                                                        src={user.profile.photos?.small as string}
-                                                        icon={!user.profile.photos?.small && <UserOutlined />}
-                                                    />
-                                                }
-                                                title={user.username}
-                                            />
-                                        </List.Item>
+                                        <li key={userId} className={classes.newDialogUserItem}>
+                                            <div className={classes.newDialogUserMeta}>
+                                                <Avatar
+                                                    src={user.profile.photos?.small as string}
+                                                    icon={!user.profile.photos?.small && <UserOutlined />}
+                                                />
+                                                <span className={classes.newDialogUserName}>{user.username}</span>
+                                            </div>
+                                            <Button
+                                                type="primary"
+                                                size="small"
+                                                loading={startingDialogFor === userId}
+                                                onClick={() => {
+                                                    if (existingDialog) {
+                                                        setUserDialogId(existingDialog.id)
+                                                        setShowNewDialogModal(false)
+                                                    } else {
+                                                        handleStartDialog(userId)
+                                                    }
+                                                }}
+                                            >
+                                                {existingDialog ? 'Open' : 'Message'}
+                                            </Button>
+                                        </li>
                                     )
-                                }}
-                                locale={{ emptyText: 'No users found' }}
-                            />
+                                })}
+                            </ul>
                         )
                     }
                 </Modal >

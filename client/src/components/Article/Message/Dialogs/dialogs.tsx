@@ -1,7 +1,6 @@
 import classes from '../messages.module.scss'
 import { Badge, Empty } from 'antd'
-import NoDialogs from '../../../common/NoDialogs/noDialogs'
-import { Avatar, Button, Input, List, Tooltip, Typography, Spin } from 'antd'
+import { Avatar, Button, Input, Tooltip, Typography, Spin } from 'antd'
 import {
     UserOutlined,
     DeleteOutlined,
@@ -108,10 +107,8 @@ const Dialogs: React.FC<DialogsProps> = ({ userDialogId, fetchUsers, dialogsData
                 {dialogsLoading ? (
                     <div className={classes.loadingContainer}><Spin /></div>
                 ) : sortedDialogs.length > 0 ? (
-                    <List
-                        itemLayout="horizontal"
-                        dataSource={sortedDialogs}
-                        renderItem={(dialog: userDialogType) => {
+                    <ul className={classes.dialogsListItems}>
+                        {sortedDialogs.map((dialog: userDialogType) => {
                             const otherUser = dialog.participants.find((u: MessageParticipant) => u.id !== authorizedUserId)
                             const dialogId = dialog.id
                             const avatarSrc = otherUser?.photos?.small || undefined
@@ -123,61 +120,55 @@ const Dialogs: React.FC<DialogsProps> = ({ userDialogId, fetchUsers, dialogsData
                                 : ''
 
                             return (
-                                <List.Item
+                                <li
+                                    key={dialogId}
                                     className={`${classes.dialogItem} ${isSelected ? classes.dialogItemSelected : classes.dialogItemUnselected}`}
                                     onClick={() => {
                                         setUserDialogId(dialogId)
                                         setMobileShowChat(true)
                                     }}
                                 >
-                                    <List.Item.Meta
-                                        avatar={
-                                            <Badge dot={isSelected} color="#1677ff" className={classes.avatarBadge}>
-                                                <Avatar
-                                                    size={46}
-                                                    icon={!avatarSrc && <UserOutlined />}
-                                                    src={avatarSrc}
-                                                    className={`${classes.avatarPrimary} ${isSelected ? classes.avatarBorder : ''}`}
-                                                />
-                                            </Badge>
-                                        }
-                                        title={
-                                            <div className={classes.dialogUserNameMetadata}>
-                                                <Text strong className={`${classes.dialogUserName} ${isSelected ? classes.dialogUserNameSelected : ''}`}>
-                                                    {conversationUsername}
-                                                </Text>
-                                                <div className={classes.dialogMetaRight}>
-                                                    {lastMsgTime && (
-                                                        <span className={classes.dialogTimestamp}>{lastMsgTime}</span>
-                                                    )}
-                                                    <Tooltip title="Delete conversation">
-                                                        <Button
-                                                            type="text"
-                                                            size="small"
-                                                            danger
-                                                            shape="circle"
-                                                            icon={<DeleteOutlined />}
-                                                            className={classes.deleteDialogButton}
-                                                            onClick={(e) => {
-                                                                e.stopPropagation()
-                                                                setDeleteDialogId(dialogId)
-                                                            }}
-                                                        />
-                                                    </Tooltip>
-                                                </div>
-                                            </div>
-                                        }
-                                        description={
-                                            <Text className={classes.dialogLastMessage}>
-                                                {lastMsg?.text?.substring(0, 45) || 'No messages yet'}
+                                    <Badge dot={isSelected} color="#1677ff" className={classes.avatarBadge}>
+                                        <Avatar
+                                            size={46}
+                                            icon={!avatarSrc && <UserOutlined />}
+                                            src={avatarSrc}
+                                            className={`${classes.avatarPrimary} ${isSelected ? classes.avatarBorder : ''}`}
+                                        />
+                                    </Badge>
+                                    <div className={classes.dialogItemContent}>
+                                        <div className={classes.dialogUserNameMetadata}>
+                                            <Text strong className={`${classes.dialogUserName} ${isSelected ? classes.dialogUserNameSelected : ''}`}>
+                                                {conversationUsername}
                                             </Text>
-                                        }
-                                    />
-                                </List.Item>
+                                            <div className={classes.dialogMetaRight}>
+                                                {lastMsgTime && (
+                                                    <span className={classes.dialogTimestamp}>{lastMsgTime}</span>
+                                                )}
+                                                <Tooltip title="Delete conversation">
+                                                    <Button
+                                                        type="text"
+                                                        size="small"
+                                                        danger
+                                                        shape="circle"
+                                                        icon={<DeleteOutlined />}
+                                                        className={classes.deleteDialogButton}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            setDeleteDialogId(dialogId)
+                                                        }}
+                                                    />
+                                                </Tooltip>
+                                            </div>
+                                        </div>
+                                        <Text className={classes.dialogLastMessage}>
+                                            {lastMsg?.text?.substring(0, 45) || 'No messages yet'}
+                                        </Text>
+                                    </div>
+                                </li>
                             )
-                        }}
-                        locale={{ emptyText: <NoDialogs /> }}
-                    />
+                        })}
+                    </ul>
                 ) : (
                     <div className={classes.noConversationsContainer}>
                         <Empty

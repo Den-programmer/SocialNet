@@ -37,3 +37,24 @@
   border-radius: 16px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
+
+.aiHistory {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.aiHistoryList {
+  background: white;
+  border-radius: 12px;
+}
+
+.aiHistoryItem {
+  cursor: pointer;
+  border-radius: 12px;
+  padding-inline: 16px !important;
+}
+
+.aiHistoryItemActive {
+  background: rgba(22, 119, 255, 0.08);
+}

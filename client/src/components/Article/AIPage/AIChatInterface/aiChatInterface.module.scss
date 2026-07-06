@@ -17,6 +17,10 @@
   margin-bottom: 16px;
 }
 
+.aiMsg.assistant {
+  flex-direction: row;
+}
+
 .aiMsg.user {
   flex-direction: row-reverse;
 }
@@ -28,7 +32,7 @@
   background: #f0f2f5;
 }
 
-.aiMsg.user .aiMsBubble {
+.aiMsg.user .aiMsgBubble {
   background: linear-gradient(135deg, #1677ff, #69b1ff);
   color: white;
 }

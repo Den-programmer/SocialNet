@@ -98,6 +98,7 @@ $color-success: #52c41a;
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
   z-index: 1;
 }
@@ -115,6 +116,8 @@ $color-success: #52c41a;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .dialogsTitle {
@@ -187,6 +190,14 @@ $color-success: #52c41a;
   }
 }
 
+.dialogsListItems {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0 4px 8px;
+}
+
 .loadingContainer {
   display: flex;
   justify-content: center;
@@ -201,16 +212,32 @@ $color-success: #52c41a;
 
 // ===== DIALOG ITEM =====
 .dialogItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   padding: 10px 12px !important;
   border-radius: 12px;
   margin: 3px 8px;
+  min-width: 0;
 
   &:hover {
     background-color: $color-background-lighter !important;
     transform: translateX(2px);
   }
+}
+
+.avatarBadge {
+  flex-shrink: 0;
+}
+
+.dialogItemContent {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
 .dialogItemSelected {
@@ -307,6 +334,7 @@ $color-success: #52c41a;
   background: #ffffff;
   position: relative;
   min-width: 0;
+  min-height: 0;
 }
 
 .noSelectionState {
@@ -362,12 +390,14 @@ $color-success: #52c41a;
   justify-content: space-between;
   gap: 16px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  min-width: 0;
 }
 
 .userInfo {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
 .userName {
@@ -375,6 +405,9 @@ $color-success: #52c41a;
   font-weight: 700;
   color: $color-text-dark;
   letter-spacing: -0.1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .userStatusActive {
@@ -416,6 +449,7 @@ $color-success: #52c41a;
 .headerActions {
   display: flex;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 // ===== MESSAGES CONTAINER =====
@@ -436,23 +470,6 @@ $color-success: #52c41a;
   font-style: italic;
   margin: 4px 0 8px 48px;
   animation: fadeIn 0.3s ease;
-}
-
-&::-webkit-scrollbar {
-  width: 5px;
-}
-
-&::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-&::-webkit-scrollbar-thumb {
-  background: $color-border;
-  border-radius: 6px;
-
-  &:hover {
-    background: $color-text-muted;
-  }
 }
 
 .messageBubble {
@@ -771,6 +788,7 @@ $color-success: #52c41a;
   background: #fff;
   gap: 8px;
   box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.04);
+  min-width: 0;
 }
 
 .imagePreview {
@@ -796,6 +814,7 @@ $color-success: #52c41a;
 
 .messageInput {
   flex-grow: 1;
+  min-width: 0;
   border-radius: 22px !important;
   padding: 10px 18px !important;
   resize: none;
@@ -987,10 +1006,31 @@ $color-success: #52c41a;
 
 // ===== RESPONSIVE BREAKPOINTS =====
 
+@media (max-width: 1200px) {
+  .dialogsSection {
+    flex: 0 0 280px;
+  }
+
+  .messagesContainer {
+    padding: 18px 20px;
+  }
+
+  .messageWrapper {
+    max-width: 74%;
+  }
+}
+
 // Tablet: narrower sidebar, smaller paddings
 @media (max-width: 992px) {
   .dialogsSection {
     flex: 0 0 260px;
+  }
+
+  .dialogsHeader,
+  .messagesHeader,
+  .inputSection {
+    padding-left: 12px;
+    padding-right: 12px;
   }
 
   .messagesContainer {
@@ -1074,6 +1114,7 @@ $color-success: #52c41a;
   .messagesHeader {
     padding: 10px 12px;
     gap: 8px;
+    align-items: flex-start;
   }
 
   .inputSection {
@@ -1092,6 +1133,14 @@ $color-success: #52c41a;
   .messageInput {
     padding: 8px 14px !important;
     font-size: 13px;
+  }
+
+  .headerActions {
+    gap: 4px;
+  }
+
+  .dialogsHeaderActions {
+    gap: 4px;
   }
 
   .noSelectionState {
@@ -1129,6 +1178,7 @@ $color-success: #52c41a;
 
   .messagesHeader {
     padding: 8px 10px;
+    gap: 6px;
   }
 
   .userName {
@@ -1142,12 +1192,15 @@ $color-success: #52c41a;
   .inputSection {
     padding: 6px 8px;
     gap: 4px;
+    flex-wrap: wrap;
   }
 
   .messageInput {
     padding: 7px 12px !important;
     font-size: 13px;
     border-radius: 18px !important;
+    width: 100%;
+    order: 1;
   }
 
   .emojiButton,
@@ -1156,6 +1209,18 @@ $color-success: #52c41a;
     width: 36px !important;
     height: 36px !important;
     min-width: 36px !important;
+  }
+
+  .emojiButton {
+    order: 2;
+  }
+
+  .uploadButton {
+    order: 3;
+  }
+
+  .sendButton {
+    order: 4;
   }
 
   .messageContent {

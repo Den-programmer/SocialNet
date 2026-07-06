@@ -5,7 +5,7 @@ class OllamaProvider {
     }
 
     async chat(messages) {
-        const response = await fetch(`${this.url}/api/chat`, {
+        const res = await fetch(`${this.url}/api/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -17,11 +17,11 @@ class OllamaProvider {
             })
         })
 
-        if (!response.ok) {
-            throw new Error(await response.text())
+        if (!res.ok) {
+            throw new Error(await res.text())
         }
 
-        const data = await response.json()
+        const data = await res.json()
 
         return data.message.content
     }

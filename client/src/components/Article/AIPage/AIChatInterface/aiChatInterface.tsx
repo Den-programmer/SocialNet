@@ -1,27 +1,32 @@
 import React, { useState } from 'react'
 import { Card, Input, Button, Avatar, Typography } from 'antd'
 import { SendOutlined, RobotOutlined, UserOutlined } from '@ant-design/icons'
-import { useGetChatCompletionMutation } from '../../../../DAL/AI/aiAPI'
+import { useGetChatCompletionMutation, useGetMessagesQuery } from '../../../../DAL/AI/aiAPI'
 import classes from './aiChatInterface.module.scss'
 
 const { Text } = Typography
 
-interface Msg {
-    role: 'user' | 'ai'
-    text: string
+export interface Msg {
+    role: 'user' | 'assistant'
+    content: string
 }
 
-const AIChatInterface: React.FC = () => {
+type AIChatInterfaceProps = {
+    conversationId: string
+}
+
+const AIChatInterface: React.FC<AIChatInterfaceProps> = ({ conversationId }) => {
     const [value, setValue] = useState('')
 
-    const [messages, setMessages] = useState<Msg[]>([
-        {
-            role: 'ai',
-            text: 'Hi! How can I help you?'
-        }
-    ])
+    const {
+        data: response
+    } = useGetMessagesQuery(conversationId, {
+        skip: !conversationId
+    })
 
-    const [getChatCompletion, { isLoading }] =
+    const messages = response?.data ?? []
+
+    const [getChatCompletion, { isLoading: isChatLoading }] =
         useGetChatCompletionMutation()
 
     const send = async () => {
@@ -29,53 +34,34 @@ const AIChatInterface: React.FC = () => {
 
         if (!text) return
 
-        setMessages((prev) => [
-            ...prev,
-            {
-                role: 'user',
-                text
-            }
-        ])
+        if (!conversationId)
+            return
 
         setValue('')
 
-        try {
-            const response = await getChatCompletion(text).unwrap()
-
-            setMessages((prev) => [
-                ...prev,
-                {
-                    role: 'ai',
-                    text: response.data.content
-                }
-            ])
-        } catch {
-            setMessages((prev) => [
-                ...prev,
-                {
-                    role: 'ai',
-                    text: 'Something went wrong.'
-                }
-            ])
-        }
+        await getChatCompletion({
+            conversationId,
+            content: text
+        })
     }
+
 
     return (
         <div className={classes.aiChat}>
             <Card className={classes.aiChatCard}>
                 <div className={classes.aiChatMessages}>
-                    {messages.map((m, i) => (
+                    {messages.map((m: Msg, i: number) => (
                         <div key={i} className={`${classes.aiMsg} ${classes[m.role]}`}>
                             <Avatar
                                 icon={
-                                    m.role === 'ai'
+                                    m.role === 'assistant'
                                         ? <RobotOutlined />
                                         : <UserOutlined />
                                 }
                             />
 
                             <div className={classes.aiMsgBubble}>
-                                <Text>{m.text}</Text>
+                                <Text>{m.content}</Text>
                             </div>
                         </div>
                     ))}
@@ -97,7 +83,7 @@ const AIChatInterface: React.FC = () => {
 
                     <Button
                         type="primary"
-                        loading={isLoading}
+                        loading={isChatLoading}
                         icon={<SendOutlined />}
                         onClick={send}
                     />

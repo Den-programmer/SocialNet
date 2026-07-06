@@ -1,5 +1,5 @@
 import React from 'react'
-import { Drawer, Divider, List, Button } from 'antd'
+import { Drawer, Divider, Button } from 'antd'
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 import SidebarItem from './SidebarItem/sidebarItem'
 import { useLocation } from 'react-router-dom'
@@ -34,7 +34,7 @@ const SideBar: React.FC<SideBarPropsType> = ({
 }) => {
   const location = useLocation()
   const isMobile = window.innerWidth <= 1000
-  const drawerWidth = isMobile ? '100vw' : `${sidebarWidth}px`
+  const drawerWidth = isMobile ? '100vw' : `${sidebarWidth}`
 
   const handleDrawerClose = () => {
     changeSidebarIsOpenStatus(false)
@@ -47,8 +47,6 @@ const SideBar: React.FC<SideBarPropsType> = ({
     }, 250)
   }
 
-
-
   const iconMap: SidebarIconMapType = {
     UserOutlined: UserOutlined,
     MailOutlined: MailOutlined,
@@ -58,6 +56,21 @@ const SideBar: React.FC<SideBarPropsType> = ({
     TeamOutlined: TeamOutlined,
     GlobalOutlined: GlobalOutlined
   }
+
+  const navLinksNodes = navLinks.map((link) => {
+    const icon = iconMap[link.iconKey] || <UserOutlined />
+    return <SidebarItem
+      key={link.id}
+      id={link.id}
+      isChosen={link.isChosen}
+      name={link.name}
+      choosePage={choosePage}
+      path={link.path}
+      icon={icon}
+      changeProfileNavItemChosenStatus={changeProfileNavItemChosenStatus}
+      location={location.pathname}
+    />
+  })
 
   return (
     <Drawer
@@ -72,7 +85,7 @@ const SideBar: React.FC<SideBarPropsType> = ({
       closable={false}
       onClose={handleDrawerClose}
       open={isSidebarOpen}
-      width={drawerWidth}
+      size={drawerWidth}
       styles={{
         body: {
           padding: 0,
@@ -83,25 +96,9 @@ const SideBar: React.FC<SideBarPropsType> = ({
     >
       <Divider style={{ margin: 0, backgroundColor: '#ccc' }} />
       <div onClick={handleListClick}>
-        <List
-          itemLayout="vertical"
-          dataSource={navLinks}
-          renderItem={(link) => {
-            const icon = iconMap[link.iconKey] || <UserOutlined />
-            return <SidebarItem
-              key={link.id}
-              id={link.id}
-              isChosen={link.isChosen}
-              name={link.name}
-              choosePage={choosePage}
-              path={link.path}
-              icon={icon}
-              changeProfileNavItemChosenStatus={changeProfileNavItemChosenStatus}
-              location={location.pathname}
-            />
-          }
-          }
-        />
+        <ul style={{ padding: 0, margin: 0 }}>
+          {navLinksNodes}
+        </ul>
       </div>
     </Drawer>
   )
