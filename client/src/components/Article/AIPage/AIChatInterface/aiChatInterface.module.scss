@@ -32,6 +32,43 @@
   background: #f0f2f5;
 }
 
+.aiStructuredMessage {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.aiPostGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.aiPostCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.aiPostImage {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  display: block;
+  background: #e9ecef;
+}
+
+.aiPostMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 12px 12px;
+}
+
 .aiMsg.user .aiMsgBubble {
   background: linear-gradient(135deg, #1677ff, #69b1ff);
   color: white;

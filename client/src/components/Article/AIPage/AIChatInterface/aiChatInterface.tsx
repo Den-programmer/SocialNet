@@ -7,8 +7,38 @@ import classes from './aiChatInterface.module.scss'
 const { Text } = Typography
 
 export interface Msg {
-    role: 'user' | 'assistant'
+    role: 'user' | 'assistant' | 'tool'
     content: string
+}
+
+type RecentPostsMessage = {
+    type: 'recentPosts'
+    text: string
+    posts: Array<{
+        index: number
+        title: string
+        author: string
+        summary: string
+        imageUrl: string
+    }>
+}
+
+const parseStructuredContent = (content: string): RecentPostsMessage | null => {
+    try {
+        const parsed = JSON.parse(content)
+
+        if (!parsed || typeof parsed !== 'object') {
+            return null
+        }
+
+        if (parsed.type !== 'recentPosts' || typeof parsed.text !== 'string' || !Array.isArray(parsed.posts)) {
+            return null
+        }
+
+        return parsed as RecentPostsMessage
+    } catch {
+        return null
+    }
 }
 
 type AIChatInterfaceProps = {
@@ -50,7 +80,7 @@ const AIChatInterface: React.FC<AIChatInterfaceProps> = ({ conversationId }) => 
         <div className={classes.aiChat}>
             <Card className={classes.aiChatCard}>
                 <div className={classes.aiChatMessages}>
-                    {messages.map((m: Msg, i: number) => (
+                    {messages.filter((m: Msg) => m.role === 'user' || m.role === 'assistant').map((m: Msg, i: number) => (
                         <div key={i} className={`${classes.aiMsg} ${classes[m.role]}`}>
                             <Avatar
                                 icon={
@@ -61,7 +91,45 @@ const AIChatInterface: React.FC<AIChatInterfaceProps> = ({ conversationId }) => 
                             />
 
                             <div className={classes.aiMsgBubble}>
-                                <Text>{m.content}</Text>
+                                {(() => {
+                                    const structured = parseStructuredContent(m.content)
+
+                                    if (!structured) {
+                                        return <Text>{m.content}</Text>
+                                    }
+
+                                    return (
+                                        <div className={classes.aiStructuredMessage}>
+                                            <Text>{structured.text}</Text>
+
+                                            {structured.posts.length > 0 ? (
+                                                <div className={classes.aiPostGrid}>
+                                                    {structured.posts.map(post => (
+                                                        <div key={`${post.index}-${post.title}`} className={classes.aiPostCard}>
+                                                            {post.imageUrl ? (
+                                                                <img
+                                                                    src={post.imageUrl}
+                                                                    alt={post.title || 'Post image'}
+                                                                    className={classes.aiPostImage}
+                                                                />
+                                                            ) : null}
+
+                                                            <div className={classes.aiPostMeta}>
+                                                                <Text strong>{post.title}</Text>
+                                                                {post.author ? (
+                                                                    <Text type="secondary">{post.author}</Text>
+                                                                ) : null}
+                                                                {post.summary ? (
+                                                                    <Text>{post.summary}</Text>
+                                                                ) : null}
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : null}
+                                        </div>
+                                    )
+                                })()}
                             </div>
                         </div>
                     ))}

@@ -36,7 +36,9 @@ class ConversationService {
             return []
         }
 
-        return await historyService.get(conversationId)
+        const messages = await historyService.get(conversationId)
+
+        return messages.filter(message => message.role !== 'tool')
     }
 
     async update(conversationId, data) {

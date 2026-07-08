@@ -31,10 +31,7 @@ class AssistantController {
                 )
             }
 
-            const answer = await assistantService.chat(
-                conversationId,
-                content
-            )
+            const answer = await assistantService.chat(conversationId, content, userId)
 
             return res.json(
                 new StandartRes(0, '', {

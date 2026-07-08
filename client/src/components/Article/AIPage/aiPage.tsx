@@ -12,6 +12,7 @@ import Title from "antd/es/typography/Title"
 import AIChatInterface from "./AIChatInterface/aiChatInterface"
 import { useCreateConversationMutation, useGetConversationsQuery } from '../../../DAL/AI/aiAPI'
 import HistoryAIContent from './History/history'
+import AITools from './AITools/aiTools'
 
 const AIPage = () => {
   useAuthRedirect()
@@ -89,7 +90,7 @@ const AIPage = () => {
               key: 'tools',
               label: 'Tools',
               icon: <ThunderboltOutlined />,
-              children: <div>AI Tools & Actions</div>
+              children: <AITools conversationId={selectedConversationId} />
             },
             {
               key: 'history',

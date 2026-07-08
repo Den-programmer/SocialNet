@@ -4,17 +4,28 @@ class OllamaProvider {
         this.model = process.env.OLLAMA_MODEL || 'qwen3'
     }
 
-    async chat(messages) {
+    async chat(messages, tools = []) {
+        const payload = {
+            model: this.model,
+            messages,
+            stream: false,
+            options: {
+                temperature: 0.5,
+                num_ctx: 4096,
+                num_predict: 256
+            }
+        }
+
+        if (tools.length > 0) {
+            payload.tools = tools
+        }
+
         const res = await fetch(`${this.url}/api/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                model: this.model,
-                messages,
-                stream: false
-            })
+            body: JSON.stringify(payload)
         })
 
         if (!res.ok) {
@@ -23,7 +34,7 @@ class OllamaProvider {
 
         const data = await res.json()
 
-        return data.message.content
+        return data.message
     }
 }
 

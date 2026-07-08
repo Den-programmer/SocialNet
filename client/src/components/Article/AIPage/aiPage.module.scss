@@ -78,3 +78,74 @@
   align-items: center;
   gap: 4px;
 }
+
+.aiTools {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.aiToolsHero {
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(18, 58, 140, 0.08), rgba(106, 17, 203, 0.08));
+}
+
+.aiToolsHeroIcon {
+  color: #123a8c;
+  font-size: 18px;
+}
+
+.aiToolsEyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+  color: #123a8c;
+  font-weight: 700;
+}
+
+.aiToolsTitle {
+  margin-bottom: 0 !important;
+}
+
+.aiToolsDescription {
+  color: rgba(15, 23, 42, 0.72);
+  max-width: 760px;
+}
+
+.aiToolsGrid {
+  width: 100%;
+}
+
+.aiToolCard {
+  height: 100%;
+  border-radius: 16px;
+}
+
+.aiToolContent {
+  width: 100%;
+}
+
+.aiToolIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: linear-gradient(135deg, #123a8c, #6a11cb);
+  box-shadow: 0 10px 24px rgba(18, 58, 140, 0.18);
+  flex-shrink: 0;
+}
+
+.aiToolTitle {
+  margin-bottom: 4px !important;
+}
+
+.aiToolDescription {
+  color: rgba(15, 23, 42, 0.72);
+}
+
+.aiToolsHint {
+  border-radius: 14px;
+  background: rgba(22, 119, 255, 0.05);
+}
