@@ -4,6 +4,7 @@ import { catchRes, StandartRes } from '../routes/responses/responses.js'
 import { generateUniqueId, compressImage } from '../functions/functions.js'
 import { cloudinaryAPI as cloudinary } from '../../cloudinaryConfig.js'
 import { deleteCloudinaryResource } from '../functions/cloudinaryHelper.js'
+import embeddingProvider from '../ai/providers/embedding.provider.js'
 
 class PostsController {
   async getPosts(req, res) {
@@ -51,13 +52,21 @@ class PostsController {
         stream.end(compressedBuffer)
       })
 
+      const embeddingText = `
+      ${newPostTitle}
+      ${newPostInformat}
+      `
+
+      const embedding = await embeddingProvider.embed(embeddingText)
+
       const newPost = await Post.create({
         id: generateUniqueId(),
         postTitle: newPostTitle,
         postInf: newPostInformat,
         postImg: imageUrl,
         likesCount: 0,
-        owner: userId
+        owner: userId,
+        embedding
       })
 
       await User.findByIdAndUpdate(userId, { $push: { posts: newPost._id } })
@@ -116,9 +125,22 @@ class PostsController {
           .json(new StandartRes(1, 'Invalid postId'))
       }
 
+      const currentPost =
+        await Post.findById(postId)
+
+      const embeddingText = `
+      ${title}
+      ${currentPost.postInf}
+      `
+
+      const embedding =
+        await embeddingProvider.embed(
+          embeddingText
+        )
+
       const post = await Post.findByIdAndUpdate(
         postId,
-        { $set: { postTitle: title } },
+        { $set: { postTitle: title, embedding } },
         { new: true, runValidators: true }
       )
 
@@ -166,9 +188,22 @@ class PostsController {
           .json(new StandartRes(1, 'Invalid postId'))
       }
 
+      const currentPost =
+        await Post.findById(postId)
+
+      const embeddingText = `
+      ${currentPost.postTitle}
+      ${content}
+      `
+
+      const embedding =
+        await embeddingProvider.embed(
+          embeddingText
+        )
+
       const post = await Post.findByIdAndUpdate(
         postId,
-        { $set: { postInf: content } },
+        { $set: { postInf: content, embedding } },
         { new: true, runValidators: true }
       )
 

@@ -6,6 +6,8 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 import { securityHeaders, corsConfig, rateLimitMiddleware, validateInputLength } from './security/securityHeaders.js'
 
+import { connectDatabase } from "./config/database.js"
+
 import authRoutes from './rest/routes/auth.routes.js'
 import backgroundRoutes from './rest/routes/background.routes.js'
 import genderRoutes from './rest/routes/gender.routes.js'
@@ -47,7 +49,7 @@ app.use('/api/ai', AIroutes)
 
 async function startApp() {
   try {
-    await mongoose.connect(process.env.DB_CONNECTION)
+    await connectDatabase()
     app.listen(process.env.PORT || 8000, () => {
       console.log(`Server running on port ${process.env.PORT || 8000}`)
     })

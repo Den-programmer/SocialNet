@@ -5,6 +5,9 @@ import promptService from './prompt.service.js'
 import conversationService from './conversation.service.js'
 import socialToolsService from '../services/social-tools.service.js'
 
+const DEFAULT_CONVERSATION_TITLE = 'New Chat'
+const MAX_CONVERSATION_TITLE_LENGTH = 48
+
 const SUPPORTED_TOOL_NAMES = new Set([
     'getProfile',
     'searchUsers',
@@ -102,6 +105,71 @@ const sanitizeToolValue = (value) => {
     return value
 }
 
+const normalizeConversationTitle = (title) => {
+    if (typeof title !== 'string') {
+        return DEFAULT_CONVERSATION_TITLE
+    }
+
+    const normalized = title
+        .replace(/\s+/g, ' ')
+        .trim()
+        .replace(/^["'`]+|["'`]+$/g, '')
+        .replace(/[.?!]+$/, '')
+
+    if (!normalized) {
+        return DEFAULT_CONVERSATION_TITLE
+    }
+
+    if (normalized.length <= MAX_CONVERSATION_TITLE_LENGTH) {
+        return normalized
+    }
+
+    return `${normalized.slice(0, MAX_CONVERSATION_TITLE_LENGTH).trimEnd()}...`
+}
+
+const buildConversationTitle = (content) => {
+    if (typeof content !== 'string') {
+        return DEFAULT_CONVERSATION_TITLE
+    }
+
+    const normalized = content.replace(/\s+/g, ' ').trim()
+
+    if (!normalized) {
+        return DEFAULT_CONVERSATION_TITLE
+    }
+
+    if (normalized.length <= MAX_CONVERSATION_TITLE_LENGTH) {
+        return normalized
+    }
+
+    return `${normalized.slice(0, MAX_CONVERSATION_TITLE_LENGTH).trimEnd()}...`
+}
+
+const generateConversationTitle = async (content) => {
+    if (typeof content !== 'string' || !content.trim()) {
+        return DEFAULT_CONVERSATION_TITLE
+    }
+
+    const response = await ollamaProvider.chat([
+        {
+            role: 'system',
+            content: 'Create a short, natural title for this chat from the user message. Return only the title, no quotes, no labels, and keep it under 6 words.'
+        },
+        {
+            role: 'user',
+            content
+        }
+    ])
+
+    const generatedTitle = normalizeConversationTitle(response?.content ?? '')
+
+    if (generatedTitle !== DEFAULT_CONVERSATION_TITLE) {
+        return generatedTitle
+    }
+
+    return buildConversationTitle(content)
+}
+
 const formatToolResponse = (toolName, result) => {
     const safeResult = sanitizeToolValue(result)
 
@@ -169,6 +237,15 @@ const formatToolResponse = (toolName, result) => {
 
 class AssistantService {
     async chat(conversationId, content, currentUserId) {
+        const conversation = await conversationService.getById(conversationId, currentUserId)
+
+        if (conversation?.title === DEFAULT_CONVERSATION_TITLE) {
+            await conversationService.rename(
+                conversationId,
+                await generateConversationTitle(content)
+            )
+        }
+
         await historyService.add(
             conversationId,
             'user',

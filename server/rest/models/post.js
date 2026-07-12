@@ -7,7 +7,8 @@ const Post = new Schema({
     postImg: { type: String, required: true },
     likesCount: { type: Number, required: true },
     owner: { type: Schema.Types.ObjectId, ref: 'User'  },
-    createdAt: { type: Date, required: true, default: Date.now }
+    createdAt: { type: Date, required: true, default: Date.now },
+    embedding: { type: [Number], required: false }
 })
 
 export default model('Post', Post)
