@@ -1,0 +1,96 @@
+services:
+
+  mongodb:
+    image: mongo:7
+    container_name: socialnet-mongodb
+    restart: unless-stopped
+
+    ports:
+      - "27017:27017"
+
+    volumes:
+      - mongodb_data:/data/db
+
+
+  ollama:
+    image: ollama/ollama
+    container_name: socialnet-ollama
+    restart: unless-stopped
+
+    ports:
+      - "11434:11434"
+
+    volumes:
+      - ollama_data:/root/.ollama
+
+
+  server:
+    build:
+      context: ./server
+
+    env_file:
+      - ./server/.env
+
+    container_name: socialnet-server
+    restart: unless-stopped
+
+    ports:
+      - "8000:8000"
+
+    environment:
+      NODE_ENV: development
+      PORT: 8000
+
+    depends_on:
+      - mongodb
+      - ollama
+      - socket
+
+
+  socket:
+    build:
+      context: ./socket
+
+    env_file:
+      - ./socket/.env
+
+    container_name: socialnet-socket
+    restart: unless-stopped
+
+    ports:
+      - "7000:7000"
+
+    environment:
+      NODE_ENV: development
+      PORT: 7000
+      FRONTEND_URL: http://localhost:3000
+
+    depends_on:
+      - mongodb
+
+
+  client:
+    build:
+      context: ./client
+
+    env_file:
+      - ./client/.env
+
+    container_name: socialnet-client
+    restart: unless-stopped
+
+    ports:
+      - "3000:3000"
+
+    environment:
+      VITE_API_URL: http://localhost:8000
+      VITE_SOCKET_URL: http://localhost:7000
+
+    depends_on:
+      - server
+      - socket
+
+
+volumes:
+  mongodb_data:
+  ollama_data:

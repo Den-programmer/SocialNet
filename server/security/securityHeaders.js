@@ -32,13 +32,28 @@ export const securityHeaders = (req, res, next) => {
 
 // CORS configuration with security in mind
 export const corsConfig = {
-  origin: process.env.NODE_ENV === 'production'
-    ? process.env.CLIENT_URL
-    :'http://localhost:3000',
+  origin:
+    process.env.CLIENT_URL ||
+    process.env.FRONTEND_URL ||
+    'http://localhost:3000',
+
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  maxAge: 86400 // 24 hours
+
+  methods: [
+    'GET',
+    'POST',
+    'PUT',
+    'DELETE',
+    'PATCH',
+    'OPTIONS'
+  ],
+
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization'
+  ],
+
+  maxAge: 86400
 }
 
 // Rate limiting middleware
