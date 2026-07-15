@@ -59,6 +59,15 @@ class PostsController {
 
       const embedding = await embeddingProvider.embed(embeddingText)
 
+      await qdrantProvider.upsertPost(
+        newPost._id.toString(),
+        embedding,
+        {
+          postTitle: newPostTitle,
+          owner: userId
+        }
+      )
+
       const newPost = await Post.create({
         id: generateUniqueId(),
         postTitle: newPostTitle,

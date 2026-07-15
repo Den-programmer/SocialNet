@@ -1,13 +1,9 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQuery, ServerResType } from '../api'
 import { Msg } from '../../components/Article/AIPage/AIChatInterface/aiChatInterface'
+import { AIConversation, AISearchResponse } from '../../types/AITypes/aiTypes';
 
-export type AIConversation = {
-  _id: string
-  title: string
-  lastMessage?: string
-  updatedAt?: string
-}
+
 
 export const aiApi = createApi({
   reducerPath: 'aiApi',
@@ -64,6 +60,21 @@ export const aiApi = createApi({
         method: 'DELETE'
       }),
       invalidatesTags: ['Conversations', 'Messages']
+    }),
+    searchPosts: builder.query<
+      ServerResType<AISearchResponse>,
+      {
+        query: string
+        limit?: number
+      }
+    >({
+      query: ({ query, limit = 10 }) => ({
+        url: '/api/ai/posts/search',
+        params: {
+          query,
+          limit
+        }
+      })
     })
   })
 })
@@ -74,5 +85,6 @@ export const {
   useRenameConversationMutation,
   useDeleteConversationMutation,
   useGetConversationsQuery,
-  useGetMessagesQuery
+  useGetMessagesQuery,
+  useSearchPostsQuery
 } = aiApi

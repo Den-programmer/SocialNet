@@ -7,6 +7,7 @@ import cors from 'cors'
 import { securityHeaders, corsConfig, rateLimitMiddleware, validateInputLength } from './security/securityHeaders.js'
 
 import { connectDatabase } from "./config/database.js"
+import qdrantProvider from "./rest/ai/providers/vector/qdrant.provider.js"
 
 import authRoutes from './rest/routes/auth.routes.js'
 import backgroundRoutes from './rest/routes/background.routes.js'
@@ -50,6 +51,7 @@ app.use('/api/ai', AIroutes)
 async function startApp() {
   try {
     await connectDatabase()
+    await qdrantProvider.createCollection()
     app.listen(process.env.PORT || 8000, () => {
       console.log(`Server running on port ${process.env.PORT || 8000}`)
     })

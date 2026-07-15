@@ -11,6 +11,15 @@ services:
     volumes:
       - mongodb_data:/data/db
 
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: socialnet-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    restart: unless-stopped
 
   ollama:
     image: ollama/ollama
@@ -22,7 +31,6 @@ services:
 
     volumes:
       - ollama_data:/root/.ollama
-
 
   server:
     build:
@@ -44,6 +52,7 @@ services:
     depends_on:
       - mongodb
       - ollama
+      - qdrant
       - socket
 
 
@@ -67,6 +76,7 @@ services:
 
     depends_on:
       - mongodb
+      - qdrant
 
 
   client:
@@ -89,8 +99,10 @@ services:
     depends_on:
       - server
       - socket
+      - qdrant
 
 
 volumes:
   mongodb_data:
   ollama_data:
+  qdrant_storage:

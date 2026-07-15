@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import AIController from '../controllers/AIController.js'
+import SearchController from '../ai/assistant/search.controller.js'
 import { verifyToken } from '../../middleware/verifyToken.js'
 import ConversationController from '../controllers/AIConversationController.js'
 import dotenv from 'dotenv'
@@ -22,6 +23,12 @@ router.get(
 router.get(
     '/conversations/:id',
     ConversationController.getById
+)
+
+
+router.get(
+    "/posts/search",
+    SearchController.posts
 )
 
 
