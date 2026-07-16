@@ -1,3 +1,40 @@
 .wallPage {
    
 }
+
+.semanticSearch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 40px auto;
+    width: 80%;
+    position: relative;
+    .searchIcon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .sem_searchInput {
+        width: 100%;
+        padding: 10px;
+        padding-left: 30px; /* Adjust this value to create space for the icon */
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+
+    }
+    .searchButton {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #91A8D0;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.78s ease;
+    }
+}

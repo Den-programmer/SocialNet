@@ -11,15 +11,19 @@ services:
     volumes:
       - mongodb_data:/data/db
 
+
   qdrant:
     image: qdrant/qdrant:latest
     container_name: socialnet-qdrant
+    restart: unless-stopped
+
     ports:
       - "6333:6333"
       - "6334:6334"
+
     volumes:
       - qdrant_storage:/qdrant/storage
-    restart: unless-stopped
+
 
   ollama:
     image: ollama/ollama
@@ -32,12 +36,12 @@ services:
     volumes:
       - ollama_data:/root/.ollama
 
+
   server:
     build:
       context: ./server
 
-    env_file:
-      - ./server/.env
+    command: npm run server
 
     container_name: socialnet-server
     restart: unless-stopped
@@ -45,9 +49,29 @@ services:
     ports:
       - "8000:8000"
 
+    env_file:
+      - ./server/.env
+
     environment:
       NODE_ENV: development
       PORT: 8000
+
+    volumes:
+      - ./uploads:/app/uploads
+
+    develop:
+      watch:
+        - action: sync
+          path: ./server
+          target: /app
+          ignore:
+            - node_modules/
+            - dist/
+            - .git/
+            - "*.log"
+
+        - action: rebuild
+          path: ./server/package.json
 
     depends_on:
       - mongodb
@@ -60,8 +84,7 @@ services:
     build:
       context: ./socket
 
-    env_file:
-      - ./socket/.env
+    command: npm run dev
 
     container_name: socialnet-socket
     restart: unless-stopped
@@ -69,10 +92,26 @@ services:
     ports:
       - "7000:7000"
 
+    env_file:
+      - ./socket/.env
+
     environment:
       NODE_ENV: development
       PORT: 7000
       FRONTEND_URL: http://localhost:3000
+
+    develop:
+      watch:
+        - action: sync
+          path: ./socket
+          target: /app
+          ignore:
+            - node_modules/
+            - dist/
+            - .git/
+
+        - action: rebuild
+          path: ./socket/package.json
 
     depends_on:
       - mongodb
@@ -83,8 +122,7 @@ services:
     build:
       context: ./client
 
-    env_file:
-      - ./client/.env
+    command: npm run dev -- --host 0.0.0.0
 
     container_name: socialnet-client
     restart: unless-stopped
@@ -92,14 +130,29 @@ services:
     ports:
       - "3000:3000"
 
+    env_file:
+      - ./client/.env
+
     environment:
       VITE_API_URL: http://localhost:8000
       VITE_SOCKET_URL: http://localhost:7000
 
+    develop:
+      watch:
+        - action: sync
+          path: ./client
+          target: /app
+          ignore:
+            - node_modules/
+            - dist/
+            - .git/
+
+        - action: rebuild
+          path: ./client/package.json
+
     depends_on:
       - server
       - socket
-      - qdrant
 
 
 volumes:

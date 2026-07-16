@@ -4,6 +4,7 @@ import MyPosts from './MyPosts/MyPosts'
 import { useAppSelector } from '../../../../hooks/hooks'
 import { selectIsAddPostModalOpenStatus, selectIsPostModalOpenStatus, selectUsersName, selectUsersProfile } from '../../../../BLL/selectors/profile-selectors'
 import { useParams } from 'react-router-dom'
+import SemanticSearch from './SemanticSearch/semanticSearch'
 
 
 interface IWall {
@@ -20,6 +21,7 @@ const Wall: React.FC<IWall> = () => {
 
     return (
         <div className={classes.wallPage}>
+            <SemanticSearch />
             <MyPosts isAddPostModalOpen={isAddPostModalOpen}
             isPostModalOpen={isPostModalOpen}
             profile={profile}

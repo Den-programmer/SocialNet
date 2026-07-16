@@ -3,7 +3,7 @@ import classes from './MyPosts.module.scss'
 import Post from './Post/Post'
 import AddPost from './AddPost/addPost'
 import { PostType, profileType } from '../../../../../types/ProfileTypes/profileTypes'
-import { Input, Typography, Row, Col } from 'antd'
+import { Input, Typography, Row } from 'antd'
 import { useCreatePostMutation, useGetUsersPostsQuery } from '../../../../../DAL/profileApi'
 import { useAppDispatch, useAppSelector } from '../../../../../hooks/hooks'
 import { profileActions } from '../../../../../BLL/reducer-profile'
@@ -31,7 +31,7 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
   } = props
 
   const { setIsAddPostModalOpen, setPostsCount } = profileActions
-  
+
   const dispatch = useAppDispatch()
 
   const authorizedUserId = useAppSelector(selectAuthorizedUserId)
@@ -48,8 +48,8 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
   }, [postsData, dispatch, setPostsCount])
 
   const [createPost] = useCreatePostMutation()
-  
-  const renderedPosts = posts.map((post: PostType) => {  
+
+  const renderedPosts = posts.map((post: PostType) => {
     return <Post
       key={post.id}
       id={post.id}
@@ -73,15 +73,13 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
     <div className={classes.postPage}>
       <div className={classes.addPost}>
         <Row justify="center" className={classes.content}>
-          <Col span={16}>
-            <TextArea
-              readOnly
-              onClick={onAddPost}
-              className={classes.textfield}
-              placeholder="What is on your mind?"
-              autoSize={{ minRows: 2, maxRows: 4 }}
-            />
-          </Col>
+          <TextArea
+            readOnly
+            onClick={onAddPost}
+            className={classes.textfield}
+            placeholder="What is on your mind?"
+            autoSize={{ minRows: 2, maxRows: 4 }}
+          />
         </Row>
         {isAddPostModalOpen && (
           <AddPost

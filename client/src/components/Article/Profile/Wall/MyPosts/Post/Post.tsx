@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useRef, useEffect, useCallback, useState } from 'react'
-import { Avatar, Typography, Input, Button, message } from 'antd'
+import { Avatar, Typography, Input, Button, message, Space } from 'antd'
+import { LikeOutlined, MessageOutlined, ShareAltOutlined, HeartFilled } from '@ant-design/icons'
 import classes from './Post.module.scss'
 import { useAppDispatch, useAppSelector } from '../../../../../../hooks/hooks'
 import { profileActions } from '../../../../../../BLL/reducer-profile'
@@ -54,6 +55,8 @@ const Post: React.FC<IPost> = props => {
 
   const [avatarImage, setAvatarImage] = useState<string>(props.avatar || defaultUserPhoto)
   const [postImage, setPostImage] = useState<string>(noPostImg)
+  const [liked, setLiked] = useState<boolean>(false)
+  const [likes, setLikes] = useState<number>(props.likesCount || 0)
 
   const resolveImage = useCallback((img: string | File | undefined | null, fallback: string): string => {
     if (!img) return fallback
@@ -151,54 +154,72 @@ const Post: React.FC<IPost> = props => {
   const handleConfirm = async () => { await saveChanges() }
   const hasChanges = postEdit.draftTitle !== props.postTitle || postEdit.draftInf !== props.postInf
 
+  const toggleLike = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setLiked(prev => {
+      const next = !prev
+      setLikes(l => l + (next ? 1 : -1))
+      return next
+    })
+  }
+
   return (
     <div className={classes.post}>
-      <div className={classes.postHeaderWrapper}>
-        <div className={classes.postHeader}>
-          <div className={classes.avatar}>
-            <Avatar size={64} src={avatarImage} />
-            <h6>{props.userName}</h6>
+      <div className={classes.card}>
+        <div className={classes.header}>
+          <div className={classes.headerLeft}>
+            <Avatar size={48} src={avatarImage} />
+            <div className={classes.userInfo}>
+              <div className={classes.userName}>{props.userName}</div>
+              <div className={classes.postTime}>{props.createdAt}</div>
+            </div>
           </div>
-          <div className={classes.date}>
-            <p>{props.createdAt}</p>
-          </div>
-        </div>
-      </div>
-
-      <div className={classes.postBody}>
-        <div className={classes.picture}>
-          <img src={postImage} alt="post visual" />
+          <div className={classes.headerRight} />
         </div>
 
-        <div className={classes.postContentWrapper}>
-          <div ref={postContentRef} className={classes.postContent}>
-            <div className={classes.postTitleContainer} onClick={handleStartEdit}>
+        <div className={classes.body} onClick={handleStartEdit}>
+          <div className={classes.leftImage}>
+            <img src={postImage} alt="post visual" />
+          </div>
+
+          <div className={classes.rightContent} ref={postContentRef}>
+            <div className={classes.titleRow}>
               {postEdit.isEditing ? (
                 <Input value={postEdit.draftTitle} onChange={handleChange('title')} placeholder="Post title" />
               ) : (
-                <Title level={4} className={classes.postTitle}>{props.postTitle}</Title>
+                <Title level={3} className={classes.postTitle}>{props.postTitle}</Title>
               )}
             </div>
 
             <div className={classes.horizontal_line} />
 
-            <div className={classes.postInfContainer} onClick={handleStartEdit}>
+            <div className={classes.contentRow}>
               {postEdit.isEditing ? (
                 <Input value={postEdit.draftInf} onChange={handleChange('inf')} placeholder="Post content" />
               ) : (
                 <Paragraph className={classes.postInf}>{props.postInf}</Paragraph>
               )}
+              <div className={classes.hashtag}>#reactjs</div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className={classes.postFooter}>
-        {postEdit.isEditing && (
-          <Button type="primary" disabled={!hasChanges || isLoading} onClick={handleConfirm} loading={isLoading}>
-            Confirm
-          </Button>
-        )}
+        <div className={classes.footer}>
+          <div className={classes.actions} onClick={e => e.stopPropagation()}>
+            <Space>
+              <Button type="text" icon={<LikeOutlined />} onClick={toggleLike} />
+              <Button type="text" icon={<MessageOutlined />} />
+              <Button type="text" icon={<ShareAltOutlined />} />
+            </Space>
+          </div>
+
+          <div className={classes.reactions}>
+            <div className={classes.reactionBadge}>
+              <HeartFilled style={{ color: '#ff4d4f', marginRight: 6 }} />
+              <span>{likes}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
