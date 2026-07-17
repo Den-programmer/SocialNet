@@ -19,7 +19,7 @@ export type photosType = {
 export const profileApi = createApi({
   reducerPath: 'profileApi',
   baseQuery,
-  tagTypes: ['Posts', 'Profile', 'Background'],
+  tagTypes: ['Posts', 'Profile', 'Background', 'Gender'],
   endpoints: (builder) => ({
     getUsersProfile: builder.query<profileType, string>({
       query: (userId) => `api/profile/getProfile/${userId}`,
@@ -137,7 +137,8 @@ export const profileApi = createApi({
     }),
     getGender: builder.query<string, string>({
       query: (userId) => `api/gender/getGender/${userId}`,
-      transformResponse: (response: ServerResType<{ gender: string }>) => response.data.gender
+      transformResponse: (response: ServerResType<{ gender: string }>) => response.data.gender,
+      providesTags: ['Gender']
     }),
     updateGender: builder.mutation<string, { gender: string; userId: string }>({
       query: ({ gender, userId }) => ({
@@ -145,7 +146,8 @@ export const profileApi = createApi({
         method: 'PUT',
         body: { gender, userId }
       }),
-      transformResponse: (response: ServerResType<{ gender: string }>) => response.data.gender
+      transformResponse: (response: ServerResType<{ gender: string }>) => response.data.gender,
+      invalidatesTags: ['Gender']
     }),
     setUserPhoto: builder.mutation<{ photos: photosType }, { photo: File; userId: string }>({
       async queryFn({ photo, userId }) {

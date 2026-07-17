@@ -5,6 +5,7 @@ import { generateUniqueId, compressImage } from '../functions/functions.js'
 import { cloudinaryAPI as cloudinary } from '../../cloudinaryConfig.js'
 import { deleteCloudinaryResource } from '../functions/cloudinaryHelper.js'
 import embeddingProvider from '../ai/providers/embedding.provider.js'
+import qdrantProvider from '../ai/providers/vector/qdrant.provider.js'
 
 class PostsController {
   async getPosts(req, res) {
@@ -57,26 +58,42 @@ class PostsController {
       ${newPostInformat}
       `
 
-      const embedding = await embeddingProvider.embed(embeddingText)
+      let embedding = null
+      try {
+        embedding = await embeddingProvider.embed(embeddingText)
+      } catch (err) {
+        console.error('Embedding generation failed, continuing without embedding:', err)
+      }
 
-      await qdrantProvider.upsertPost(
-        newPost._id.toString(),
-        embedding,
-        {
-          postTitle: newPostTitle,
-          owner: userId
-        }
-      )
-
-      const newPost = await Post.create({
+      const newPostPayload = {
         id: generateUniqueId(),
         postTitle: newPostTitle,
         postInf: newPostInformat,
         postImg: imageUrl,
         likesCount: 0,
-        owner: userId,
-        embedding
-      })
+        owner: userId
+      }
+
+      if (embedding && Array.isArray(embedding)) {
+        newPostPayload.embedding = embedding
+      }
+
+      const newPost = await Post.create(newPostPayload)
+
+      if (embedding && Array.isArray(embedding)) {
+        try {
+          await qdrantProvider.upsertPost(
+            newPost._id.toString(),
+            embedding,
+            {
+              postTitle: newPostTitle,
+              owner: userId
+            }
+          )
+        } catch (err) {
+          console.error('Qdrant upsert failed:', err)
+        }
+      }
 
       await User.findByIdAndUpdate(userId, { $push: { posts: newPost._id } })
 

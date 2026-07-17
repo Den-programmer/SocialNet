@@ -109,7 +109,7 @@ export const notificationSchema = z.object({
 
 export const genderSchema = z.object({
   userId: userIdSchema,
-  gender: z.enum(['male', 'female', 'other', '']),
+  gender: z.enum(['Male', 'Female', 'Not chosen']),
 })
 
 export const saveUsernameSchema = z.object({

@@ -5,7 +5,7 @@ import OptionsTitle from './OptionsTitle/optionsTitle'
 import { selectAuthorizedUserId } from '../../../../../BLL/selectors/auth-selectors'
 import { useAppDispatch, useAppSelector } from '../../../../../hooks/hooks'
 import { selectContacts, selectGender, selectIsMembersColumnOpenedStatus, selectUsersName, selectUsersProfile } from '../../../../../BLL/selectors/profile-selectors'
-import { useUpdateAboutMeMutation, useUpdateGenderMutation, useUpdateUsernameMutation } from '../../../../../DAL/profileApi'
+import { useUpdateAboutMeMutation, useUpdateUsernameMutation } from '../../../../../DAL/profileApi'
 import { useAddNotificationMutation } from '../../../../../DAL/notificationApi'
 import { profileActions } from '../../../../../BLL/reducer-profile'
 import { contactsType } from '../../../../../types/ProfileTypes/profileTypes'
@@ -27,7 +27,6 @@ export interface IChangeOptions {
   createNotification: (arg: { title: string, pageUrl: string, itemType: 'Profile' | 'Messages' | 'News' | 'Friends' }) => void
   saveAboutMe: (arg: { aboutMe: string, userId: string }) => void
   aboutMe: string
-  setGender: (arg: { gender: string, userId: string }) => void
   gender: string
   userName: string
   contacts: contactsType
@@ -44,7 +43,6 @@ const AccountOptions: React.FC = () => {
   const aboutMe = useAppSelector(selectUsersProfile).aboutMe
 
   const [changeUserName, { }] = useUpdateUsernameMutation()
-  const [setGender] = useUpdateGenderMutation()
   const [saveAboutMe] = useUpdateAboutMeMutation()
   const [createNotification] = useAddNotificationMutation()
   const { changeMembersColumnOpenedStatus } = profileActions
@@ -93,7 +91,6 @@ const AccountOptions: React.FC = () => {
                 createNotification={createNotification}
                 saveAboutMe={saveAboutMe}
                 aboutMe={aboutMe}
-                setGender={setGender}
                 gender={gender}
                 userName={userName}
                 contacts={contacts}

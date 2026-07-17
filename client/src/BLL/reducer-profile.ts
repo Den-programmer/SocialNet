@@ -166,6 +166,20 @@ const profileSlice = createSlice({
       }
     )
 
+     builder.addMatcher(
+      profileApi.endpoints.getGender.matchFulfilled,
+      (state, { payload }) => {
+        state.gender = payload
+      }
+    )
+
+    builder.addMatcher(
+      profileApi.endpoints.updateGender.matchFulfilled,
+      (state, { payload }) => {
+        state.gender = payload
+      }
+    )
+
     builder.addMatcher(
       profileApi.endpoints.updateContacts.matchFulfilled,
       (state, { meta }) => {
