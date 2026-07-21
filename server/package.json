@@ -31,7 +31,7 @@
     "@qdrant/js-client-rest": "^1.18.0",
     "axios": "^1.13.5",
     "bcryptjs": "^3.0.2",
-    "body-parser": "^2.2.0",
+    "body-parser": "^2.3.0",
     "cheerio": "^1.0.0",
     "cloudinary": "^2.7.0",
     "cors": "^2.8.5",
