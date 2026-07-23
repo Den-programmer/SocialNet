@@ -3,7 +3,7 @@ import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolk
 import { getToken } from '../BLL/reducer-auth'
 
 export const baseQuery = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:3000/',
+  baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:8000/',
   prepareHeaders: (headers) => {
     const token = getToken()
     if (token) {
