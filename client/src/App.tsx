@@ -10,7 +10,7 @@ import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import Article from './components/Article/Article'
 import Authentication from './components/Authentication/authentication'
-import CookieConsent from 'react-cookie-consent'
+// import CookieConsent from 'react-cookie-consent'
 
 const App: React.FC = () => {
   const isAuth = useAppSelector(selectIsAuthStatus)
@@ -19,7 +19,7 @@ const App: React.FC = () => {
   
   return (
     <>
-      <CookieConsent
+      {/* <CookieConsent
         location="bottom"
         buttonText="Consent"
         cookieName="myCookieConsent"
@@ -28,7 +28,7 @@ const App: React.FC = () => {
         buttonStyle={{ background: '#4CAF50', color: '#fff' }}
       >
         Vi use cookies 🍪 to ensure the website is working properly.
-      </CookieConsent>
+      </CookieConsent> */}
 
       {isAuth ? (
         <div className="App">

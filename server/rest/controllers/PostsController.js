@@ -253,23 +253,40 @@ class PostsController {
   }
   async deletePost(req, res) {
     try {
-      let postId = req.body?.postId || req.params?.postId
+      const postId = req.body?.postId || req.params?.postId
 
       if (!postId) {
         return res.status(400).json(new StandartRes(1, 'Post id is undefined.'))
       }
 
-      const deletedPost = await Post.findByIdAndDelete(postId)
+      if (!Post.db.base.Types.ObjectId.isValid(postId)) {
+        return res.status(400).json(new StandartRes(1, 'Invalid postId'))
+      }
 
-      if (!deletedPost) {
+      const post = await Post.findById(postId)
+
+      if (!post) {
         return res.status(404).json(new StandartRes(1, 'Post not found.'))
       }
 
-      // Delete the post image from Cloudinary if it exists
+      if (post.owner.toString() !== req.user) {
+        return res.status(403).json(new StandartRes(1, 'You are not allowed to delete this post.'))
+      }
+
+      const deletedPost = await Post.findByIdAndDelete(postId)
+
+      await User.findByIdAndUpdate(deletedPost.owner, { $pull: { posts: postId } })
+
       if (deletedPost.postImg) {
         deleteCloudinaryResource(deletedPost.postImg).catch(err =>
           console.error('Failed to delete post image from Cloudinary:', err)
         )
+      }
+
+      try {
+        await qdrantProvider.deletePost(postId)
+      } catch (err) {
+        console.error('Qdrant delete failed:', err)
       }
 
       res.json(new StandartRes(0, 'Post deleted successfully.', { deletedPost }))

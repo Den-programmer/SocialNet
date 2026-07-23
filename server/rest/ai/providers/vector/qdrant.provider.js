@@ -75,6 +75,16 @@ class QdrantProvider {
         )
     }
 
+
+    async deletePost(postId) {
+        await this.client.delete(
+            this.collection,
+            {
+                points: [postId]
+            }
+        )
+    }
+
 }
 
 

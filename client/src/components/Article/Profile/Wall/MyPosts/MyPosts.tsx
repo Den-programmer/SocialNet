@@ -49,6 +49,8 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
 
   const [createPost] = useCreatePostMutation()
 
+  const canDeletePosts = authorizedUserId === idToLoad
+
   const renderedPosts = posts.map((post: PostType) => {
     return <Post
       key={post.id}
@@ -62,6 +64,8 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
       likesCount={post.likesCount}
       avatar={profile.photos.large}
       isModalOpen={isPostModalOpen}
+      canDelete={canDeletePosts}
+      userId={idToLoad}
     />
   })
 

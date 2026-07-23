@@ -1,12 +1,13 @@
 import React, { ChangeEvent, useRef, useEffect, useCallback, useState } from 'react'
-import { Avatar, Typography, Input, Button, message, Space } from 'antd'
-import { LikeOutlined, MessageOutlined, ShareAltOutlined, HeartFilled } from '@ant-design/icons'
+import { Avatar, Typography, Input, Button, message, Space, Popconfirm, Tooltip } from 'antd'
+import { LikeOutlined, MessageOutlined, ShareAltOutlined, HeartFilled, DeleteOutlined } from '@ant-design/icons'
 import classes from './Post.module.scss'
 import { useAppDispatch, useAppSelector } from '../../../../../../hooks/hooks'
 import { profileActions } from '../../../../../../BLL/reducer-profile'
 import {
   useUpdatePostTitleMutation,
-  useUpdatePostInformatMutation
+  useUpdatePostInformatMutation,
+  useDeletePostMutation
 } from '../../../../../../DAL/profileApi'
 import { selectPostEdits } from '../../../../../../BLL/selectors/profile-selectors'
 import { enteredNothingError, FieldValidator, maxLengthCreator, minLengthCreator, required, runValidators } from '../../../../../../utils/validators/validators'
@@ -24,6 +25,8 @@ interface IPost {
   likesCount: number
   avatar: string | undefined | File
   isModalOpen: boolean
+  canDelete?: boolean
+  userId?: string
 }
 
 const defaultUserPhoto = import.meta.env.VITE_CLOUDINARY_DEFAULT_USER
@@ -50,8 +53,9 @@ const Post: React.FC<IPost> = props => {
 
   const [updatePostTitle, { isLoading: isUpdatingTitle }] = useUpdatePostTitleMutation()
   const [updatePostInf, { isLoading: isUpdatingInf }] = useUpdatePostInformatMutation()
+  const [deletePost, { isLoading: isDeleting }] = useDeletePostMutation()
 
-  const isLoading = isUpdatingTitle || isUpdatingInf
+  const isLoading = isUpdatingTitle || isUpdatingInf || isDeleting
 
   const [avatarImage, setAvatarImage] = useState<string>(props.avatar || defaultUserPhoto)
   const [postImage, setPostImage] = useState<string>(noPostImg)
@@ -163,6 +167,18 @@ const Post: React.FC<IPost> = props => {
     })
   }
 
+  const handleDelete = async () => {
+    if (!props.userId) return
+
+    try {
+      await deletePost({ postId: props._id, userId: props.userId }).unwrap()
+      message.success('Post deleted')
+    } catch (err) {
+      console.error(err)
+      message.error('Failed to delete post')
+    }
+  }
+
   return (
     <div className={classes.post}>
       <div className={classes.card}>
@@ -174,7 +190,28 @@ const Post: React.FC<IPost> = props => {
               <div className={classes.postTime}>{props.createdAt}</div>
             </div>
           </div>
-          <div className={classes.headerRight} />
+          <div className={classes.headerRight}>
+            {props.canDelete && (
+              <Popconfirm
+                title="Delete post"
+                description="This post will be permanently removed."
+                okText="Delete"
+                okButtonProps={{ danger: true }}
+                onConfirm={handleDelete}
+              >
+                <Tooltip title="Delete post">
+                  <Button
+                    type="text"
+                    danger
+                    shape="circle"
+                    icon={<DeleteOutlined />}
+                    loading={isDeleting}
+                    onClick={e => e.stopPropagation()}
+                  />
+                </Tooltip>
+              </Popconfirm>
+            )}
+          </div>
         </div>
 
         <div className={classes.body} onClick={handleStartEdit}>

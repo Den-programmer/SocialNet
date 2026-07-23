@@ -119,6 +119,14 @@ export const profileApi = createApi({
       }),
       invalidatesTags: ['Posts']
     }),
+    deletePost: builder.mutation<{ deletedPost: PostType }, { postId: string; userId: string }>({
+      query: ({ postId }) => ({
+        url: `api/posts/deletePost/${postId}`,
+        method: 'DELETE'
+      }),
+      transformResponse: (response: ServerResType<{ deletedPost: PostType }>) => response.data,
+      invalidatesTags: (result, error, { userId }) => [{ type: 'Posts', id: userId }]
+    }),
     updateContacts: builder.mutation<contactsType, { contacts: contactsType; userId: string }>({
       query: ({ contacts, userId }) => ({
         url: `api/profile/contacts/updateContacts`,
@@ -255,7 +263,8 @@ export const {
   useSetUserBackgroundMutation,
   useGetUserBackgroundQuery,
   useUpdatePostTitleMutation,
-  useUpdatePostInformatMutation
+  useUpdatePostInformatMutation,
+  useDeletePostMutation
 } = profileApi
 
 
