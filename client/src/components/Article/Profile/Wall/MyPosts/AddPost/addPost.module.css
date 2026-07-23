@@ -1,23 +1,40 @@
 .addPostContainer {
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 40px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.75);
-    transition: 0.35s ease-in-out;
-    max-height: 100vh;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+  transition: 0.35s ease-in-out;
+  max-height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
+
 .addPost {
-    box-sizing: border-box;
-    background: white;
-    box-shadow: 0px 1px 10px rgba(255, 255, 255, 0.35);
-    transition: 0.35s ease-in-out;
-    height: 80%;
-    width: 40%;
+  box-sizing: border-box;
+  width: min(100%, 480px);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  border-radius: 16px;
+  background: #2a3142;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+  transition: 0.35s ease-in-out;
+}
+
+@media screen and (max-width: 600px) {
+  .addPostContainer {
+    padding: 16px;
+    align-items: flex-start;
+  }
+
+  .addPost {
+    max-height: calc(100vh - 32px);
+  }
 }

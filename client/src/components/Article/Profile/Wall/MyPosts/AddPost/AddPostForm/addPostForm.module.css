@@ -1,138 +1,260 @@
 .postForm {
-    margin: 0 auto;
-}
-.dFlex {
-    display:flex;
-    justify-content: center;
-    align-items: center;
-}
-.btn_closeTheWindow p {
-    color: #222222;
-    font-size: 30px;
-    margin: 0 10px;
-    cursor: pointer;
-    width: min-content;
-    margin-left: auto;
-}
-.modalTitle {
-    display: flex;
-    justify-content: center;
-}
-.modalTitle h4 {
-    font-size: 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px 32px 32px;
+  height: 100%;
+  box-sizing: border-box;
 }
 
-.photo {
-    display: flex;
-    justify-content: center;
-}
-.photo img {
-    height: 200px;
-}
-.btn_selectPhoto {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.btn_selectPhoto label {
-    outline: none;
-    margin: 7px;
-    font-weight: 700;
-    color: white;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 40px;
-    background: rgb(64,199,129);
-    box-shadow: 0 -3px rgb(53,167,110) inset;
-    transition: 0.2s;
-}
-.btn_selectPhoto label:hover { 
-    background: rgb(53, 167, 110); 
-}
-.btn_selectPhoto label:active {
-    background: rgb(33,147,90);
-    box-shadow: 0 3px rgb(33,147,90) inset;
+.closeBtn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.btn_selectPhoto input {
-    position: absolute;
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    z-index: -1;
-    overflow: hidden;
+.closeBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.postTitle, .postInf {
-   width: 100%;
+.title {
+  margin: 0;
+  padding-right: 28px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #ffffff;
 }
 
-.postForm input {
-    text-align: center;
-    margin: 10px;
-    height: 20px;
-    width: 85%;
-}
-.postForm textarea {
-    text-align: center;
-    margin: 10px;
-    height: 90px;
-    width: 85%;
-    text-overflow: clip;
-    resize: none;
-}
-
-.postTitle, .postInf {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-}
-.postTitle input, .postInf textarea {
-    outline: none;
-    border: none;
-    border-bottom: 1px solid #ADADAD;
-}
-.postTitle input:focus, .postInf textarea:focus {
-    transition: all .5s linear;
-    border-bottom: 1px solid purple;
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 220px;
+  padding: 28px 24px 20px;
+  border-radius: 14px;
+  background: #343a4d;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 
-.Block_btn_addPost {
-    margin: 10px;
-}
-.btn_addPost {
-    display: inline-block;
-    padding: 2px 10px;
-    outline: none;
-    border: 1px solid rgba(0,0,0,.4);
-    border-top-color: rgba(0,0,0,.3);
-    border-radius: 2px;
-    background: linear-gradient(rgb(255,255,255), rgb(240,240,240));
-    box-shadow:
-     0 0 3px rgba(0,0,0,0) inset,
-     0 1px 1px 1px rgba(255,255,255,.2),
-     0 -1px 1px 1px rgba(0,0,0,0);
-}
-.btn_addPost:hover {
-    transition: .2s ease-in-out;
-    box-shadow:
-     0 0 3px rgba(0,0,0,0) inset,
-     0 1px 1px 1px rgba(0,255,255,.5),
-     0 -1px 1px 1px rgba(0,255,255,.5);
+.dropzone:hover,
+.dropzoneActive {
+  background: #3d4459;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-@media screen and (max-width: 900px) {
-    .photo img {
-        width: 75%;
-    }
+.dropzoneHasPhoto {
+  padding: 12px;
+  gap: 12px;
 }
 
-/* Error! */
+.cameraIcon {
+  font-size: 52px;
+  color: #ffffff;
+  opacity: 0.95;
+}
+
+.dropText {
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.browseText {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.browseText span {
+  text-decoration: underline;
+  color: #ffffff;
+}
+
+.preview {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.selectPhotoBtn {
+  margin-top: 8px;
+  padding: 8px 22px;
+  border: none;
+  border-radius: 999px;
+  background: #40c781;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.selectPhotoBtn:hover {
+  background: #35a76e;
+}
+
+.selectPhotoBtn:active {
+  transform: scale(0.98);
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.input::placeholder {
+  color: #9ca3af;
+}
+
+.input:focus,
+.textarea:focus {
+  box-shadow: 0 0 0 2px #60a5fa;
+}
+
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.charCount {
+  align-self: flex-end;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.cancelBtn,
+.addPostBtn {
+  min-width: 120px;
+  padding: 12px 28px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.cancelBtn {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: transparent;
+  color: #ffffff;
+}
+
+.cancelBtn:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.addPostBtn {
+  border: none;
+  background: #40c781;
+  color: #ffffff;
+}
+
+.addPostBtn:hover {
+  background: #35a76e;
+}
+
+.cancelBtn:active,
+.addPostBtn:active {
+  transform: scale(0.98);
+}
+
+.error {
+  margin-top: -8px;
+  text-align: center;
+}
+
+.error span {
+  color: #f87171;
+  font-size: 14px;
+  font-weight: 500;
+}
 
 .messageError {
-    display: block;
-    color: red;
-    font-weight: bold;
+  display: block;
+  color: #f87171;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 600px) {
+  .postForm {
+    padding: 24px 20px 28px;
+    gap: 16px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .dropzone {
+    min-height: 180px;
+    padding: 20px 16px 16px;
+  }
+
+  .footer {
+    flex-direction: column-reverse;
+  }
+
+  .cancelBtn,
+  .addPostBtn {
+    width: 100%;
+  }
 }

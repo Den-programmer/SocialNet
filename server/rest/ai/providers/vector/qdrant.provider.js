@@ -1,4 +1,5 @@
 import {QdrantClient} from "@qdrant/js-client-rest"
+import crypto from "crypto"
 
 
 class QdrantProvider {
@@ -13,6 +14,11 @@ class QdrantProvider {
 
         this.collection =
             "posts"
+    }
+
+    toPointId(postId) {
+        const hash = crypto.createHash('md5').update(String(postId)).digest('hex')
+        return `${hash.slice(0, 8)}-${hash.slice(8, 12)}-${hash.slice(12, 16)}-${hash.slice(16, 20)}-${hash.slice(20, 32)}`
     }
 
 
@@ -54,9 +60,12 @@ class QdrantProvider {
             {
                 points: [
                     {
-                        id: postId,
+                        id: this.toPointId(postId),
                         vector,
-                        payload
+                        payload: {
+                            postId: String(postId),
+                            ...payload
+                        }
                     }
                 ]
             }
@@ -80,7 +89,7 @@ class QdrantProvider {
         await this.client.delete(
             this.collection,
             {
-                points: [postId]
+                points: [this.toPointId(postId)]
             }
         )
     }
