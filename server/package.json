@@ -39,7 +39,7 @@
     "express": "^4.21.2",
     "groq-sdk": "^0.37.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.13.2",
+    "mongoose": "^8.24.1",
     "multer": "^2.0.2",
     "path": "^0.12.7",
     "resend": "^1.0.0",
