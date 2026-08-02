@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import OptionsTitle from '../accountOptions/OptionsTitle/optionsTitle'
 import ChangeContact from './ChangeContacts/changeContactsForm/changeContact/changeContact'
@@ -14,22 +14,25 @@ export interface ICurrentContact {
   isEdit: boolean
 }
 
+const buildContactItems = (contacts: Record<string, string | null | undefined> | undefined) =>
+  Object.entries(contacts ?? {})
+    .filter(([key]) => key in socialsValidatorsMap)
+    .map(([key, val], idx) => ({
+      id: idx + 1,
+      property: key,
+      value: val ?? null,
+      isEdit: false
+    }))
+
 const ContactsOptions: React.FC = () => {
   const location = useLocation()
 
   const contacts = useAppSelector(selectContacts) || {}
+  const [currentContacts, setCurrentContacts] = useState<ICurrentContact[]>(() => buildContactItems(contacts))
 
-  const initialContacts = useMemo(() =>
-    Object.entries(contacts)
-      .filter(([key]) => key in socialsValidatorsMap)
-      .map(([key, val], idx) => ({
-        id: idx + 1,
-        property: key,
-        value: val,
-        isEdit: false
-      })), [contacts])
-
-  const [currentContacts, setCurrentContacts] = useState<ICurrentContact[]>(initialContacts)
+  useEffect(() => {
+    setCurrentContacts(buildContactItems(contacts))
+  }, [contacts])
 
   const handleClick = (id: number) => {
     setCurrentContacts(currentContacts.map(c =>

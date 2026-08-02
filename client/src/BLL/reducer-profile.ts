@@ -47,6 +47,9 @@ const initialState: ProfileState = {
       youtube: null,
       github: null,
       linkedin: null,
+      website: null,
+      vk: null,
+      mainLink: null
     },
     photos: { large: '', small: '' },
     userId: '0'
@@ -148,7 +151,13 @@ const profileSlice = createSlice({
     builder.addMatcher(
       profileApi.endpoints.getUsersProfile.matchFulfilled,
       (state, { payload }) => {
-        state.profile = payload
+        state.profile = {
+          ...payload,
+          contacts: {
+            ...state.profile.contacts,
+            ...(payload.contacts ?? {})
+          }
+        }
       }
     )
 
@@ -182,8 +191,11 @@ const profileSlice = createSlice({
 
     builder.addMatcher(
       profileApi.endpoints.updateContacts.matchFulfilled,
-      (state, { meta }) => {
-        state.profile.contacts = meta.arg.originalArgs.contacts
+      (state, { payload }) => {
+        state.profile.contacts = {
+          ...state.profile.contacts,
+          ...payload
+        }
       }
     )
 

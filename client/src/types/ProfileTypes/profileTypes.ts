@@ -9,6 +9,9 @@ export type contactsType = {
     youtube: string | null
     github: string | null
     linkedin: string | null
+    website?: string | null
+    vk?: string | null
+    mainLink?: string | null
 }
 
 export type profileType = {

@@ -6,8 +6,20 @@ import { useAddNotificationMutation } from '../../DAL/notificationApi'
 import { socialsValidatorsMap, sanitizeUrl } from '../../utils/validators/validators'
 import { contactsType } from '../../types/ProfileTypes/profileTypes'
 
+const defaultContacts: contactsType = {
+  facebook: null,
+  twitter: null,
+  instagram: null,
+  youtube: null,
+  github: null,
+  linkedin: null,
+  website: null,
+  vk: null,
+  mainLink: null
+}
+
 export const useContactsEditor = () => {
-  const contacts = useAppSelector(selectContacts) || {}
+  const contacts = useAppSelector(selectContacts) ?? defaultContacts
   const userId = useAppSelector(selectAuthorizedUserId) || ''
   const [updateContacts] = useUpdateContactsMutation()
   const [createNotification] = useAddNotificationMutation()

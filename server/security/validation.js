@@ -42,13 +42,20 @@ export const updateAboutMeSchema = z.object({
   aboutMe: z.string().max(5000, 'About me must be less than 5000 characters').trim(),
 })
 
+const nullableUrlSchema = z.union([urlSchema, z.literal(null)])
+
 export const updateContactsSchema = z.object({
   userId: userIdSchema,
   contacts: z.object({
-    github: urlSchema.optional(),
-    twitter: urlSchema.optional(),
-    linkedin: urlSchema.optional(),
-    website: urlSchema.optional(),
+    facebook: nullableUrlSchema.optional(),
+    twitter: nullableUrlSchema.optional(),
+    instagram: nullableUrlSchema.optional(),
+    youtube: nullableUrlSchema.optional(),
+    github: nullableUrlSchema.optional(),
+    linkedin: nullableUrlSchema.optional(),
+    website: nullableUrlSchema.optional(),
+    vk: nullableUrlSchema.optional(),
+    mainLink: nullableUrlSchema.optional(),
   }).optional(),
 })
 
