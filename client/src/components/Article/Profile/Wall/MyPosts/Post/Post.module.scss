@@ -24,6 +24,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 12px;
 
         .headerLeft {
             display: flex;
@@ -45,6 +46,49 @@
                     font-size: 13px;
                     color: #9aa0b4;
                 }
+
+                .visibilityLabel {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    margin-top: 4px;
+                    font-size: 12px;
+                    color: #4f46e5;
+                    font-weight: 600;
+                }
+            }
+        }
+
+        .headerRight {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .visibilityToggle {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px;
+            border-radius: 999px;
+            background: #eef2ff;
+            border: 1px solid #dfe3f8;
+
+            .visibilityToggleBtn {
+                border: none;
+                background: transparent;
+                color: #475569;
+                padding: 8px 12px;
+                border-radius: 999px;
+                font-size: 12px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .visibilityToggleBtnActive {
+                background: linear-gradient(135deg, #4f46e5, #7c3aed);
+                color: #fff;
+                box-shadow: 0 6px 16px rgba(79, 70, 229, 0.2);
             }
         }
     }
@@ -118,6 +162,9 @@
         }
 
         .reactions {
+            display: flex;
+            gap: 8px;
+
             .reactionBadge {
                 display: inline-flex;
                 align-items: center;
@@ -128,6 +175,32 @@
                 box-shadow: 0 4px 12px rgba(16,24,40,0.06);
                 font-weight: 600;
                 color: #111827;
+            }
+        }
+    }
+
+    .commentSection {
+        padding: 0 20px 18px;
+
+        .commentForm {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .commentList {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .commentItem {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+                background: #f9fafb;
+                padding: 8px 10px;
+                border-radius: 8px;
+                color: #374151;
             }
         }
     }

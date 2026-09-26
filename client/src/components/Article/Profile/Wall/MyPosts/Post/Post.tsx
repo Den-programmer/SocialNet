@@ -1,16 +1,21 @@
 import React, { ChangeEvent, useRef, useEffect, useCallback, useState } from 'react'
 import { Avatar, Typography, Input, Button, message, Space, Popconfirm, Tooltip } from 'antd'
-import { LikeOutlined, MessageOutlined, ShareAltOutlined, HeartFilled, DeleteOutlined } from '@ant-design/icons'
+import { LikeOutlined, MessageOutlined, ShareAltOutlined, HeartFilled, DeleteOutlined, LockOutlined, GlobalOutlined } from '@ant-design/icons'
 import classes from './Post.module.scss'
 import { useAppDispatch, useAppSelector } from '../../../../../../hooks/hooks'
 import { profileActions } from '../../../../../../BLL/reducer-profile'
 import {
   useUpdatePostTitleMutation,
   useUpdatePostInformatMutation,
-  useDeletePostMutation
+  useUpdatePostVisibilityMutation,
+  useDeletePostMutation,
+  useTogglePostLikeMutation,
+  useAddPostCommentMutation,
+  useRepostPostMutation
 } from '../../../../../../DAL/profileApi'
 import { selectPostEdits } from '../../../../../../BLL/selectors/profile-selectors'
 import { enteredNothingError, FieldValidator, maxLengthCreator, minLengthCreator, required, runValidators } from '../../../../../../utils/validators/validators'
+import { selectAuthorizedUserId } from '../../../../../../BLL/selectors/auth-selectors'
 
 const { Title, Paragraph } = Typography
 
@@ -19,14 +24,17 @@ interface IPost {
   postTitle: string
   postInf: string
   postImg: string | File
-  id: string
-  _id: string
+  post_id: string
   createdAt: string
   likesCount: number
   avatar: string | undefined | File
   isModalOpen: boolean
   canDelete?: boolean
-  userId?: string
+  visibility?: 'public' | 'private'
+  likedByViewer?: boolean
+  canInteract?: boolean
+  comments?: Array<{ id: string; author: string; text: string; createdAt: string }>
+  repostsCount?: number
 }
 
 const defaultUserPhoto = import.meta.env.VITE_CLOUDINARY_DEFAULT_USER
@@ -51,16 +59,24 @@ const Post: React.FC<IPost> = props => {
   const dispatch = useAppDispatch()
   const { startEdit, updateDraft, finishEdit } = profileActions
 
-  const [updatePostTitle, { isLoading: isUpdatingTitle }] = useUpdatePostTitleMutation()
-  const [updatePostInf, { isLoading: isUpdatingInf }] = useUpdatePostInformatMutation()
+  const [updatePostTitle] = useUpdatePostTitleMutation()
+  const [updatePostInf] = useUpdatePostInformatMutation()
+  const [updatePostVisibility] = useUpdatePostVisibilityMutation()
   const [deletePost, { isLoading: isDeleting }] = useDeletePostMutation()
+  const [toggleLike] = useTogglePostLikeMutation()
+  const [addComment] = useAddPostCommentMutation()
+  const [repostPost] = useRepostPostMutation()
 
-  const isLoading = isUpdatingTitle || isUpdatingInf || isDeleting
 
   const [avatarImage, setAvatarImage] = useState<string>(props.avatar || defaultUserPhoto)
+  const [postVisibility, setPostVisibility] = useState<'public' | 'private'>(props.visibility || 'public')
   const [postImage, setPostImage] = useState<string>(noPostImg)
-  const [liked, setLiked] = useState<boolean>(false)
+  const [liked, setLiked] = useState<boolean>(Boolean(props.likedByViewer))
   const [likes, setLikes] = useState<number>(props.likesCount || 0)
+  const [comments, setComments] = useState(props.comments || [])
+  const [commentDraft, setCommentDraft] = useState('')
+  const [reposts, setReposts] = useState<number>(props.repostsCount || 0)
+  const authorizedUserId = useAppSelector(selectAuthorizedUserId)
 
   const resolveImage = useCallback((img: string | File | undefined | null, fallback: string): string => {
     if (!img) return fallback
@@ -68,6 +84,10 @@ const Post: React.FC<IPost> = props => {
     if (img instanceof File) return URL.createObjectURL(img)
     return fallback
   }, [])
+
+  useEffect(() => {
+    setPostVisibility(props.visibility || 'public')
+  }, [props.visibility])
 
   useEffect(() => {
     const result = resolveImage(props.avatar, defaultUserPhoto)
@@ -88,11 +108,15 @@ const Post: React.FC<IPost> = props => {
   }, [props.postImg, resolveImage])
 
   const postEdit = useAppSelector(state =>
-    selectPostEdits(state, props._id)
+    selectPostEdits(state, props.post_id)
   ) ?? { isEditing: false, draftTitle: '', draftInf: '' }
+
+  const canManageThisPost = props.canDelete
+  const canInteractWithPost = props.canInteract ?? Boolean(authorizedUserId)
 
   const saveChanges = useCallback(async () => {
     if (!postEdit.isEditing) return
+    if (!canManageThisPost) return
 
     const title = postEdit.draftTitle.trim()
     const inf = postEdit.draftInf.trim()
@@ -100,7 +124,7 @@ const Post: React.FC<IPost> = props => {
     const infChanged = inf !== props.postInf
 
     if (!titleChanged && !infChanged) {
-      dispatch(finishEdit(props._id))
+      dispatch(finishEdit(props.post_id))
       return
     }
 
@@ -115,18 +139,18 @@ const Post: React.FC<IPost> = props => {
     }
 
     try {
-      if (titleChanged) await updatePostTitle({ postId: props._id, newTitle: title }).unwrap()
-      if (infChanged) await updatePostInf({ postId: props._id, newInformat: inf }).unwrap()
+      if (titleChanged) await updatePostTitle({ postId: props.post_id, newTitle: title }).unwrap()
+      if (infChanged) await updatePostInf({ postId: props.post_id, newInformat: inf }).unwrap()
       message.success('Post updated')
     } catch (err) {
       console.error(err)
       message.error('Failed to update post')
     } finally {
-      dispatch(finishEdit(props._id))
+      dispatch(finishEdit(props.post_id))
     }
   }, [
     postEdit,
-    props._id,
+    props.post_id,
     props.postTitle,
     props.postInf,
     updatePostTitle,
@@ -147,35 +171,82 @@ const Post: React.FC<IPost> = props => {
   }, [handleOutsideClick])
 
   const handleStartEdit = (e: React.MouseEvent) => {
+    if (!canManageThisPost || !authorizedUserId) return
     e.stopPropagation()
-    dispatch(startEdit(props._id))
+    dispatch(startEdit(props.post_id))
   }
 
   const handleChange = (field: 'title' | 'inf') => (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(updateDraft({ postId: props._id, field, value: e.target.value }))
+    dispatch(updateDraft({ postId: props.post_id, field, value: e.target.value }))
   }
 
-  const handleConfirm = async () => { await saveChanges() }
-  const hasChanges = postEdit.draftTitle !== props.postTitle || postEdit.draftInf !== props.postInf
-
-  const toggleLike = (e: React.MouseEvent) => {
+  const handleToggleLike = async (e: React.MouseEvent) => {
     e.stopPropagation()
-    setLiked(prev => {
-      const next = !prev
-      setLikes(l => l + (next ? 1 : -1))
-      return next
-    })
+    try {
+      const result = await toggleLike({ postId: props.post_id }).unwrap()
+      setLiked(Boolean(result.likedByViewer))
+      setLikes(result.likesCount || 0)
+    } catch (err) {
+      console.error(err)
+      message.error('Failed to update like')
+    }
+  }
+
+  const handleCommentSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const trimmed = commentDraft.trim()
+    if (!trimmed) return
+
+    try {
+      const result = await addComment({ postId: props.post_id, comment: trimmed }).unwrap()
+      setComments(result.comments || [])
+      setCommentDraft('')
+    } catch (err) {
+      console.error(err)
+      message.error('Failed to add comment')
+    }
+  }
+
+  const handleRepost = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    try {
+      const result = await repostPost({ postId: props.post_id }).unwrap()
+      setReposts(result.repostsCount || 0)
+      message.success('Post reposted')
+    } catch (err) {
+      console.error(err)
+      message.error('Failed to repost')
+    }
   }
 
   const handleDelete = async () => {
-    if (!props.userId) return
+    if (!canManageThisPost) return
 
     try {
-      await deletePost({ postId: props._id, userId: props.userId }).unwrap()
+      await deletePost({ postId: props.post_id, userId: authorizedUserId }).unwrap()
       message.success('Post deleted')
     } catch (err) {
       console.error(err)
       message.error('Failed to delete post')
+    }
+  }
+
+  const handleVisibilityChange = async (nextVisibility: 'public' | 'private') => {
+    if (!canManageThisPost) return
+    if (nextVisibility === postVisibility) return
+
+    try {
+      const result = await updatePostVisibility({
+        postId: props.post_id,
+        visibility: nextVisibility
+      }).unwrap()
+
+      const nextVisibleState = result?.visibility || nextVisibility
+      setPostVisibility(nextVisibleState)
+      message.success(`Post set to ${nextVisibleState === 'private' ? 'Private' : 'Public'}`)
+    } catch (err) {
+      console.error(err)
+      message.error('Failed to update visibility')
     }
   }
 
@@ -188,10 +259,32 @@ const Post: React.FC<IPost> = props => {
             <div className={classes.userInfo}>
               <div className={classes.userName}>{props.userName}</div>
               <div className={classes.postTime}>{props.createdAt}</div>
+              <div className={classes.visibilityLabel}>
+                {postVisibility === 'private' ? <LockOutlined /> : <GlobalOutlined />}
+                <span>{postVisibility === 'private' ? 'Private' : 'Public'}</span>
+              </div>
             </div>
           </div>
           <div className={classes.headerRight}>
-            {props.canDelete && (
+            {canManageThisPost && (
+              <div className={classes.visibilityToggle} onClick={e => e.stopPropagation()}>
+                <button
+                  type="button"
+                  className={`${classes.visibilityToggleBtn} ${postVisibility === 'public' ? classes.visibilityToggleBtnActive : ''}`}
+                  onClick={() => handleVisibilityChange('public')}
+                >
+                  Public
+                </button>
+                <button
+                  type="button"
+                  className={`${classes.visibilityToggleBtn} ${postVisibility === 'private' ? classes.visibilityToggleBtnActive : ''}`}
+                  onClick={() => handleVisibilityChange('private')}
+                >
+                  Private
+                </button>
+              </div>
+            )}
+            {canManageThisPost && (
               <Popconfirm
                 title="Delete post"
                 description="This post will be permanently removed."
@@ -214,7 +307,7 @@ const Post: React.FC<IPost> = props => {
           </div>
         </div>
 
-        <div className={classes.body} onClick={handleStartEdit}>
+        <div className={classes.body} onClick={canManageThisPost ? handleStartEdit : undefined}>
           <div className={classes.leftImage}>
             <img src={postImage} alt="post visual" />
           </div>
@@ -242,20 +335,54 @@ const Post: React.FC<IPost> = props => {
         </div>
 
         <div className={classes.footer}>
-          <div className={classes.actions} onClick={e => e.stopPropagation()}>
-            <Space>
-              <Button type="text" icon={<LikeOutlined />} onClick={toggleLike} />
-              <Button type="text" icon={<MessageOutlined />} />
-              <Button type="text" icon={<ShareAltOutlined />} />
-            </Space>
-          </div>
+          {canInteractWithPost ? (
+            <div className={classes.actions} onClick={e => e.stopPropagation()}>
+              <Space>
+                <Button type="text" icon={liked ? <HeartFilled style={{ color: '#ff4d4f' }} /> : <LikeOutlined />} onClick={handleToggleLike} />
+                <Button type="text" icon={<MessageOutlined />} />
+                <Button type="text" icon={<ShareAltOutlined />} onClick={handleRepost} />
+              </Space>
+            </div>
+          ) : <div />}
 
           <div className={classes.reactions}>
             <div className={classes.reactionBadge}>
               <HeartFilled style={{ color: '#ff4d4f', marginRight: 6 }} />
               <span>{likes}</span>
             </div>
+            <div className={classes.reactionBadge}>
+              <MessageOutlined style={{ marginRight: 6 }} />
+              <span>{comments.length}</span>
+            </div>
+            <div className={classes.reactionBadge}>
+              <ShareAltOutlined style={{ marginRight: 6 }} />
+              <span>{reposts}</span>
+            </div>
           </div>
+        </div>
+
+        <div className={classes.commentSection}>
+          {canInteractWithPost && (
+            <form className={classes.commentForm} onSubmit={handleCommentSubmit}>
+              <Input
+                value={commentDraft}
+                onChange={e => setCommentDraft(e.target.value)}
+                placeholder="Write a comment"
+                onClick={e => e.stopPropagation()}
+              />
+              <Button type="primary" htmlType="submit">Comment</Button>
+            </form>
+          )}
+          {comments.length > 0 && (
+            <div className={classes.commentList}>
+              {comments.slice(0, 3).map(comment => (
+                <div key={comment.id} className={classes.commentItem}>
+                  <strong>{comment.author}</strong>
+                  <span>{comment.text}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -85,6 +85,7 @@ const Article: React.FC<ArticlePropType> = React.memo(({
           <Routes>
             <Route path='/Profile/:userId' element={<div className="flex-content"><ProfileContainer />{isMembersColumnOpen && <MembersContainer />}</div>} />
             <Route path='/Profile' element={<div className="flex-content"><ProfileContainer />{isMembersColumnOpen && <MembersContainer />}</div>} />
+            <Route path='/Wall/:userId' element={<div className="flex-content"><ProfileMainContent /><Wall /></div>} />
             <Route path='/Wall' element={<div className="flex-content"><ProfileMainContent /><Wall /></div>} />
             {/* Maybe it has to be changed to route param - :userDialogId */}<Route path={`/Messages/dialog/${userDialogId}`} element={<div className="flex-content"><ProfileMainContent /><Messages /></div>} />
             <Route path='/Messages' element={<div className="flex-content"><ProfileMainContent /><Messages /></div>} />

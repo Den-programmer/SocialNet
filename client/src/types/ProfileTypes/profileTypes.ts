@@ -22,15 +22,27 @@ export type profileType = {
     userId: string
 }
 
-export type PostType = {
+export type PostCommentType = {
   id: string
+  author: string
+  text: string
+  createdAt: string
+}
+
+export type PostType = {
   _id: string
   postTitle: string
   postInf: string
   postImg: File | string
   likesCount: number
+  likedByViewer?: boolean
+  comments?: PostCommentType[]
+  repostsCount?: number
+  visibility?: 'public' | 'private'
   owner: string
   createdAt: string
+  canDelete?: boolean
+  canInteract?: boolean
 }
 
 export type PostEditState = {

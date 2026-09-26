@@ -60,7 +60,7 @@ export const updateContactsSchema = z.object({
 })
 
 export const createPostSchema = z.object({
-  userId: userIdSchema,
+  userId: userIdSchema.optional(),
   newPostTitle: z.string()
     .min(1, 'Post title is required')
     .max(200, 'Post title must be less than 200 characters')
@@ -69,6 +69,7 @@ export const createPostSchema = z.object({
     .min(1, 'Post content is required')
     .max(10000, 'Post content must be less than 10000 characters')
     .trim(),
+  visibility: z.enum(['public', 'private']).optional().default('public'),
 })
 
 export const updatePostSchema = z.object({
@@ -85,6 +86,11 @@ export const updatePostContentSchema = z.object({
     .min(1, 'Post content is required')
     .max(10000, 'Post content must be less than 10000 characters')
     .trim(),
+})
+
+export const updatePostVisibilitySchema = z.object({
+  postId: userIdSchema,
+  visibility: z.enum(['public', 'private']).default('public'),
 })
 
 export const messageSchema = z.object({

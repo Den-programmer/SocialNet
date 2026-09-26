@@ -9,6 +9,7 @@ export type postPayload = {
   newPostTitle: string
   newPostInformat: string
   postPhoto: File
+  visibility?: 'public' | 'private'
 }
 
 export type photosType = {
@@ -51,7 +52,7 @@ export const profileApi = createApi({
       transformResponse: (response: ServerResType<PostType[]>) => response.data
     }),
     createPost: builder.mutation<PostType, postPayload>({
-      async queryFn({ userId, newPostTitle, newPostInformat, postPhoto }, _queryApi, _extraOptions, baseQuery) {
+      async queryFn({ userId, newPostTitle, newPostInformat, postPhoto, visibility }, _queryApi, _extraOptions, baseQuery) {
         try {
           const compressed = await imageCompression(postPhoto, {
             maxSizeMB: 1,
@@ -66,6 +67,7 @@ export const profileApi = createApi({
           formData.append('userId', userIdfromStorage || userId || '')
           formData.append('newPostTitle', newPostTitle)
           formData.append('newPostInformat', newPostInformat)
+          formData.append('visibility', visibility || 'public')
           formData.append('postPhoto', compressed)
 
           const token = getToken() || ''
@@ -119,6 +121,21 @@ export const profileApi = createApi({
       }),
       invalidatesTags: ['Posts']
     }),
+    updatePostVisibility: builder.mutation<
+      { postId: string; visibility: 'public' | 'private' },
+      { postId: string; visibility: 'public' | 'private' }
+    >({
+      query: (body) => ({
+        url: 'api/posts/updatePostVisibility',
+        method: 'PUT',
+        body: {
+          postId: body.postId,
+          visibility: body.visibility
+        }
+      }),
+      transformResponse: (response: ServerResType<{ postId: string; visibility: 'public' | 'private' }>) => response.data,
+      invalidatesTags: ['Posts']
+    }),
     deletePost: builder.mutation<{ deletedPost: PostType }, { postId: string; userId: string }>({
       query: ({ postId }) => ({
         url: `api/posts/deletePost/${postId}`,
@@ -126,6 +143,31 @@ export const profileApi = createApi({
       }),
       transformResponse: (response: ServerResType<{ deletedPost: PostType }>) => response.data,
       invalidatesTags: (result, error, { userId }) => [{ type: 'Posts', id: userId }]
+    }),
+    togglePostLike: builder.mutation<PostType, { postId: string }>({
+      query: ({ postId }) => ({
+        url: `api/posts/${postId}/like`,
+        method: 'POST'
+      }),
+      transformResponse: (response: ServerResType<PostType>) => response.data,
+      invalidatesTags: ['Posts']
+    }),
+    addPostComment: builder.mutation<PostType, { postId: string; comment: string }>({
+      query: ({ postId, comment }) => ({
+        url: `api/posts/${postId}/comment`,
+        method: 'POST',
+        body: { comment }
+      }),
+      transformResponse: (response: ServerResType<PostType>) => response.data,
+      invalidatesTags: ['Posts']
+    }),
+    repostPost: builder.mutation<PostType, { postId: string }>({
+      query: ({ postId }) => ({
+        url: `api/posts/${postId}/repost`,
+        method: 'POST'
+      }),
+      transformResponse: (response: ServerResType<PostType>) => response.data,
+      invalidatesTags: ['Posts']
     }),
     updateContacts: builder.mutation<contactsType, { contacts: contactsType; userId: string }>({
       query: ({ contacts, userId }) => ({
@@ -264,7 +306,11 @@ export const {
   useGetUserBackgroundQuery,
   useUpdatePostTitleMutation,
   useUpdatePostInformatMutation,
-  useDeletePostMutation
+  useDeletePostMutation,
+  useTogglePostLikeMutation,
+  useAddPostCommentMutation,
+  useRepostPostMutation, 
+  useUpdatePostVisibilityMutation
 } = profileApi
 
 

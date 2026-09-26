@@ -10,6 +10,8 @@ interface IAddPostForm {
   postPhoto: string
   postPhotoError: string
   onSubmit: (data: AddPostFD) => void
+  visibility: 'public' | 'private'
+  onVisibilityChange: (value: 'public' | 'private') => void
 }
 
 const MAX_DESCRIPTION_LENGTH = 2000
@@ -19,7 +21,9 @@ const AddPostForm: React.FC<IAddPostForm> = ({
   getPostImg,
   postPhoto,
   postPhotoError,
-  onSubmit
+  onSubmit,
+  visibility,
+  onVisibilityChange
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -144,6 +148,18 @@ const AddPostForm: React.FC<IAddPostForm> = ({
           {postInfValue.length}/{MAX_DESCRIPTION_LENGTH}
         </span>
         {errors.postInf && <span className={classes.messageError}>{errors.postInf.message}</span>}
+      </div>
+
+      <div className={classes.field}>
+        <label className={classes.label}>Post visibility</label>
+        <div className={classes.visibilityRow}>
+          <button type="button" className={`${classes.visibilityBtn} ${visibility === 'public' ? classes.visibilityBtnActive : ''}`} onClick={() => onVisibilityChange('public')}>
+            Public
+          </button>
+          <button type="button" className={`${classes.visibilityBtn} ${visibility === 'private' ? classes.visibilityBtnActive : ''}`} onClick={() => onVisibilityChange('private')}>
+            Private
+          </button>
+        </div>
       </div>
 
       <div className={classes.footer}>

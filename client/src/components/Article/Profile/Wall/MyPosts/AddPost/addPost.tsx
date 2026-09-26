@@ -22,6 +22,7 @@ const AddPost: React.FC<IAddPost> = ({ userId, addPost }) => {
     const messageError = useAppSelector(selectMessageError)
 
     const [postPhoto, setPostPhoto] = useState<File | null>(null)
+    const [visibility, setVisibility] = useState<'public' | 'private'>('public')
 
     const postPhotoURL = postPhoto ? URL.createObjectURL(postPhoto) : '';
 
@@ -46,7 +47,7 @@ const AddPost: React.FC<IAddPost> = ({ userId, addPost }) => {
     const onSubmit = (formData: AddPostFD) => {
         const { postName, postInf } = formData
         if (postPhoto) {
-            addPost({userId, newPostTitle: postName, newPostInformat: postInf, postPhoto})
+            addPost({userId, newPostTitle: postName, newPostInformat: postInf, postPhoto, visibility})
             handleAddPostModalWindowStatus(false)
         } else {
             handleTextError('You must choose the post image!')
@@ -63,6 +64,8 @@ const AddPost: React.FC<IAddPost> = ({ userId, addPost }) => {
                         postPhoto={postPhotoURL}
                         getPostImg={getPostImg}
                         postPhotoError={messageError}
+                        visibility={visibility}
+                        onVisibilityChange={setVisibility}
                     />
                 </div>
             </div>

@@ -1,19 +1,29 @@
 import React from 'react'
 import { Layout, Menu } from 'antd'
 import { profileNavItem } from '../../../../types/ProfileTypes/profileTypes'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { sidebarActions } from '../../../../BLL/reducer-sidebar'
 import { profileActions } from '../../../../BLL/reducer-profile'
 import { useAppSelector, useAppDispatch } from '../../../../hooks/hooks'
-import { selectProfileNavigationMenu } from '../../../../BLL/selectors/profile-selectors'
+import { selectProfileNavigationMenu, selectUsersProfile } from '../../../../BLL/selectors/profile-selectors'
+import { selectAuthorizedUserId } from '../../../../BLL/selectors/auth-selectors'
 
 const { Header } = Layout
 
 const ProfileNav: React.FC = () => {
     const dispatch = useAppDispatch()
     const profileNav = useAppSelector(selectProfileNavigationMenu)
+    const profile = useAppSelector(selectUsersProfile)
+    const authorizedUserId = useAppSelector(selectAuthorizedUserId)
     const { pathname } = useLocation()
     const navigate = useNavigate()
+    const { userId: routeUserId } = useParams<{ userId?: string }>()
+    const routeUserIdIsValid = Boolean(routeUserId && routeUserId !== 'undefined')
+    const profileUserId = routeUserIdIsValid
+        ? routeUserId
+        : profile.userId !== '0' && profile.userId !== 'undefined'
+            ? profile.userId
+            : authorizedUserId
 
     const { changeProfileNavItemChosenStatus } = profileActions
     const { choosePage } = sidebarActions
@@ -24,7 +34,12 @@ const ProfileNav: React.FC = () => {
         onClick: () => {
             dispatch(changeProfileNavItemChosenStatus(item.id))
             dispatch(choosePage(item.id))
-            navigate(item.path)
+            const path = item.path === '/Profile' || item.path === '/Wall'
+                ? profileUserId && profileUserId !== '0' && profileUserId !== 'undefined'
+                    ? `${item.path}/${profileUserId}`
+                    : item.path
+                : item.path
+            navigate(path)
         },
     }))
 

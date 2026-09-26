@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography } from 'antd';
 import { Link } from 'react-router-dom';
-import classes from './ErrorPage.module.scss';
+import classes from './errorPage.module.scss';
 
 const { Title, Text } = Typography;
 
