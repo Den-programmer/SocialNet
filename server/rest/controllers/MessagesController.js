@@ -7,6 +7,8 @@ import { serializeMessage } from '../functions/messageSerializers.js'
 
 class MessagesController {
   async addMessage(req, res) {
+    let uploadedImageUrl
+
     try {
       const senderId = req.user
       const conversationId = req.params.conversationId || req.params.id
@@ -37,7 +39,8 @@ class MessagesController {
             folder: 'messages_images',
             resource_type: 'image'
           })
-          imageUrl = uploadResponse.secure_url
+          uploadedImageUrl = uploadResponse.secure_url
+          imageUrl = uploadedImageUrl
         } else {
           imageUrl = image
         }
@@ -69,6 +72,10 @@ class MessagesController {
 
       res.status(201).json(new StandartRes(0, 'Message sent successfully', { newMessage: serializeMessage(newMessage) }))
     } catch (error) {
+      if (uploadedImageUrl) {
+        await deleteCloudinaryResource(uploadedImageUrl)
+      }
+
       console.error('Failed to send message:', error)
       res.status(500).json(catchRes)
     }

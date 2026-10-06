@@ -67,6 +67,8 @@ $color-background-lightest: #f4f6fb;
 $color-background-selection: #e8f0ff;
 $color-message-other: #eef0f3;
 $color-success: #52c41a;
+$color-ink: #172235;
+$color-blue-soft: #eef5ff;
 
 // ===== LAYOUT CONTAINERS =====
 .card {
@@ -331,7 +333,7 @@ $color-success: #52c41a;
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
-  background: #ffffff;
+  background: #fbfcfe;
   position: relative;
   min-width: 0;
   min-height: 0;
@@ -384,7 +386,7 @@ $color-success: #52c41a;
 .messagesHeader {
   padding: 14px 20px;
   border-bottom: 1px solid $color-border;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.94);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -460,7 +462,7 @@ $color-success: #52c41a;
   display: flex;
   flex-direction: column;
   gap: 3px;
-  background: $color-background-lightest;
+  background: radial-gradient(circle at 85% 12%, #f1f6ff 0, transparent 28%), #f7f9fc;
   position: relative;
 }
 
@@ -783,12 +785,151 @@ $color-success: #52c41a;
 .inputSection {
   display: flex;
   align-items: flex-end;
-  padding: 14px 18px;
+  padding: 16px 24px 20px;
   border-top: 1px solid $color-border;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.96);
   gap: 8px;
   box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.04);
   min-width: 0;
+}
+
+.attachmentMenu {
+  display: flex;
+  flex-direction: column;
+  min-width: 190px;
+  padding: 6px;
+}
+
+.attachmentOption {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: $color-ink;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: $color-blue-soft;
+    color: $color-primary;
+  }
+
+  :global(.anticon) {
+    color: $color-primary;
+    font-size: 18px;
+  }
+}
+
+.imagePreviewCard {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  padding: 4px;
+  border: 1px solid $color-border;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 5px 18px rgba(23, 34, 53, 0.08);
+}
+
+.imageCaptionInput {
+  width: 170px;
+  align-self: flex-end;
+  border: 0 !important;
+  box-shadow: none !important;
+  font-size: 13px;
+  resize: none;
+}
+
+.imageCaptionText {
+  align-self: center;
+  width: 170px;
+  color: $color-text-secondary;
+  font-size: 13px;
+  word-break: break-word;
+}
+
+.uploadModal {
+  :global(.ant-modal-content) {
+    border-radius: 18px;
+    padding: 26px;
+  }
+}
+
+.uploadModalHeader {
+  margin-bottom: 18px;
+
+  h3 {
+    margin: 5px 0 4px;
+    color: $color-ink;
+    font-size: 21px;
+  }
+
+  p {
+    margin: 0;
+    color: $color-text-light;
+    font-size: 13px;
+  }
+}
+
+.uploadModalEyebrow {
+  color: $color-primary;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
+
+.uploadDropzone {
+  :global(.ant-upload-drag) {
+    min-height: 205px;
+    border: 1px dashed #cbd8e8;
+    border-radius: 14px;
+    background: #fbfdff;
+  }
+}
+
+.uploadDropzoneIcon {
+  margin: 22px 0 10px;
+  color: #8997a9;
+  font-size: 32px;
+}
+
+.uploadDropzoneTitle {
+  margin-bottom: 6px !important;
+  color: $color-text-secondary;
+  font-size: 14px;
+}
+
+.uploadDropzoneOr {
+  margin-bottom: 11px !important;
+  color: $color-text-light;
+  font-size: 12px;
+}
+
+.captionModal {
+  :global(.ant-modal-content) {
+    border-radius: 18px;
+  }
+}
+
+.captionModalImage {
+  display: block;
+  width: 100%;
+  max-height: 340px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #f3f6fa;
+}
+
+.captionModalInput {
+  margin-top: 16px;
+  border-radius: 10px !important;
 }
 
 .imagePreview {
@@ -1266,6 +1407,26 @@ $color-success: #52c41a;
   .imagePreviewImg {
     max-width: 55px;
     max-height: 70px;
+  }
+
+  .imagePreviewCard {
+    width: 100%;
+  }
+
+  .imageCaptionInput {
+    width: auto;
+    flex: 1;
+  }
+
+  .imageCaptionText {
+    width: auto;
+    flex: 1;
+  }
+
+  .uploadModal {
+    :global(.ant-modal-content) {
+      padding: 20px 14px;
+    }
   }
 
   .messageImage {

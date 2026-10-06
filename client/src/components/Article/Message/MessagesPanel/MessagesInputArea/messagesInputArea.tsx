@@ -1,13 +1,16 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import classes from '../../messages.module.scss'
-import { Button, Tooltip, Popover, message as antMessage } from 'antd'
+import { Button, Tooltip, Popover, Modal, message as antMessage } from 'antd'
 import {
+    CloseOutlined,
     DeleteOutlined,
+    FileImageOutlined,
     SmileOutlined,
     PictureOutlined,
     SendOutlined,
+    UploadOutlined,
 } from '@ant-design/icons'
-import Upload, { UploadChangeParam, UploadFile } from 'antd/es/upload'
+import Upload from 'antd/es/upload'
 import TextArea, { TextAreaRef } from 'antd/es/input/TextArea'
 import { EmojiPickerContent } from '../../messages-utils/messages-utils'
 import { useSendDialogMessagesMutation } from '../../../../../DAL/messagesApi'
@@ -24,15 +27,30 @@ interface MessagesInputAreaProps {
 const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, selectedDialog, authorizedUserId }) => {
     const inputRef = useRef<TextAreaRef | null>(null)
     const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+    const [showAttachmentMenu, setShowAttachmentMenu] = useState(false)
+    const [showUploadDialog, setShowUploadDialog] = useState(false)
+    const [showCaptionDialog, setShowCaptionDialog] = useState(false)
 
     const [sendMessage, { isLoading: isSending }] = useSendDialogMessagesMutation()
 
     const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
     const isTypingRef = useRef(false)
 
-    const handleUpload = (info: UploadChangeParam<UploadFile<File>>) => {
-        const uploadedFile = info.file.originFileObj
-        if (uploadedFile) setFile(uploadedFile)
+    const handleBeforeUpload = (uploadedFile: File) => {
+        if (!uploadedFile.type.startsWith('image/')) {
+            antMessage.error('Please choose an image file')
+            return Upload.LIST_IGNORE
+        }
+
+        if (uploadedFile.size > 10 * 1024 * 1024) {
+            antMessage.error('Images must be smaller than 10 MB')
+            return Upload.LIST_IGNORE
+        }
+
+        setFile(uploadedFile)
+        setShowAttachmentMenu(false)
+        setShowUploadDialog(false)
+        return false
     }
 
     const handleEmojiSelect = (emoji: string) => {
@@ -40,10 +58,19 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
         inputRef.current?.focus()
     }
 
-    const [input, setInput] = useState('')
-    const [imageUrl, setImageUrl] = useState<string>()
+    const clearAttachment = () => {
+        setFile(null)
+        setImageUrl(undefined)
+        setCaption('')
+        setShowCaptionDialog(false)
+    }
 
-    const emitTyping = (isTyping: boolean) => {
+    const [input, setInput] = useState('')
+    const [caption, setCaption] = useState('')
+    const [imageUrl, setImageUrl] = useState<string>()
+    const [isProcessingImage, setIsProcessingImage] = useState(false)
+
+    const emitTyping = useCallback((isTyping: boolean) => {
         const receiverId = selectedDialog?.participants.find(p => p.id !== authorizedUserId)?.id
         if (!receiverId) return
 
@@ -53,15 +80,11 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
             isTyping,
             username: selectedDialog?.participants.find(p => p.id === authorizedUserId)?.username
         })
-    }
+    }, [authorizedUserId, conversationId, selectedDialog])
 
     const handleSend = async () => {
-        if ((!input.trim() && !imageUrl) || !conversationId || isSending) return
-        const text = input.trim()
-        setInput('')
-        setFile(null)
-        setImageUrl(undefined)
-        setShowEmojiPicker(false)
+        const text = imageUrl ? caption.trim() : input.trim()
+        if ((!text && !imageUrl) || !conversationId || isSending || isProcessingImage) return
 
         if (isTypingRef.current) {
             isTypingRef.current = false
@@ -71,6 +94,9 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
 
         try {
             await sendMessage({ conversationId, text, image: imageUrl }).unwrap()
+            setInput('')
+            clearAttachment()
+            setShowEmojiPicker(false)
         } catch {
             antMessage.error('Failed to send message')
         }
@@ -85,6 +111,15 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
             }
             if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
         }
+    }, [conversationId, emitTyping])
+
+    useEffect(() => {
+        setInput('')
+        clearAttachment()
+        setShowEmojiPicker(false)
+        setShowAttachmentMenu(false)
+        setShowUploadDialog(false)
+        setShowCaptionDialog(false)
     }, [conversationId])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -103,8 +138,13 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
     }
 
     useEffect(() => {
-        if (!file) return
+        if (!file) {
+            setIsProcessingImage(false)
+            return
+        }
+
         let cancelled = false
+        setIsProcessingImage(true)
         const processImage = async () => {
             try {
                 const compressed = await imageCompression(file, {
@@ -115,11 +155,19 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
                 if (cancelled) return
                 const reader = new FileReader()
                 reader.onload = (e) => {
-                    if (!cancelled) setImageUrl(e.target?.result as string)
+                    if (!cancelled) {
+                        setImageUrl(e.target?.result as string)
+                        setIsProcessingImage(false)
+                        setShowCaptionDialog(true)
+                    }
                 }
                 reader.readAsDataURL(compressed)
             } catch {
-                if (!cancelled) antMessage.error('Failed to process image')
+                if (!cancelled) {
+                    antMessage.error('Failed to process image')
+                    clearAttachment()
+                    setIsProcessingImage(false)
+                }
             }
         }
         processImage()
@@ -129,20 +177,23 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
     return (
         <div className={classes.inputSection}>
             {imageUrl && (
-                <div className={classes.imagePreview}>
-                    <img src={imageUrl} alt="preview" className={classes.imagePreviewImg} />
-                    <Button
-                        className={classes.deleteImageButton}
-                        type="text"
-                        size="small"
-                        danger
-                        icon={<DeleteOutlined />}
-                        onClick={() => { setFile(null); setImageUrl(undefined) }}
-                    />
+                <div className={classes.imagePreviewCard}>
+                    <div className={classes.imagePreview}>
+                        <img src={imageUrl} alt="preview" className={classes.imagePreviewImg} />
+                        <Button
+                            className={classes.deleteImageButton}
+                            type="text"
+                            size="small"
+                            danger
+                            icon={<DeleteOutlined />}
+                            onClick={clearAttachment}
+                        />
+                    </div>
+                    <span className={classes.imageCaptionText}>{caption || 'No caption'}</span>
                 </div>
             )}
 
-            <TextArea
+            {!imageUrl && <TextArea
                 ref={inputRef}
                 className={classes.messageInput}
                 placeholder="Write a message... (Ctrl+Enter to send)"
@@ -155,7 +206,7 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
                     }
                 }}
                 autoSize={{ minRows: 1, maxRows: 4 }}
-            />
+            />}
 
             <Popover
                 content={<EmojiPickerContent onEmojiSelect={handleEmojiSelect} />}
@@ -175,21 +226,29 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
                 </Tooltip>
             </Popover>
 
-            <Tooltip title="Attach image">
-                <Upload
-                    accept="image/*"
-                    showUploadList={false}
-                    beforeUpload={() => false}
-                    onChange={handleUpload}
-                >
-                    <Button
-                        className={classes.uploadButton}
-                        shape="circle"
-                        icon={<PictureOutlined />}
-                        size="large"
-                    />
-                </Upload>
-            </Tooltip>
+            <Popover
+                trigger="click"
+                open={showAttachmentMenu}
+                onOpenChange={setShowAttachmentMenu}
+                placement="topRight"
+                content={<div className={classes.attachmentMenu}>
+                    <button
+                        type="button"
+                        className={classes.attachmentOption}
+                        onClick={() => {
+                            setShowAttachmentMenu(false)
+                            setShowUploadDialog(true)
+                        }}
+                    >
+                        <FileImageOutlined />
+                        <span>Upload photo</span>
+                    </button>
+                </div>}
+            >
+                <Tooltip title="Attach image">
+                    <Button className={classes.uploadButton} shape="circle" icon={<PictureOutlined />} size="large" />
+                </Tooltip>
+            </Popover>
 
             <Tooltip title="Send (Ctrl+Enter)">
                 <Button
@@ -198,11 +257,61 @@ const MessagesInputArea: React.FC<MessagesInputAreaProps> = ({ conversationId, s
                     type="primary"
                     icon={<SendOutlined />}
                     size="large"
-                    loading={isSending}
+                    loading={isSending || isProcessingImage}
                     onClick={handleSend}
-                    disabled={!input.trim() && !imageUrl}
+                    disabled={(!input.trim() && !imageUrl) || isProcessingImage}
                 />
             </Tooltip>
+
+            <Modal
+                open={showUploadDialog}
+                onCancel={() => setShowUploadDialog(false)}
+                footer={null}
+                centered
+                className={classes.uploadModal}
+                closeIcon={<CloseOutlined />}
+            >
+                <div className={classes.uploadModalHeader}>
+                    <span className={classes.uploadModalEyebrow}>ATTACHMENT</span>
+                    <h3>Choose a photo</h3>
+                    <p>Drop an image here or browse your device.</p>
+                </div>
+                <Upload.Dragger
+                    accept="image/*"
+                    showUploadList={false}
+                    beforeUpload={handleBeforeUpload}
+                    className={classes.uploadDropzone}
+                >
+                    <p className={classes.uploadDropzoneIcon}><PictureOutlined /></p>
+                    <p className={classes.uploadDropzoneTitle}>Drag and drop a photo here</p>
+                    <p className={classes.uploadDropzoneOr}>or</p>
+                    <Button type="primary" icon={<UploadOutlined />}>Choose from device</Button>
+                </Upload.Dragger>
+            </Modal>
+
+            <Modal
+                open={showCaptionDialog && Boolean(imageUrl)}
+                onCancel={clearAttachment}
+                title="Add a caption"
+                centered
+                className={classes.captionModal}
+                okText="Use photo"
+                cancelText="Remove"
+                onOk={() => setShowCaptionDialog(false)}
+                okButtonProps={{ disabled: isProcessingImage }}
+            >
+                {imageUrl && <img src={imageUrl} alt="Selected attachment" className={classes.captionModalImage} />}
+                <TextArea
+                    autoFocus
+                    className={classes.captionModalInput}
+                    placeholder="Add a caption..."
+                    value={caption}
+                    onChange={(event) => setCaption(event.target.value)}
+                    maxLength={500}
+                    showCount
+                    autoSize={{ minRows: 2, maxRows: 5 }}
+                />
+            </Modal>
         </div>
     )
 }
