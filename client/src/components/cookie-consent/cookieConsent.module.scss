@@ -169,6 +169,53 @@
   margin-bottom: 1.25rem;
 }
 
+.services {
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  background: #f4f6f8;
+  border-radius: 0.35rem;
+}
+
+.services h3 {
+  margin: 0 0 0.5rem;
+  color: #222;
+  font-size: 1rem;
+}
+
+.serviceNotice {
+  margin: 0 0 0.75rem;
+  color: #4c5560;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.service {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid #dfe3e8;
+}
+
+.service strong {
+  color: #222;
+  font-size: 0.9rem;
+}
+
+.service p {
+  margin: 0.2rem 0 0;
+  color: #4c5560;
+  font-size: 0.85rem;
+}
+
+.service a {
+  flex-shrink: 0;
+  color: #125c72;
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
 .settingsActions {
   justify-content: flex-end;
 }
@@ -197,5 +244,14 @@
   .manageButton {
     right: 0.75rem;
     bottom: 0.75rem;
+  }
+
+  .service {
+    display: block;
+  }
+
+  .service a {
+    display: inline-block;
+    margin-top: 0.5rem;
   }
 }

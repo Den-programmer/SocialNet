@@ -1,5 +1,8 @@
 import React, { useEffect, useRef } from 'react'
-import { COOKIE_CATEGORIES } from '../../lib/cookie-consent/constants'
+import {
+  COOKIE_CATEGORIES,
+  COOKIE_SERVICES
+} from '../../lib/cookie-consent/constants'
 import { useCookieConsent } from '../../hooks/useCookieConsent'
 import classes from './cookieConsent.module.scss'
 
@@ -64,6 +67,34 @@ const CookieSettings: React.FC = () => {
         <p className={classes.emptyState}>
           This application has no optional cookie categories at this time.
         </p>
+
+        <div className={classes.services}>
+          <h3>Services used by this application</h3>
+          <p className={classes.serviceNotice}>
+            These services are used for core functionality. Cloudinary image
+            delivery is not a tracking script or embedded Cloudinary widget.
+            Cloudinary may process technical request data such as an IP
+            address when delivering media. See the provider&apos;s policy for
+            details.
+          </p>
+          {COOKIE_SERVICES.map(service => (
+            <div className={classes.service} key={service.name}>
+              <div>
+                <strong>{service.name}</strong>
+                <p>{service.purpose}</p>
+              </div>
+              {service.privacyUrl && (
+                <a
+                  href={service.privacyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Privacy policy
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
 
         <div className={classes.settingsActions}>
           <button type="button" className={classes.secondaryButton} onClick={closeSettings}>

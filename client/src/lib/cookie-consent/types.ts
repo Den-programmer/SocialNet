@@ -7,3 +7,11 @@ export interface CookieConsent {
 }
 
 export type CookieConsentSelection = Pick<CookieConsent, 'necessary'>
+
+export interface CookieService {
+  name: string
+  purpose: string
+  provider: string
+  category: CookieCategory
+  privacyUrl?: string
+}

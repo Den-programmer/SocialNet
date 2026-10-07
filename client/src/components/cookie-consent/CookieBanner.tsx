@@ -15,9 +15,10 @@ const CookieBanner: React.FC = () => {
         <div>
           <h2 className={classes.title}>Cookie choices</h2>
           <p className={classes.description}>
-            We use necessary storage to keep you signed in, protect the
-            application, and provide its core features. We do not currently
-            use analytics, marketing, or preference cookies.
+            We use necessary storage and services to keep you signed in,
+            protect the application, deliver media, and provide its core
+            features. We do not currently use analytics, marketing, or
+            preference cookies.
           </p>
         </div>
         <div className={classes.actions}>
