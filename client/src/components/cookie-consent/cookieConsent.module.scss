@@ -1,0 +1,201 @@
+.banner {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 1000;
+  padding: 1.25rem;
+  color: #fff;
+  background: #20232a;
+  border: 1px solid #49515e;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.25);
+}
+
+.bannerContent {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1170px;
+  margin: 0 auto;
+}
+
+.title {
+  margin: 0 0 0.35rem;
+  color: inherit;
+  font-size: 1.1rem;
+}
+
+.description {
+  max-width: 720px;
+  margin: 0;
+  color: #e4e7eb;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.actions,
+.settingsActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.primaryButton,
+.secondaryButton,
+.linkButton,
+.manageButton,
+.closeButton {
+  min-height: 2.5rem;
+  padding: 0.55rem 0.9rem;
+  font: inherit;
+  border-radius: 0.35rem;
+  cursor: pointer;
+}
+
+.primaryButton {
+  color: #20232a;
+  background: #61dafb;
+  border: 1px solid #61dafb;
+}
+
+.secondaryButton {
+  color: #fff;
+  background: transparent;
+  border: 1px solid #aeb7c4;
+}
+
+.linkButton {
+  color: #bceefa;
+  background: transparent;
+  border: 0;
+  text-decoration: underline;
+}
+
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible,
+.linkButton:focus-visible,
+.manageButton:focus-visible,
+.closeButton:focus-visible {
+  outline: 3px solid #ffcc66;
+  outline-offset: 2px;
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.settings {
+  width: min(100%, 620px);
+  max-height: 90vh;
+  overflow: auto;
+  padding: 1.5rem;
+  color: #222;
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.3);
+}
+
+.settingsHeader {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.settings .title {
+  color: #222;
+}
+
+.settings .description,
+.category p,
+.emptyState {
+  color: #4c5560;
+}
+
+.closeButton {
+  width: 2.5rem;
+  padding: 0;
+  color: #222;
+  background: transparent;
+  border: 1px solid #c8cdd3;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.categoryList {
+  margin: 1.25rem 0;
+  border-top: 1px solid #dfe3e8;
+}
+
+.category {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid #dfe3e8;
+}
+
+.category h3 {
+  margin: 0 0 0.3rem;
+  color: #222;
+  font-size: 1rem;
+}
+
+.category p,
+.emptyState {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.alwaysActive {
+  flex-shrink: 0;
+  color: #4c5560;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.emptyState {
+  margin-bottom: 1.25rem;
+}
+
+.settingsActions {
+  justify-content: flex-end;
+}
+
+.manageButton {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 999;
+  color: #20232a;
+  background: #fff;
+  border: 1px solid #b8c0ca;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 700px) {
+  .bannerContent {
+    display: block;
+  }
+
+  .actions {
+    margin-top: 1rem;
+    justify-content: flex-start;
+  }
+
+  .manageButton {
+    right: 0.75rem;
+    bottom: 0.75rem;
+  }
+}
