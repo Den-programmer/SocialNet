@@ -4,6 +4,8 @@ import Dialog from '../models/dialog.js'
 import Message from '../models/message.js'
 import { catchRes, StandartRes } from '../routes/responses/responses.js'
 import { serializeDialog } from '../functions/messageSerializers.js'
+import { storagePolicy } from '../../config/storagePolicy.js'
+import { paginationMeta, parsePagination } from '../functions/pagination.js'
 
 class DialogsController {
   async getAllDialogs(req, res) {
@@ -12,22 +14,22 @@ class DialogsController {
         return res.status(401).json({ message: 'Unauthorized' })
       }
 
+      const { page, pageSize } = parsePagination(req.query, 20, storagePolicy.maxUserConversations)
       const dialogs = await Dialog.find({ participants: req.user })
         .sort({ updatedAt: -1 })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
         .populate([
-          { path: 'participants', select: 'username email profile.photos' },
-          {
-            path: 'messages',
-            populate: {
-              path: 'sender receiver',
-              select: 'username email profile.photos'
-            }
-          }
+          { path: 'participants', select: 'username email profile.photos' }
         ])
 
       const formattedDialogs = dialogs.map(dialog => serializeDialog(dialog))
 
-      res.status(200).json(new StandartRes(0, 'Dialogs fetched successfully', { dialogs: formattedDialogs }))
+      const totalCount = await Dialog.countDocuments({ participants: req.user })
+      res.status(200).json(new StandartRes(0, 'Dialogs fetched successfully', {
+        dialogs: formattedDialogs,
+        ...paginationMeta(page, pageSize, totalCount)
+      }))
     } catch (e) {
       console.error('Error in fetching dialogs:', e)
       res.status(500).json({ error: 'Internal Server Error', details: e.message })
@@ -62,6 +64,7 @@ class DialogsController {
         { path: 'participants', select: 'username email profile.photos' },
         {
           path: 'messages',
+          options: { limit: storagePolicy.maxDialogMessages, sort: { createdAt: -1 } },
           populate: {
             path: 'sender receiver',
             select: 'username email profile.photos'

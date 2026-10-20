@@ -46,10 +46,10 @@ export const profileApi = createApi({
       },
       transformResponse: (response: ServerResType<{ username: string }>) => response.data.username
     }),
-    getUsersPosts: builder.query<PostType[], string>({
-      query: (userId) => `api/posts/getPosts/${userId}`,
-      providesTags: (result, error, userId) => [{ type: 'Posts', id: userId }],
-      transformResponse: (response: ServerResType<PostType[]>) => response.data
+    getUsersPosts: builder.query<{ items: PostType[]; page: number; pageSize: number; totalCount: number; totalPages: number; hasNextPage: boolean }, { userId: string; page?: number; pageSize?: number }>({
+      query: ({ userId, page = 1, pageSize = 20 }) => `api/posts/getPosts/${userId}?page=${page}&pageSize=${pageSize}`,
+      providesTags: (result, error, args) => [{ type: 'Posts', id: args.userId }],
+      transformResponse: (response: ServerResType<{ items: PostType[]; page: number; pageSize: number; totalCount: number; totalPages: number; hasNextPage: boolean }>) => response.data
     }),
     createPost: builder.mutation<PostType, postPayload>({
       async queryFn({ userId, newPostTitle, newPostInformat, postPhoto, visibility }, _queryApi, _extraOptions, baseQuery) {

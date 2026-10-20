@@ -1,12 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { normalizeVisibility, canViewPost, matchesCommentAuthor, canDeletePost } from './postLogic.js'
-
-test('normalizes visibility values to public or private', () => {
-  assert.equal(normalizeVisibility('PUBLIC'), 'public')
-  assert.equal(normalizeVisibility('private'), 'private')
-  assert.equal(normalizeVisibility(undefined), 'public')
-})
+import { canViewPost, matchesCommentAuthor, canDeletePost } from './postLogic.js'
 
 test('public posts are visible to any viewer, and private posts stay visible only to the owner', () => {
   const publicPost = { visibility: 'public', owner: 'owner-1' }

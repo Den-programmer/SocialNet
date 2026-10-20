@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { storagePolicy } from '../../../config/storagePolicy.js'
 
 const AIMessageSchema = new mongoose.Schema(
     {
@@ -15,6 +16,11 @@ const AIMessageSchema = new mongoose.Schema(
         content: {
             type: String,
             required: true
+        },
+        expiresAt: {
+            type: Date,
+            default: () => new Date(Date.now() + storagePolicy.ttlDays * 24 * 60 * 60 * 1000),
+            expires: 0
         }
     },
     {

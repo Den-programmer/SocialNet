@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
+import { storagePolicy } from '../../config/storagePolicy.js'
 
 const Schema = mongoose.Schema;
 
 const dialogSchema = new Schema({
     hasNewMessages: { type: Boolean, default: false },
     participants: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
-    messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
+    messages: [{ type: Schema.Types.ObjectId, ref: 'Message', maxItems: storagePolicy.maxDialogMessages }],
     lastDialogActivityDate: { type: Date, default: Date.now },
     lastUserActivityDate: { type: Date, default: Date.now },
     newMessagesCount: { type: Number, default: 0 },

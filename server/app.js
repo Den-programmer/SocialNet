@@ -8,6 +8,7 @@ import { securityHeaders, corsConfig, rateLimitMiddleware, validateInputLength }
 
 import { connectDatabase } from "./config/database.js"
 import qdrantProvider from "./rest/ai/providers/vector/qdrant.provider.js"
+import { storagePolicy } from './config/storagePolicy.js'
 
 import authRoutes from './rest/routes/auth.routes.js'
 import backgroundRoutes from './rest/routes/background.routes.js'
@@ -28,10 +29,10 @@ const app = express()
 
 app.use(securityHeaders)
 app.use(cors(corsConfig))
-app.use(validateInputLength('10mb'))
+app.use(validateInputLength(`${storagePolicy.maxJsonBytes / 1024 / 1024}mb`))
 app.use(rateLimitMiddleware(100, 60000))
 
-app.use(express.json({ limit: '10mb' }))
+app.use(express.json({ limit: storagePolicy.maxJsonBytes }))
 
 app.use('/api/auth', authRoutes)
 app.use('/api/background', backgroundRoutes)

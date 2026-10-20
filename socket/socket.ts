@@ -37,6 +37,18 @@ type DialogPayload = {
 }
 
 let onlineUsers: OnlineUser[] = []
+const eventTimestamps = new Map<string, number[]>()
+const MAX_EVENTS_PER_MINUTE = 30
+
+const allowEvent = (socketId: string, event: string) => {
+  const key = `${socketId}:${event}`
+  const now = Date.now()
+  const timestamps = (eventTimestamps.get(key) || []).filter(timestamp => now - timestamp < 60000)
+  if (timestamps.length >= MAX_EVENTS_PER_MINUTE) return false
+  timestamps.push(now)
+  eventTimestamps.set(key, timestamps)
+  return true
+}
 
 const emitToUser = (userId: string | undefined, event: string, payload: unknown) => {
   if (!userId) return
@@ -60,28 +72,36 @@ io.on('connection', (socket) => {
   })
 
   socket.on('sendMessage', (message: MessagePayload) => {
+    if (!allowEvent(socket.id, 'sendMessage')) return
     emitToUser(message.receiverId, 'getMessage', message)
   })
 
   socket.on('messageDeleted', (payload: MessagePayload) => {
+    if (!allowEvent(socket.id, 'messageDeleted')) return
     emitToUser(payload.receiverId, 'messageDeleted', payload)
   })
 
   socket.on('dialogStarted', (payload: DialogPayload) => {
+    if (!allowEvent(socket.id, 'dialogStarted')) return
     emitToUser(payload.receiverId, 'dialogStarted', payload.dialog)
   })
 
   socket.on('dialogDeleted', (payload: DialogPayload) => {
+    if (!allowEvent(socket.id, 'dialogDeleted')) return
     emitToUser(payload.receiverId, 'dialogDeleted', {
       dialogId: payload.dialogId || payload.dialog?.id
     })
   })
 
   socket.on('typing', (data: TypingPayload) => {
+    if (!allowEvent(socket.id, 'typing')) return
     emitToUser(data.receiverId, 'userTyping', data)
   })
 
   socket.on('disconnect', () => {
+    for (const key of eventTimestamps.keys()) {
+      if (key.startsWith(`${socket.id}:`)) eventTimestamps.delete(key)
+    }
     onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id)
     io.emit('getOnlineUsers', onlineUsers)
   })

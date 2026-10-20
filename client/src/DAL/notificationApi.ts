@@ -18,15 +18,16 @@ export type NotificationPayloadType = {
   author?: string | null
   avatar?: string | null
 }
+type NotificationsPage = { notifications: NotificationType[]; page: number; pageSize: number; totalCount: number; hasNextPage: boolean }
 
 export const notificationsApi = createApi({
   reducerPath: 'notificationsApi',
   baseQuery,
   tagTypes: ['Notification'],
   endpoints: (builder) => ({
-    getNotifications: builder.query<NotificationType[], void>({
-      query: () => `api/notifications/getNotifications`,
-      transformResponse: (res: ServerResType<{ notifications: NotificationType[] }>) => res.data.notifications,
+    getNotifications: builder.query<NotificationType[], { page?: number; pageSize?: number } | void>({
+      query: (args) => `api/notifications/getNotifications?page=${args?.page || 1}&pageSize=${args?.pageSize || 20}`,
+      transformResponse: (res: ServerResType<NotificationsPage>) => res.data.notifications,
       providesTags: (result) =>
         result
           ? [

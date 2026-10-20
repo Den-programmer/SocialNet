@@ -4,6 +4,8 @@ import Dialog from '../models/dialog.js'
 import { cloudinaryAPI as cloudinary } from '../../cloudinaryConfig.js'
 import { deleteCloudinaryResource } from '../functions/cloudinaryHelper.js'
 import { serializeMessage } from '../functions/messageSerializers.js'
+import { storagePolicy } from '../../config/storagePolicy.js'
+import { paginationMeta, parsePagination } from '../functions/pagination.js'
 
 class MessagesController {
   async addMessage(req, res) {
@@ -60,6 +62,7 @@ class MessagesController {
       await newMessage.save()
 
       conversation.messages.push(newMessage._id)
+      conversation.messages = conversation.messages.slice(-storagePolicy.maxDialogMessages)
       conversation.updatedAt = new Date()
       conversation.lastDialogActivityDate = new Date()
       conversation.lastMessage = content || (imageUrl ? 'Image' : '')
@@ -85,6 +88,7 @@ class MessagesController {
     try {
       const { userId1, userId2 } = req.params
       const currentUserId = req.user
+      const { page, pageSize } = parsePagination(req.query, 50, storagePolicy.maxMessagesPageSize)
 
       if (!userId1 || !userId2) {
         return res.status(400).json({ message: 'Both user IDs are required' })
@@ -97,23 +101,26 @@ class MessagesController {
 
       const conversation = await Dialog.findOne({
         participants: { $all: [userId1, userId2] }
-      }).populate([
-        {
-          path: 'messages',
-          populate: {
-            path: 'sender receiver',
-            select: 'username email profile.photos'
-          }
-        }
+      }).select('_id')
+      const messageQuery = conversation ? { conversationId: conversation._id } : { _id: null }
+      const [messages, totalCount] = await Promise.all([
+        Message.find(messageQuery)
+          .sort({ createdAt: -1 })
+          .skip((page - 1) * pageSize)
+          .limit(pageSize)
+          .populate([
+            { path: 'sender', select: 'username email profile.photos' },
+            { path: 'receiver', select: 'username email profile.photos' }
+          ]),
+        Message.countDocuments(messageQuery)
       ])
-
-      const messages = conversation?.messages || []
+      messages.reverse()
       const serializedMessages = messages.map(message => serializeMessage(message)).filter(Boolean)
 
       res.json(new StandartRes(0, 'Messages fetched successfully', {
         messages: serializedMessages,
         items: serializedMessages,
-        totalCount: serializedMessages.length
+        ...paginationMeta(page, pageSize, totalCount)
       }))
     } catch (error) {
       console.error('Failed to fetch messages:', error)

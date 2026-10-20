@@ -7,22 +7,20 @@ import { deleteCloudinaryResource } from '../functions/cloudinaryHelper.js'
 import embeddingProvider from '../ai/providers/embedding.provider.js'
 import qdrantProvider from '../ai/providers/vector/qdrant.provider.js'
 import { canViewPost, buildPostInteractions, canDeletePost, canDisplayProfilePost } from '../functions/postLogic.js'
+import { storagePolicy } from '../../config/storagePolicy.js'
+import { paginationMeta, parsePagination } from '../functions/pagination.js'
 
 class PostsController {
   async getPosts(req, res) {
     try {
       const { userId } = req.params // Тот юзер, чьи посты мы хотим получить (профиль пользователя)
+      const { page, pageSize } = parsePagination(req.query, 20, storagePolicy.maxPostsPageSize)
       if (!userId) {
         return res.status(400).json(new StandartRes(1, "User's id is undefined."))
       }
 
-      /// Check userId, it should be a value of profile that is not owner or owner
-
       const viewerId = req.user // Тот юзер, который делает запрос (тот, кто просматривает профиль)
-      const targetUser = await User.findById(userId).populate({
-        path: 'posts',
-        model: 'Post'
-      })
+      const targetUser = await User.findById(userId).select('_id')
 
       if (!targetUser) {
         return res.status(404).json(new StandartRes(1, 'User not found.'))
@@ -39,7 +37,11 @@ class PostsController {
         profilePostsQuery.visibility = 'public'
       }
 
-      const profilePosts = await Post.find(profilePostsQuery).sort({ createdAt: -1 })
+      const profilePosts = await Post.find(profilePostsQuery)
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+      const totalCount = await Post.countDocuments(profilePostsQuery)
 
       const posts = profilePosts
         .filter(post => canDisplayProfilePost(post.toObject ? post.toObject() : post, viewerId, targetUserId))
@@ -57,7 +59,10 @@ class PostsController {
           createdAt: post.createdAt.toLocaleDateString('en-GB')
         }))
 
-      res.json(new StandartRes(0, '', posts))
+      res.json(new StandartRes(0, '', {
+        items: posts,
+        ...paginationMeta(page, pageSize, totalCount)
+      }))
     } catch (e) {
       console.error(e)
       res.status(500).json(catchRes)
@@ -132,7 +137,9 @@ class PostsController {
         }
       }
 
-      await User.findByIdAndUpdate(userId, { $push: { posts: newPost._id } })
+      await User.findByIdAndUpdate(userId, {
+        $push: { posts: { $each: [newPost._id], $slice: -storagePolicy.maxUserPosts } }
+      })
 
       res.json(new StandartRes(0, '', { ...newPost }))
     } catch (e) {
@@ -149,12 +156,12 @@ class PostsController {
       }
 
       const viewerId = req.user
-      const user = await User.findById(userId).populate('posts')
+      const user = await User.findById(userId).select('_id')
       if (!user) {
         return res.status(404).json(new StandartRes(1, 'User not found.'))
       }
 
-      const post = user.posts.find(p => p._id.toString() === postId)
+      const post = await Post.findOne({ _id: postId, owner: userId })
       if (!post) {
         return res.status(404).json(new StandartRes(1, 'Post not found.'))
       }
@@ -317,6 +324,9 @@ class PostsController {
 
       const userId = req.user.toString()
       const liked = post.likedBy.some(id => id.toString() === userId)
+      if (!liked && post.likedBy.length >= storagePolicy.maxPostLikes) {
+        return res.status(429).json(new StandartRes(1, 'This post has reached its like quota.'))
+      }
       const update = liked
         ? { $pull: { likedBy: userId }, $inc: { likesCount: -1 } }
         : { $addToSet: { likedBy: userId }, $inc: { likesCount: 1 } }
@@ -357,7 +367,7 @@ class PostsController {
 
       const updatedPost = await Post.findByIdAndUpdate(
         postId,
-        { $push: { comments: newComment } },
+        { $push: { comments: { $each: [newComment], $slice: -storagePolicy.maxPostComments } } },
         { new: true }
       )
 
@@ -399,7 +409,9 @@ class PostsController {
       }
 
       const repost = await Post.create(repostPayload)
-      await User.findByIdAndUpdate(req.user, { $push: { posts: repost._id } })
+      await User.findByIdAndUpdate(req.user, {
+        $push: { posts: { $each: [repost._id], $slice: -storagePolicy.maxUserPosts } }
+      })
       await Post.findByIdAndUpdate(postId, { $inc: { repostsCount: 1 } })
 
       res.json(new StandartRes(0, 'Post reposted.', buildPostInteractions(repost, req.user)))

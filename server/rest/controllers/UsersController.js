@@ -1,5 +1,6 @@
 import User from '../models/user.js'
 import { catchRes, StandartRes } from '../routes/responses/responses.js'
+import { storagePolicy } from '../../config/storagePolicy.js'
 
 class UsersController {
   async getUsers(req, res) {
@@ -25,9 +26,14 @@ class UsersController {
 
       console.log('Constructed query:', JSON.stringify(query))
 
+      const safePageSize = Math.min(
+        Math.max(Number.isInteger(Number(pageSize)) ? Number(pageSize) : 20, 1),
+        storagePolicy.maxUsersPageSize
+      )
+      const safeCurrentPage = Math.max(Number.isInteger(Number(currentPage)) ? Number(currentPage) : 1, 1)
       const users = await User.find(query)
-        .limit(Number(pageSize))
-        .skip(Number(pageSize) * (Number(currentPage) - 1))
+        .limit(safePageSize)
+        .skip(safePageSize * (safeCurrentPage - 1))
 
       const currentUser = currentUserId ? await User.findById(currentUserId) : null
 
@@ -76,6 +82,7 @@ class UsersController {
       }
 
       currentUser.following.push(userId)
+      currentUser.following = currentUser.following.slice(-storagePolicy.maxUserFollowing)
       await currentUser.save()
 
       res.json(new StandartRes(0, 'Followed successfully', {}))

@@ -18,8 +18,8 @@ export const aiApi = createApi({
       }),
       invalidatesTags: ['Messages', 'Conversations']
     }),
-    getConversations: builder.query<ServerResType<AIConversation[]>, void>({
-      query: () => 'api/ai/conversations',
+    getConversations: builder.query<ServerResType<{ items: AIConversation[]; page: number; pageSize: number; totalCount: number; hasNextPage: boolean }>, { page?: number; pageSize?: number } | void>({
+      query: (args) => `api/ai/conversations?page=${args?.page || 1}&pageSize=${args?.pageSize || 20}`,
       providesTags: ['Conversations']
     }),
     renameConversation: builder.mutation<
@@ -34,11 +34,11 @@ export const aiApi = createApi({
       invalidatesTags: ['Conversations']
     }),
     getMessages: builder.query<
-      ServerResType<Msg[]>,
-      string
+      ServerResType<{ items: Msg[]; page: number; pageSize: number; totalCount: number; hasNextPage: boolean }>,
+      { conversationId: string; page?: number; pageSize?: number }
     >({
-      query: (conversationId) =>
-        `api/ai/conversations/${conversationId}/messages`,
+      query: ({ conversationId, page = 1, pageSize = 50 }) =>
+        `api/ai/conversations/${conversationId}/messages?page=${page}&pageSize=${pageSize}`,
       providesTags: ['Messages']
     }),
     createConversation: builder.mutation<

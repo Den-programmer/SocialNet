@@ -3,7 +3,7 @@ import { baseQuery, ServerResType } from './api'
 import { socketService } from './socket'
 import { MessageType, userDialogType } from '../types/MessagesTypes/messagesTypes'
 
-type DialogsResponse = ServerResType<{ dialogs: userDialogType[] }>
+type DialogsResponse = ServerResType<{ dialogs: userDialogType[]; page: number; pageSize: number; totalCount: number; hasNextPage: boolean }>
 type DialogResponse = ServerResType<{ dialog: userDialogType }>
 type MessageResponse = ServerResType<{ newMessage: MessageType }>
 type DeletedMessageResponse = ServerResType<{ message: MessageType }>
@@ -16,6 +16,9 @@ type ConversationMessagesResponse = ServerResType<{
   messages?: MessageType[]
   items?: MessageType[]
   totalCount?: number
+  page?: number
+  pageSize?: number
+  hasNextPage?: boolean
 }>
 
 type DialogsCache = userDialogType[]
@@ -109,8 +112,8 @@ export const messagesApi = createApi({
   baseQuery,
   tagTypes: ['Messages'],
   endpoints: (builder) => ({
-    getAllDialogs: builder.query<userDialogType[], void>({
-      query: () => 'api/dialogs/getAllDialogs',
+    getAllDialogs: builder.query<userDialogType[], { page?: number; pageSize?: number } | void>({
+      query: (args) => `api/dialogs/getAllDialogs?page=${args?.page || 1}&pageSize=${args?.pageSize || 20}`,
       transformResponse: (response: DialogsResponse) => response.data.dialogs ?? [],
       providesTags: () => [{ type: 'Messages', id: 'LIST' }],
       async onCacheEntryAdded(_, { updateCachedData, cacheDataLoaded, cacheEntryRemoved }) {
@@ -323,8 +326,8 @@ export const messagesApi = createApi({
       }
     }),
 
-    getDialogMessages: builder.query<MessageType[], { userId1: string; userId2: string }>({
-      query: ({ userId1, userId2 }) => `api/messages/getMessagesBetweenUsers/${userId1}/${userId2}`,
+    getDialogMessages: builder.query<MessageType[], { userId1: string; userId2: string; page?: number; pageSize?: number }>({
+      query: ({ userId1, userId2, page = 1, pageSize = 50 }) => `api/messages/getMessagesBetweenUsers/${userId1}/${userId2}?page=${page}&pageSize=${pageSize}`,
       transformResponse: (response: ConversationMessagesResponse) =>
         response.data.messages ?? response.data.items ?? []
     })

@@ -1,17 +1,27 @@
 import Notification from '../models/notification.js'
 import { catchRes, StandartRes } from '../routes/responses/responses.js'
 import { generateUniqueId } from '../functions/functions.js'
+import { storagePolicy } from '../../config/storagePolicy.js'
+import { paginationMeta, parsePagination } from '../functions/pagination.js'
 
 class NotificationsController {
   async getNotifications(req, res) {
     try {
       const userId = req.user
+      const { page, pageSize } = parsePagination(req.query, 20, storagePolicy.maxNotificationsPageSize)
       if (!userId) {
         return res.status(400).json(new StandartRes(1, "User's id is undefined."))
       }
 
       const notifications = await Notification.find({ owner: userId })
-      res.json(new StandartRes(0, '', { notifications }))
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+      const totalCount = await Notification.countDocuments({ owner: userId })
+      res.json(new StandartRes(0, '', {
+        notifications,
+        ...paginationMeta(page, pageSize, totalCount)
+      }))
     } catch (e) {
       console.error(e)
       res.status(500).json(catchRes)

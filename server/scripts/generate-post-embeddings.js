@@ -5,12 +5,13 @@ import { connectDatabase } from "../config/database.js";
 import mongoose from "mongoose";
 import Post from "../rest/models/post.js";
 import embeddingProvider from "../rest/ai/providers/embedding.provider.js";
+import { storagePolicy } from "../config/storagePolicy.js";
 
 
 await connectDatabase();
 
 
-const posts = await Post.find();
+const posts = await Post.find().limit(storagePolicy.maxPostsPageSize);
 
 console.log(`Found ${posts.length} posts`);
 

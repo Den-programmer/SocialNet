@@ -59,9 +59,9 @@ export const corsConfig = {
 // Rate limiting middleware
 const requestCounts = new Map()
 
-export const rateLimitMiddleware = (maxRequests = 100, timeWindowMs = 60000) => {
+export const rateLimitMiddleware = (maxRequests = 100, timeWindowMs = 60000, keyResolver = req => req.ip) => {
   return (req, res, next) => {
-    const key = req.ip + ':' + req.path
+    const key = `${keyResolver(req)}:${req.method}:${req.baseUrl}${req.route?.path || req.path}`
     const now = Date.now()
     
     if (!requestCounts.has(key)) {
@@ -96,7 +96,10 @@ export const validateInputLength = (maxBodySize = '10mb') => {
   return (req, res, next) => {
     if (req.is('application/json')) {
       const contentLength = req.get('content-length')
-      if (contentLength && parseInt(contentLength) > 10 * 1024 * 1024) {
+      const maxBytes = typeof maxBodySize === 'number'
+        ? maxBodySize
+        : parseInt(maxBodySize, 10) * 1024 * 1024
+      if (contentLength && parseInt(contentLength, 10) > maxBytes) {
         return res.status(413).json({
           error: 'Payload too large'
         })

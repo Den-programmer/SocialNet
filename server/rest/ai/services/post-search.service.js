@@ -40,7 +40,7 @@ class PostSearchService {
                 _id:{
                     $in:postIds
                 }
-            });
+            }).limit(10);
 
 
 

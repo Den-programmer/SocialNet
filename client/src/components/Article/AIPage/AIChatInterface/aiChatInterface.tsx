@@ -50,11 +50,11 @@ const AIChatInterface: React.FC<AIChatInterfaceProps> = ({ conversationId }) => 
 
     const {
         data: response
-    } = useGetMessagesQuery(conversationId, {
+    } = useGetMessagesQuery({ conversationId, page: 1, pageSize: 50 }, {
         skip: !conversationId
     })
 
-    const messages = response?.data ?? []
+    const messages = response?.data?.items ?? []
 
     const [getChatCompletion, { isLoading: isChatLoading }] =
         useGetChatCompletionMutation()

@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import classes from './MyPosts.module.scss'
 import Post from './Post/Post'
 import AddPost from './AddPost/addPost'
 import { PostType, profileType } from '../../../../../types/ProfileTypes/profileTypes'
-import { Input, Typography, Row, Divider } from 'antd'
+import { Input, Typography, Row, Divider, Pagination } from 'antd'
 import { useCreatePostMutation, useGetUsersPostsQuery } from '../../../../../DAL/profileApi'
 import { useAppDispatch, useAppSelector } from '../../../../../hooks/hooks'
 import { profileActions } from '../../../../../BLL/reducer-profile'
@@ -37,11 +37,16 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
   const authorizedUserId = useAppSelector(selectAuthorizedUserId)
 
   const isOwnProfile = Boolean(authorizedUserId === profileUserId)
+  const [postPage, setPostPage] = useState(1)
 
-  const { data: postsData, isLoading: isPostsLoading } = useGetUsersPostsQuery(profileUserId || '', {
+  const { data: postsData, isLoading: isPostsLoading } = useGetUsersPostsQuery({ userId: profileUserId || '', page: postPage, pageSize: 20 }, {
     skip: !profileUserId
   })
-  const posts: PostType[] = postsData ? postsData : []
+  const posts: PostType[] = postsData?.items || []
+
+  useEffect(() => {
+    setPostPage(1)
+  }, [profileUserId])
 
   const groupedPosts = useMemo(() => {
     return {
@@ -138,6 +143,17 @@ const MyPosts: React.FC<IMyPosts> = React.memo(props => {
           </div>
         )}
       </div>
+      {postsData && postsData.totalPages > 1 && (
+        <div className={classes.pagination}>
+          <Pagination
+            current={postsData.page}
+            pageSize={postsData.pageSize}
+            total={postsData.totalCount}
+            onChange={setPostPage}
+            showSizeChanger={false}
+          />
+        </div>
+      )}
     </div>
   )
 })

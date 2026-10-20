@@ -8,6 +8,7 @@ import {
   useGetAllDialogsQuery,
   useStartDialogMutation,
   useDeleteDialogMutation,
+  useGetDialogMessagesQuery,
 } from '../../../DAL/messagesApi'
 import { setUserDialogId } from '../../../BLL/reducer-messages'
 import { useLazyGetUsersQuery } from '../../../DAL/usersApi'
@@ -38,11 +39,21 @@ const MessagesPage: React.FC = () => {
     isLoading: dialogsLoading,
   } = useGetAllDialogsQuery()
 
-  const messagesLoading = dialogsLoading
-
   // Find the selected dialog
   const selectedDialog = (dialogsData?.find((d: userDialogType) => d.id === userDialogId) || null) as userDialogType | null
-  const messages: MessageType[] = selectedDialog?.messages || []
+  const messageParticipants = selectedDialog?.participants || []
+  const otherParticipant = messageParticipants.find(participant => participant.id !== authorizedUserId)
+  const { data: loadedMessages, isLoading: messagesLoading } = useGetDialogMessagesQuery(
+    {
+      userId1: authorizedUserId,
+      userId2: otherParticipant?.id || '',
+      page: 1,
+      pageSize: 50
+    },
+    { skip: !authorizedUserId || !otherParticipant?.id }
+  )
+  const isMessagesLoading = dialogsLoading || messagesLoading
+  const messages: MessageType[] = loadedMessages || selectedDialog?.messages || []
 
   const handleStartDialog = async (userId: string) => {
     try {
@@ -91,7 +102,7 @@ const MessagesPage: React.FC = () => {
       messages={messages} 
       selectedDialog={selectedDialog} 
       setLightboxImage={setLightboxImage}
-      messagesLoading={messagesLoading}
+      messagesLoading={isMessagesLoading}
       mobileShowChat={mobileShowChat}
       setMobileShowChat={setMobileShowChat}
       />

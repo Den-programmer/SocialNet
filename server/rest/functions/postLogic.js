@@ -4,9 +4,6 @@ export const canViewPost = (post, viewerId) => {
   const ownerId = post.owner?.toString()
   const viewerIdString = viewerId?.toString()
 
-  console.log("Owner id is: ", ownerId)
-  console.log("Viewer id is: ", viewerIdString)
-
   if(post.visibility === 'public') {
     return true
   } else if (post.visibility === 'private') {

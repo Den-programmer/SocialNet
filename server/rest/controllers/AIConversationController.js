@@ -1,5 +1,7 @@
 import conversationService from '../ai/assistant/conversation.service.js'
 import { StandartRes, catchRes } from '../routes/responses/responses.js'
+import { storagePolicy } from '../../config/storagePolicy.js'
+import { paginationMeta, parsePagination } from '../functions/pagination.js'
 
 class ConversationController {
     async create(req, res) {
@@ -73,12 +75,17 @@ class ConversationController {
     async getAll(req, res) {
         try {
             const userId = req.user
+            const { page, pageSize } = parsePagination(req.query, 20, storagePolicy.maxUserConversations)
 
             const conversations =
-                await conversationService.getUserConversations(userId)
+                await conversationService.getUserConversations(userId, page, pageSize)
+            const totalCount = await conversationService.countUserConversations(userId)
 
             return res.json(
-                new StandartRes(0, '', conversations)
+                new StandartRes(0, '', {
+                    items: conversations,
+                    ...paginationMeta(page, pageSize, totalCount)
+                })
             )
         } catch (e) {
             console.error(e)
@@ -89,12 +96,17 @@ class ConversationController {
         try {
             const { id } = req.params
             const userId = req.user
+            const { page, pageSize } = parsePagination(req.query, 50, storagePolicy.maxConversationHistory)
 
             const messages =
-                await conversationService.getMessages(id, userId)
+                await conversationService.getMessages(id, userId, page, pageSize)
+            const totalCount = await conversationService.countMessages(id, userId)
 
             return res.json(
-                new StandartRes(0, '', messages)
+                new StandartRes(0, '', {
+                    items: messages,
+                    ...paginationMeta(page, pageSize, totalCount)
+                })
             )
         } catch (e) {
             console.error(e)

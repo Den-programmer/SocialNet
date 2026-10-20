@@ -6,6 +6,11 @@
 .postPage {
     margin-left: 20px;
 }
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 24px 0;
+}
 .postedNothingBlock {
     padding: 100px;
     margin: auto;

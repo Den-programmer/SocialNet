@@ -1,5 +1,6 @@
 import Conversation from '../models/conversation.model.js'
 import historyService from './history.service.js'
+import { storagePolicy } from '../../../config/storagePolicy.js'
 
 class ConversationService {
     async create(data) {
@@ -9,14 +10,20 @@ class ConversationService {
         })
     }
 
-    async getUserConversations(userId) {
+    async getUserConversations(userId, page, pageSize) {
         return await Conversation.find({
             userId
         })
             .sort({
                 updatedAt: -1
             })
+            .skip((page - 1) * pageSize)
+            .limit(pageSize)
             .lean()
+    }
+
+    async countUserConversations(userId) {
+        return Conversation.countDocuments({ userId })
     }
 
     async getById(
@@ -29,16 +36,21 @@ class ConversationService {
         }).lean()
     }
 
-    async getMessages(conversationId, userId) {
+    async getMessages(conversationId, userId, page, pageSize) {
         const conversation = await this.getById(conversationId, userId)
 
         if (!conversation) {
             return []
         }
 
-        const messages = await historyService.get(conversationId)
+        const messages = await historyService.get(conversationId, page, pageSize)
 
-        return messages.filter(message => message.role !== 'tool')
+        return messages
+    }
+
+    async countMessages(conversationId, userId) {
+        const conversation = await this.getById(conversationId, userId)
+        return conversation ? historyService.count(conversationId) : 0
     }
 
     async update(conversationId, data) {
@@ -62,6 +74,7 @@ class ConversationService {
             conversationId,
             {
                 updatedAt: new Date(),
+                expiresAt: new Date(Date.now() + storagePolicy.ttlDays * 24 * 60 * 60 * 1000),
                 ...(lastMessage && { lastMessage })
             },
             {

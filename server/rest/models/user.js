@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { storagePolicy } from '../../config/storagePolicy.js'
 
 const User = new Schema({
     email: { type: String, required: true, unique: true },
@@ -25,10 +26,10 @@ const User = new Schema({
         },
         userId: Schema.Types.ObjectId
     },
-    posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
-    notifications: [{ type: Schema.Types.ObjectId, ref: 'Notification' }],
+    posts: [{ type: Schema.Types.ObjectId, ref: 'Post', maxItems: storagePolicy.maxUserPosts }],
+    notifications: [{ type: Schema.Types.ObjectId, ref: 'Notification', maxItems: storagePolicy.maxUserNotifications }],
     followers: [{ type: Schema.Types.ObjectId, ref: 'User' }], 
-    following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    following: [{ type: Schema.Types.ObjectId, ref: 'User', maxItems: storagePolicy.maxUserFollowing }],
     background: { type: String, default: '' }
 })
 

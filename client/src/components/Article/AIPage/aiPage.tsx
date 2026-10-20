@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAuthRedirect } from "../../../hooks/hooks"
 import classes from './aiPage.module.scss'
 import { Card, Tabs, Avatar, Row, Col, Typography } from 'antd'
@@ -17,20 +17,28 @@ import AITools from './AITools/aiTools'
 const AIPage = () => {
   useAuthRedirect()
   const [selectedConversationId, setSelectedConversationId] = useState('')
+  const isCreatingInitialConversation = useRef(false)
 
   const {
     data: conversationsResponse,
     isLoading: isConversationsLoading
   } = useGetConversationsQuery()
 
-  const conversations = conversationsResponse?.data ?? []
+  const conversations = conversationsResponse?.data?.items ?? []
 
   const [createConversation, { isLoading: isCreatingConversation }] =
     useCreateConversationMutation()
 
   const startConversation = async () => {
-    const response = await createConversation().unwrap()
-    setSelectedConversationId(response.data._id)
+    if (isCreatingInitialConversation.current) return
+
+    isCreatingInitialConversation.current = true
+    try {
+      const response = await createConversation().unwrap()
+      setSelectedConversationId(response.data._id)
+    } finally {
+      isCreatingInitialConversation.current = false
+    }
   }
 
   useEffect(() => {
@@ -43,7 +51,11 @@ const AIPage = () => {
       return
     }
 
-    if (!isConversationsLoading && !isCreatingConversation) {
+    if (
+      !isConversationsLoading &&
+      !isCreatingConversation &&
+      !isCreatingInitialConversation.current
+    ) {
       void startConversation()
     }
   }, [
