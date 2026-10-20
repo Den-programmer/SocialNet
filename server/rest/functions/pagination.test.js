@@ -17,6 +17,11 @@ test('pagination defaults invalid values and clamps page size', () => {
     page: 3,
     pageSize: 1
   })
+
+  assert.deepEqual(parsePagination({ page: 'not-a-number', pageSize: 'not-a-number' }, 20, 50), {
+    page: 1,
+    pageSize: 20
+  })
 })
 
 test('pagination metadata reports navigation state', () => {
@@ -30,4 +35,15 @@ test('pagination metadata reports navigation state', () => {
   })
 
   assert.equal(paginationMeta(1, 20, 0).hasNextPage, false)
+})
+
+test('pagination metadata handles exact page boundaries', () => {
+  assert.deepEqual(paginationMeta(2, 20, 40), {
+    page: 2,
+    pageSize: 20,
+    totalCount: 40,
+    totalPages: 2,
+    hasNextPage: false,
+    hasPreviousPage: true
+  })
 })

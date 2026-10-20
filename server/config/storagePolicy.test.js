@@ -26,3 +26,11 @@ test('storage policy exposes positive bounded safety limits', () => {
 
   limits.forEach(limit => assert.equal(Number.isInteger(limit) && limit > 0, true))
 })
+
+test('request and collection limits stay below the application storage budget', () => {
+  assert.ok(storagePolicy.maxUploadBytes < storagePolicy.applicationStorageBytes)
+  assert.ok(storagePolicy.maxJsonBytes < storagePolicy.applicationStorageBytes)
+  assert.ok(storagePolicy.maxUserPosts < storagePolicy.maxUserFollowing)
+  assert.ok(storagePolicy.maxPostComments < storagePolicy.maxPostLikes)
+  assert.ok(storagePolicy.maxConversationMessages > storagePolicy.maxConversationHistory)
+})
